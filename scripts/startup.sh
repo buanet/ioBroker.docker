@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ -f .install_host ];
 then
@@ -6,4 +6,6 @@ then
 	rm .install_host
 fi
 
-node node_modules/iobroker.js-controller/controller.js
+./iobroker start
+cd /
+/bin/bash
