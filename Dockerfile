@@ -17,6 +17,6 @@ RUN npm install iobroker --unsafe-perm && echo $(hostname) > .install_host
 ADD scripts/startup.sh startup.sh
 RUN chmod +x startup.sh
 
-CMD /opt/iobroker/startup.sh
+CMD ["sh", "/opt/iobroker/startup.sh"]
 
 ENV DEBIAN_FRONTEND teletype
