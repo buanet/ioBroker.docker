@@ -6,7 +6,7 @@ Cause the container ist based on debian:latest, it acts nearly like a full virtu
 
 ## Installation & Usage
 
-Coming soon...
+For instructions and discussion (in german) please visit ioBroker-Forum (http://forum.iobroker.net/viewtopic.php?f=17&t=5089).
 
 ## Changelog
 
