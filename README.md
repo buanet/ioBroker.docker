@@ -10,6 +10,9 @@ For instructions and discussion (in german) please visit ioBroker-Forum (http://
 
 ## Changelog
 
+### v0.0.2 (2017-03-06)
+* added support for avahi-daemon (installation and autostart)
+
 ### v0.0.1 (2017-01-31)
 * project started / initial release
 
