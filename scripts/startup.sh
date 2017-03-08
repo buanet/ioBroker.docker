@@ -6,7 +6,7 @@ then
 	rm .install_host
 fi
 
-./avahi-start.sh
+/opt/scripts/avahi-start.sh
 ./iobroker start
 cd /
 /bin/bash
