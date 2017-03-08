@@ -7,6 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y apt-utils curl avahi-daemon
 RUN curl -sL https://deb.nodesource.com/setup_4.x | bash
 RUN apt-get install -y build-essential python nodejs
+RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 RUN mkdir -p /opt/iobroker/ && chmod 777 /opt/iobroker/
 RUN mkdir -p /opt/scripts/ && chmod 777 /opt/scripts/
