@@ -10,6 +10,9 @@ For instructions and discussion (in german) please visit ioBroker-Forum (http://
 
 ## Changelog
 
+### v0.1.1 (2017-03-10)
+* added git package
+
 ### v0.1.0 (2017-03-08)
 * moved avahi-start.sh to seperate directory
 * fixed timezone issue (sets now timezone to Europe/Berlin)
