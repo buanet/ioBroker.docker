@@ -10,6 +10,9 @@ For instructions and discussion (in german) please visit ioBroker-Forum (http://
 
 ## Changelog
 
+### v0.1.2 (2017-03-14)
+* added libpcap-dev package (for iobroker.amazon-dash)
+
 ### v0.1.1 (2017-03-10)
 * added git package
 
