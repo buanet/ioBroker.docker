@@ -10,6 +10,10 @@ For instructions and discussion (in german) please visit ioBroker-Forum (http://
 
 ## Changelog
 
+### v0.1.3 (2017-06-04)
+* fixed startup issue in startup.sh
+* changed node version from 4 to 6
+
 ### v0.1.2 (2017-03-14)
 * added libpcap-dev package (for iobroker.amazon-dash)
 
