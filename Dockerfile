@@ -4,7 +4,7 @@ MAINTAINER Andre Germann <info@buanet.de>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install -y apt-utils curl avahi-daemon git libpcap-dev libavahi-compat-libdnssd-dev
+RUN apt-get update && apt-get install -y apt-utils curl avahi-daemon git libpcap-dev libavahi-compat-libdnssd-dev libfontconfig
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash
 RUN apt-get install -y build-essential python nodejs
 RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
