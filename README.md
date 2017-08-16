@@ -12,6 +12,7 @@ For instructions and discussion (in german) please visit ioBroker-Forum (http://
 
 ### v0.2.1 (2017-08-16)
 * added libfontconfig package (for iobroker.phantomjs)
+* added gnupg2 package as prerequisite for installing node version 6
 
 ### v0.2.0 (2017-06-04)
 * fixed startup issue in startup.sh
