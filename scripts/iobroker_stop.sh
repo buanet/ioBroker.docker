@@ -5,3 +5,5 @@
 
 cd /opt/iobroker
 ./iobroker stop
+
+exit
