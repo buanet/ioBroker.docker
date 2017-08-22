@@ -8,6 +8,7 @@ fi
 
 /opt/scripts/avahi-start.sh
 sleep 5
+cd /opt/iobroker
 ./iobroker start
 cd /
 /bin/bash
