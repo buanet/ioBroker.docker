@@ -10,6 +10,11 @@ For instructions and discussion (in german) please visit ioBroker-Forum (http://
 
 ## Changelog
 
+### v1.0.0 (2017-08-22)
+* moved and renamed iobroker startup script
+* disabled iobroker deamon to (hopefully) fix restart issue
+* added some maintenance scripts
+
 ### v0.2.1 (2017-08-16)
 * added libfontconfig package (for iobroker.phantomjs)
 * added gnupg2 package as prerequisite for installing node version 6
