@@ -18,13 +18,13 @@ ADD scripts/avahi_startup.sh avahi_startup.sh
 RUN chmod +x avahi_startup.sh
 RUN mkdir /var/run/dbus/
 
+ADD scripts/iobroker_startup.sh iobroker_startup.sh
+RUN chmod +x iobroker_startup.sh
+
 WORKDIR /opt/iobroker/
 
 RUN npm install iobroker --unsafe-perm && echo $(hostname) > .install_host
 
-ADD scripts/startup.sh startup.sh
-RUN chmod +x startup.sh
-
-CMD ["sh", "/opt/iobroker/startup.sh"]
+CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
 
 ENV DEBIAN_FRONTEND teletype
