@@ -8,4 +8,4 @@ cd /opt/iobroker
 sleep 5
 ./iobroker start
 
-exit
+exit 0
