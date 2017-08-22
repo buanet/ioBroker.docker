@@ -6,4 +6,4 @@
 cd /opt/iobroker
 ./iobroker stop
 
-exit
+exit 0
