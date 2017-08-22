@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Einfaches Script zum Stoppen von ioBroker. 
-# Wird zum Beispiel genutzt zum automatischen Beenden von ioBroker bevor das Backupscript auf der Synology Disk Station startet. 
+# Kann zum Beispiel aus ioBroker heraus aufgerufen werden um ioBroker zu stoppen. 
 
 cd /opt/iobroker
 ./iobroker stop
