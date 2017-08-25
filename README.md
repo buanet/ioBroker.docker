@@ -10,6 +10,9 @@ For instructions and discussion (in german) please visit ioBroker-Forum (http://
 
 ## Changelog
 
+### v1.0.1 (2017-08-25)
+* fixed locales issue
+
 ### v1.0.0 (2017-08-22)
 * moved and renamed iobroker startup script
 * disabled iobroker deamon to (hopefully) fix restart issue
