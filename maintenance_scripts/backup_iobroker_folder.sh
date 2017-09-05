@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backupscript für ein (wöchentliches) Backup von ioBroker unter Docker auf einer Synology Disk Station (Sicherung des ioBroker-Verzeichnises).
+# Backupscript für ein Backup von ioBroker unter Docker auf einer Synology Disk Station (Sicherung des ioBroker-Verzeichnises).
 # Vorhaltezeit der letzten Backups: 90 Tage, ältere Backups werden automatisch gelöscht.
 # 
 # By André Germann
@@ -16,8 +16,8 @@
 
 # Deklaration der Variablen. Pfade und Bezeichnungen müssen ggf. entsprechend angepasst werden.
 
-iobrokerPATH='/volume1/docker/mount/iobroker'                       # Pfad des gemounteten ioBroker-Verzeichnises (zu sicherndes Verzeichnis) auf der Synology Disk Station
-backupPATH='/volume1/backup/Homeautomation/iobroker/backup.weekly'	# Pfad zum Speichern des Backups
+iobrokerPATH='/volume1/docker/iobroker_mount'                       # Pfad des gemounteten ioBroker-Verzeichnises (zu sicherndes Verzeichnis) auf der Synology Disk Station
+backupPATH='/volume1/docker/iobroker_backup'	                      # Pfad zum Speichern des Backups
 iobrokerCONTAINERNAME='iobroker'					                          # Name des ioBroker-Containers in Docker
 
 
