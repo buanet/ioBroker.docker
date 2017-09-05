@@ -17,7 +17,7 @@
 # Deklaration der Variablen. Pfade und Bezeichnungen müssen ggf. entsprechend angepasst werden.
 
 iobrokerPATH='/volume1/docker/iobroker_mount'                       # Pfad des gemounteten ioBroker-Verzeichnises (zu sicherndes Verzeichnis) auf der Synology Disk Station
-backupPATH='/volume1/docker/iobroker_backup'	                      # Pfad zum Speichern des Backups
+backupPATH='/volume1/docker/iobroker_backup/archiv'	                      # Pfad zum Speichern des Backups
 iobrokerCONTAINERNAME='iobroker'					                          # Name des ioBroker-Containers in Docker
 
 
