@@ -49,7 +49,7 @@ sleep 5
 echo ""
 echo "Der Ordner $iobrokerPATH wird gesichert..."
 
-tar -C "$iobrokerPATH" -czf "$backupPATH/backup-$(date +%d.%m.%y-%R).tar.gz" .
+tar -C "$iobrokerPATH" -czf "$backupPATH/backup-$(date +%Y-%m-%d_%H-%M).tar.gz" .
 
 echo "Sicherung des Ordners erstellt."
 echo ""
@@ -62,7 +62,7 @@ sleep 5
 echo ""
 echo "Entfernen alter Backups aus dem Verzeichnis $backupPATH..."
 
-find -P "$backupPATH/" -maxdepth 1 -type f \( -name '*.tar.gz' \) -ctime +19 -exec rm {} \;
+find -P "$backupPATH/" -maxdepth 1 -type f \( -name '*.tar.gz' \) -ctime +90 -exec rm {} \;
 
 echo "Alte Backups wurden entfernt."
 echo ""
