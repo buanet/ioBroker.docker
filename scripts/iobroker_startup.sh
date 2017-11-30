@@ -11,3 +11,4 @@ fi
 /opt/scripts/avahi_startup.sh
 sleep 5
 node node_modules/iobroker.js-controller/controller.js
+/bin/bash
