@@ -25,7 +25,7 @@ RUN chmod +x iobroker_startup.sh
 
 WORKDIR /opt/iobroker/
 
-RUN npm install iobroker --unsafe-perm && echo $(hostname) > .install_host
+RUN npm install iobroker --unsafe-perm
 RUN update-rc.d iobroker.sh remove
 
 CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
