@@ -1,14 +1,13 @@
 #!/bin/sh
 
+cd /opt/iobroker
+
 if [ -f .install_host ];
 then
-	sed -i "s/$(cat .install_host)/$(hostname)/g" iobroker-data/objects.json
+	./iobroker host $(cat .install_host) && echo $(hostname) > .install_host
 	rm .install_host
 fi
 
 /opt/scripts/avahi_startup.sh
 sleep 5
-cd /opt/iobroker
-./iobroker start
-cd /
-/bin/bash
+node node_modules/iobroker.js-controller/controller.js
