@@ -4,8 +4,7 @@ cd /opt/iobroker
 
 if [ -f .install_host ];
 then
-        echo $(hostname) > .install_host
-        ./iobroker host $(cat .install_host)
+        ./iobroker host $(cat .install_host) && echo $(hostname) > .install_host
         rm .install_host
 fi
 
