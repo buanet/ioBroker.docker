@@ -10,6 +10,13 @@ For instructions and discussion (in german) please visit ioBroker-Forum (http://
 
 ## Changelog
 
+### v1.1.0 (2017-12-10)
+* changed startup call to fix restart issue
+* fixed avahi startup issue
+* fixed hostname issue
+* added z-wave support
+* added logging to /opt/scripts/docker_iobroker_log.txt
+
 ### v1.0.1 (2017-08-25)
 * fixed locales issue
 
