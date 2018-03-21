@@ -10,6 +10,9 @@ For instructions and discussion (in german) please visit ioBroker-Forum (http://
 
 ## Changelog
 
+### v1.1.1 (2018-03-21)
+* added wget package
+
 ### v1.1.0 (2017-12-10)
 * changed startup call to fix restart issue
 * fixed avahi startup issue
