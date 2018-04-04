@@ -12,6 +12,9 @@ For discussion and support please visit ioBroker-forum-thread (http://forum.iobr
 
 ## Changelog
 
+### v1.1.2 (2018-04-04)
+* added ENV for timezone issue
+
 ### v1.1.1 (2018-03-29)
 * added wget package
 * updated readme.md
