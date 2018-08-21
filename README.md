@@ -12,6 +12,9 @@ For discussion and support please visit ioBroker-forum-thread (http://forum.iobr
 
 ## Changelog
 
+### v1.2.0 (2018-08-21)
+* after testing making 1.1.3beta to latest stable release 
+
 ### v1.1.3beta (2018-08-21)
 * added ffmpeg-package for yahka to support webcams
 
