@@ -1,21 +1,24 @@
 # docker-iobroker
 Docker image for ioBroker (http://iobroker.net) based on debian:latest (http://hub.docker.com/_/debian/)
 
-This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-Package installed. But it should also work on other systems with Docker!<br>
+This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker!<br>
 Cause the container ist based on debian:latest, it acts nearly like a full virtual machine. That makes it possible to easily add some additional dependies for some ioBroker-Adapters.
 
 ## Installation & Usage
 
-A detailed tutorial (german) can be found on my Website (https://buanet.de/2017/09/iobroker-unter-docker-auf-der-synology-diskstation/).<br>
+A detailed tutorial (german) can be found on my website (https://buanet.de/2017/09/iobroker-unter-docker-auf-der-synology-diskstation/).<br>
 For discussion and support please visit ioBroker-forum-thread (http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support-question should be answered in a public place. Thank you.
 
 
 ## Changelog
 
-### v1.1.2 (2018-04-04)
+### v1.1.3beta (2018-08-21)
+* added ffmpeg-package for yahka to support webcams
+
+### v1.1.2beta (2018-04-04)
 * added ENV for timezone issue
 
-### v1.1.1 (2018-03-29)
+### v1.1.1beta (2018-03-29)
 * added wget package
 * updated readme.md
 
@@ -26,7 +29,7 @@ For discussion and support please visit ioBroker-forum-thread (http://forum.iobr
 * added z-wave support
 * added logging to /opt/scripts/docker_iobroker_log.txt
 
-### v1.0.1 (2017-08-25)
+### v1.0.1beta (2017-08-25)
 * fixed locales issue
 
 ### v1.0.0 (2017-08-22)
