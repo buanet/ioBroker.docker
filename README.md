@@ -12,6 +12,9 @@ For discussion and support please visit ioBroker-forum-thread (http://forum.iobr
 
 ## Changelog
 
+### v1.2.1beta (2018-09-12)
+* added support for firetv-adapter
+
 ### v1.2.0 (2018-08-21)
 * after testing making 1.1.3beta to latest stable release 
 
