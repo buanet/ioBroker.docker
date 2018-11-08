@@ -4,6 +4,6 @@
 # Kann zum Beispiel aus ioBroker heraus aufgerufen werden um ioBroker zu stoppen. 
 
 cd /opt/iobroker
-./iobroker stop
+pkill io
 
 exit 0
