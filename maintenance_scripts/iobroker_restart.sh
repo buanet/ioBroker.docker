@@ -4,8 +4,8 @@
 # Kann zum Beispiel aus ioBroker heraus aufgerufen werden um ioBroker neu zu starten. 
 
 cd /opt/iobroker
-./iobroker stop
+pkill io
 sleep 5
-./iobroker start
+node node_modules/iobroker.js-controller/controller.js >/opt/scripts/docker_iobroker_log.txt 2>&1 &
 
 exit 0
