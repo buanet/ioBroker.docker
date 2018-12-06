@@ -16,6 +16,7 @@ For discussion and support please visit ioBroker-forum-thread (http://forum.iobr
 
 ### v2.0.0 (2018-12-05)
 * using node8 instead of node6 
+* changes for new iobroker setup
 
 ### v1.2.1beta (2018-09-12)
 * added support for firetv-adapter
