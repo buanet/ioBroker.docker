@@ -15,7 +15,8 @@ ENV LANG de_DE.UTF-8
 RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 ENV TZ Europe/Berlin
 
-RUN curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash -
+RUN mkdir -p /opt/iobroker/ && chmod 777 /opt/iobroker/
+RUN mkdir -p /opt/scripts/ && chmod 777 /opt/scripts/
 
 WORKDIR /opt/scripts/
 
@@ -28,7 +29,7 @@ RUN chmod +x iobroker_startup.sh
 
 WORKDIR /opt/iobroker/
 
-RUN echo $(hostname) > .install_host
+RUN npm install iobroker --unsafe-perm && echo $(hostname) > .install_host
 RUN update-rc.d iobroker.sh remove
 RUN npm install node-gyp -g
 
