@@ -5,6 +5,8 @@ cd /opt/iobroker
 if [ -f .install_host ];
 then
         echo $(hostname) > .install_host && ./iobroker host $(cat .install_host)
+		iobroker del admin.0 && iobroker del discovery.0
+		iobroker add admin && iobroker add discovery
         rm .install_host
 fi
 
