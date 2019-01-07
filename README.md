@@ -14,6 +14,9 @@ For discussion and support please visit ioBroker-forum-thread (http://forum.iobr
 
 ## Changelog
 
+### v2.0.1 (2019-01-07)
+* some changes for supporting other docker-environments than synology ds
+
 ### v2.0.0 (2018-12-05)
 * using node8 instead of node6 
 * changes for new iobroker setup
