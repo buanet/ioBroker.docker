@@ -20,6 +20,6 @@ sleep 5
 
 echo 'Starting ioBroker...'
 node node_modules/iobroker.js-controller/controller.js >/opt/scripts/docker_iobroker_log.txt 2>&1 &
-echo 'Starting ioBroker done...
+echo 'Starting ioBroker done...'
 
 /bin/bash
