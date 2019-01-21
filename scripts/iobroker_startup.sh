@@ -5,11 +5,14 @@ cd /opt/iobroker
 if [ -f /opt/scripts/.install_host ];
 then
         echo 'First run preparation! Used Hostname:' $(hostname)
-	echo 'STEP 1 of 2: Renaming...'
+	echo 'STEP 1 of 2: Restoring if folder empty...'
+	if [ `ls -1a|wc -l` -lt 3 ];
+	then
+		tar -xf /opt/initial_iobroker.tar -C /
+	fi
+	echo 'STEP 2 of 2: Renaming ioBroker...'
         iobroker host $(cat /opt/scripts/.install_host)
         rm /opt/scripts/.install_host
-	echo 'STEP 2 of 2: Backup...'
-	tar -cf /opt/initial_iobroker.tar /opt/iobroker
 	echo 'First run preparation done...'
 fi
 
