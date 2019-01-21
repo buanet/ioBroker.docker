@@ -29,7 +29,7 @@ RUN chmod +x iobroker_startup.sh
 
 WORKDIR /
 
-RUN echo $(hostname) > .install_host && curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash -
+RUN echo $(hostname) > /opt/scripts/.install_host && curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash -
 # RUN update-rc.d iobroker.sh remove
 
 WORKDIR /opt/iobroker/
