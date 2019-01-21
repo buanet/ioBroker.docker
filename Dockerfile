@@ -34,6 +34,7 @@ RUN echo $(hostname) > /opt/scripts/.install_host && curl -sL https://raw.github
 
 WORKDIR /opt/iobroker/
 RUN npm install node-gyp -g
+RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 
 CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
 
