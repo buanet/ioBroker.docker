@@ -70,6 +70,5 @@ RUN npm install node-gyp -g
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 
 # Run startup-script
-CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
-
 ENV DEBIAN_FRONTEND teletype
+CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
