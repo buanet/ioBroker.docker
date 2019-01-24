@@ -2,18 +2,22 @@
 
 cd /opt/iobroker
 
-if [ -f /opt/scripts/.install_host ];
+echo 'Startupscript running...'
+
+if [ `ls -1a|wc -l` -lt 3 ];
 then
-        echo 'First run preparation! Used Hostname:' $(hostname)
-	echo 'STEP 1 of 2: Restoring if ioBroker-folder empty...'
-	if [ `ls -1a|wc -l` -lt 3 ];
-	then
-		tar -xf /opt/initial_iobroker.tar -C /
-		echo 'Restoring done...'
-	fi
-	echo 'STEP 2 of 2: Renaming ioBroker...'
-        iobroker host $(cat /opt/scripts/.install_host)
-        rm /opt/scripts/.install_host
+  echo 'Directory /opt/iobroker is empty!'
+  echo 'Restoring...'
+	tar -xf /opt/initial_iobroker.tar -C /
+	echo 'Restoring done...'
+fi
+
+if [ -f /opt/iobroker/.install_host ];
+then
+  echo 'First run preparation! Used Hostname:' $(hostname)
+	echo 'Renaming ioBroker...'
+        iobroker host $(cat /opt/iobroker/.install_host)
+        rm /opt/iobroker/.install_host
 	echo 'First run preparation done...'
 fi
 
