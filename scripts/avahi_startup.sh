@@ -1,7 +1,10 @@
 #!/bin/sh
 
-echo 'Preparing...'
-rm /var/run/dbus/pid
+if [ -f /var/run/dbus/pid ];
+then
+  rm -f /var/run/dbus/pid
+fi
+
 dbus-daemon --system
 
 echo 'Restarting...'
