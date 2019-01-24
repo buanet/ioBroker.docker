@@ -69,6 +69,10 @@ RUN npm install node-gyp -g
 # Backup initial ioBroker-folder
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 
+# Some Testing
+RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
+USER docker
+
 # Run startup-script
 ENV DEBIAN_FRONTEND teletype
 CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
