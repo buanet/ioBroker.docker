@@ -18,7 +18,7 @@ then
 fi
 
 echo 'Initializing Avahi-Daemon...'
-sh /opt/scripts/avahi_startup.sh
+sudo sh /opt/scripts/avahi_startup.sh
 echo 'Initializing Avahi-Daemon done...'
 
 sleep 5
