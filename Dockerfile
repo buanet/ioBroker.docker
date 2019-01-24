@@ -72,7 +72,7 @@ RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 # Some Testing
 RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
     && echo "iobroker:iobroker" | chpasswd \
-    && adduser docker sudo
+    && adduser iobroker sudo
 USER iobroker
 
 # Run startup-script
