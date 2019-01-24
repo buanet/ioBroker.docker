@@ -8,7 +8,7 @@ if [ `ls -1a|wc -l` -lt 3 ];
 then
   echo 'Directory /opt/iobroker is empty!'
   echo 'Restoring...'
-	tar -xf /opt/initial_iobroker.tar -C /
+	sudo tar -xf /opt/initial_iobroker.tar -C /
 	echo 'Restoring done...'
 fi
 
@@ -17,7 +17,7 @@ then
   echo 'First run preparation! Used Hostname:' $(hostname)
 	echo 'Renaming ioBroker...'
   iobroker host $(cat /opt/iobroker/.install_host)
-  rm -f /opt/iobroker/.install_host
+  sudo rm -f /opt/iobroker/.install_host
 	echo 'First run preparation done...'
 fi
 
