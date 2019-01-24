@@ -70,8 +70,10 @@ RUN npm install node-gyp -g
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 
 # Some Testing
-RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
-USER docker
+RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
+    && echo "iobroker:iobroker" | chpasswd \
+    && adduser docker sudo
+USER iobroker
 
 # Run startup-script
 ENV DEBIAN_FRONTEND teletype
