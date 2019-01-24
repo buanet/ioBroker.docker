@@ -16,8 +16,8 @@ if [ -f /opt/iobroker/.install_host ];
 then
   echo 'First run preparation! Used Hostname:' $(hostname)
 	echo 'Renaming ioBroker...'
-        iobroker host $(cat /opt/iobroker/.install_host)
-        rm /opt/iobroker/.install_host
+  iobroker host $(cat /opt/iobroker/.install_host)
+  rm -f /opt/iobroker/.install_host
 	echo 'First run preparation done...'
 fi
 
