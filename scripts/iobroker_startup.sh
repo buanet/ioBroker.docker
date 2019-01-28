@@ -7,6 +7,14 @@ avahi=$AVAHI
 echo 'ENV packages:' $packages
 echo 'ENV avahi:' $avahi
 
+if [ "$packages" != "" ]
+then
+  echo 'Installing additional packages...'
+  echo 'The following packages will be installed:' $packages
+  sudo sh /opt/scripts/packages_install.sh # >/opt/scripts/packages_install.log 2>&1 &
+  echo 'Installing additional packages done...'
+fi
+
 cd /opt/iobroker
 
 echo 'Startupscript running...'
@@ -38,7 +46,7 @@ fi
 sleep 5
 
 echo 'Starting ioBroker...'
-node node_modules/iobroker.js-controller/controller.js >/opt/scripts/docker_iobroker_log.txt 2>&1 &
+node node_modules/iobroker.js-controller/controller.js >/opt/scripts/docker_iobroker.log 2>&1 &
 echo 'Starting ioBroker done...'
 
 tail -f /dev/null
