@@ -11,6 +11,7 @@ if [ "$packages" != "" ]
 then
   echo 'Installing additional packages...'
   echo 'The following packages will be installed:' $packages
+  sudo echo $packages > /opt/scripts/.packages
   sudo sh /opt/scripts/packages_install.sh # >/opt/scripts/packages_install.log 2>&1 &
   echo 'Installing additional packages done...'
 fi

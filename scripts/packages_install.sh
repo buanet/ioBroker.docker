@@ -1,8 +1,8 @@
 #!/bin/bash
 
-packages=$PACKAGES
-echo 'ENV packages:' $packages
-
-apt-get update && apt-get install -y $packages && rm -rf /var/lib/apt/lists/*
+apt-get update
+apt-get install -y  $(cat /opt/scripts/.packages)
+rm -rf /var/lib/apt/lists/*
+rm -f /opt/scripts/.packages
 
 exit 0
