@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y \
         android-tools-adb \
         android-tools-fastboot \
         apt-utils \
-        avahi-daemon \
         build-essential \
         curl \
         ffmpeg \
@@ -35,7 +34,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Configure avahi-daemon 
-RUN sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
+# RUN sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
 
 # Configure locales/ language/ timezone
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
@@ -49,11 +48,10 @@ ENV TZ Europe/Berlin
 RUN mkdir -p /opt/scripts/ \
     && chmod 777 /opt/scripts/
 WORKDIR /opt/scripts/
-ADD scripts/avahi_startup.sh avahi_startup.sh
-ADD scripts/iobroker_startup.sh iobroker_startup.sh
+COPY scripts/avahi_startup.sh avahi_startup.sh
+COPY scripts/iobroker_startup.sh iobroker_startup.sh
 RUN chmod +x avahi_startup.sh \
-    && chmod +x iobroker_startup.sh \
-    && mkdir /var/run/dbus/
+    && chmod +x iobroker_startup.sh
 
 # Install ioBroker
 WORKDIR /
@@ -69,7 +67,7 @@ RUN npm install node-gyp -g
 # Backup initial ioBroker-folder
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 
-# Some Testing
+# Giving iobroker-user sudo rights
 RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
     && echo "iobroker:iobroker" | chpasswd \
     && adduser iobroker sudo

@@ -1,7 +1,11 @@
 #!/bin/sh
 
+# Checking env-variables
 packages=$PACKAGES
-echo 'Additional packages:' $packages
+avahi=$AVAHI
+
+echo 'ENV packages:' $packages
+echo 'ENV avahi:' $avahi
 
 cd /opt/iobroker
 
@@ -24,9 +28,12 @@ then
 	echo 'First run preparation done...'
 fi
 
-echo 'Initializing Avahi-Daemon...'
-sudo sh /opt/scripts/avahi_startup.sh
-echo 'Initializing Avahi-Daemon done...'
+if [ "$avahi" == "true"];
+then
+  echo 'Initializing Avahi-Daemon...'
+  sudo sh /opt/scripts/avahi_startup.sh
+  echo 'Initializing Avahi-Daemon done...'
+fi
 
 sleep 5
 
