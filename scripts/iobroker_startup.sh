@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Checking env-variables
 packages=$PACKAGES
@@ -11,7 +11,7 @@ cd /opt/iobroker
 
 echo 'Startupscript running...'
 
-if [ `ls -1a|wc -l` -lt 3 ];
+if [ `ls -1a|wc -l` -lt 3 ]
 then
   echo 'Directory /opt/iobroker is empty!'
   echo 'Restoring...'
@@ -19,7 +19,7 @@ then
 	echo 'Restoring done...'
 fi
 
-if [ -f /opt/iobroker/.install_host ];
+if [ -f /opt/iobroker/.install_host ]
 then
   echo 'First run preparation! Used Hostname:' $(hostname)
 	echo 'Renaming ioBroker...'
@@ -28,7 +28,7 @@ then
 	echo 'First run preparation done...'
 fi
 
-if [ "$avahi" == "true"];
+if [ "$avahi" = "true" ]
 then
   echo 'Initializing Avahi-Daemon...'
   sudo sh /opt/scripts/avahi_startup.sh

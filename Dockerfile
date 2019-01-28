@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
         ffmpeg \
         git \
         gnupg2 \
-        libavahi-compat-libdnssd-dev \
         libfontconfig \
         libpam0g-dev \
         libpcap-dev \
