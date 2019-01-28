@@ -6,7 +6,9 @@ Cause the container ist based on debian:latest, it acts nearly like a full virtu
 
 ## Installation & Usage
 
-**Important Notice: Switching an existing ioBroker-installation from node6 to node8 (docker-iobroker v1 to v2) requires an additional step inside ioBroker! After Upgrade you have to call "reinstall.sh" for recompiling your Installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=5106&lang=de). Make backup first!!!**
+**Important Notice 1: Switching an existing ioBroker-installation from node6 to node8 (docker-iobroker v1 to v2) requires an additional step inside ioBroker! After Upgrade you have to call "reinstall.sh" for recompiling your Installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=5106&lang=de). Make backup first!!!**
+
+**Important Notice 2: Versions greater than 2.0.0 do no longer support running in host-mode on Synology-devices! Please use bridged or macvlan mode. Tutorial will be updated as soon as possible!**
 
 A detailed tutorial (german) can be found on my website (https://buanet.de/2017/09/iobroker-unter-docker-auf-der-synology-diskstation/).<br>
 For discussion and support please visit ioBroker-forum-thread (http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support-question should be answered in a public place. Thank you.
@@ -14,7 +16,24 @@ For discussion and support please visit ioBroker-forum-thread (http://forum.iobr
 
 ## Changelog
 
-### v2.0.1 (2019-01-07)
+### v2.0.4beta (2019-01-28)
+* added support for env variables "avahi" and "packages"
+* moving avahi-daemon installation into avahi startup script
+* added script for installing optional packages
+* optimizing logging output
+
+### v2.0.3beta (2019-01-24)
+* added support for running ioBroker under iobroker user
+* optimizing logging output
+* optimizing scripts
+
+### v2.0.2beta (2019-01-23)
+* optimizing and rearraged dockerfile
+* changes for new ioBroker install script
+* added restoring for empty mounted /opt/iobroker folder
+* some more small fixes
+
+### v2.0.1beta (2019-01-07)
 * some changes for supporting other docker-environments than synology ds
 
 ### v2.0.0 (2018-12-05)

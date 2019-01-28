@@ -1,25 +1,26 @@
 #!/bin/bash
 
-# Checking env-variables
+# Reading env-variables
 packages=$PACKAGES
 avahi=$AVAHI
 
-echo 'ENV packages:' $packages
-echo 'ENV avahi:' $avahi
+# Version output for logging
+echo 'Version: 2.0.9beta'
+echo 'Startupscript running...'
 
+# Checking and installing additional packages
 if [ "$packages" != "" ]
 then
   echo 'Installing additional packages...'
   echo 'The following packages will be installed:' $packages
   sudo echo $packages > /opt/scripts/.packages
-  sudo sh /opt/scripts/packages_install.sh # >/opt/scripts/packages_install.log 2>&1 &
+  sudo sh /opt/scripts/packages_install.sh >/opt/scripts/packages_install.log 2>&1
   echo 'Installing additional packages done...'
 fi
 
 cd /opt/iobroker
 
-echo 'Startupscript running...'
-
+# Checking and restoring ioBroker to mounted folder
 if [ `ls -1a|wc -l` -lt 3 ]
 then
   echo 'Directory /opt/iobroker is empty!'
@@ -28,6 +29,7 @@ then
 	echo 'Restoring done...'
 fi
 
+# Checking for first run and renaming ioBroker
 if [ -f /opt/iobroker/.install_host ]
 then
   echo 'First run preparation! Used Hostname:' $(hostname)
@@ -37,6 +39,7 @@ then
 	echo 'First run preparation done...'
 fi
 
+# Checking and setting up avahi-daemon
 if [ "$avahi" = "true" ]
 then
   echo 'Initializing Avahi-Daemon...'
@@ -46,8 +49,10 @@ fi
 
 sleep 5
 
+# Starting ioBroker
 echo 'Starting ioBroker...'
 node node_modules/iobroker.js-controller/controller.js >/opt/scripts/docker_iobroker.log 2>&1 &
 echo 'Starting ioBroker done...'
 
+# Preventing container restart
 tail -f /dev/null
