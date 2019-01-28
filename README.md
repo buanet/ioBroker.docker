@@ -6,7 +6,7 @@ Cause the container ist based on debian:latest, it acts nearly like a full virtu
 
 ## Installation & Usage
 
-**Important Notice 1: Switching an existing ioBroker-installation from node6 to node8 (docker-iobroker v1 to v2) requires an additional step inside ioBroker! After Upgrade you have to call "reinstall.sh" for recompiling your Installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=5106&lang=de). Make backup first!!!**
+**Important Notice 1: Switching an existing ioBroker-installation from node6 to node8 (docker-iobroker v1 to v2) requires an additional step inside ioBroker! After Upgrade you have to call "reinstall.sh" for recompiling your Installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!!!**
 
 **Important Notice 2: Versions greater than 2.0.0 do no longer support running in host-mode on Synology-devices! Please use bridged or macvlan mode. Tutorial will be updated as soon as possible!**
 
