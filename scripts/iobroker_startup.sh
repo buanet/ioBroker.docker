@@ -1,5 +1,8 @@
 #!/bin/sh
 
+packages=$PACKAGES
+echo 'Additional packages:' $packages
+
 cd /opt/iobroker
 
 echo 'Startupscript running...'
