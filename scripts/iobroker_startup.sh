@@ -14,7 +14,7 @@ then
   echo 'Installing additional packages...'
   echo 'The following packages will be installed:' $packages
   sudo echo $packages > /opt/scripts/.packages
-  sudo sh /opt/scripts/packages_install.sh >/opt/scripts/packages_install.log 2>&1
+  sudo sh /opt/scripts/packages_install.sh > /opt/scripts/packages_install.log 2>&1
   echo 'Installing additional packages done...'
 fi
 
@@ -51,7 +51,7 @@ sleep 5
 
 # Starting ioBroker
 echo 'Starting ioBroker...'
-node node_modules/iobroker.js-controller/controller.js >/opt/scripts/iobroker.log 2>&1 &
+node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &
 echo 'Starting ioBroker done...'
 
 # Preventing container restart
