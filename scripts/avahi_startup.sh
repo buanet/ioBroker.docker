@@ -7,9 +7,9 @@ then
   echo 'Avahi already installed...'
 else
   echo 'Installing avahi-daemon...'
-  apt-get update >/opt/scripts/avahi_install.log 2>&1
-  apt-get install -y libavahi-compat-libdnssd-dev avahi-daemon >/opt/scripts/avahi_install.log 2>&1
-  rm -rf /var/lib/apt/lists/* >/opt/scripts/avahi_install.log 2>&1
+  apt-get update >/opt/scripts/avahi_startup.log 2>&1
+  apt-get install -y libavahi-compat-libdnssd-dev avahi-daemon >/opt/scripts/avahi_startup.log 2>&1
+  rm -rf /var/lib/apt/lists/* >/opt/scripts/avahi_startup.log 2>&1
   echo 'Configuring avahi-daemon...'
   sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
   echo 'Configuring dbus...'
