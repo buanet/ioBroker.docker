@@ -5,7 +5,7 @@ packages=$PACKAGES
 avahi=$AVAHI
 
 # Version output for logging
-echo 'Version: 2.0.9beta'
+echo 'Version: 2.0.4beta'
 echo 'Startupscript running...'
 
 # Checking and installing additional packages
