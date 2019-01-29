@@ -1,18 +1,38 @@
 # docker-iobroker
 Docker image for ioBroker (http://iobroker.net) based on debian:latest (http://hub.docker.com/_/debian/)
 
-This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker!<br>
-Cause the container ist based on debian:latest, it acts nearly like a full virtual machine. That makes it possible to easily add some additional dependies for some ioBroker-Adapters.
+This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker!
+
+## Important
+
+Switching an existing installation from docker-iobroker-image v1 to v2 or greater means switching iobroker itself from node6 to node8! This requires additional steps inside ioBroker! After upgrading iobroker-container you have to call "reinstall.sh" for recompiling your installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!!!
+
+Also versions greater than 2.0.0 do no longer support running in host-mode on Synology-devices! Please use bridged or macvlan mode. Tutorial will be updated as soon as possible!
 
 ## Installation & Usage
 
-**Important Notice 1: Switching an existing ioBroker-installation from node6 to node8 (docker-iobroker v1 to v2) requires an additional step inside ioBroker! After Upgrade you have to call "reinstall.sh" for recompiling your Installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!!!**
+A detailed tutorial (german) can be found here: [https://buanet.de](https://buanet.de/2017/09/iobroker-unter-docker-auf-der-synology-diskstation/)
 
-**Important Notice 2: Versions greater than 2.0.0 do no longer support running in host-mode on Synology-devices! Please use bridged or macvlan mode. Tutorial will be updated as soon as possible!**
+For discussion and support please visit [ioBroker-forum-thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support-question should be answered in a public place. Thank you.
 
-A detailed tutorial (german) can be found on my website (https://buanet.de/2017/09/iobroker-unter-docker-auf-der-synology-diskstation/).<br>
-For discussion and support please visit ioBroker-forum-thread (http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support-question should be answered in a public place. Thank you.
+## Special Settings
 
+In versions greater than 2.0.0 (actual beta) I added some new features. The following will give some short information about that.
+
+### Environment Variables
+
+|env|value|description|
+|---|---|---|
+|PACKAGES|package1 package2 package2|seperateed by whitespace; will install the listed packages on startup<br>(be paitient, this may take some time!)|
+|AVAHI|true|will install and activate avahi-daemon for supporting yahka-adapter|
+
+### Mounting Folder/ Volume
+
+It is now possible to mount an empty folder to /opt/iobroker during first startup of the container. The Startupscript will check this folder and restore content if empty.
+
+It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
+
+This also works with mounting a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker). 
 
 ## Changelog
 
