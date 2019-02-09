@@ -34,9 +34,7 @@ RUN apt-get update && apt-get install -y \
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
     && \dpkg-reconfigure --frontend=noninteractive locales \
     && \update-locale LANG=de_DE.UTF-8
-ENV LANG de_DE.UTF-8 
 RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
-ENV TZ Europe/Berlin
 
 # Create scripts directory and copy scripts
 RUN mkdir -p /opt/scripts/ \
@@ -69,6 +67,15 @@ RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
     && adduser iobroker sudo
 USER iobroker
 
+# Setting up ENV
+ENV DEBIAN_FRONTEND="teletype" \
+	LANG="de_DE.UTF-8" \
+	TZ="Europe/Berlin" \
+	PACKAGES="nano" \
+	AVAHI="false"
+
+# Setting up EXPOSE for Admin
+EXPOSE 8082/tcp	
+	
 # Run startup-script
-ENV DEBIAN_FRONTEND teletype
 CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
