@@ -36,6 +36,11 @@ This also works with mounting a folder containing an existing ioBroker-installat
 
 ## Changelog
 
+### v2.0.5beta (2019-02-09)
+* added ENV to dockerfile
+* added EXPOSE for admin 
+* final testing
+
 ### v2.0.4beta (2019-01-28)
 * added support for env variables "avahi" and "packages"
 * moving avahi-daemon installation into avahi startup script
