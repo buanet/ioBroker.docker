@@ -56,7 +56,7 @@ RUN apt-get update \
 
 # Install node-gyp
 WORKDIR /opt/iobroker/
-RUN sudo npm install -g node-gyp
+RUN npm install -g node-gyp
 
 # Backup initial ioBroker-folder
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
