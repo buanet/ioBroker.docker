@@ -5,12 +5,15 @@ MAINTAINER Andre Germann <https://buanet.de>
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install necessary packages
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+        acl \
         apt-utils \
         build-essential \
         curl \
         git \
         gnupg2 \
+        libavahi-compat-libdnssd-dev \
+        libcap2-bin \
         libpam0g-dev \
         libudev-dev \
         locales \
