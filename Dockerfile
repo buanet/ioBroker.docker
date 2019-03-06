@@ -4,7 +4,7 @@ MAINTAINER Andre Germann <https://buanet.de>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install necessary packages
+# Install prerequisites
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         acl \
         apt-utils \
@@ -29,9 +29,6 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
 RUN apt-get update && apt-get install -y \
         nodejs \
     && rm -rf /var/lib/apt/lists/*
-
-# Configure avahi-daemon 
-# RUN sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
 
 # Configure locales/ language/ timezone
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
