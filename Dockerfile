@@ -26,8 +26,6 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
 RUN apt-get update && apt-get install -y \
         nodejs \
     && rm -rf /var/lib/apt/lists/*
-    
-RUN apt-get update --fix-missing
 
 # Configure avahi-daemon 
 # RUN sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
@@ -56,6 +54,13 @@ RUN apt-get update \
     && echo $(hostname) > /opt/iobroker/.install_host \
     && rm -rf /var/lib/apt/lists/*
 
+# Install default instances
+WORKDIR /opt/iobroker
+RUN iobroker add web
+RUN iobroker add node-red
+RUN iobroker add mqtt
+RUN iobroker add simple-api
+
 # Install node-gyp
 WORKDIR /opt/iobroker/
 RUN npm install node-gyp -g
@@ -76,8 +81,13 @@ ENV DEBIAN_FRONTEND="teletype" \
 	PACKAGES="nano" \
 	AVAHI="false"
 
-# Setting up EXPOSE for Admin
-EXPOSE 8081/tcp	
+# Setting up EXPOSE for Instances
+EXPOSE 1880/tcp	 # Node Red 
+EXPOSE 1883/tcp  # Mqtt Server
+EXPOSE 8081/tcp  # Admin
+EXPOSE 8082/tcp  # Web
+EXPOSE 8083/tcp  # 
+EXPOSE 8087/tcp  # Simple API
 	
 # Run startup-script
 CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
