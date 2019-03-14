@@ -4,11 +4,18 @@
 packages=$PACKAGES
 avahi=$AVAHI
 
+#!/bin/bash
+
+# Reading env-variables
+packages=$PACKAGES
+avahi=$AVAHI
+dati=`date '+%Y-%m-%d %H:%M:%S'`
+
 # Information
 echo ''
 echo '----------------------------------------'
 echo '-----   Image-Version: 2.0.5beta   -----'
-echo '-----     $(date '+%Y-%m-%d %H:%M:%S')     -----'
+echo '-----      '$dati'     -----'
 echo '----------------------------------------'
 echo ''
 echo 'Startupscript running...'
