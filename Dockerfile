@@ -27,9 +27,6 @@ RUN apt-get update && apt-get install -y \
         nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Configure avahi-daemon 
-# RUN sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
-
 # Configure locales/ language/ timezone
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
     && \dpkg-reconfigure --frontend=noninteractive locales \
@@ -40,7 +37,6 @@ RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 RUN mkdir -p /opt/scripts/ \
     && chmod 777 /opt/scripts/
 WORKDIR /opt/scripts/
-COPY scripts/avahi_startup.sh avahi_startup.sh
 COPY scripts/iobroker_startup.sh iobroker_startup.sh
 COPY scripts/packages_install.sh packages_install.sh
 RUN chmod +x avahi_startup.sh \
@@ -85,8 +81,7 @@ ENV DEBIAN_FRONTEND="teletype" \
 EXPOSE 1880/tcp	 # Node Red 
 EXPOSE 1883/tcp  # Mqtt Server
 EXPOSE 8081/tcp  # Admin
-EXPOSE 8082/tcp  # Web
-EXPOSE 8083/tcp  # 
+EXPOSE 8082/tcp  # Web 
 EXPOSE 8087/tcp  # Simple API
 	
 # Run startup-script
