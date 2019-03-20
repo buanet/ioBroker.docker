@@ -40,12 +40,12 @@ RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 RUN mkdir -p /opt/scripts/ \
     && chmod 777 /opt/scripts/
 WORKDIR /opt/scripts/
-COPY scripts/avahi_startup.sh avahi_startup.sh
 COPY scripts/iobroker_startup.sh iobroker_startup.sh
-COPY scripts/packages_install.sh packages_install.sh
-RUN chmod +x avahi_startup.sh \
-    && chmod +x iobroker_startup.sh \
-	&& chmod +x packages_install.sh
+COPY scripts/setup_avahi.sh setup_avahi.sh
+COPY scripts/setup_packages.sh setup_packages.sh
+RUN chmod +x iobroker_startup.sh \
+	&& chmod +x setup_avahi.sh \
+    && chmod +x setup_packages.sh
 
 # Install ioBroker
 WORKDIR /

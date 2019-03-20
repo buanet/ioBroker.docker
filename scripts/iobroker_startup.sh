@@ -4,11 +4,7 @@
 packages=$PACKAGES
 avahi=$AVAHI
 
-#!/bin/bash
-
-# Reading env-variables
-packages=$PACKAGES
-avahi=$AVAHI
+# Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
 
 # Information
@@ -27,7 +23,7 @@ then
   echo 'Installing additional packages...'
   echo 'The following packages will be installed:' $packages
   sudo echo $packages > /opt/scripts/.packages
-  sudo sh /opt/scripts/packages_install.sh > /opt/scripts/packages_install.log 2>&1
+  sudo sh /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
   echo 'Installing additional packages done...'
 fi
 
@@ -54,12 +50,12 @@ then
 	echo 'First run preparation done...'
 fi
 
-# Checking and setting up avahi-daemon
+# Checking for and setting up avahi-daemon
 if [ "$avahi" = "true" ]
 then
   echo ''
   echo 'Initializing Avahi-Daemon...'
-  sudo sh /opt/scripts/avahi_startup.sh
+  sudo sh /opt/scripts/setup_avahi.sh
   echo 'Initializing Avahi-Daemon done...'
 fi
 
