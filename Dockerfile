@@ -50,11 +50,12 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install default instances
-WORKDIR /opt/iobroker
-RUN iobroker add web
-RUN iobroker add node-red
-RUN iobroker add mqtt
-RUN iobroker add simple-api
+# Not working at the moment, instances need to be deleted and added again to get it working
+# WORKDIR /opt/iobroker
+# RUN iobroker add web
+# RUN iobroker add node-red
+# RUN iobroker add mqtt
+# RUN iobroker add simple-api
 
 # Install node-gyp
 WORKDIR /opt/iobroker/
@@ -73,15 +74,14 @@ USER iobroker
 ENV DEBIAN_FRONTEND="teletype" \
 	LANG="de_DE.UTF-8" \
 	TZ="Europe/Berlin" \
-	PACKAGES="nano" \
 	AVAHI="false"
 
 # Setting up EXPOSE for Instances
-EXPOSE 1880/tcp
-EXPOSE 1883/tcp
+# EXPOSE 1880/tcp
+# EXPOSE 1883/tcp
 EXPOSE 8081/tcp
-EXPOSE 8082/tcp
-EXPOSE 8087/tcp
+# EXPOSE 8082/tcp
+# EXPOSE 8087/tcp
 	
 # Run startup-script
 CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
