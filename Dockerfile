@@ -77,11 +77,11 @@ ENV DEBIAN_FRONTEND="teletype" \
 	AVAHI="false"
 
 # Setting up EXPOSE for Instances
-EXPOSE 1880/tcp	 # Node Red 
-EXPOSE 1883/tcp  # Mqtt Server
-EXPOSE 8081/tcp  # Admin
-EXPOSE 8082/tcp  # Web 
-EXPOSE 8087/tcp  # Simple API
+EXPOSE 1880/tcp
+EXPOSE 1883/tcp
+EXPOSE 8081/tcp
+EXPOSE 8082/tcp
+EXPOSE 8087/tcp
 	
 # Run startup-script
 CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
