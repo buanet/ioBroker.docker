@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install necessary packages
 RUN apt-get update && apt-get install -y \
-        apt-utils \
+	apt-utils \
         build-essential \
         curl \
         git \
@@ -62,7 +62,7 @@ WORKDIR /opt/iobroker/
 RUN npm install node-gyp -g
 
 # Backup initial ioBroker-folder
-RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
+RUN tar -cf /opt/iobroker/initial_iobroker.tar /opt/iobroker
 
 # Giving iobroker-user sudo rights
 RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
