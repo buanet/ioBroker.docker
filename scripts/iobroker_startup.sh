@@ -22,8 +22,8 @@ then
   echo ''
   echo 'Installing additional packages...'
   echo 'The following packages will be installed:' $packages
-  sudo echo $packages > /opt/scripts/.packages
-  sudo sh /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
+  echo $packages > /opt/scripts/.packages												#sudo
+  sh /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1				#sudo
   echo 'Installing additional packages done...'
 fi
 
@@ -35,7 +35,7 @@ then
   echo ''
   echo 'Directory /opt/iobroker is empty!'
   echo 'Restoring...'
-	sudo tar -xf /opt/initial_iobroker.tar -C /
+	tar -xf /opt/initial_iobroker.tar -C /												#sudo
 	echo 'Restoring done...'
 fi
 
@@ -46,7 +46,7 @@ then
   echo 'First run preparation! Used Hostname:' $(hostname)
 	echo 'Renaming ioBroker...'
   iobroker host $(cat /opt/iobroker/.install_host)
-  sudo rm -f /opt/iobroker/.install_host
+  rm -f /opt/iobroker/.install_host														#sudo
 	echo 'First run preparation done...'
 fi
 
@@ -55,7 +55,7 @@ if [ "$avahi" = "true" ]
 then
   echo ''
   echo 'Initializing Avahi-Daemon...'
-  sudo sh /opt/scripts/setup_avahi.sh
+  sh /opt/scripts/setup_avahi.sh														#sudo
   echo 'Initializing Avahi-Daemon done...'
 fi
 
@@ -64,7 +64,7 @@ sleep 5
 # Starting ioBroker
 echo ''
 echo 'Starting ioBroker...'
-sudo node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &
+node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &	#sudo
 echo 'Starting ioBroker done...'
 
 # Preventing container restart

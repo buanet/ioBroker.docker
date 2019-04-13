@@ -65,7 +65,7 @@ RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 #RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
 #    && echo "iobroker:iobroker" | chpasswd \
 #    && adduser iobroker sudo
-USER iobroker
+#USER iobroker
 
 # Setting up ENV
 ENV DEBIAN_FRONTEND="teletype" \
