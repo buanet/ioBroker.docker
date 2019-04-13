@@ -31,10 +31,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Configure locales/ language/ timezone
-RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
-    && \dpkg-reconfigure --frontend=noninteractive locales \
-    && \update-locale LANG=de_DE.UTF-8
-RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+#RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
+#    && \dpkg-reconfigure --frontend=noninteractive locales \
+#    && \update-locale LANG=de_DE.UTF-8
+#RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 # Create scripts directory and copy scripts
 RUN mkdir -p /opt/scripts/ \
@@ -62,9 +62,9 @@ RUN npm install -g node-gyp
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 
 # Giving iobroker-user sudo rights
-RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
-    && echo "iobroker:iobroker" | chpasswd \
-    && adduser iobroker sudo
+#RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
+#    && echo "iobroker:iobroker" | chpasswd \
+#    && adduser iobroker sudo
 USER iobroker
 
 # Setting up ENV
