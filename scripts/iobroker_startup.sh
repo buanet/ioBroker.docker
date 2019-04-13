@@ -43,11 +43,11 @@ fi
 if [ -f /opt/iobroker/.install_host ]
 then
   echo ''
-  echo 'First run preparation! Used Hostname:' $(hostname)
+  echo 'First run preparation... (Hostname:' $(hostname)')'
   echo 'Renaming ioBroker...'
   iobroker host $(cat /opt/iobroker/.install_host)
   rm -f /opt/iobroker/.install_host
-  echo 'Fixing permissions...'
+  echo 'Fixing permissions... (This might take a while!)'
   chown -R iobroker /opt/iobroker
   chown -R iobroker /opt/scripts
 	echo 'First run preparation done...'
