@@ -72,8 +72,8 @@ RUN chsh -s /bin/bash iobroker
 # Setting up ENVs
 ENV DEBIAN_FRONTEND="teletype" \
 	LANG="de_DE.UTF-8" \
-	LANGUAGE de_DE:de \
-	LC_ALL de_DE.UTF-8 \
+	LANGUAGE="de_DE:de" \
+	LC_ALL="de_DE.UTF-8" \
 	TZ="Europe/Berlin" \
 	PACKAGES="nano" \
 	AVAHI="false"
