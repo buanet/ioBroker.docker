@@ -30,11 +30,10 @@ RUN apt-get update && apt-get install -y \
         nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Configure locales/ language/ timezone
-#RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
-#    && \dpkg-reconfigure --frontend=noninteractive locales \
-#    && \update-locale LANG=de_DE.UTF-8
-#RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+# Generating locales
+RUN sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
+	&& sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+	&& locale-gen
 
 # Create scripts directory and copy scripts
 RUN mkdir -p /opt/scripts/ \
