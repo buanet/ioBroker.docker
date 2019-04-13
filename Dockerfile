@@ -61,15 +61,19 @@ RUN npm install -g node-gyp
 # Backup initial ioBroker-folder
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 
-# Giving iobroker-user sudo rights
+# Setting up iobroker-user
+RUN chsh -s /bin/bash iobroker
+
 #RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
 #    && echo "iobroker:iobroker" | chpasswd \
 #    && adduser iobroker sudo
 #USER iobroker
 
-# Setting up ENV
+# Setting up ENVs
 ENV DEBIAN_FRONTEND="teletype" \
 	LANG="de_DE.UTF-8" \
+	LANGUAGE de_DE:de \
+	LC_ALL de_DE.UTF-8 \
 	TZ="Europe/Berlin" \
 	PACKAGES="nano" \
 	AVAHI="false"
