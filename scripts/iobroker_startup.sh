@@ -47,7 +47,7 @@ then
   echo 'Renaming ioBroker...'
   iobroker host $(cat /opt/iobroker/.install_host)
   rm -f /opt/iobroker/.install_host
-  echo 'Fixing permissions... (This might take a while!)'
+  echo 'Fixing permissions... (This might take a while! Please be patient!)'
   chown -R iobroker /opt/iobroker
   chown -R iobroker /opt/scripts
 	echo 'First run preparation done...'

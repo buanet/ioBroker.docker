@@ -1,23 +1,23 @@
 # docker-iobroker
 Docker image for ioBroker (http://iobroker.net) based on debian:latest (http://hub.docker.com/_/debian/)
 
-This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker!
+This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker (Normally I do a small additional test on my Debian-VM with Docker CE)!
 
 ## Important
 
 Switching an existing installation from docker-iobroker-image v1 to v2 or greater means switching iobroker itself from node6 to node8! This requires additional steps inside ioBroker! After upgrading iobroker-container you have to call "reinstall.sh" for recompiling your installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!!!
 
-Also versions greater than 2.0.0 do no longer support running in host-mode on Synology-devices! Please use bridged or macvlan mode. Tutorial will be updated as soon as possible!
+Also versions greater than 2.0.0 (actual beta) do no longer support running in host-mode on Synology-devices because of a kernel issue in DSM-kernel! Please use bridged or macvlan mode. Tutorial will be updated as soon as possible!
 
 ## Installation & Usage
 
-A detailed tutorial (german) can be found here: [https://buanet.de](https://buanet.de/2017/09/iobroker-unter-docker-auf-der-synology-diskstation/)
+A detailed tutorial (german, based on v2.0.0) can be found here: [https://buanet.de](https://buanet.de/2017/09/iobroker-unter-docker-auf-der-synology-diskstation/)
 
 For discussion and support please visit [ioBroker-forum-thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support-question should be answered in a public place. Thank you.
 
 ## Special Settings
 
-In versions greater than 2.0.0 (actual beta) I added some new features. The following will give some short information about that.
+In versions greater than 2.0.0 (only actual beta!!!) I added some new features. The following will give some short information about that.
 
 ### Environment Variables
 
@@ -34,7 +34,16 @@ It is absolutely recommended to use a mounted folder or persistent volume for /o
 
 This also works with mounting a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker). 
 
+### Permission Fixer
+
+I added some code for fixing permissions for new iobroker-user. Permission-fixing is called on first start of the container. This might take a few minutes. Please be patient!
+
 ## Changelog
+
+### v2.0.6beta (2019-04-14)
+* added some additional logging
+* fixing some issues for languag env
+* added permission fixing on first start
 
 ### v2.0.5beta (2019-02-09)
 * added ENV to dockerfile
