@@ -25,6 +25,10 @@ In versions greater than 2.0.0 (only actual beta!!!) I added some new features. 
 |---|---|---|
 |PACKAGES|package1 package2 package2|seperateed by whitespace; will install the listed packages on startup<br>(be paitient, this may take some time!)|
 |AVAHI|true|will install and activate avahi-daemon for supporting yahka-adapter|
+|LANGUAGE|de_DE:de|following locales are pre-generated: de_DE:de, en_US:en|
+|LANG|de_DE.UTF-8|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
+|LC_ALL|de_DE|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
+|TZ|Europe/Berlin|all valid Linux-timezones|
 
 ### Mounting Folder/ Volume
 
