@@ -39,7 +39,7 @@ then
 	echo 'Restoring done...'
 fi
 
-# Checking for first run and renaming ioBroker
+# Checking for first run of an new installation and renaming ioBroker
 if [ -f /opt/iobroker/.install_host ]
 then
   echo ''
@@ -47,10 +47,18 @@ then
   echo 'Renaming ioBroker...'
   iobroker host $(cat /opt/iobroker/.install_host)
   rm -f /opt/iobroker/.install_host
-  echo 'Fixing permissions... (This might take a while! Please be patient!)'
+  echo 'First run preparation done...'
+fi
+
+# Checking permissions on first run
+if [ -f /opt/.firstrun ]
+then
+  echo ''
+  echo 'Checking permissions (This might take a while! Please be patient!)...'
   chown -R iobroker /opt/iobroker
   chown -R iobroker /opt/scripts
-	echo 'First run preparation done...'
+  rm -f /opt/.firstrun
+  echo 'Checking permissions done...'
 fi
 
 # Checking for and setting up avahi-daemon
