@@ -64,11 +64,6 @@ RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 # Setting up iobroker-user
 RUN chsh -s /bin/bash iobroker
 
-#RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
-#    && echo "iobroker:iobroker" | chpasswd \
-#    && adduser iobroker sudo
-#USER iobroker
-
 # Setting up ENVs
 ENV DEBIAN_FRONTEND="teletype" \
 	LANG="de_DE.UTF-8" \
@@ -82,4 +77,5 @@ ENV DEBIAN_FRONTEND="teletype" \
 EXPOSE 8081/tcp	
 	
 # Run startup-script
+USER root
 CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
