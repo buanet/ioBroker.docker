@@ -10,7 +10,7 @@ dati=`date '+%Y-%m-%d %H:%M:%S'`
 # Information
 echo ''
 echo '----------------------------------------'
-echo '-----   Image-Version: 2.0.6beta   -----'
+echo '-----     Image-Version: 3.0.0     -----'
 echo '-----      '$dati'     -----'
 echo '----------------------------------------'
 echo ''
@@ -67,7 +67,7 @@ sleep 5
 # Starting ioBroker
 echo ''
 echo 'Starting ioBroker...'
-su iobroker -c "node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &"
+sudo -u iobroker node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &
 echo 'Starting ioBroker done...'
 
 # Preventing container restart
