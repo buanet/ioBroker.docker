@@ -77,5 +77,5 @@ ENV DEBIAN_FRONTEND="teletype" \
 EXPOSE 8081/tcp	
 	
 # Run startup-script
-USER root
-CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
+# CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
+ENTRYPOINT ["/opt/scripts/iobroker_startup.sh"]
