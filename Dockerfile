@@ -51,6 +51,7 @@ WORKDIR /
 RUN apt-get update \
     && curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash - \
     && echo $(hostname) > /opt/iobroker/.install_host \
+    && echo $(hostname) > /opt/.firstrun \
     && rm -rf /var/lib/apt/lists/*
 
 # Install node-gyp
