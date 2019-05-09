@@ -7,17 +7,17 @@ This project creates a Docker image for running ioBroker in a Docker container. 
 
 Switching an existing installation from docker-iobroker-image v1 to v2 or greater means switching iobroker itself from node6 to node8! This requires additional steps inside ioBroker! After upgrading iobroker-container you have to call "reinstall.sh" for recompiling your installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!!!
 
-Also versions greater than 2.0.0 (actual beta) do no longer support running in host-mode on Synology-devices because of a kernel issue in DSM-kernel! Please use bridged or macvlan mode. Tutorial will be updated as soon as possible!
+At the moment v3.0.0 does no longer support running in host-mode on Synology-devices because of a kernel issue in actual DSM-kernel! Please use bridged or macvlan mode. For details see new tutorial linked in the following.
 
 ## Installation & Usage
 
-A detailed tutorial (german, based on v2.0.0) can be found here: [https://buanet.de](https://buanet.de/2017/09/iobroker-unter-docker-auf-der-synology-diskstation/)
+A detailed tutorial (german, based on new v3.0.0) can be found here: [https://buanet.de](https://buanet.de/2019/05/iobroker-unter-docker-auf-der-synology-diskstation-v3/). Please notice that the old tutorial does no longer work!
 
 For discussion and support please visit [ioBroker-forum-thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support-question should be answered in a public place. Thank you.
 
 ## Special Settings
 
-In versions greater than 2.0.0 (only actual beta!!!) I added some new features. The following will give some short information about that.
+In v3.0.0 I added some new features. The following will give some short information about that.
 
 ### Environment Variables
 
@@ -43,6 +43,10 @@ This also works with mounting a folder containing an existing ioBroker-installat
 I added some code for fixing permissions for new iobroker-user. Permission-fixing is called on first start of the container. This might take a few minutes. Please be patient!
 
 ## Changelog
+
+### v3.0.0 (2019-05-09)
+* bringing changes since v2.0.0 to stable
+* new tutorial available
 
 ### v2.0.6beta (2019-04-14)
 * added some additional logging
