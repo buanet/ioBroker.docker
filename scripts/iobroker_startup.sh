@@ -29,36 +29,37 @@ fi
 
 cd /opt/iobroker
 
-# Checking and restoring ioBroker to mounted folder
+# Checking and restoring ioBroker to empty mounted folder
 if [ `ls -1a|wc -l` -lt 3 ]
 then
   echo ''
   echo 'Directory /opt/iobroker is empty!'
-  echo 'Restoring...'
+  echo 'Restoring data from image...'
 	tar -xf /opt/initial_iobroker.tar -C /
 	echo 'Restoring done...'
 fi
 
-# Checking for first run of an new installation and renaming ioBroker
+# Checking for first run of a new installation and renaming ioBroker
 if [ -f /opt/iobroker/.install_host ]
 then
   echo ''
-  echo 'First run preparation... (Hostname:' $(hostname)')'
+  echo 'This is the first run of an new installation...'
+  echo 'Hostname given is' $(hostname)'...'
   echo 'Renaming ioBroker...'
   iobroker host $(cat /opt/iobroker/.install_host)
   rm -f /opt/iobroker/.install_host
-  echo 'First run preparation done...'
+  echo 'Renaming ioBroker done...'
 fi
 
-# Checking permissions on first run
+# Checking for first run and change permissions
 if [ -f /opt/.firstrun ]
-then
+then 
   echo ''
-  echo 'Checking permissions (This might take a while! Please be patient!)...'
+  echo 'Changing permissions upon first run (This might take a while! Please be patient!)...'
   chown -R iobroker /opt/iobroker
   chown -R iobroker /opt/scripts
   rm -f /opt/.firstrun
-  echo 'Checking permissions done...'
+  echo 'Changing permissions done...'
 fi
 
 # Checking for and setting up avahi-daemon
@@ -78,5 +79,5 @@ echo 'Starting ioBroker...'
 sudo -u iobroker node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &
 echo 'Starting ioBroker done...'
 
-# Preventing container restart
+# Preventing container restart by keeping a process alive
 tail -f /dev/null
