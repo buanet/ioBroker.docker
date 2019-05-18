@@ -10,7 +10,7 @@ dati=`date '+%Y-%m-%d %H:%M:%S'`
 # Information
 echo ''
 echo '----------------------------------------'
-echo '-----     Image-Version: 3.0.0     -----'
+echo '-----   Image-Version: 3.0.1beta   -----'
 echo '-----      '$dati'     -----'
 echo '----------------------------------------'
 echo ''
@@ -86,6 +86,4 @@ echo '----------     Have fun!     -----------'
 echo '----------------------------------------'
 
 # Preventing container restart by keeping a process alive
-# tail -f /dev/null
-
-exit
+tail -f /dev/null
