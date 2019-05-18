@@ -44,6 +44,9 @@ I added some code for fixing permissions for new iobroker-user. Permission-fixin
 
 ## Changelog
 
+### v3.0.1beta (2019-05-18)
+* switching back to iobroker-daemon for startup
+
 ### v3.0.0 (2019-05-09)
 * bringing changes since v2.0.0 to stable
 * new tutorial available
