@@ -76,8 +76,16 @@ sleep 5
 # Starting ioBroker
 echo ''
 echo 'Starting ioBroker...'
-sudo -u iobroker node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &
+iobroker start
+# sudo -u iobroker node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &
 echo 'Starting ioBroker done...'
 
+echo ''
+echo '----------------------------------------'
+echo '----------     Have fun!     -----------'
+echo '----------------------------------------'
+
 # Preventing container restart by keeping a process alive
-tail -f /dev/null
+# tail -f /dev/null
+
+exit
