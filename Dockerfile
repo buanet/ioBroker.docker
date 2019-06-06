@@ -19,7 +19,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         locales \
         procps \
         python \
-        sudo \
+        gosu \
         unzip \
         wget \
     && rm -rf /var/lib/apt/lists/*

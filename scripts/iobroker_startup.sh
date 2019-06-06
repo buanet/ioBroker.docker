@@ -39,6 +39,9 @@ then
 	echo 'Restoring done...'
 fi
 
+# Change sudo to gosu
+sed -i 's/sudo -H -u/gosu/g' /opt/iobroker/iobroker
+
 # Checking for first run of a new installation and renaming ioBroker
 if [ -f /opt/iobroker/.install_host ]
 then
