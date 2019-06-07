@@ -24,6 +24,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         gosu \
         unzip \
         wget \
+        nano \
     && rm -rf /var/lib/apt/lists/*
 
 # Install node8
@@ -74,7 +75,7 @@ ENV DEBIAN_FRONTEND="teletype" \
 	LANGUAGE="de_DE:de" \
 	LC_ALL="de_DE.UTF-8" \
 	TZ="Europe/Berlin" \
-	PACKAGES="nano" \
+	PACKAGES="" \
 	AVAHI="false"
 
 # Setting up EXPOSE for Admin
