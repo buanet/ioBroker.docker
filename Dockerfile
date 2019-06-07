@@ -34,7 +34,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash \
     && rm -rf /var/lib/apt/lists/*
 
 # Generating locales
-RUN sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
+RUN sed -i 's/^# *\(zh_CN.UTF-8\)/\1/' /etc/locale.gen \
 	&& sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
 	&& locale-gen
 
@@ -71,10 +71,10 @@ RUN chsh -s /bin/bash iobroker
 
 # Setting up ENVs
 ENV DEBIAN_FRONTEND="teletype" \
-	LANG="de_DE.UTF-8" \
-	LANGUAGE="de_DE:de" \
-	LC_ALL="de_DE.UTF-8" \
-	TZ="Europe/Berlin" \
+	LANG="zh_CN.UTF-8" \
+	LANGUAGE="zh_CN:de" \
+	LC_ALL="zh_CN.UTF-8" \
+	TZ="Asia/Shanghai" \
 	PACKAGES="" \
 	AVAHI="false"
 
