@@ -1,5 +1,7 @@
 FROM debian:latest
 
+ARG IOBROKER_VERSION = "2.0.3"
+
 MAINTAINER Andre Germann <https://buanet.de>
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -49,7 +51,9 @@ RUN chmod +x iobroker_startup.sh \
 # Install ioBroker
 WORKDIR /
 RUN apt-get update \
-    && curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash - \
+    && curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | \
+    sed -e 's/${INSTALL_TARGET-"iobroker"}/iobroker@${IOBROKER_VERSION}/g' | \
+    bash - \
     && echo $(hostname) > /opt/iobroker/.install_host \
     && echo $(hostname) > /opt/.firstrun \
     && rm -rf /var/lib/apt/lists/*
