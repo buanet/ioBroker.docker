@@ -3,7 +3,6 @@
 # Reading env-variables
 packages=$PACKAGES
 avahi=$AVAHI
-hostnameold=$HOSTNAMEOLD
 
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -53,15 +52,6 @@ then
   echo 'Renaming ioBroker...'
   iobroker host $(cat /opt/iobroker/.install_host)
   rm -f /opt/iobroker/.install_host
-  echo 'Renaming ioBroker done...'
-elif [ "$hostnameold" != "" ]
-then
-  echo ''
-  echo 'This is the first run of an existing installation...'
-  echo 'Hostname given is' $(hostname)'...'
-  echo 'Hostname old is' $hostnameold'...'
-  echo 'Renaming ioBroker...'
-  iobroker host $hostnameold
   echo 'Renaming ioBroker done...'
 fi
 

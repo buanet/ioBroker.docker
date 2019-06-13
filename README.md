@@ -29,7 +29,6 @@ In v3.0.0 I added some new features. The following will give some short informat
 |LANG|de_DE.UTF-8|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |LC_ALL|de_DE|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |TZ|Europe/Berlin|all valid Linux-timezones|
-|HOSTNAMEOLD|old hostname|should only be used for renaming with an existing iobroker installation which was running under a different hostname before|
 
 ### Mounting Folder/ Volume
 
@@ -48,7 +47,6 @@ I added some code for fixing permissions for new iobroker-user. Permission-fixin
 ### v3.0.2beta (2019-06-13)
 * using gosu instead of sudo
 * changing output of ioBroker logging
-* new env: "HOSTNAMEOLD" for migration
 
 ### v3.0.1beta (2019-05-18)
 * ~~switching back to iobroker-daemon for startup~~
