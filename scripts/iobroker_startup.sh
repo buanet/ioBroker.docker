@@ -3,6 +3,7 @@
 # Reading env-variables
 packages=$PACKAGES
 avahi=$AVAHI
+hostnameold=$HOSTNAMEOLD
 
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -10,7 +11,7 @@ dati=`date '+%Y-%m-%d %H:%M:%S'`
 # Information
 echo ''
 echo '----------------------------------------'
-echo '-----   Image-Version: 3.0.1beta   -----'
+echo '-----   Image-Version: 3.0.2beta   -----'
 echo '-----      '$dati'     -----'
 echo '----------------------------------------'
 echo ''
@@ -39,7 +40,8 @@ then
 	echo 'Restoring done...'
 fi
 
-# Change sudo to gosu
+# Backing up original iobroker-file and changing sudo to gosu
+cp -a /opt/iobroker/iobroker /opt/iobroker/iobroker.bak
 sed -i 's/sudo -H -u/gosu/g' /opt/iobroker/iobroker
 
 # Checking for first run of a new installation and renaming ioBroker
@@ -51,6 +53,15 @@ then
   echo 'Renaming ioBroker...'
   iobroker host $(cat /opt/iobroker/.install_host)
   rm -f /opt/iobroker/.install_host
+  echo 'Renaming ioBroker done...'
+elif [ "$hostnameold" != "" ]
+then
+  echo ''
+  echo 'This is the first run of an existing installation...'
+  echo 'Hostname given is' $(hostname)'...'
+  echo 'Hostname old is' $hostnameold'...'
+  echo 'Renaming ioBroker...'
+  iobroker host $hostnameold
   echo 'Renaming ioBroker done...'
 fi
 
@@ -79,14 +90,14 @@ sleep 5
 # Starting ioBroker
 echo ''
 echo 'Starting ioBroker...'
-iobroker start
-# sudo -u iobroker node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &
-echo 'Starting ioBroker done...'
-
 echo ''
 echo '----------------------------------------'
-echo '----------     Have fun!     -----------'
+echo '-------     ioBroker Logging     -------'
 echo '----------------------------------------'
+echo ''
 
-# Preventing container restart by keeping a process alive
+# gosu iobroker node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &
+gosu iobroker node node_modules/iobroker.js-controller/controller.js
+
+# Preventing container restart by keeping a process alive even if iobroker will be stopped
 tail -f /dev/null
