@@ -12,7 +12,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         curl \
         git \
         gnupg2 \
-        libavahi-compat-libdnssd-dev \
         libcap2-bin \
         libpam0g-dev \
         libudev-dev \
