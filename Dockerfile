@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM debian:stretch
 
 MAINTAINER Andre Germann <https://buanet.de>
 
