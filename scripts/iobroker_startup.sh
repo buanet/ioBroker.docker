@@ -3,6 +3,8 @@
 # Reading env-variables
 packages=$PACKAGES
 avahi=$AVAHI
+uid=$PUID
+gid=$PGID
 
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -12,6 +14,7 @@ echo ''
 echo '----------------------------------------'
 echo '-----   Image-Version: 3.0.2beta   -----'
 echo '-----      '$dati'     -----'
+echo '----- uid: '$uid' gid: '$gid' -----'
 echo '----------------------------------------'
 echo ''
 echo 'Startupscript running...'
@@ -39,6 +42,9 @@ then
 	echo 'Restoring done...'
 fi
 
+echo 'who am i'
+whoami
+
 # Backing up original iobroker-file and changing sudo to gosu
 cp -a /opt/iobroker/iobroker /opt/iobroker/iobroker.bak
 sed -i 's/sudo -H -u/gosu/g' /opt/iobroker/iobroker
@@ -50,7 +56,7 @@ then
   echo 'This is the first run of an new installation...'
   echo 'Hostname given is' $(hostname)'...'
   echo 'Renaming ioBroker...'
-  iobroker host $(cat /opt/iobroker/.install_host)
+  /opt/iobroker/iobroker host $(cat /opt/iobroker/.install_host)
   rm -f /opt/iobroker/.install_host
   echo 'Renaming ioBroker done...'
 fi
@@ -60,8 +66,8 @@ if [ -f /opt/.firstrun ]
 then 
   echo ''
   echo 'Changing permissions upon first run (This might take a while! Please be patient!)...'
-  chown -R iobroker /opt/iobroker
-  chown -R iobroker /opt/scripts
+  chown -R $uid:$gid /opt/iobroker
+  chown -R $uid:$gid /opt/scripts
   rm -f /opt/.firstrun
   echo 'Changing permissions done...'
 fi
