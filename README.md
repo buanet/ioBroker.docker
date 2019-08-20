@@ -29,6 +29,7 @@ In v3.0.0 I added some new features. The following will give some short informat
 |LANG|de_DE.UTF-8|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |LC_ALL|de_DE|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |TZ|Europe/Berlin|all valid Linux-timezones|
+|HOSTUID|1000|any new UID you need to match from host|
 
 ### Mounting Folder/ Volume
 
@@ -43,6 +44,9 @@ This also works with mounting a folder containing an existing ioBroker-installat
 I added some code for fixing permissions for new iobroker-user. Permission-fixing is called on first start of the container. This might take a few minutes. Please be patient!
 
 ## Changelog
+
+### v3.0.3beta (2019-08-20)
+* you can provide a userid from your host system. permissions will be applied.
 
 ### v3.0.2beta (2019-06-13)
 * using gosu instead of sudo
