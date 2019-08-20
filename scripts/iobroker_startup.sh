@@ -41,12 +41,6 @@ then
 	echo 'Restoring done...'
 fi
 
-echo 'who am i'
-whoami
-
-echo 'whats my id'
-id $(whoami)
-
 # Checking for first run and change permissions
 if [ -f /opt/.firstrun ]
 then 
