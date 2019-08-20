@@ -71,7 +71,8 @@ ENV DEBIAN_FRONTEND="teletype" \
 	TZ="Europe/Berlin" \
 	PACKAGES="nano" \
 	AVAHI="false"  \
-    HOSTUID=1000
+    HOSTUID=1000   \
+    HOSTGID=1000
 
 # Setting up EXPOSE for Admin
 EXPOSE 8081/tcp	

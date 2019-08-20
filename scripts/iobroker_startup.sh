@@ -4,6 +4,7 @@
 packages=$PACKAGES
 avahi=$AVAHI
 uid=$HOSTUID
+gid=$HOSTGID
 
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -11,9 +12,9 @@ dati=`date '+%Y-%m-%d %H:%M:%S'`
 # Information
 echo ''
 echo '----------------------------------------'
-echo '-----   Image-Version: 3.0.2beta   -----'
+echo '-----   Image-Version: 3.0.3beta   -----'
 echo '-----      '$dati'     -----'
-echo '-----        uid: '$uid'      -----'
+echo '-----        uid: '$uid' gid: '$gid'  -----'
 echo '----------------------------------------'
 echo ''
 echo 'Startupscript running...'
@@ -46,16 +47,20 @@ if [ -f /opt/.firstrun ]
 then 
   echo ''
   echo 'Changing permissions upon first run (This might take a while! Please be patient!)...'
+  echo 'Changing user and group ids'
   usermod -u $uid iobroker
-  chown -R $uid /opt/iobroker
-  chown -R $uid /opt/scripts
+  groupmod -g $gid iobroker
+  echo 'Done.'
+  echo 'Setting folder permissions'
+  chown -R $uid:$gid /opt/iobroker
+  chown -R $uid:$gid /opt/scripts
   rm -f /opt/.firstrun
   echo 'Changing permissions done...'
 fi
 
 # Backing up original iobroker-file and changing sudo to gosu
 cp -a /opt/iobroker/iobroker /opt/iobroker/iobroker.bak
-chmod u+x /opt/iobroker/iobroker
+chmod 755 /opt/iobroker/iobroker
 sed -i 's/sudo -H -u/gosu/g' /opt/iobroker/iobroker
 
 # Checking for first run of a new installation and renaming ioBroker
@@ -65,7 +70,7 @@ then
   echo 'This is the first run of an new installation...'
   echo 'Hostname given is' $(hostname)'...'
   echo 'Renaming ioBroker...'
-  /opt/iobroker/iobroker host $(cat /opt/iobroker/.install_host)
+  sh /opt/iobroker/iobroker host $(cat /opt/iobroker/.install_host)
   rm -f /opt/iobroker/.install_host
   echo 'Renaming ioBroker done...'
 fi
@@ -75,7 +80,7 @@ if [ "$avahi" = "true" ]
 then
   echo ''
   echo 'Initializing Avahi-Daemon...'
-  chmod u+x /opt/scripts/setup_avahi.sh
+  chmod 764 /opt/scripts/setup_avahi.sh
   sh /opt/scripts/setup_avahi.sh
   echo 'Initializing Avahi-Daemon done...'
 fi
@@ -91,7 +96,8 @@ echo '-------     ioBroker Logging     -------'
 echo '----------------------------------------'
 echo ''
 
-# gosu iobroker node node_modules/iobroker.js-controller/controller.js > /opt/scripts/iobroker.log 2>&1 &
+#touch /opt/iobroker/iobroker.log
+#gosu iobroker node --trace-warnings node_modules/iobroker.js-controller/controller.js > /opt/iobroker/iobroker.log 2>&1 &
 gosu iobroker node node_modules/iobroker.js-controller/controller.js
 
 # Preventing container restart by keeping a process alive even if iobroker will be stopped
