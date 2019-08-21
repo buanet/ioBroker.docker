@@ -1,13 +1,11 @@
 # docker-iobroker
-Docker image for ioBroker (http://iobroker.net) based on debian:latest (http://hub.docker.com/_/debian/)
+Docker image for ioBroker (http://iobroker.net) based on debian:stretch (http://hub.docker.com/_/debian/)
 
-This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker (Normally I do a small additional test on my Debian-VM with Docker CE)!
+This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker installed!
 
 ## Important
 
 Switching an existing installation from docker-iobroker-image v1 to v2 or greater means switching iobroker itself from node6 to node8! This requires additional steps inside ioBroker! After upgrading iobroker-container you have to call "reinstall.sh" for recompiling your installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!!!
-
-At the moment v3.0.0 does no longer support running in host-mode on Synology-devices because of a kernel issue in actual DSM-kernel! Please use bridged or macvlan mode. For details see new tutorial linked in the following.
 
 ## Installation & Usage
 
@@ -40,9 +38,13 @@ This also works with mounting a folder containing an existing ioBroker-installat
 
 ### Permission Fixer
 
-I added some code for fixing permissions for new iobroker-user. Permission-fixing is called on first start of the container. This might take a few minutes. Please be patient!
+I added some code for fixing permissions for new iobroker-user. Permission-fixing is called on first start of the container. This might take a few minutes. Please take a look at the logs and be patient!
 
 ## Changelog
+
+### v3.1.0 (2019-08-21)
+* switching base image from "debian:latest" to "debian:stretch"
+* bringing beta changes to stable
 
 ### v3.0.2beta (2019-06-13)
 * using gosu instead of sudo
