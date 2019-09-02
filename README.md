@@ -27,6 +27,8 @@ In v3.0.0 I added some new features. The following will give some short informat
 |LANG|de_DE.UTF-8|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |LC_ALL|de_DE|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |TZ|Europe/Berlin|all valid Linux-timezones|
+|SETUID|1000|for security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
+|SETGID|1000|for security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
 
 ### Mounting Folder/ Volume
 
@@ -41,6 +43,9 @@ This also works with mounting a folder containing an existing ioBroker-installat
 I added some code for fixing permissions for new iobroker-user. Permission-fixing is called on first start of the container. This might take a few minutes. Please take a look at the logs and be patient!
 
 ## Changelog
+
+### v3.1.1beta (2019-09-02)
+* adding env for setting uid/ gid for iobroker-user
 
 ### v3.1.0 (2019-08-21)
 * v3.0.3beta (2019-08-21)
