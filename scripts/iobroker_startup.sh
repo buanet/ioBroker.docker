@@ -45,12 +45,12 @@ fi
 if [ -f /opt/.firstrun ]
 then 
   echo ''
-  echo 'Changing uid/gid and permissions upon first run (This might take a while! Please be patient!)...'
-  echo 'Changing user and group ids'
+  echo 'Changing UID/GID and permissions upon first run...'
+  echo 'Setting UID to '$uid' and GID to '$gid'...'
   usermod -u $uid iobroker
   groupmod -g $gid iobroker
   echo 'Done.'
-  echo 'Setting folder permissions'
+  echo 'Setting folder permissions (This might take a while! Please be patient!)...'
   chown -R $uid:$gid /opt/iobroker
   chown -R $uid:$gid /opt/scripts
   rm -f /opt/.firstrun
