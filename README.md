@@ -1,13 +1,11 @@
 # docker-iobroker
-Docker image for ioBroker (http://iobroker.net) based on debian:latest (http://hub.docker.com/_/debian/)
+Docker image for ioBroker (http://iobroker.net) based on debian:stretch (http://hub.docker.com/_/debian/)
 
-This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker (Normally I do a small additional test on my Debian-VM with Docker CE)!
+This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker installed!
 
 ## Important
 
 Switching an existing installation from docker-iobroker-image v1 to v2 or greater means switching iobroker itself from node6 to node8! This requires additional steps inside ioBroker! After upgrading iobroker-container you have to call "reinstall.sh" for recompiling your installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!!!
-
-At the moment v3.0.0 does no longer support running in host-mode on Synology-devices because of a kernel issue in actual DSM-kernel! Please use bridged or macvlan mode. For details see new tutorial linked in the following.
 
 ## Installation & Usage
 
@@ -29,8 +27,8 @@ In v3.0.0 I added some new features. The following will give some short informat
 |LANG|de_DE.UTF-8|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |LC_ALL|de_DE|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |TZ|Europe/Berlin|all valid Linux-timezones|
-|HOSTUID|1000|new UID you need to match from host|
-|HOSTGID|1000|new GID you need to match from host|
+|SETUID|1000|for security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
+|SETGID|1000|for security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
 
 ### Mounting Folder/ Volume
 
@@ -42,83 +40,73 @@ This also works with mounting a folder containing an existing ioBroker-installat
 
 ### Permission Fixer
 
-I added some code for fixing permissions for new iobroker-user. Permission-fixing is called on first start of the container. This might take a few minutes. Please be patient!
+I added some code for fixing permissions for new iobroker-user. Permission-fixing is called on first start of the container. This might take a few minutes. Please take a look at the logs and be patient!
 
 ## Changelog
 
-### v3.0.3beta (2019-08-20)
-* you can provide a userid and a groupid from your host system. permissions will be applied.
+### v3.1.1beta (2019-09-02)
+* adding env for setting uid/ gid for iobroker-user
 
-### v3.0.2beta (2019-06-13)
-* using gosu instead of sudo
-* changing output of ioBroker logging
-
-### v3.0.1beta (2019-05-18)
-* ~~switching back to iobroker-daemon for startup~~
+### v3.1.0 (2019-08-21)
+* v3.0.3beta (2019-08-21)
+  * switching base image from "debian:latest" to "debian:stretch"
+* v3.0.2beta (2019-06-13)
+  * using gosu instead of sudo
+  * changing output of ioBroker logging
+* v3.0.1beta (2019-05-18)
+  * ~~switching back to iobroker-daemon for startup~~
 
 ### v3.0.0 (2019-05-09)
-* bringing changes since v2.0.0 to stable
-* new tutorial available
-
-### v2.0.6beta (2019-04-14)
-* added some additional logging
-* fixing some issues for languag env
-* added permission fixing on first start
-
-### v2.0.5beta (2019-02-09)
-* added ENV to dockerfile
-* added EXPOSE for admin 
-* final testing
-
-### v2.0.4beta (2019-01-28)
-* added support for env variables "avahi" and "packages"
-* moving avahi-daemon installation into avahi startup script
-* added script for installing optional packages
-* optimizing logging output
-
-### v2.0.3beta (2019-01-24)
-* added support for running ioBroker under iobroker user
-* optimizing logging output
-* optimizing scripts
-
-### v2.0.2beta (2019-01-23)
-* optimizing and rearraged dockerfile
-* changes for new ioBroker install script
-* added restoring for empty mounted /opt/iobroker folder
-* some more small fixes
-
-### v2.0.1beta (2019-01-07)
-* some changes for supporting other docker-environments than synology ds
+* v2.0.6beta (2019-04-14)
+  * added some additional logging
+  * fixing some issues for languag env
+  * added permission fixing on first start
+* v2.0.5beta (2019-02-09)
+  * added ENV to dockerfile
+  * added EXPOSE for admin 
+  * final testing
+* v2.0.4beta (2019-01-28)
+  * added support for env variables "avahi" and "packages"
+  * moving avahi-daemon installation into avahi startup script
+  * added script for installing optional packages
+  * optimizing logging output
+* v2.0.3beta (2019-01-24)
+  * added support for running ioBroker under iobroker user
+  * optimizing logging output
+  * optimizing scripts
+* v2.0.2beta (2019-01-23)
+  * optimizing and rearraged dockerfile
+  * changes for new ioBroker install script
+  * added restoring for empty mounted /opt/iobroker folder
+  * some more small fixes
+* v2.0.1beta (2019-01-07)
+  * some changes for supporting other docker-environments than synology ds
 
 ### v2.0.0 (2018-12-05)
-* using node8 instead of node6 
-* changes for new iobroker setup
+* v1.2.2beta (2018-12-05)  
+  * using node8 instead of node6 
+  * changes for new iobroker setup
+* v1.2.1beta (2018-09-12)
+  * added support for firetv-adapter
 
-### v1.2.1beta (2018-09-12)
-* added support for firetv-adapter
+### v1.2.0 (2018-08-21) 
+* v1.1.3beta (2018-08-21)
+  * added ffmpeg-package for yahka to support webcams
+* v1.1.2beta (2018-04-04)
+  * added ENV for timezone issue
+* v1.1.1beta (2018-03-29)
+  * added wget package
+  * updated readme.md
 
-### v1.2.0 (2018-08-21)
-* after testing making 1.1.3beta to latest stable release 
-
-### v1.1.3beta (2018-08-21)
-* added ffmpeg-package for yahka to support webcams
-
-### v1.1.2beta (2018-04-04)
-* added ENV for timezone issue
-
-### v1.1.1beta (2018-03-29)
-* added wget package
-* updated readme.md
-
-### v1.1.0 (2017-12-10)
-* changed startup call to fix restart issue
-* fixed avahi startup issue
-* fixed hostname issue
-* added z-wave support
-* added logging to /opt/scripts/docker_iobroker_log.txt
-
-### v1.0.1beta (2017-08-25)
-* fixed locales issue
+###  v1.1.0 (2017-12-10)
+* v1.0.2beta (2017-12-10)
+  * changed startup call to fix restart issue
+  * fixed avahi startup issue
+  * fixed hostname issue
+  * added z-wave support
+  * added logging to /opt/scripts/docker_iobroker_log.txt
+* v1.0.1beta (2017-08-25)
+  * fixed locales issue
 
 ### v1.0.0 (2017-08-22)
 * moved and renamed iobroker startup script

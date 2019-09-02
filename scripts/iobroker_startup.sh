@@ -3,8 +3,8 @@
 # Reading env-variables
 packages=$PACKAGES
 avahi=$AVAHI
-uid=$HOSTUID
-gid=$HOSTGID
+uid=$SETUID
+gid=$SETGID
 
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -12,9 +12,8 @@ dati=`date '+%Y-%m-%d %H:%M:%S'`
 # Information
 echo ''
 echo '----------------------------------------'
-echo '-----   Image-Version: 3.0.3beta   -----'
+echo '-----   Image-Version: 3.1.1beta   -----'
 echo '-----      '$dati'     -----'
-echo '-----        uid: '$uid' gid: '$gid'  -----'
 echo '----------------------------------------'
 echo ''
 echo 'Startupscript running...'
@@ -27,7 +26,7 @@ then
   echo 'The following packages will be installed:' $packages
   echo $packages > /opt/scripts/.packages
   sh /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
-  echo 'Installing additional packages done...'
+  echo 'Done.'
 fi
 
 cd /opt/iobroker
@@ -39,14 +38,14 @@ then
   echo 'Directory /opt/iobroker is empty!'
   echo 'Restoring data from image...'
 	tar -xf /opt/initial_iobroker.tar -C /
-	echo 'Restoring done...'
+	echo 'Done.'
 fi
 
-# Checking for first run and change permissions
+# Checking for first run and set uid/gid and permissions
 if [ -f /opt/.firstrun ]
 then 
   echo ''
-  echo 'Changing permissions upon first run (This might take a while! Please be patient!)...'
+  echo 'Changing uid/gid and permissions upon first run (This might take a while! Please be patient!)...'
   echo 'Changing user and group ids'
   usermod -u $uid iobroker
   groupmod -g $gid iobroker
@@ -55,7 +54,7 @@ then
   chown -R $uid:$gid /opt/iobroker
   chown -R $uid:$gid /opt/scripts
   rm -f /opt/.firstrun
-  echo 'Changing permissions done...'
+  echo 'Done.'
 fi
 
 # Backing up original iobroker-file and changing sudo to gosu
@@ -72,7 +71,7 @@ then
   echo 'Renaming ioBroker...'
   sh /opt/iobroker/iobroker host $(cat /opt/iobroker/.install_host)
   rm -f /opt/iobroker/.install_host
-  echo 'Renaming ioBroker done...'
+  echo 'Done.'
 fi
 
 # Checking for and setting up avahi-daemon
@@ -82,7 +81,7 @@ then
   echo 'Initializing Avahi-Daemon...'
   chmod 764 /opt/scripts/setup_avahi.sh
   sh /opt/scripts/setup_avahi.sh
-  echo 'Initializing Avahi-Daemon done...'
+  echo 'Done.'
 fi
 
 sleep 5
