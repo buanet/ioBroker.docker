@@ -44,8 +44,10 @@ I added some code for fixing permissions for new iobroker-user. Permission-fixin
 
 ## Changelog
 
-### v3.1.1beta (2019-09-02)
-* adding env for setting uid/ gid for iobroker-user
+### v3.1.2beta (2019-09-03)
+  * using node 10 instead of node 8
+* v3.1.1beta (2019-09-02)
+  * adding env for setting uid/ gid for iobroker-user
 
 ### v3.1.0 (2019-08-21)
 * v3.0.3beta (2019-08-21)
