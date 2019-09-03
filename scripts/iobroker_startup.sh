@@ -12,7 +12,7 @@ dati=`date '+%Y-%m-%d %H:%M:%S'`
 # Information
 echo ''
 echo '----------------------------------------'
-echo '-----   Image-Version: 3.1.1beta   -----'
+echo '-----   Image-Version: 3.1.2beta   -----'
 echo '-----      '$dati'     -----'
 echo '----------------------------------------'
 echo ''
