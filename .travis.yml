@@ -77,6 +77,15 @@ after_success:
       
       #manifest for image: buanet/iobroker:latest
       cat manifest.yaml | sed "s/\$DOCKERTAG/latest/g" > manifestlatest.yaml
+      
+      #manifest for image: buanet/iobroker:VERSION-amd64
+      cat manifest_amd64.yml | sed "s/\$VERSION/${VERSION}/g" > manifest_amd64.yaml
+      
+      #manifest for image: buanet/iobroker:VERSION-armv7hf
+      cat manifest_armv7hf.yml | sed "s/\$VERSION/${VERSION}/g" > manifest_armv7hf.yaml
+      
+      #manifest for image: buanet/iobroker:VERSION-aarch64
+      cat manifest_aarch64.yml | sed "s/\$VERSION/${VERSION}/g" > manifest_aarch64.yaml
 
       #push to hub
       mv manifestversion.yaml iobroker.yaml
@@ -84,6 +93,15 @@ after_success:
       
       mv manifestlatest.yaml iobroker.yaml
       ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
+            
+      mv manifest_amd64.yaml manifest.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec manifest.yaml
+      
+      mv manifest_armv7hf.yaml manifest.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec manifest.yaml
+      
+      mv manifest_aarch64.yaml manifest.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec manifest.yaml
     fi
     
     if [ "$TRAVIS_BRANCH" == "beta" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Manifest" ]; then
@@ -96,10 +114,28 @@ after_success:
       #manifest for image: buanet/iobroker:beta
       cat manifest.yaml | sed "s/\$DOCKERTAG/beta/g" > manifestbeta.yaml
 
+      #manifest for image: buanet/iobroker:VERSION-amd64
+      cat manifest_amd64.yml | sed "s/\$VERSION/${VERSION}/g" > manifest_amd64.yaml
+      
+      #manifest for image: buanet/iobroker:VERSION-armv7hf
+      cat manifest_armv7hf.yml | sed "s/\$VERSION/${VERSION}/g" > manifest_armv7hf.yaml
+      
+      #manifest for image: buanet/iobroker:VERSION-aarch64
+      cat manifest_aarch64.yml | sed "s/\$VERSION/${VERSION}/g" > manifest_aarch64.yaml
+
       #push to hub
       mv manifestversion.yaml iobroker.yaml
       ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
       
       mv manifestbeta.yaml iobroker.yaml
       ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
+      
+      mv manifest_amd64.yaml manifest.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec manifest.yaml
+      
+      mv manifest_armv7hf.yaml manifest.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec manifest.yaml
+      
+      mv manifest_aarch64.yaml manifest.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec manifest.yaml
     fi

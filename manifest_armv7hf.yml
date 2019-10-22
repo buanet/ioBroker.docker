@@ -1,0 +1,8 @@
+image: buanet/iobroker-testing:$VERSION-armv7hf
+manifests:
+  -
+    image: buanet/iobroker-testing:$VERSION-armv7hf
+    platform:
+      architecture: arm
+      variant: v7
+      os: linux

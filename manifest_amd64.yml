@@ -1,0 +1,7 @@
+image: buanet/iobroker-testing:$VERSION-amd64
+manifests:
+  -
+    image: buanet/iobroker-testing:$VERSION-amd64
+    platform:
+      architecture: amd64
+      os: linux

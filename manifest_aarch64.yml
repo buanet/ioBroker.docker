@@ -1,0 +1,8 @@
+image: buanet/iobroker-testing:$VERSION-aarch64
+manifests:
+  -
+    image: buanet/iobroker-testing:$VERSION-aarch64
+    platform:
+      architecture: arm64
+      variant: v8
+      os: linux
