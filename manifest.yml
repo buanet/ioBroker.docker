@@ -1,18 +1,18 @@
-image: buanet/iobroker-testing:$DOCKERTAG
+image: buanet/iobroker:$DOCKERTAG
 manifests:
   -
-    image: buanet/iobroker-testing:$VERSION-amd64
+    image: buanet/iobroker:$VERSION-amd64
     platform:
       architecture: amd64
       os: linux
   -
-    image: buanet/iobroker-testing:$VERSION-aarch64
+    image: buanet/iobroker:$VERSION-aarch64
     platform:
       architecture: arm64
       variant: v8
       os: linux
   -
-    image: buanet/iobroker-testing:$VERSION-armv7hf
+    image: buanet/iobroker:$VERSION-armv7hf
     platform:
       architecture: arm
       variant: v7

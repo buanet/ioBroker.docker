@@ -30,7 +30,7 @@ jobs:
         - JOB_NAME="Build images"
       script:
         - sed -i "s/\$VERSION/${VERSION}/g" $ARCH/scripts/iobroker_startup.sh
-        - docker build -t "buanet/iobroker-testing:$VERSION-$ARCH" ./amd64
+        - docker build -t "buanet/iobroker:$VERSION-$ARCH" ./amd64
 
     - stage: Build images
       env:
@@ -39,7 +39,7 @@ jobs:
       script:
         - docker run --rm --privileged multiarch/qemu-user-static:register --reset
         - sed -i "s/\$VERSION/${VERSION}/g" $ARCH/scripts/iobroker_startup.sh
-        - docker build -t "buanet/iobroker-testing:$VERSION-$ARCH" ./aarch64
+        - docker build -t "buanet/iobroker:$VERSION-$ARCH" ./aarch64
 
     - stage: Build images
       env:
@@ -48,7 +48,7 @@ jobs:
       script:
         - docker run --rm --privileged multiarch/qemu-user-static:register --reset
         - sed -i "s/\$VERSION/${VERSION}/g" $ARCH/scripts/iobroker_startup.sh
-        - docker build -t "buanet/iobroker-testing:$VERSION-$ARCH" ./armv7hf
+        - docker build -t "buanet/iobroker:$VERSION-$ARCH" ./armv7hf
         
     - stage: Manifest
       env:
@@ -60,11 +60,11 @@ after_success:
 # tag and push built images
   - >
     if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Build images" ] ; then
-      docker push buanet/iobroker-testing:$VERSION-$ARCH
+      docker push buanet/iobroker:$VERSION-$ARCH
     fi
     
     if [ "$TRAVIS_BRANCH" == "beta" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Build images" ] ; then
-      docker push buanet/iobroker-testing:$VERSION-$ARCH
+      docker push buanet/iobroker:$VERSION-$ARCH
     fi
     
 # update repository manifest for multiarch and push to hub
@@ -72,34 +72,34 @@ after_success:
     if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Manifest" ]; then
       cat manifest.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
       
-      #manifest for image: buanet/iobroker-testing:version
+      #manifest for image: buanet/iobroker:version
       cat manifest.yaml | sed "s/\$DOCKERTAG/${VERSION}/g" > manifestversion.yaml
       
-      #manifest for image: buanet/iobroker-testing:latest
+      #manifest for image: buanet/iobroker:latest
       cat manifest.yaml | sed "s/\$DOCKERTAG/latest/g" > manifestlatest.yaml
 
       #push to hub
-      mv manifestversion.yaml iobroker-testing.yaml
-      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker-testing.yaml
+      mv manifestversion.yaml iobroker.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
       
-      mv manifestlatest.yaml iobroker-testing.yaml
-      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker-testing.yaml
+      mv manifestlatest.yaml iobroker.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
     fi
     
     if [ "$TRAVIS_BRANCH" == "beta" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Manifest" ]; then
       
       cat manifest.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
       
-      #manifest for image: buanet/iobroker-testing:version
+      #manifest for image: buanet/iobroker:version
       cat manifest.yaml | sed "s/\$DOCKERTAG/${VERSION}/g" > manifestversion.yaml
       
-      #manifest for image: buanet/iobroker-testing:beta
+      #manifest for image: buanet/iobroker:beta
       cat manifest.yaml | sed "s/\$DOCKERTAG/beta/g" > manifestbeta.yaml
 
       #push to hub
-      mv manifestversion.yaml iobroker-testing.yaml
-      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker-testing.yaml
+      mv manifestversion.yaml iobroker.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
       
-      mv manifestbeta.yaml iobroker-testing.yaml
-      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker-testing.yaml
+      mv manifestbeta.yaml iobroker.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
     fi
