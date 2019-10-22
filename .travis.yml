@@ -1,0 +1,105 @@
+sudo: required
+
+branches:
+  only:
+  - master
+  - beta
+
+services:
+  - docker
+
+language: bash
+
+env:
+  global:
+  - secure: "LnAvKBxbcqOz650+gb2BTLvhHR1t9PTCQv274IWIGLHqHB9u6mgM0wRpr8MR7mzxpi21QjFelkc1XIkRKR4w07+1OR259+lNYAIGjITKA7iIr1/MVgt0MGlclA6AXQGMV2398TLvkmd/3egvbjBYm7wwmcESnI43w050qhaygQR2PY7bwA/1K4O7LI3FVFPRu2Q78QK/PfLAy2923k+eTtwFstz1q/CmySKpAWNOvUthX2WcZbQOXRgr7+OZrSVwcqReu0ZUfuBp79nMZcXAXxPBu7RelP3GaFMsyxMGJlrLIlv97pQLOaoJ2T9/ZmvDqEtFmi6vzuukDGsWmZx13ZUiEAn+XFQUtpACf77h61b6jC2lzqXQlSJG7Uy2W2f0BPMBSQelVxoiONbzyjtptcjTX+xb0jnyTjQgOo2IZa8f8D55D+XsRJfc25u77323iH2x8blESslW3L52XZDXno0nwoa9LCj5bjDVlQ2jMpzedj88yjk9ss6HUwL/xDThmV74f/tL9R7n7M9WsT4RBkBIOOce/yRKF0rhGZDXY+uC8dg0mTYWeSXOJPmqIi59lZyKYR5WBupdts4/Q3b+mI7BAX8HTxjHw450G0iX1Dh5MSf3kgKoPbu03CC7l+XPgRVu9j4brUQ6uN9DVCjomlDzJzMN6EFR+meSIwhUR8Y="
+  - secure: "eJui3AAugMETkg+E5CAN3F7707/WG9Ueq7rTE6QBuSFuLprhbTwZJGRCuf6iYuwQeHfUyP3JJDsUI1aasnkdLMr2sgKpNhmJ93J/8pCzlNDWbzskPAsIZ3vvXW0Dvcg9ALN7RBeG9fyOoJW2RmhQYE4oqIZQDXX/qBzDZbTzclB8O74ENu2M7hiQtKieYN/hrbmBVgLftScvbClBIwR+yCSMuan9ivyoiZnRq9RxoWpiyi+U+45A4jTO7ZWvSYpF4Rj6QlJyx4bfEhscvOwP5Vg834SKgBFU82HjFofKcH0jMeoH0ohFmpgEhrtFF3BF3cMPrz3dGJTt3Jwf3DUuLmBeN/im4omqVlysTq2AaTdrIDMnBP0sQUekKcXeqOwMZxFx4nm5cl86VAfa/DeqjuXabv2LEwidHxHRziuzwpzsRMCF1Q5EU56jyFCaKMXwzlTCrRvYNRhk+y2rdWatvOnnmsin7OmgDBY3PcFLDR3gGb4hqLt1ZE5+LaPofXWx3AF4k/Ovtaw5gaVzA4xoMs4w0jBIUl8GhutqVpYYDkjETIy47Nxf2QBBLvnSZR0eNBzA3Qd3j6RswFsEjDiB3UcsznlNmM+CGj1OzqkiIX7ggW+C05KMpyGjhugk90TjMh7HH/MmZD0FZlYvyJHb3EmAe4jgyZ3B6MU86BpjG0c="
+  - VERSION="$(cat .VERSION)"
+
+before_install:
+  - wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64 -O manifest-tool
+  - chmod +x manifest-tool
+  - docker run --rm --privileged multiarch/qemu-user-static:register
+  - echo "$HUB_PASS" | docker login -u "$HUB_USER" --password-stdin
+
+jobs:
+  include:
+    - stage: Build images
+      env:
+        - ARCH=amd64
+        - JOB_NAME="Build images"
+      script:
+        - sed -i "s/\$VERSION/${VERSION}/g" $ARCH/scripts/iobroker_startup.sh
+        - docker build -t "buanet/iobroker-testing:$VERSION-$ARCH" ./amd64
+
+    - stage: Build images
+      env:
+        - ARCH=aarch64
+        - JOB_NAME="Build images"
+      script:
+        - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+        - sed -i "s/\$VERSION/${VERSION}/g" $ARCH/scripts/iobroker_startup.sh
+        - docker build -t "buanet/iobroker-testing:$VERSION-$ARCH" ./aarch64
+
+    - stage: Build images
+      env:
+        - ARCH=armv7hf
+        - JOB_NAME="Build images"
+      script:
+        - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+        - sed -i "s/\$VERSION/${VERSION}/g" $ARCH/scripts/iobroker_startup.sh
+        - docker build -t "buanet/iobroker-testing:$VERSION-$ARCH" ./armv7hf
+        
+    - stage: Manifest
+      env:
+        - JOB_NAME="Manifest"
+      script:
+        - echo Placeholder
+
+after_success:
+# tag and push built images
+  - >
+    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Build images" ] ; then
+      docker push buanet/iobroker-testing:$VERSION-$ARCH
+    fi
+    
+    if [ "$TRAVIS_BRANCH" == "beta" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Build images" ] ; then
+      docker push buanet/iobroker-testing:$VERSION-$ARCH
+    fi
+    
+# update repository manifest for multiarch and push to hub
+  - >
+    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Manifest" ]; then
+      cat manifest.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
+      
+      #manifest for image: buanet/iobroker-testing:version
+      cat manifest.yaml | sed "s/\$DOCKERTAG/${VERSION}/g" > manifestversion.yaml
+      
+      #manifest for image: buanet/iobroker-testing:latest
+      cat manifest.yaml | sed "s/\$DOCKERTAG/latest/g" > manifestlatest.yaml
+
+      #push to hub
+      mv manifestversion.yaml iobroker-testing.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker-testing.yaml
+      
+      mv manifestlatest.yaml iobroker-testing.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker-testing.yaml
+    fi
+    
+    if [ "$TRAVIS_BRANCH" == "beta" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Manifest" ]; then
+      
+      cat manifest.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
+      
+      #manifest for image: buanet/iobroker-testing:version
+      cat manifest.yaml | sed "s/\$DOCKERTAG/${VERSION}/g" > manifestversion.yaml
+      
+      #manifest for image: buanet/iobroker-testing:beta
+      cat manifest.yaml | sed "s/\$DOCKERTAG/beta/g" > manifestbeta.yaml
+
+      #push to hub
+      mv manifestversion.yaml iobroker-testing.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker-testing.yaml
+      
+      mv manifestbeta.yaml iobroker-testing.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker-testing.yaml
+    fi

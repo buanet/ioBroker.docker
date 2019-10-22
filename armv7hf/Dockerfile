@@ -1,8 +1,11 @@
-FROM debian:stretch
+FROM balenalib/armv7hf-debian:stretch
 
 MAINTAINER Andre Germann <https://buanet.de>
 
 ENV DEBIAN_FRONTEND noninteractive
+
+# Debugging for multiarch
+RUN uname -m
 
 # Install prerequisites
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
@@ -55,6 +58,7 @@ RUN apt-get update \
 
 # Install node-gyp
 WORKDIR /opt/iobroker/
+RUN npm config set unsafe-perm true     # To fix "Error: could not get uid/gid"
 RUN npm install -g node-gyp
 
 # Backup initial ioBroker-folder
@@ -70,9 +74,9 @@ ENV DEBIAN_FRONTEND="teletype" \
 	LC_ALL="de_DE.UTF-8" \
 	TZ="Europe/Berlin" \
 	PACKAGES="nano" \
-	AVAHI="false"  \
-    	SETUID=1000   \
-    	SETGID=1000
+	AVAHI="false" \
+    SETUID=1000 \
+    SETGID=1000
 
 # Setting up EXPOSE for Admin
 EXPOSE 8081/tcp	
