@@ -157,7 +157,7 @@ then
   echo "ZWave is activated by ENV."
   echo "Initializing ZWave-support..."
   chmod 764 /opt/scripts/setup_zwave.sh
-  sh /opt/scripts/setup_avahi.sh
+  sh /opt/scripts/setup_zwave.sh
   echo "Done."
   echo ' '
 fi
