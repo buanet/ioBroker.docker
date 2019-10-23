@@ -145,7 +145,6 @@ echo ' '
 if [ "$avahi" = "true" ]
 then
   echo "Avahi-daemon is activated by ENV."
-  echo "Initializing Avahi-Daemon..."
   chmod 764 /opt/scripts/setup_avahi.sh
   sh /opt/scripts/setup_avahi.sh
   echo "Done."
@@ -155,7 +154,6 @@ fi
 if [ "$zwave" = "true" ]
 then
   echo "ZWave is activated by ENV."
-  echo "Initializing ZWave-support..."
   chmod 764 /opt/scripts/setup_zwave.sh
   sh /opt/scripts/setup_zwave.sh
   echo "Done."
