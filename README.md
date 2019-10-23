@@ -5,12 +5,12 @@ IoBroker for Docker is an Dockerimage for ioBroker (http://iobroker.net) smartho
 
 It is originally made for, and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker installed!
 
-Version 4 now supports running the Image in Docker on the following architectures: amd64, armv7hf, aarch64.
+Version 4 (coming soon, at the moment still as 3.1.4beta) now supports running the Image in Docker on the following architectures: amd64, armv7hf, aarch64.
 Feel free to ask for more architectures by opening an github-issue. 
 
 ## Important
 
-The new v4 comes again with a new major node-version (node10)!
+The new v4 (coming soon, at the moment still as 3.1.4beta) comes again with a new major node-version (node10)!
 If you are updating an existing Installation you have to perform some additional steps inside ioBroker!
 After upgrading your iobroker-container you have to call "reinstall.sh" for recompiling your installation for the use with node10!
 For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!
@@ -39,6 +39,7 @@ Since v3 is possible to set some environment variables to configure a new contai
 |TZ|Europe/Berlin|all valid Linux-timezones|
 |SETUID|1000|for security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
 |SETGID|1000|for security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
+|ZWAVE|false|will install openzwave to support zwave-adapter|
 
 ### Mounting Folder/ Volume
 
@@ -54,7 +55,8 @@ After some issues with permissions related to the use of a dedicated user for io
 
 ## Changelog
 
-### v4.0.0 (2019-10-22)
+### v3.1.4beta (2019-10-23)
+  * added env for zwave support
 * v3.1.3beta (2019-10-17)
   * enhanced logging of startup-script
   * multiarch support (amd64, aarch64, armv7hf)

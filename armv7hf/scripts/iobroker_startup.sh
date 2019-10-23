@@ -5,6 +5,7 @@ packages=$PACKAGES
 avahi=$AVAHI
 uid=$SETUID
 gid=$SETGID
+zwave=$ZWAVE
 
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -147,7 +148,17 @@ then
   echo "Initializing Avahi-Daemon..."
   chmod 764 /opt/scripts/setup_avahi.sh
   sh /opt/scripts/setup_avahi.sh
-  echo 'Done.'
+  echo "Done."
+  echo ' '
+fi
+
+if [ "$zwave" = "true" ]
+then
+  echo "ZWave is activated by ENV."
+  echo "Initializing ZWave-support..."
+  chmod 764 /opt/scripts/setup_zwave.sh
+  sh /opt/scripts/setup_avahi.sh
+  echo "Done."
   echo ' '
 fi
 

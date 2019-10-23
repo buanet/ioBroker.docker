@@ -4,9 +4,6 @@ MAINTAINER Andre Germann <https://buanet.de>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Debugging for multiarch
-RUN uname -m
-
 # Install prerequisites
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         acl \
@@ -44,6 +41,7 @@ WORKDIR /opt/scripts/
 COPY scripts/iobroker_startup.sh iobroker_startup.sh
 COPY scripts/setup_avahi.sh setup_avahi.sh
 COPY scripts/setup_packages.sh setup_packages.sh
+COPY scripts/setup_zwave.sh setup_zwave.sh
 RUN chmod +x iobroker_startup.sh \
 	&& chmod +x setup_avahi.sh \
     && chmod +x setup_packages.sh
@@ -76,7 +74,8 @@ ENV DEBIAN_FRONTEND="teletype" \
 	PACKAGES="nano" \
 	AVAHI="false" \
     SETUID=1000 \
-    SETGID=1000
+    SETGID=1000 \
+	ZWAVE="false"
 
 # Setting up EXPOSE for Admin
 EXPOSE 8081/tcp	
