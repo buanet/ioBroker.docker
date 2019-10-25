@@ -55,9 +55,6 @@ After some issues with permissions related to the use of a dedicated user for io
 
 ## Changelog
 
-### v4.0.1beta
-  * no changes yet
-
 ### v4.0.0 (2019-10-25)
 * v3.1.4beta (2019-10-23)
   * added env for zwave support
