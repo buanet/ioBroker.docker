@@ -1,23 +1,33 @@
-# docker-iobroker
-Docker image for ioBroker (http://iobroker.net) based on debian:stretch (http://hub.docker.com/_/debian/)
+# ioBroker for Docker
+Source: https://github.com/buanet/docker-iobroker
 
-This project creates a Docker image for running ioBroker in a Docker container. It is made for and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker installed!
+IoBroker for Docker is an Dockerimage for ioBroker (http://iobroker.net) smarthome software. 
+
+It is originally made for, and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker installed!
+
+Version 4 (coming soon, at the moment still as 3.1.4beta) now supports running the Image in Docker on the following architectures: amd64, armv7hf, aarch64.
+Feel free to ask for more architectures by opening an github-issue. 
 
 ## Important
 
-Switching an existing installation from docker-iobroker-image v1 to v2 or greater means switching iobroker itself from node6 to node8! This requires additional steps inside ioBroker! After upgrading iobroker-container you have to call "reinstall.sh" for recompiling your installation for the use with node8. For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!!!
+The new v4 (coming soon, at the moment still as 3.1.4beta) comes again with a new major node-version (node10)!
+If you are updating an existing Installation you have to perform some additional steps inside ioBroker!
+After upgrading your iobroker-container you have to call "reinstall.sh" for recompiling your installation for the use with node10!
+For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!
 
-## Installation & Usage
+## Installation & usage
 
-A detailed tutorial (german, based on new v3.0.0) can be found here: [https://buanet.de](https://buanet.de/2019/05/iobroker-unter-docker-auf-der-synology-diskstation-v3/). Please notice that the old tutorial does no longer work!
+A detailed tutorial (german, based on v3.0.0) can be found here: [https://buanet.de](https://buanet.de/2019/05/iobroker-unter-docker-auf-der-synology-diskstation-v3/). Please notice that the old tutorial is outdated and does no longer work!
 
 For discussion and support please visit [ioBroker-forum-thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support-question should be answered in a public place. Thank you.
 
-## Special Settings
+## Special settings and features
 
-In v3.0.0 I added some new features. The following will give some short information about that.
+The following will give a short overview.
 
-### Environment Variables
+### Environment variables
+
+Since v3 is possible to set some environment variables to configure a new container. 
 
 |env|value|description|
 |---|---|---|
@@ -29,10 +39,11 @@ In v3.0.0 I added some new features. The following will give some short informat
 |TZ|Europe/Berlin|all valid Linux-timezones|
 |SETUID|1000|for security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
 |SETGID|1000|for security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
+|ZWAVE|false|will install openzwave to support zwave-adapter|
 
 ### Mounting Folder/ Volume
 
-It is now possible to mount an empty folder to /opt/iobroker during first startup of the container. The Startupscript will check this folder and restore content if empty.
+It is now possible to mount an empty folder to /opt/iobroker during first startup of the container. The Startupscript will check this folder and restore content if it is empty.
 
 It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
 
@@ -40,11 +51,16 @@ This also works with mounting a folder containing an existing ioBroker-installat
 
 ### Permission Fixer
 
-I added some code for fixing permissions for new iobroker-user. Permission-fixing is called on first start of the container. This might take a few minutes. Please take a look at the logs and be patient!
+After some issues with permissions related to the use of a dedicated user for ioBroker, I added some code for fixing permissions on container startup. This might take a few minutes on first startup. Please take a look at the logs and be patient!
 
 ## Changelog
 
-### v3.1.2beta (2019-09-03)
+### v3.1.4beta (2019-10-23)
+  * added env for zwave support
+* v3.1.3beta (2019-10-17)
+  * enhanced logging of startup-script
+  * multiarch support (amd64, aarch64, armv7hf)
+* v3.1.2beta (2019-09-03)
   * using node 10 instead of node 8
 * v3.1.1beta (2019-09-02)
   * adding env for setting uid/ gid for iobroker-user

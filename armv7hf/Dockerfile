@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM balenalib/armv7hf-debian:stretch
 
 MAINTAINER Andre Germann <https://buanet.de>
 
@@ -41,6 +41,7 @@ WORKDIR /opt/scripts/
 COPY scripts/iobroker_startup.sh iobroker_startup.sh
 COPY scripts/setup_avahi.sh setup_avahi.sh
 COPY scripts/setup_packages.sh setup_packages.sh
+COPY scripts/setup_zwave.sh setup_zwave.sh
 RUN chmod +x iobroker_startup.sh \
 	&& chmod +x setup_avahi.sh \
     && chmod +x setup_packages.sh
@@ -55,6 +56,7 @@ RUN apt-get update \
 
 # Install node-gyp
 WORKDIR /opt/iobroker/
+RUN npm config set unsafe-perm true     # To fix "Error: could not get uid/gid"
 RUN npm install -g node-gyp
 
 # Backup initial ioBroker-folder
@@ -70,9 +72,10 @@ ENV DEBIAN_FRONTEND="teletype" \
 	LC_ALL="de_DE.UTF-8" \
 	TZ="Europe/Berlin" \
 	PACKAGES="nano" \
-	AVAHI="false"  \
-    	SETUID=1000   \
-    	SETGID=1000
+	AVAHI="false" \
+    SETUID=1000 \
+    SETGID=1000 \
+	ZWAVE="false"
 
 # Setting up EXPOSE for Admin
 EXPOSE 8081/tcp	
