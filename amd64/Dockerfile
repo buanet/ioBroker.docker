@@ -4,7 +4,7 @@ MAINTAINER Andre Germann <https://buanet.de>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install prerequisites
+# Install prerequisites (as listed in iobroker installer.sh)
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         acl \
         apt-utils \
@@ -12,17 +12,20 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         curl \
         git \
         gnupg2 \
+	gosu \
+	libavahi-compat-libdnssd-dev \
         libcap2-bin \
         libpam0g-dev \
         libudev-dev \
         locales \
-        procps \
+	pkg-config \
         python \
-        gosu \
+	python-dev \
+	sudo \
         unzip \
         wget \
     && rm -rf /var/lib/apt/lists/*
-
+    
 # Install node10
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash \
     && apt-get update && apt-get install -y \
@@ -61,8 +64,9 @@ RUN npm install -g node-gyp
 # Backup initial ioBroker-folder
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 
-# Setting up iobroker-user
-RUN chsh -s /bin/bash iobroker
+# Setting up iobroker-user (shell and home directory)
+RUN chsh -s /bin/bash iobroker \
+    && usermod --home /opt/iobroker iobroker
 
 # Setting up ENVs
 ENV DEBIAN_FRONTEND="teletype" \
@@ -70,10 +74,10 @@ ENV DEBIAN_FRONTEND="teletype" \
 	LANGUAGE="de_DE:de" \
 	LC_ALL="de_DE.UTF-8" \
 	TZ="Europe/Berlin" \
-	PACKAGES="nano" \
+	PACKAGES="vi" \
 	AVAHI="false" \
-    SETUID=1000 \
-    SETGID=1000 \
+	SETUID=1000 \
+	SETGID=1000 \
 	ZWAVE="false"
 
 # Setting up EXPOSE for Admin
