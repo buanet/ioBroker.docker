@@ -1,4 +1,7 @@
 # ioBroker for Docker
+
+[![Build Status](https://travis-ci.org/buanet/docker-iobroker.svg?branch=master)](https://travis-ci.org/buanet/docker-iobroker)
+
 Source: https://github.com/buanet/docker-iobroker
 
 IoBroker for Docker is an Dockerimage for ioBroker (http://iobroker.net) smarthome software. 
