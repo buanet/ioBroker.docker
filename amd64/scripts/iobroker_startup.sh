@@ -148,7 +148,7 @@ echo ' '
 if [ "$adminport" != "8081" ]
 then
   echo "Adminport is set by ENV."
-  echo "Setting Adminport to" $(adminport)"..."
+  echo "Setting Adminport to" $adminport"..."
     iobroker set admin.0 --port $adminport
   echo 'Done.'
   echo ' '
