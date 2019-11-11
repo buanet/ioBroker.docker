@@ -75,13 +75,11 @@ ENV DEBIAN_FRONTEND="teletype" \
 	LC_ALL="de_DE.UTF-8" \
 	TZ="Europe/Berlin" \
 	PACKAGES="vi" \
-	AVAHI="false" \
+	ADMINPORT=8081 \
 	SETUID=1000 \
 	SETGID=1000 \
+	AVAHI="false" \
 	ZWAVE="false"
-
-# Setting up EXPOSE for Admin
-EXPOSE 8081/tcp	
 	
 # Run startup-script
 ENTRYPOINT ["/opt/scripts/iobroker_startup.sh"]
