@@ -2,7 +2,7 @@
 
 echo "Checking avahi-daemon installation state..."
 
-if [ -f /usr/sbin/avahi-daemon ]
+if [ -f /usr/sbin/avahi-daemon ] && [ -f /var/run/dbus ]
 then
   echo "Avahi is already installed..."
 else
