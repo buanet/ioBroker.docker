@@ -79,7 +79,8 @@ ENV DEBIAN_FRONTEND="teletype" \
 	SETUID=1000 \
 	SETGID=1000 \
 	AVAHI="false" \
-	ZWAVE="false"
+	ZWAVE="false" \
+	USBDEVICES="none"
 	
 # Run startup-script
 ENTRYPOINT ["/opt/scripts/iobroker_startup.sh"]
