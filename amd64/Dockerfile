@@ -19,6 +19,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         libudev-dev \
         locales \
 	pkg-config \
+	procps \
         python \
 	python-dev \
 	sudo \
