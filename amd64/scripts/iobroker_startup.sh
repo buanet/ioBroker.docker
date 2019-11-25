@@ -180,7 +180,15 @@ fi
 if [ "$usbdevices" != "none" ]
 then
   echo "Usb-device-support is activated by ENV."
-  #testing	
+  
+  deviceslist="$usbdevices"
+  IFS=';' read -ra devicearray <<< "$deviceslist"
+    for i in "${devicearray[@]}"
+    do
+      echo "Setting permissions for" $i"..."
+      chown root:dialout $i
+      chmod g+rw $i
+    done
   echo "Done."
   echo ' '
 fi
