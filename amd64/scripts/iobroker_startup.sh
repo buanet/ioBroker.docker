@@ -7,6 +7,7 @@ uid=$SETUID
 gid=$SETGID
 zwave=$ZWAVE
 avahi=$AVAHI
+usbdevices=$USBDEVICES
 
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -154,7 +155,7 @@ then
   echo ' '
 fi
 
-# Checking for and setting up avahi-daemon
+# Checking for enabled avahi-daemon
 if [ "$avahi" = "true" ]
 then
   echo "Avahi-daemon is activated by ENV."
@@ -164,11 +165,22 @@ then
   echo ' '
 fi
 
+# Checking for enabled zwave-support
 if [ "$zwave" = "true" ]
 then
   echo "ZWave is activated by ENV."
   chmod 764 /opt/scripts/setup_zwave.sh
   sh /opt/scripts/setup_zwave.sh
+  echo "Done."
+  echo ' '
+fi
+
+# checking enabled usb-devices
+
+if [ "$usbdevices" != "none" ]
+then
+  echo "Usb-device-support is activated by ENV."
+  #testing	
   echo "Done."
   echo ' '
 fi
