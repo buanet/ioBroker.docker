@@ -168,7 +168,7 @@ fi
 # Checking for enabled zwave-support
 if [ "$zwave" = "true" ]
 then
-  echo "ZWave is activated by ENV."
+  echo "Z-Wave is activated by ENV."
   chmod 764 /opt/scripts/setup_zwave.sh
   sh /opt/scripts/setup_zwave.sh
   echo "Done."
