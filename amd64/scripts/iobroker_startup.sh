@@ -181,8 +181,7 @@ if [ "$usbdevices" != "none" ]
 then
   echo "Usb-device-support is activated by ENV."
   
-  deviceslist="$usbdevices"
-  IFS=';' read -ra devicearray <<< "$deviceslist"
+  IFS=';' read -ra devicearray <<< "$usbdevices"
     for i in "${devicearray[@]}"
     do
       echo "Setting permissions for" $i"..."
