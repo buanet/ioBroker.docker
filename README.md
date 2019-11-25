@@ -1,4 +1,7 @@
 # ioBroker for Docker
+
+[![Build Status](https://travis-ci.org/buanet/docker-iobroker.svg?branch=master)](https://travis-ci.org/buanet/docker-iobroker)
+
 Source: https://github.com/buanet/docker-iobroker
 
 IoBroker for Docker is an Dockerimage for ioBroker (http://iobroker.net) smarthome software. 
@@ -12,14 +15,14 @@ Feel free to ask for more architectures by opening an github-issue.
 
 The new v4 comes again with a new major node-version (node10)!
 If you are updating an existing Installation you have to perform some additional steps inside ioBroker!
-After upgrading your iobroker-container you have to call "reinstall.sh" for recompiling your installation for the use with node10!
+After upgrading your iobroker-container you have to call "reinstall.sh" for recompileing your installation for the use with node10!
 For Details see official ioBroker-documentation (http://www.iobroker.net/docu/?page_id=8323&lang=de). Make backup first!
 
 ## Installation & usage
 
 A detailed tutorial (german, based on v3.0.0) can be found here: [https://buanet.de](https://buanet.de/2019/05/iobroker-unter-docker-auf-der-synology-diskstation-v3/). Please notice that the old tutorial is outdated and does no longer work!
 
-For discussion and support please visit [ioBroker-forum-thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support-question should be answered in a public place. Thank you.
+For discussion and support please visit [ioBroker-forum-thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support question should be answered in a public place. Thank you.
 
 ## Special settings and features
 
@@ -40,6 +43,8 @@ Since v3 is possible to set some environment variables to configure a new contai
 |SETUID|1000|for security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
 |SETGID|1000|for security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
 |ZWAVE|false|will install openzwave to support zwave-adapter|
+|ADMINPORT|8081|for setting iobroker adminport (beta feature!)|
+|USBDEVICES|none|for automatically setting permissions on mounted devices like "/dev/ttyACM0". For more than one device separate with ";" (beta feature!)|
 
 ### Mounting Folder/ Volume
 
@@ -54,6 +59,12 @@ This also works with mounting a folder containing an existing ioBroker-installat
 After some issues with permissions related to the use of a dedicated user for ioBroker, I added some code for fixing permissions on container startup. This might take a few minutes on first startup. Please take a look at the logs and be patient!
 
 ## Changelog
+
+### v4.0.1beta (2019-11-25)
+* added env for iobroker admin port
+* added env for usb-devices (setting permissions)
+* updateing prerequisites for iobroker installation
+* some small codefixes
 
 ### v4.0.0 (2019-10-25)
 * v3.1.4beta (2019-10-23)
