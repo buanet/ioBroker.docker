@@ -4,23 +4,27 @@ MAINTAINER Andre Germann <https://buanet.de>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install prerequisites
+# Install prerequisites (as listed in iobroker installer.sh)
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
-        acl \
-        apt-utils \
-        build-essential \
-        curl \
-        git \
-        gnupg2 \
-        libcap2-bin \
-        libpam0g-dev \
-        libudev-dev \
-        locales \
-        procps \
-        python \
-        gosu \
-        unzip \
-        wget \
+    acl \
+    apt-utils \
+    build-essential \
+    curl \
+    git \
+    gnupg2 \
+	gosu \
+	libavahi-compat-libdnssd-dev \
+    libcap2-bin \
+    libpam0g-dev \
+    libudev-dev \
+    locales \
+	pkg-config \
+	procps \
+    python \
+	python-dev \
+	sudo \
+    unzip \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Install node10
@@ -56,14 +60,14 @@ RUN apt-get update \
 
 # Install node-gyp
 WORKDIR /opt/iobroker/
-RUN npm config set unsafe-perm true     # To fix "Error: could not get uid/gid"
 RUN npm install -g node-gyp
 
 # Backup initial ioBroker-folder
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker
 
-# Setting up iobroker-user
-RUN chsh -s /bin/bash iobroker
+# Setting up iobroker-user (shell and home directory)
+RUN chsh -s /bin/bash iobroker \
+    && usermod --home /opt/iobroker iobroker
 
 # Setting up ENVs
 ENV DEBIAN_FRONTEND="teletype" \
@@ -71,14 +75,13 @@ ENV DEBIAN_FRONTEND="teletype" \
 	LANGUAGE="de_DE:de" \
 	LC_ALL="de_DE.UTF-8" \
 	TZ="Europe/Berlin" \
-	PACKAGES="nano" \
+	PACKAGES="vi" \
+	ADMINPORT=8081 \
+	SETUID=1000 \
+	SETGID=1000 \
 	AVAHI="false" \
-    SETUID=1000 \
-    SETGID=1000 \
-	ZWAVE="false"
-
-# Setting up EXPOSE for Admin
-EXPOSE 8081/tcp	
+	ZWAVE="false" \
+	USBDEVICES="none"
 	
 # Run startup-script
 ENTRYPOINT ["/opt/scripts/iobroker_startup.sh"]
