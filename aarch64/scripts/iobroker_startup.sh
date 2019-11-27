@@ -2,10 +2,12 @@
 
 # Reading ENV
 packages=$PACKAGES
-avahi=$AVAHI
+adminport=$ADMINPORT
 uid=$SETUID
 gid=$SETGID
 zwave=$ZWAVE
+avahi=$AVAHI
+usbdevices=$USBDEVICES
 
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -34,8 +36,10 @@ echo -n "-----               " && echo -n "$(printf "%-10s %-23s" node: $(node -
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" npm: $(npm -v))" && echo " -----"
 echo "-----                                                  -----"
 echo "-----                       ENV                        -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" AVAHI: $AVAHI)" && echo " -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $PACKAGES)" && echo " -----"
+echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ADMINPORT: $ADMINPORT)" && echo " -----"
+echo -n "-----               " && echo -n "$(printf "%-10s %-23s" AVAHI: $AVAHI)" && echo " -----"
+echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $ZWAVE)" && echo " -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETGID: $SETGID)" && echo " -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETUID: $SETUID)" && echo " -----"
 echo "$(printf -- '-%.0s' {1..60})"
@@ -125,8 +129,8 @@ if [ -f /opt/iobroker/.install_host ]
 then
   echo "Looks like this is a new and empty installation of ioBroker."
   echo "Hostname needs to be updated to " $(hostname)"..."
-	sh /opt/iobroker/iobroker host $(cat /opt/iobroker/.install_host)
-	rm -f /opt/iobroker/.install_host
+    sh /opt/iobroker/iobroker host $(cat /opt/iobroker/.install_host)
+    rm -f /opt/iobroker/.install_host
   echo 'Done.'
   echo ' '
 fi
@@ -141,7 +145,17 @@ echo "Some adapters have special requirements which can be activated by the use 
 echo "For more information take a look at readme.md"
 echo ' '
 
-# Checking for and setting up avahi-daemon
+# Checking ENV for Adminport
+if [ "$adminport" != "8081" ]
+then
+  echo "Adminport is set by ENV."
+  echo "Setting Adminport to" $adminport"..."
+    iobroker set admin.0 --port $adminport
+  echo 'Done.'
+  echo ' '
+fi
+
+# Checking for enabled avahi-daemon
 if [ "$avahi" = "true" ]
 then
   echo "Avahi-daemon is activated by ENV."
@@ -151,11 +165,29 @@ then
   echo ' '
 fi
 
+# Checking for enabled zwave-support
 if [ "$zwave" = "true" ]
 then
-  echo "ZWave is activated by ENV."
+  echo "Z-Wave is activated by ENV."
   chmod 764 /opt/scripts/setup_zwave.sh
   sh /opt/scripts/setup_zwave.sh
+  echo "Done."
+  echo ' '
+fi
+
+# checking enabled usb-devices
+
+if [ "$usbdevices" != "none" ]
+then
+  echo "Usb-device-support is activated by ENV."
+  
+  IFS=';' read -ra devicearray <<< "$usbdevices"
+    for i in "${devicearray[@]}"
+    do
+      echo "Setting permissions for" $i"..."
+      chown root:dialout $i
+      chmod g+rw $i
+    done
   echo "Done."
   echo ' '
 fi

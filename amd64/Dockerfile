@@ -6,27 +6,27 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install prerequisites (as listed in iobroker installer.sh)
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
-        acl \
-        apt-utils \
-        build-essential \
-        curl \
-        git \
-        gnupg2 \
+    acl \
+    apt-utils \
+    build-essential \
+    curl \
+    git \
+    gnupg2 \
 	gosu \
 	libavahi-compat-libdnssd-dev \
-        libcap2-bin \
-        libpam0g-dev \
-        libudev-dev \
-        locales \
+    libcap2-bin \
+    libpam0g-dev \
+    libudev-dev \
+    locales \
 	pkg-config \
 	procps \
-        python \
+    python \
 	python-dev \
 	sudo \
-        unzip \
-        wget \
+    unzip \
+    wget \
     && rm -rf /var/lib/apt/lists/*
-    
+
 # Install node10
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash \
     && apt-get update && apt-get install -y \
