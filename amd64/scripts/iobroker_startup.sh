@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # Reading ENV
-packages=$PACKAGES
 adminport=$ADMINPORT
-uid=$SETUID
-gid=$SETGID
-zwave=$ZWAVE
 avahi=$AVAHI
+gid=$SETGID
+packages=$PACKAGES
+redis=$REDIS
+uid=$SETUID
 usbdevices=$USBDEVICES
+zwave=$ZWAVE
 
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -36,12 +37,14 @@ echo -n "-----               " && echo -n "$(printf "%-10s %-23s" node: $(node -
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" npm: $(npm -v))" && echo " -----"
 echo "-----                                                  -----"
 echo "-----                       ENV                        -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $PACKAGES)" && echo " -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ADMINPORT: $ADMINPORT)" && echo " -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" AVAHI: $AVAHI)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $ZWAVE)" && echo " -----"
+echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $PACKAGES)" && echo " -----"
+echo -n "-----               " && echo -n "$(printf "%-10s %-23s" REDIS: $REDIS)" && echo " -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETGID: $SETGID)" && echo " -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETUID: $SETUID)" && echo " -----"
+echo -n "-----               " && echo -n "$(printf "%-10s %-23s" USBDEVICES: $USBDEVICES)" && echo " -----"
+echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $ZWAVE)" && echo " -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
