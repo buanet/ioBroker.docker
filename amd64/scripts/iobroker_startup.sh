@@ -13,7 +13,7 @@ zwave=$ZWAVE
 # Getting date and time for logging 
 dati=`date '+%Y-%m-%d %H:%M:%S'`
 
-# Header
+# Logging header
 echo ' '
 echo "$(printf -- '-%.0s' {1..60})"
 echo -n "$(printf -- '-%.0s' {1..15})" && echo -n "     "$dati"      " && echo "$(printf -- '-%.0s' {1..15})"
@@ -48,14 +48,24 @@ echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $ZWAVE)
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
-# Checking and installing additional packages
+
+# Not in use
+# if [ -f /opt/.firstrun ]
+# rm -f /opt/.firstrun
+
+
+#####
+# STEP 1 - Preparing container
+#####
 echo "$(printf -- '-%.0s' {1..60})"
-echo "-----   Step 1 of 5: Installing additional packages    -----"
+echo "-----         Step 1 of 5: Preparing container         -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
+# Installing additional packages
 if [ "$packages" != "" ]
 then
+  echo "Installing additional packages is set by ENV."
   echo "The following packages will be installed:" $packages"..."
   echo $packages > /opt/scripts/.packages
   sh /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
@@ -65,10 +75,26 @@ else
 fi
 echo ' '
 
+# Checking and setting uid/gid
+gidold=`cat /etc/group | grep "iobroker:" | cut -d":" -f3`
+uidold=`cat /etc/passwd | grep "iobroker:" | cut -d":" -f3`
+if [ $gidold != $gid || $uidold != $uid ]
+then 
+  echo "Different UID and/ or GID is set by ENV."
+  echo "Changing UID to "$uid" and GID to "$gid"..."
+  usermod -u $uid iobroker
+  groupmod -g $gid iobroker
+  echo "Done."
+  echo ' '
+fi
+
 # Change directory for next steps
 cd /opt/iobroker
 
+
+#####
 # Detecting ioBroker-Installation
+#####
 echo "$(printf -- '-%.0s' {1..60})"
 echo "-----   Step 2 of 5: Detecting ioBroker installation   -----"
 echo "$(printf -- '-%.0s' {1..60})"
@@ -91,25 +117,13 @@ else
 fi
 echo ' '
 
+
+#####
 # Checking ioBroker-Installation
+#####
 echo "$(printf -- '-%.0s' {1..60})"
 echo "-----   Step 3 of 5: Checking ioBroker installation    -----"
 echo "$(printf -- '-%.0s' {1..60})"
-echo ' '
-
-# Checking for first run and set uid/gid
-if [ -f /opt/.firstrun ]
-then 
-  echo "This is the first run of a new container. Time for some preparation."
-  echo ' '
-  echo "Changing UID to "$uid" and GID to "$gid"..."
-  usermod -u $uid iobroker
-  groupmod -g $gid iobroker
-  rm -f /opt/.firstrun
-  echo "Done."
-else
-  echo "This is NOT the first run of the container. Some Steps will be skipped."
-fi
 echo ' '
 
 # (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"  
@@ -138,7 +152,10 @@ then
   echo ' '
 fi
 
+
+#####
 # Setting up prerequisites for some ioBroker-adapters
+#####
 echo "$(printf -- '-%.0s' {1..60})"
 echo "-----      Step 4 of 5: Applying special settings      -----"
 echo "$(printf -- '-%.0s' {1..60})"
@@ -158,7 +175,7 @@ then
   echo ' '
 fi
 
-# Checking for enabled avahi-daemon
+# Checking ENV for AVAHI
 if [ "$avahi" = "true" ]
 then
   echo "Avahi-daemon is activated by ENV."
@@ -168,7 +185,7 @@ then
   echo ' '
 fi
 
-# Checking for enabled zwave-support
+# Checking ENV for Z-WAVE
 if [ "$zwave" = "true" ]
 then
   echo "Z-Wave is activated by ENV."
@@ -178,8 +195,7 @@ then
   echo ' '
 fi
 
-# checking enabled usb-devices
-
+# checking ENV for USBDEVICES
 if [ "$usbdevices" != "none" ]
 then
   echo "Usb-device-support is activated by ENV."
@@ -197,14 +213,17 @@ fi
 
 sleep 5
 
+
+#####
 # Starting ioBroker
+#####
 echo "$(printf -- '-%.0s' {1..60})"
 echo "-----          Step 5 of 5: ioBroker startup           -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 echo "Starting ioBroker..."
 echo ' '
-#gosu iobroker node --trace-warnings node_modules/iobroker.js-controller/controller.js > /opt/iobroker/iobroker.log 2>&1 &
+
 gosu iobroker node node_modules/iobroker.js-controller/controller.js
 
 # Preventing container restart by keeping a process alive even if iobroker will be stopped
