@@ -83,8 +83,10 @@ then
   usermod -u $uid iobroker
   groupmod -g $gid iobroker
   echo "Done."
-  echo ' '
+else
+  echo "There are no changes in UID/ GID needed."
 fi
+echo ' '
 
 # Change directory for next steps
 cd /opt/iobroker
@@ -100,16 +102,16 @@ echo ' '
 
 if [ `ls -1a|wc -l` -lt 3 ]
 then
-  echo "There is no data detected in /opt/iobroker. Restoring..."
+  echo "There is no data detected in /opt/iobroker. Restoring initial ioBroker installation..."
   tar -xf /opt/initial_iobroker.tar -C /
   echo "Done."
 else
   if [ -f /opt/iobroker/iobroker ]
   then
-    echo "Installation of ioBroker detected in /opt/iobroker."
+    echo "Existing installation of ioBroker detected in /opt/iobroker."
   else
     echo "There is data detected in /opt/iobroker, but it looks like it is no instance of iobroker!"
-	echo "Please check/ recreate mounted folder/ volume and restart ioBroker container."
+    echo "Please check/ recreate mounted folder/ volume and restart ioBroker container."
 	exit 1
   fi
 fi
@@ -132,7 +134,7 @@ echo "Done."
 echo ' '
 
 # Backing up original iobroker-file and changing sudo to gosu
-echo "Fixing \"sudo-bug\" by replacing sudo with gosu..."
+echo "Fixing \"sudo-bug\" by replacing sudo in iobroker with gosu..."
   cp -a /opt/iobroker/iobroker /opt/iobroker/iobroker.bak
   chmod 755 /opt/iobroker/iobroker
   sed -i 's/sudo -H -u/gosu/g' /opt/iobroker/iobroker
@@ -148,6 +150,12 @@ then
     rm -f /opt/iobroker/.install_host
   echo 'Done.'
   echo ' '
+else if [ $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
+  echo "Hostname in ioBroker does not match the hostname of this container."
+  echo "Updating hostname to " $(hostname)"..."
+    sh /opt/iobroker/iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+  echo 'Done.'
+  echo ' '
 fi
 
 
@@ -159,14 +167,14 @@ echo "-----      Step 4 of 5: Applying special settings      -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
-echo "Some adapters have special requirements which can be activated by the use of environment variables."
-echo "For more information take a look at readme.md"
+echo "Some adapters have special requirements/ settings which can be activated by the use of environment variables."
+echo "For more information take a look at readme.md on Github!"
 echo ' '
 
 # Checking ENV for Adminport
-if [ "$adminport" != "8081" ]
+if [ "$adminport" != $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*') ]
 then
-  echo "Adminport is set by ENV."
+  echo "Adminport set by ENV does not match port configured in ioBroker installation."
   echo "Setting Adminport to" $adminport"..."
     iobroker set admin.0 --port $adminport
   echo 'Done.'
