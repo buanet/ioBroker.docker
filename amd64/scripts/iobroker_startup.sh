@@ -228,7 +228,7 @@ then
   redisport=$(echo $redis | sed -E  's/(.*):(.*)/\2/')
   echo "Setting configuration for Redis (Server: "$redisserver", Port: "$redisport") in ioBroker..."
   cd /opt/iobroker/iobroker-data
-  jq '.states.type = "redis" | .states.host = "$redisserver" | .states.port = "$redisport"' iobroker.json > iobroker.json.tmp && mv iobroker.json.tmp iobroker.json
+  jq --arg redisserver "$redisserver" --arg redisport "$redisport" '.states.type = "redis" | .states.host = $redisserver | .states.port = $redisport' iobroker.json > iobroker.json.tmp && mv iobroker.json.tmp iobroker.json
   cd /opt/iobroker
   echo "Done."
   echo ' '
