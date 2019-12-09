@@ -217,6 +217,18 @@ then
   echo ' '
 fi
 
+# Checking ENV for REDIS
+if [ "$redis" != "false" ]
+then
+  echo "Connection to Redis is configured by ENV."
+  echo "Installing prerequisites..."
+  apt-get update 2>&1> /dev/null && apt-get install -y jq 2>&1> /dev/null && rm -rf /var/lib/apt/lists/*
+  echo "Setting configuration for Redis in ioBroker..."
+  # missing
+  echo "Done."
+  echo ' '
+fi
+
 sleep 5
 
 
