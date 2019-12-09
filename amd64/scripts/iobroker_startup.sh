@@ -150,7 +150,8 @@ then
     rm -f /opt/iobroker/.install_host
   echo 'Done.'
   echo ' '
-else if [ $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
+elif [ $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
+then
   echo "Hostname in ioBroker does not match the hostname of this container."
   echo "Updating hostname to " $(hostname)"..."
     sh /opt/iobroker/iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
@@ -222,9 +223,13 @@ if [ "$redis" != "false" ]
 then
   echo "Connection to Redis is configured by ENV."
   echo "Installing prerequisites..."
-  apt-get update 2>&1> /dev/null && apt-get install -y jq 2>&1> /dev/null && rm -rf /var/lib/apt/lists/*
-  echo "Setting configuration for Redis in ioBroker..."
-  # missing
+  apt-get update 2>&1> /dev/null && apt-get install -y jq 2>&1> /dev/null && rm -rf /var/lib/apt/lists/* 2>&1> /dev/null
+  redisserver=$(echo $redis | sed -E  's/(.*):(.*)/\1/')
+  redisport=$(echo $redis | sed -E  's/(.*):(.*)/\2/')
+  echo "Setting configuration for Redis (Server: "$redisserver", Port: "$redisport") in ioBroker..."
+  cd /opt/iobroker/iobroker-data
+  jq '.states.type = "redis" | .states.host = "$redisserver" | .states.port = "$redisport"' iobroker.json > iobroker.json.tmp && mv iobroker.json.tmp iobroker.json
+  cd /opt/iobroker
   echo "Done."
   echo ' '
 fi
