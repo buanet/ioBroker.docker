@@ -76,9 +76,7 @@ fi
 echo ' '
 
 # Checking and setting uid/gid
-gidold=`cat /etc/group | grep "iobroker:" | cut -d":" -f3`
-uidold=`cat /etc/passwd | grep "iobroker:" | cut -d":" -f3`
-if [ $gidold != $gid || $uidold != $uid ]
+if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $gid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $uid ]
 then 
   echo "Different UID and/ or GID is set by ENV."
   echo "Changing UID to "$uid" and GID to "$gid"..."
