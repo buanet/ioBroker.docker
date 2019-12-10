@@ -32,19 +32,20 @@ The following will give a short overview.
 
 Since v3 is possible to set some environment variables to configure a new container. 
 
-|env|value|description|
-|---|---|---|
-|PACKAGES|package1 package2 package2|seperateed by whitespace; will install the listed packages on startup<br>(be paitient, this may take some time!)|
-|AVAHI|true|will install and activate avahi-daemon for supporting yahka-adapter|
-|LANGUAGE|de_DE:de|following locales are pre-generated: de_DE:de, en_US:en|
-|LANG|de_DE.UTF-8|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
-|LC_ALL|de_DE|following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
-|TZ|Europe/Berlin|all valid Linux-timezones|
-|SETUID|1000|for security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
-|SETGID|1000|for security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
-|ZWAVE|false|will install openzwave to support zwave-adapter|
-|ADMINPORT|8081|for setting iobroker adminport (beta feature!)|
-|USBDEVICES|none|for automatically setting permissions on mounted devices like "/dev/ttyACM0". For more than one device separate with ";" (beta feature!)|
+|env|default|values|description|
+|---|---|---|---|
+|ADMINPORT|8081|portnumber|Sets ioBroker-adminport on startup (beta)|
+|AVAHI|false|true/false|Installs and activates avahi-daemon for supporting yahka-adapter|
+|LANG|de_DE.UTF-8|locales|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
+|LANGUAGE|de_DE:de|locales|The following locales are pre-generated: de_DE:de, en_US:en|
+|LC_ALL|de_DE|locales|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
+|PACKAGES|vi|package1 package2 package2|Installs additional packages to your container, needed by some adapters, packages should be seperated by whitespace|
+|REDIS|false|false/hostname:port|Activates redis as states-db on startup, fill with "hostname:port" to set redis connection (beta)|
+|SETGID|1000|idnumber|For security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
+|SETUID|1000|idnumber|For security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
+|TZ|Europe/Berlin|timezone|All valid Linux-timezones|
+|USBDEVICES|none|none/device-path|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" (beta)|
+|ZWAVE|false|true/false|will install openzwave to support zwave-adapter|
 
 ### Mounting Folder/ Volume
 
@@ -60,11 +61,14 @@ After some issues with permissions related to the use of a dedicated user for io
 
 ## Changelog
 
-### v4.0.1beta (2019-11-25)
-* added env for iobroker admin port
-* added env for usb-devices (setting permissions)
-* updateing prerequisites for iobroker installation
-* some small codefixes
+### v4.0.2beta (2019-12-10)
+* added env for activating redis
+* enhancements in startupscript and dockerfile
+* v4.0.1beta (2019-11-25)
+  * added env for iobroker admin port
+  * added env for usb-devices (setting permissions)
+  * updateing prerequisites for iobroker installation
+  * some small codefixes
 
 ### v4.0.0 (2019-10-25)
 * v3.1.4beta (2019-10-23)
