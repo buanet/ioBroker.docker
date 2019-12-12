@@ -32,20 +32,20 @@ The following will give a short overview.
 
 Since v3 is possible to set some environment variables to configure a new container. 
 
-|env|default|values|description|
-|---|---|---|---|
-|ADMINPORT|8081|portnumber|Sets ioBroker-adminport on startup (beta)|
-|AVAHI|false|true/false|Installs and activates avahi-daemon for supporting yahka-adapter|
-|LANG|de_DE.UTF-8|locales|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
-|LANGUAGE|de_DE:de|locales|The following locales are pre-generated: de_DE:de, en_US:en|
-|LC_ALL|de_DE|locales|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
-|PACKAGES|vi|package1 package2 package2|Installs additional packages to your container, needed by some adapters, packages should be seperated by whitespace|
-|REDIS|false|false/hostname:port|Activates redis as states-db on startup, fill with "hostname:port" to set redis connection (beta)|
-|SETGID|1000|idnumber|For security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
-|SETUID|1000|idnumber|For security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
-|TZ|Europe/Berlin|timezone|All valid Linux-timezones|
-|USBDEVICES|none|none/device-path|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" (beta)|
-|ZWAVE|false|true/false|will install openzwave to support zwave-adapter|
+|env|default|description|
+|---|---|---|
+|ADMINPORT|8081|Sets ioBroker-adminport on startup (beta)|
+|AVAHI|false|Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"|
+|LANG|de_DE.UTF-8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
+|LANGUAGE|de_DE:de|The following locales are pre-generated: de_DE:de, en_US:en|
+|LC_ALL|de_DE|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
+|PACKAGES|vi|Installs additional packages to your container, needed by some adapters, packages should be seperated by whitespace like "package1 package2 package3"|
+|REDIS|false|Activates redis as states-db on startup, fill with "hostname:port" to set redis connection otherwise use "false"(beta)|
+|SETGID|1000|For security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
+|SETUID|1000|For security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
+|TZ|Europe/Berlin|All valid Linux-timezones|
+|USBDEVICES|none|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" like "/dev/ttyACM0;/dev/ttyACM01" (beta)|
+|ZWAVE|false|Will install openzwave to support zwave-adapter, can be "true" or "false"|
 
 ### Mounting Folder/ Volume
 
