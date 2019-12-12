@@ -12,31 +12,31 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     curl \
     git \
     gnupg2 \
-	gosu \
-	libavahi-compat-libdnssd-dev \
+    gosu \
+    libavahi-compat-libdnssd-dev \
     libcap2-bin \
     libpam0g-dev \
     libudev-dev \
     locales \
-	pkg-config \
-	procps \
+    pkg-config \
+    procps \
     python \
-	python-dev \
-	sudo \
+    python-dev \
+    sudo \
+    udev \
     unzip \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Install node10
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash \
-    && apt-get update && apt-get install -y \
-        nodejs \
+    && apt-get update && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 # Generating locales
 RUN sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
-	&& sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
-	&& locale-gen
+    && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+    && locale-gen
 
 # Create scripts directory and copy scripts
 RUN mkdir -p /opt/scripts/ \
@@ -47,7 +47,7 @@ COPY scripts/setup_avahi.sh setup_avahi.sh
 COPY scripts/setup_packages.sh setup_packages.sh
 COPY scripts/setup_zwave.sh setup_zwave.sh
 RUN chmod +x iobroker_startup.sh \
-	&& chmod +x setup_avahi.sh \
+    && chmod +x setup_avahi.sh \
     && chmod +x setup_packages.sh
 
 # Install ioBroker
@@ -70,18 +70,19 @@ RUN chsh -s /bin/bash iobroker \
     && usermod --home /opt/iobroker iobroker
 
 # Setting up ENVs
-ENV DEBIAN_FRONTEND="teletype" \
-	LANG="de_DE.UTF-8" \
-	LANGUAGE="de_DE:de" \
-	LC_ALL="de_DE.UTF-8" \
-	TZ="Europe/Berlin" \
-	PACKAGES="vi" \
-	ADMINPORT=8081 \
-	SETUID=1000 \
-	SETGID=1000 \
-	AVAHI="false" \
-	ZWAVE="false" \
-	USBDEVICES="none"
+ENV ADMINPORT=8081 \
+    AVAHI="false" \
+    DEBIAN_FRONTEND="teletype" \
+    LANG="de_DE.UTF-8" \
+    LANGUAGE="de_DE:de" \
+    LC_ALL="de_DE.UTF-8" \
+    PACKAGES="vi" \
+    REDIS="false" \
+    SETGID=1000 \
+    SETUID=1000 \
+    TZ="Europe/Berlin" \
+    USBDEVICES="none" \
+    ZWAVE="false"
 	
 # Run startup-script
 ENTRYPOINT ["/opt/scripts/iobroker_startup.sh"]
