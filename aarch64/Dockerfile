@@ -1,6 +1,7 @@
 FROM balenalib/aarch64-debian:stretch
 
-MAINTAINER Andre Germann <https://buanet.de>
+LABEL maintainer="Andre Germann" \ 
+      url="<https://buanet.de>"
 
 ENV DEBIAN_FRONTEND noninteractive
 
