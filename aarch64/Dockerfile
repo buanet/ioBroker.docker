@@ -6,7 +6,7 @@ LABEL maintainer="Andre Germann" \
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install prerequisites (as listed in iobroker installer.sh)
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     acl \
     apt-utils \
     build-essential \
