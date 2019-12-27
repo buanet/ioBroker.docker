@@ -110,9 +110,27 @@ else
   then
     echo "Existing installation of ioBroker detected in /opt/iobroker."
   else
-    echo "There is data detected in /opt/iobroker, but it looks like it is no instance of iobroker!"
-    echo "Please check/ recreate mounted folder/ volume and restart ioBroker container."
-	exit 1
+    files=(/opt/iobroker/*)
+    if [ ${#files[@]} -lt 2 ]; then
+      if tar -ztvf /opt/iobroker/*.tar.gz "backup/backup.json" &> /dev/null; then
+        echo "ioBroker Backup detected in /opt/iobroker. Restoring ioBroker..."
+        mv /opt/iobroker/iobroker_20*.tar.gz /opt/
+        tar -xf /opt/initial_iobroker.tar -C /
+        mkdir /opt/iobroker/backups
+        rm -r /opt/iobroker/backups/*
+        mv /opt/iobroker_20*.tar.gz /opt/iobroker/backups/
+        iobroker restore 0
+		echo "Done."
+      else
+        echo "There is data detected in /opt/iobroker, but it looks like it is no instance of iobroker or a valid backup file!"
+        echo "Please check/ recreate mounted folder/ volume and restart ioBroker container."
+        exit 1
+     fi
+    else
+      echo "There is data detected in /opt/iobroker, but it looks like it is no instance of iobroker!"
+      echo "Please check/ recreate mounted folder/ volume and restart ioBroker container."
+      exit 1
+    fi
   fi
 fi
 echo ' '
