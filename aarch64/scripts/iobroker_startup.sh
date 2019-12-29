@@ -117,7 +117,6 @@ else
         mv /opt/iobroker/iobroker_20*.tar.gz /opt/
         tar -xf /opt/initial_iobroker.tar -C /
         mkdir /opt/iobroker/backups
-        rm -r /opt/iobroker/backups/* &> /dev/null
         mv /opt/iobroker_20*.tar.gz /opt/iobroker/backups/
         iobroker restore 0
 		echo "Done."
