@@ -15,7 +15,7 @@ Feel free to ask for more architectures by opening an github-issue.
 
 The new v4 comes again with a new major node-version (node10)!
 If you are updating an existing Installation you have to perform some additional steps inside ioBroker!
-After upgrading your iobroker-container you have to call "reinstall.sh" for recompileing your installation for the use with node10!
+After upgrading your iobroker-container you have to call "npm rebuild" or "reinstall.sh" (when js-controller > v1.5 "reinstall.js") for recompileing your installation for the use with node10!
 For Details see official ioBroker-documentation: [EN](https://www.iobroker.net/#en/documentation/install/updatenode.md) | [DE](https://www.iobroker.net/#de/documentation/install/updatenode.md). Make backup first!
 
 ## Installation & usage
