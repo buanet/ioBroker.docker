@@ -38,7 +38,7 @@ Since v3 is possible to set some environment variables to configure a new contai
 |AVAHI|false|Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"|
 |LANG|de_DE.UTF&#x2011;8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |LANGUAGE|de_DE:de|The following locales are pre-generated: de_DE:de, en_US:en|
-|LC_ALL|de_DE|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
+|LC_ALL|de_DE.UTF-8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |PACKAGES|vi|Installs additional packages to your container, needed by some adapters, packages should be seperated by whitespace like "package1 package2 package3"|
 |REDIS|false|Activates redis as states-db on startup, fill with "hostname:port" to set redis connection otherwise use "false"(beta)|
 |SETGID|1000|For security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
