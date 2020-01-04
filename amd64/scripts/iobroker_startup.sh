@@ -100,37 +100,37 @@ echo "-----   Step 2 of 5: Detecting ioBroker installation   -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
-if [ `ls -1a|wc -l` -lt 3 ]
+files=(/opt/iobroker/*)
+if [ ${#files[@]} -lt 1 ]
 then
   echo "There is no data detected in /opt/iobroker. Restoring initial ioBroker installation..."
   tar -xf /opt/initial_iobroker.tar -C /
   echo "Done."
-else
-  if [ -f /opt/iobroker/iobroker ]
+elif [ -f /opt/iobroker/iobroker ]
+then
+  echo "Existing installation of ioBroker detected in /opt/iobroker."
+elif [ ${#files[@]} -lt 2 ]
+then
+  if tar -ztvf /opt/iobroker/*.tar.gz "backup/backup.json" &> /dev/null
   then
-    echo "Existing installation of ioBroker detected in /opt/iobroker."
-  else
-    files=(/opt/iobroker/*)
-    if [ ${#files[@]} -lt 2 ]; then
-      if tar -ztvf /opt/iobroker/*.tar.gz "backup/backup.json" &> /dev/null; then
-        echo "ioBroker Backup detected in /opt/iobroker. Restoring ioBroker..."
-        mv /opt/iobroker/iobroker_20*.tar.gz /opt/
-        tar -xf /opt/initial_iobroker.tar -C /
-        mkdir /opt/iobroker/backups
-        mv /opt/iobroker_20*.tar.gz /opt/iobroker/backups/
-        iobroker restore 0
-		echo "Done."
-      else
-        echo "There is data detected in /opt/iobroker, but it looks like it is no instance of iobroker or a valid backup file!"
-        echo "Please check/ recreate mounted folder/ volume and restart ioBroker container."
-        exit 1
-     fi
-    else
-      echo "There is data detected in /opt/iobroker, but it looks like it is no instance of iobroker!"
-      echo "Please check/ recreate mounted folder/ volume and restart ioBroker container."
-      exit 1
-    fi
+    echo "ioBroker backup file detected in /opt/iobroker. Restoring ioBroker..."
+    mv /opt/iobroker/iobroker_20*.tar.gz /opt/
+    tar -xf /opt/initial_iobroker.tar -C /
+    mkdir /opt/iobroker/backups
+    mv /opt/iobroker_20*.tar.gz /opt/iobroker/backups/
+    iobroker restore 0
+	echo "Done."
+	echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	echo "!!!!!     Please note: The sartup script restored iobroker from a backup file.     !!!!!"
+	echo "!!!!! When ioBroker will be started it will reinstall all Adapters automatically.  !!!!!"
+	echo "!!!!!            This might be take a looooong time! Please be patient!            !!!!!"
+	echo "!!!!!     You can view installation process by taking a look at ioBroker log.      !!!!!"
+	echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   fi
+else
+  echo "There is data detected in /opt/iobroker but it looks like it is no instance of iobroker or a valid backup file!"
+  echo "Please check/ recreate mounted folder/ volume and restart ioBroker container."
+  exit 1
 fi
 echo ' '
 
