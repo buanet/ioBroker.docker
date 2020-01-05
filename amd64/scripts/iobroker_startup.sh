@@ -100,7 +100,7 @@ echo "-----   Step 2 of 5: Detecting ioBroker installation   -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
-if [ `ls -1a|wc -l` -lt 1 ]
+if [ `find /opt/iobroker -type f | wc -l` -lt 1 ]
 then
   echo "There is no data detected in /opt/iobroker. Restoring initial ioBroker installation..."
   tar -xf /opt/initial_iobroker.tar -C /
@@ -108,21 +108,24 @@ then
 elif [ -f /opt/iobroker/iobroker ]
 then
   echo "Existing installation of ioBroker detected in /opt/iobroker."
-elif [ -f /opt/iobroker/*.tar.gz ] && [ tar -ztvf /opt/iobroker/*.tar.gz "backup/backup.json" &> /dev/null ]			#ACTUALLY BROKEN!!!
+elif [ $(ls iobroker_20* 2> /dev/null | wc -l) != "0" ] && [ $(tar -ztvf /opt/iobroker/iobroker_20*.tar.gz "backup/backup.json" 2> /dev/null | wc -l) != "0" ]
 then
   echo "ioBroker backup file detected in /opt/iobroker. Restoring ioBroker..."
   mv /opt/iobroker/*.tar.gz /opt/
   tar -xf /opt/initial_iobroker.tar -C /
   mkdir /opt/iobroker/backups
   mv /opt/*.tar.gz /opt/iobroker/backups/
-  iobroker restore 0
+  iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
   echo "Done."
-  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-  echo "!!!!!     Please note: The sartup script restored iobroker from a backup file.     !!!!!"
-  echo "!!!!! When ioBroker will be started it will reinstall all Adapters automatically.  !!!!!"
-  echo "!!!!!            This might be take a looooong time! Please be patient!            !!!!!"
-  echo "!!!!!     You can view installation process by taking a look at ioBroker log.      !!!!!"
-  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo ' '
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!!!!                             IMPORTANT NOTE                             !!!!!"
+  echo "!!!!!        The sartup script restored iobroker from a backup file.         !!!!!"
+  echo "!!!!! Check /opt/iobroker/log/restore.log to see if restore was successful.  !!!!!"
+  echo "!!!!! When ioBroker now starts it will reinstall all Adapters automatically. !!!!!"
+  echo "!!!!!         This might be take a looooong time! Please be patient!         !!!!!"
+  echo "!!!!!  You can view installation process by taking a look at ioBroker log.   !!!!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 else
   echo "There is data detected in /opt/iobroker but it looks like it is no instance of iobroker or a valid backup file!"
   echo "Please check/ recreate mounted folder/ volume and restart ioBroker container."
