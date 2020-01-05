@@ -49,11 +49,13 @@ Since v3 is possible to set some environment variables to configure a new contai
 
 ### Mounting Folder/ Volume
 
-It is now possible to mount an empty folder to /opt/iobroker during first startup of the container. The Startupscript will check this folder and restore content if it is empty.
+It is possible to mount an empty folder to /opt/iobroker during first startup of the container. The Startupscript will check this folder and restore content if it is empty.
+In actual beta (v4.0.3beta) it is also possible mount a folder with an iobroker backup (created with backitup-adapter) named like this: "iobroker_2020_01_06-01_09_10_backupiobroker.tar.gz".
+The startup script will then detect this backup and restore it during the start of the container. Plese see logs when starting the container for more details.
 
 It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
 
-This also works with mounting a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker). 
+You can also mount a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker). 
 
 ### Permission Fixer
 
@@ -61,9 +63,12 @@ After some issues with permissions related to the use of a dedicated user for io
 
 ## Changelog
 
-### v4.0.2beta (2019-12-10)
-* added env for activating redis
-* enhancements in startupscript and dockerfile
+### v4.0.3beta (2020-01-06)
+* added support to restore backup on startup
+* small fixes according to "docker best practices"
+* v4.0.2beta (2019-12-10)
+  * added env for activating redis
+  * enhancements in startupscript and dockerfile
 * v4.0.1beta (2019-11-25)
   * added env for iobroker admin port
   * added env for usb-devices (setting permissions)
