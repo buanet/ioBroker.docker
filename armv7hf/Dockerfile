@@ -1,11 +1,12 @@
 FROM balenalib/armv7hf-debian:stretch
 
-MAINTAINER Andre Germann <https://buanet.de>
-
+LABEL maintainer="Andre Germann" \ 
+      url="<https://buanet.de>"
+	  
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install prerequisites (as listed in iobroker installer.sh)
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     acl \
     apt-utils \
     build-essential \
