@@ -52,7 +52,6 @@ services:
       - "8081:8081"
     volumes:
       - iobrokerdata:/opt/iobroker
-    mem_swappiness: -1  # temp workaround!
 ```
 
 ## Special settings and features
