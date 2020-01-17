@@ -2,7 +2,7 @@
 
 echo "Checking openzwave installation state..."
 
-if [ -f /usr/local/lib64 ]
+if [ -e /usr/local/lib64 ]
 then
   echo "Openzwave is already installed..."
 else
