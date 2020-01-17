@@ -4,25 +4,56 @@
 
 Source: https://github.com/buanet/docker-iobroker
 
-IoBroker for Docker is an Dockerimage for ioBroker (http://iobroker.net) smarthome software. 
+IoBroker for Docker is an Dockerimage for ioBroker IoT platform (http://www.iobroker.net). 
 
-It is originally made for, and tested on a Synology Disk Station 1515+ with DSM 6 and Docker-package installed. But it should also work on other systems with Docker installed!
+It is originally made for and always tested on a Synology Disk Station 1515+ with DSM 6 and official Docker package installed. But it also works on other systems with Docker installed!
 
 Version 4 now supports running the Image in Docker on the following architectures: amd64, armv7hf, aarch64.
-Feel free to ask for more architectures by opening an github-issue. 
+Feel free to ask for more architectures by opening an github issue. 
 
-## Important
+## Important notice
 
-The new v4 comes again with a new major node-version (node10)!
-If you are updating an existing Installation you have to perform some additional steps inside ioBroker!
-After upgrading your iobroker-container you have to call "npm rebuild" or "reinstall.sh" (when js-controller > v1.5 "reinstall.js") for recompileing your installation for the use with node10!
-For Details see official ioBroker-documentation: [EN](https://www.iobroker.net/#en/documentation/install/updatenode.md) | [DE](https://www.iobroker.net/#de/documentation/install/updatenode.md). Make backup first!
+The new v4 comes again with a new major node version (node10)!
+If you are updating an existing installation you have to perform some additional steps inside ioBroker!
+After upgrading your iobroker container you have to call "npm rebuild" or "reinstall.sh" (when js-controller > v1.5 "reinstall.js") for recompileing your installation for the use with node10!
+For more details please see official ioBroker documentation: [EN](https://www.iobroker.net/#en/documentation/install/updatenode.md) | [DE](https://www.iobroker.net/#de/documentation/install/updatenode.md).
+Make backup first!
 
-## Installation & usage
+## Getting started
 
 A detailed tutorial (german, based on v3.0.0) can be found here: [https://buanet.de](https://buanet.de/2019/05/iobroker-unter-docker-auf-der-synology-diskstation-v3/). Please notice that the old tutorial is outdated and does no longer work!
 
-For discussion and support please visit [ioBroker-forum-thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support question should be answered in a public place. Thank you.
+For discussion and support please visit [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support question should be answered in a public place. Thank you.
+
+The following ways to geht iobroker-container running are only examples. Maybe you have to change, add or replace parameters to configure ioBroker for your environment.
+
+### Running from commandline
+
+For taking a first look at the iobroker docker container it would be enough to simply run the following basic docker run command: 
+
+```
+docker run -p 8081:8081 --name iobroker -v /opt/iobroker:/iobroker buanet/iobroker:latest
+```
+
+### Running with docker-compose
+
+You can also run iobroker by using docker-compose. Here is an example:
+
+```
+version: '2'
+
+services:
+  iobroker:
+    restart: always
+    image: buanet/iobroker:latest
+    container_name: iobroker
+    hostname: iobroker
+    ports:
+      - "8081:8081"
+    volumes:
+      - iobrokerdata:/opt/iobroker
+    mem_swappiness: -1  # temp workaround!
+```
 
 ## Special settings and features
 
@@ -30,42 +61,45 @@ The following will give a short overview.
 
 ### Environment variables
 
-Since v3 is possible to set some environment variables to configure a new container. 
+To configure the ioBroker container on startup it is possible to set some environment variables. 
 
 |env|default|description|
 |---|---|---|
-|ADMINPORT|8081|Sets ioBroker-adminport on startup (beta)|
+|ADMINPORT|8081|Sets ioBroker adminport on startup|
 |AVAHI|false|Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"|
 |LANG|de_DE.UTF&#x2011;8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |LANGUAGE|de_DE:de|The following locales are pre-generated: de_DE:de, en_US:en|
 |LC_ALL|de_DE.UTF-8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
-|PACKAGES|vi|Installs additional packages to your container, needed by some adapters, packages should be seperated by whitespace like "package1 package2 package3"|
-|REDIS|false|Activates redis as states-db on startup, fill with "hostname:port" to set redis connection otherwise use "false"(beta)|
+|PACKAGES|vi|Installs additional packages to your container needed by some adapters, packages should be seperated by whitespace like "package1 package2 package3"|
+|REDIS|false|Activates the uses of redis as states-db on startup, fill with "hostname:port" to set redis connection, redis db has to be set up seperately (e.g. in another container)|
 |SETGID|1000|For security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
 |SETUID|1000|For security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
 |TZ|Europe/Berlin|All valid Linux-timezones|
-|USBDEVICES|none|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" like "/dev/ttyACM0;/dev/ttyACM01" (beta)|
+|USBDEVICES|none|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" like "/dev/ttyACM0;/dev/ttyACM1"|
 |ZWAVE|false|Will install openzwave to support zwave-adapter, can be "true" or "false"|
 
 ### Mounting Folder/ Volume
 
 It is possible to mount an empty folder to /opt/iobroker during first startup of the container. The Startupscript will check this folder and restore content if it is empty.
-In actual beta (v4.0.3beta) it is also possible mount a folder with an iobroker backup (created with backitup-adapter) named like this: "iobroker_2020_01_06-01_09_10_backupiobroker.tar.gz".
-The startup script will then detect this backup and restore it during the start of the container. Plese see logs when starting the container for more details.
+Since v4.1.0 it is also possible mount a folder filled up with an iobroker backup file (created with backitup adapter) named like this: "iobroker_2020_01_06-01_09_10_backupiobroker.tar.gz".
+The startup script will detect this backup and restore it during the start of the container. Plese see container logs when starting the container for more details!
 
-It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
+Note: It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
 
-You can also mount a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker). 
+You can also mount a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker).
+But watch for the used node version. If the existing installation runs with another major version of node you have do perform additional steps. For more Details see the "Important notice" on top.
 
 ### Permission Fixer
 
-After some issues with permissions related to the use of a dedicated user for ioBroker, I added some code for fixing permissions on container startup. This might take a few minutes on first startup. Please take a look at the logs and be patient!
+After some issues with permissions related to the use of a dedicated user for ioBroker, I added some code for fixing permissions on container startup. This might take a few minutes on first startup. Please take a look at the container logs and be patient!
 
 ## Changelog
 
-### v4.0.3beta (2020-01-06)
-* added support to restore backup on startup
-* small fixes according to "docker best practices"
+### v4.1.0 (2020-01-17)
+* improved readme.md
+* v4.0.3beta (2020-01-06)
+  * added support to restore backup on startup
+  * small fixes according to "docker best practices"
 * v4.0.2beta (2019-12-10)
   * added env for activating redis
   * enhancements in startupscript and dockerfile
