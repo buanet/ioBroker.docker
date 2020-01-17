@@ -92,7 +92,17 @@ But watch for the used node version. If the existing installation runs with anot
 
 After some issues with permissions related to the use of a dedicated user for ioBroker, I added some code for fixing permissions on container startup. This might take a few minutes on first startup. Please take a look at the container logs and be patient!
 
+## Miscellaneous
+
+### Keep me updated
+
+If you want the newest updates about the image and my tutorials at https://buanet.de/tutorials you can simply subscribe to my new "news and updates" channel (only in german) on Telegram.
+You will find the channel here: https://t.me/buanet_tutorials
+
 ## Changelog
+
+### v4.1.1beta (2020-01-17)
+* updated openzwave to version 1.6.1007
 
 ### v4.1.0 (2020-01-17)
 * improved readme.md
