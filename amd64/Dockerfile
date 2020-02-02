@@ -86,4 +86,4 @@ ENV ADMINPORT=8081 \
     ZWAVE="false"
 	
 # Run startup-script
-ENTRYPOINT ["/opt/scripts/iobroker_startup.sh"]
+ENTRYPOINT ["/bin/bash", "-c", "/opt/scripts/iobroker_startup.sh"]
