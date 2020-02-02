@@ -101,8 +101,10 @@ You will find the channel here: https://t.me/buanet_tutorials
 
 ## Changelog
 
-### v4.1.1beta (2020-01-17)
-* updated openzwave to version 1.6.1007
+### v4.1.2beta (2020-02-02)
+* small fix for permissions issues on some systems
+* v4.1.1beta (2020-01-17)
+  * updated openzwave to version 1.6.1007
 
 ### v4.1.0 (2020-01-17)
 * improved readme.md
