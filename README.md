@@ -70,7 +70,7 @@ To configure the ioBroker container on startup it is possible to set some enviro
 |LANGUAGE|de_DE:de|The following locales are pre-generated: de_DE:de, en_US:en|
 |LC_ALL|de_DE.UTF-8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |PACKAGES|vi|Installs additional packages to your container needed by some adapters, packages should be seperated by whitespace like "package1 package2 package3"|
-|REDIS|false|Activates the uses of redis as states-db on startup, fill with "hostname:port" to set redis connection, redis db has to be set up seperately (e.g. in another container)|
+|REDIS|false|Activates the use of redis as states-db on startup, fill with "hostname:port" to set redis connection, redis db has to be set up seperately (e.g. in another container)|
 |SETGID|1000|For security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
 |SETUID|1000|For security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
 |TZ|Europe/Berlin|All valid Linux-timezones|

@@ -49,11 +49,6 @@ echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
 
-# Not in use
-# if [ -f /opt/.firstrun ]
-# rm -f /opt/.firstrun
-
-
 #####
 # STEP 1 - Preparing container
 #####
@@ -68,7 +63,7 @@ then
   echo "Installing additional packages is set by ENV."
   echo "The following packages will be installed:" $packages"..."
   echo $packages > /opt/scripts/.packages
-  sh /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
+  bash /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
   echo "Done."
 else
   echo "There are no additional packages defined."
@@ -162,15 +157,15 @@ if [ -f /opt/iobroker/.install_host ]
 then
   echo "Looks like this is a new and empty installation of ioBroker."
   echo "Hostname needs to be updated to " $(hostname)"..."
-    sh /opt/iobroker/iobroker host $(cat /opt/iobroker/.install_host)
+    bash iobroker host $(cat /opt/iobroker/.install_host)
     rm -f /opt/iobroker/.install_host
   echo 'Done.'
   echo ' '
-elif [ $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
+elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
 then
   echo "Hostname in ioBroker does not match the hostname of this container."
   echo "Updating hostname to " $(hostname)"..."
-    sh /opt/iobroker/iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+    bash iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
   echo 'Done.'
   echo ' '
 fi
@@ -189,11 +184,11 @@ echo "For more information take a look at readme.md on Github!"
 echo ' '
 
 # Checking ENV for Adminport
-if [ "$adminport" != $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*') ]
+if [ "$adminport" != $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*') ]
 then
   echo "Adminport set by ENV does not match port configured in ioBroker installation."
   echo "Setting Adminport to" $adminport"..."
-    iobroker set admin.0 --port $adminport
+    bash iobroker set admin.0 --port $adminport
   echo 'Done.'
   echo ' '
 fi
@@ -202,8 +197,8 @@ fi
 if [ "$avahi" = "true" ]
 then
   echo "Avahi-daemon is activated by ENV."
-  chmod 764 /opt/scripts/setup_avahi.sh
-  sh /opt/scripts/setup_avahi.sh
+  chmod 755 /opt/scripts/setup_avahi.sh
+  bash /opt/scripts/setup_avahi.sh
   echo "Done."
   echo ' '
 fi
@@ -212,8 +207,8 @@ fi
 if [ "$zwave" = "true" ]
 then
   echo "Z-Wave is activated by ENV."
-  chmod 764 /opt/scripts/setup_zwave.sh
-  sh /opt/scripts/setup_zwave.sh
+  chmod 755 /opt/scripts/setup_zwave.sh
+  bash /opt/scripts/setup_zwave.sh
   echo "Done."
   echo ' '
 fi
@@ -249,6 +244,38 @@ then
   echo "Done."
   echo ' '
 fi
+
+# Checking for Userscripts in /opt/userscripts
+if [ `find /opt/userscripts -type f | wc -l` -lt 1 ]
+then
+  echo "There is no data detected in /opt/userscripts. Restoring exapmple userscripts..."
+  tar -xf /opt/initial_userscripts.tar -C /
+  chmod 755 userscript_firststart_example.sh
+  chmod 755 userscript_everystart_example.sh
+  echo "Done."
+  echo ' '
+elif [ -f /opt/userscripts/userscript_firststart.sh ] || [ -f /opt/userscripts/userscript_everystart.sh ]
+then
+  if [ -f /opt/userscripts/userscript_firststart.sh ] && [ -f /opt/.firstrun ]
+  then
+    echo "Userscript for first start detected and this is the first start of a new container."
+    echo "Running userscript_firststart.sh..."
+    chmod 755 userscript_firststart.sh
+    bash /opt/userscripts/userscript_firststart.sh
+	rm -f /opt/.firstrun
+    echo "Done."
+	echo ' '
+  fi
+  if [ -f /opt/userscripts/userscript_everystart.sh ]
+  then
+    echo "Userscript for every start detected. Running userscript_everystart.sh..."
+    chmod 755 userscript_everystart.sh
+    bash /opt/userscripts/userscript_everystart.sh
+    echo "Done."
+	echo ' '
+  fi
+fi
+
 
 sleep 5
 
