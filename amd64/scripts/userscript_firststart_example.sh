@@ -5,4 +5,8 @@
 
 # You can add your advanced script code here!
 
+echo ' '
+echo "I'm your startscript userscript_firststart.sh. I will run only on the FIRST startup of the container."
+echo ' '
+
 exit 0

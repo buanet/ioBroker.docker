@@ -78,14 +78,19 @@ RUN chsh -s /bin/bash iobroker \
     && usermod --home /opt/iobroker iobroker
 
 # Setting up ENVs
-ENV ADMINPORT=8081 \
-    AVAHI="false" \
+ENV AVAHI="false" \
     DEBIAN_FRONTEND="teletype" \
+	IOB_ADMINPORT=8081 \
+	IOB_OBJECTSDB_HOST="127.0.0.1" \
+	IOB_OBJECTSDB_PORT="9001" \
+	IOB_OBJECTSDB_TYPE="file" \
+	IOB_STATESDB_HOST="127.0.0.1" \
+	IOB_STATESDB_PORT="9000" \
+	IOB_STATESDB_TYPE="file" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
     PACKAGES="vi" \
-    REDIS="false" \
     SETGID=1000 \
     SETUID=1000 \
     TZ="Europe/Berlin" \

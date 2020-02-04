@@ -1,11 +1,16 @@
 #!/bin/bash
 
 # Reading ENV
-adminport=$ADMINPORT
+adminport=$IOB_ADMINPORT
 avahi=$AVAHI
 gid=$SETGID
+objectsdbhost=$IOB_OBJECTSDB_HOST
+objectsdbport=$IOB_OBJECTSDB_PORT
+objectsdbtype=$IOB_OBJECTSDB_TYPE
 packages=$PACKAGES
-redis=$REDIS
+statesdbhost=$IOB_STATESDB_HOST
+statesdbport=$IOB_STATESDB_PORT
+statesdbtype=$IOB_STATESDB_TYPE
 uid=$SETUID
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
@@ -229,7 +234,7 @@ then
   echo ' '
 fi
 
-# Checking ENV for REDIS
+# Checking ENVs for custom setup of objects db
 if [ "$redis" != "false" ]
 then
   echo "Connection to Redis is configured by ENV."
@@ -245,13 +250,18 @@ then
   echo ' '
 fi
 
+# Checking ENVs for custom setup of states db#
+
+
+
+
 # Checking for Userscripts in /opt/userscripts
 if [ `find /opt/userscripts -type f | wc -l` -lt 1 ]
 then
   echo "There is no data detected in /opt/userscripts. Restoring exapmple userscripts..."
   tar -xf /opt/initial_userscripts.tar -C /
-  chmod 755 userscript_firststart_example.sh
-  chmod 755 userscript_everystart_example.sh
+  chmod 755 /opt/userscripts/userscript_firststart_example.sh
+  chmod 755 /opt/userscripts/userscript_everystart_example.sh
   echo "Done."
   echo ' '
 elif [ -f /opt/userscripts/userscript_firststart.sh ] || [ -f /opt/userscripts/userscript_everystart.sh ]
@@ -260,7 +270,7 @@ then
   then
     echo "Userscript for first start detected and this is the first start of a new container."
     echo "Running userscript_firststart.sh..."
-    chmod 755 userscript_firststart.sh
+    chmod 755 /opt/userscripts/userscript_firststart.sh
     bash /opt/userscripts/userscript_firststart.sh
 	rm -f /opt/.firstrun
     echo "Done."
@@ -269,7 +279,7 @@ then
   if [ -f /opt/userscripts/userscript_everystart.sh ]
   then
     echo "Userscript for every start detected. Running userscript_everystart.sh..."
-    chmod 755 userscript_everystart.sh
+    chmod 755 /opt/userscripts/userscript_everystart.sh
     bash /opt/userscripts/userscript_everystart.sh
     echo "Done."
 	echo ' '

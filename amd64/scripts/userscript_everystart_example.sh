@@ -5,4 +5,9 @@
 
 # You can add your advanced script code here!
 
+echo ' '
+echo "I'm your startscript userscript_everystart.sh. I will run on EVERY container startup."
+echo ' '
+
+
 exit 0
