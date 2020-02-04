@@ -10,7 +10,7 @@ uid=$SETUID
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
 
-# Getting date and time for logging 
+# Getting date and time for logging
 dati=`date '+%Y-%m-%d %H:%M:%S'`
 
 # Logging header
@@ -77,7 +77,7 @@ echo ' '
 
 # Checking and setting uid/gid
 if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $gid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $uid ]
-then 
+then
   echo "Different UID and/ or GID is set by ENV."
   echo "Changing UID to "$uid" and GID to "$gid"..."
   usermod -u $uid iobroker
@@ -142,7 +142,7 @@ echo "-----   Step 3 of 5: Checking ioBroker installation    -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
-# (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"  
+# (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
 echo "(Re)Setting folder permissions (This might take a while! Please be patient!)..."
   chown -R $uid:$gid /opt/iobroker
   chown -R $uid:$gid /opt/scripts
@@ -222,7 +222,7 @@ fi
 if [ "$usbdevices" != "none" ]
 then
   echo "Usb-device-support is activated by ENV."
-  
+
   IFS=';' read -ra devicearray <<< "$usbdevices"
     for i in "${devicearray[@]}"
     do
