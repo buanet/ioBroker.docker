@@ -2,7 +2,6 @@
 
 # Reading env-variables
 packages=$PACKAGES
-avahi=$AVAHI
 
 # Version output for logging
 echo 'Version: 2.0.5beta'
@@ -38,16 +37,6 @@ then
   sudo rm -f /opt/iobroker/.install_host
 	echo 'First run preparation done...'
 fi
-
-# Checking and setting up avahi-daemon
-if [ "$avahi" = "true" ]
-then
-  echo 'Initializing Avahi-Daemon...'
-  sudo sh /opt/scripts/avahi_startup.sh
-  echo 'Initializing Avahi-Daemon done...'
-fi
-
-sleep 5
 
 # Starting ioBroker
 echo 'Starting ioBroker...'

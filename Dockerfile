@@ -51,8 +51,7 @@ USER iobroker
 
 ENV DEBIAN_FRONTEND="teletype" \
 	LANG="de_DE.UTF-8" \
-	TZ="Europe/Berlin" \
-	AVAHI="false"
+	TZ="Europe/Berlin"
 
 EXPOSE 8081/tcp
 VOLUME ["/opt/iobroker"]
