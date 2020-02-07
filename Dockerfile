@@ -1,11 +1,10 @@
-FROM debian:latest
+FROM node:10
 
 LABEL maintainer="info@thorstenreichelt.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y \
-	apt-utils \
         build-essential \
         curl \
         git \
@@ -18,11 +17,6 @@ RUN apt-get update && apt-get install -y \
         sudo \
         unzip \
         wget \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
-RUN apt-get update && apt-get install -y \
-        nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
@@ -39,8 +33,7 @@ RUN chmod +x iobroker_startup.sh \
 	&& chmod +x packages_install.sh
 
 WORKDIR /
-RUN apt-get update \
-    && curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash - \
+RUN curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash - \
     && echo $(hostname) > /opt/iobroker/.install_host \
     && rm -rf /var/lib/apt/lists/*
 
