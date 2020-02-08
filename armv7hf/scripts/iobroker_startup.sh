@@ -1,16 +1,21 @@
 #!/bin/bash
 
 # Reading ENV
-adminport=$ADMINPORT
+adminport=$IOB_ADMINPORT
 avahi=$AVAHI
-gid=$SETGID
+objectsdbhost=$IOB_OBJECTSDB_HOST
+objectsdbport=$IOB_OBJECTSDB_PORT
+objectsdbtype=$IOB_OBJECTSDB_TYPE
 packages=$PACKAGES
-redis=$REDIS
-uid=$SETUID
+setgid=$SETGID
+setuid=$SETUID
+statesdbhost=$IOB_STATESDB_HOST
+statesdbport=$IOB_STATESDB_PORT
+statesdbtype=$IOB_STATESDB_TYPE
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
 
-# Getting date and time for logging 
+# Getting date and time for logging
 dati=`date '+%Y-%m-%d %H:%M:%S'`
 
 # Logging header
@@ -37,21 +42,21 @@ echo -n "-----               " && echo -n "$(printf "%-10s %-23s" node: $(node -
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" npm: $(npm -v))" && echo " -----"
 echo "-----                                                  -----"
 echo "-----                       ENV                        -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ADMINPORT: $ADMINPORT)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" AVAHI: $AVAHI)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $PACKAGES)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" REDIS: $REDIS)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETGID: $SETGID)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETUID: $SETUID)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" USBDEVICES: $USBDEVICES)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $ZWAVE)" && echo " -----"
+if [ "$adminport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ADMINPORT: $adminport)" && echo " -----"; fi
+if [ "$avahi" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" AVAHI: $avahi)" && echo " -----"; fi
+if [ "$objectsdbhost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
+if [ "$objectsdbport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
+if [ "$objectsdbtype" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
+if [ "$packages" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $packages)" && echo " -----"; fi
+if [ "$setgid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETGID: $setgid)" && echo " -----"; fi
+if [ "$setuid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETUID: $setuid)" && echo " -----"; fi
+if [ "$statesdbhost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_HOST: $statesdbhost)" && echo " -----"; fi
+if [ "$statesdbport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_PORT: $statesdbport)" && echo " -----"; fi
+if [ "$statesdbtype" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
+if [ "$usbdevices" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" USBDEVICES: $usbdevices)" && echo " -----"; fi
+if [ "$zwave" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $zwave)" && echo " -----"; fi
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
-
-
-# Not in use
-# if [ -f /opt/.firstrun ]
-# rm -f /opt/.firstrun
 
 
 #####
@@ -62,31 +67,30 @@ echo "-----         Step 1 of 5: Preparing container         -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
-# Installing additional packages
-if [ "$packages" != "" ]
+# Installing additional packages and setting uid/gid
+if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]
 then
-  echo "Installing additional packages is set by ENV."
-  echo "The following packages will be installed:" $packages"..."
-  echo $packages > /opt/scripts/.packages
-  sh /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
-  echo "Done."
+  if [ "$packages" != "" ]
+  then
+    echo "Installing additional packages is set by ENV."
+    echo "The following packages will be installed:" $packages"..."
+    echo $packages > /opt/scripts/.packages
+    bash /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
+    echo "Done."
+    echo ' '
+  fi
+  if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]
+  then
+    echo "Different UID and/ or GID is set by ENV."
+    echo "Changing UID to "$setuid" and GID to "$setgid"..."
+    usermod -u $setuid iobroker
+    groupmod -g $setgid iobroker
+    echo "Done."
+    echo ' '
+  fi
 else
-  echo "There are no additional packages defined."
+  echo "Nothing to do here."
 fi
-echo ' '
-
-# Checking and setting uid/gid
-if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $gid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $uid ]
-then 
-  echo "Different UID and/ or GID is set by ENV."
-  echo "Changing UID to "$uid" and GID to "$gid"..."
-  usermod -u $uid iobroker
-  groupmod -g $gid iobroker
-  echo "Done."
-else
-  echo "There are no changes in UID/ GID needed."
-fi
-echo ' '
 
 # Change directory for next steps
 cd /opt/iobroker
@@ -142,10 +146,10 @@ echo "-----   Step 3 of 5: Checking ioBroker installation    -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
-# (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"  
+# (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
 echo "(Re)Setting folder permissions (This might take a while! Please be patient!)..."
-  chown -R $uid:$gid /opt/iobroker
-  chown -R $uid:$gid /opt/scripts
+  chown -R $setuid:$setgid /opt/iobroker
+  chown -R $setuid:$setgid /opt/scripts
 echo "Done."
 echo ' '
 
@@ -162,15 +166,15 @@ if [ -f /opt/iobroker/.install_host ]
 then
   echo "Looks like this is a new and empty installation of ioBroker."
   echo "Hostname needs to be updated to " $(hostname)"..."
-    sh /opt/iobroker/iobroker host $(cat /opt/iobroker/.install_host)
+    bash iobroker host $(cat /opt/iobroker/.install_host)
     rm -f /opt/iobroker/.install_host
   echo 'Done.'
   echo ' '
-elif [ $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
+elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
 then
   echo "Hostname in ioBroker does not match the hostname of this container."
   echo "Updating hostname to " $(hostname)"..."
-    sh /opt/iobroker/iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+    bash iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
   echo 'Done.'
   echo ' '
 fi
@@ -188,67 +192,167 @@ echo "Some adapters have special requirements/ settings which can be activated b
 echo "For more information take a look at readme.md on Github!"
 echo ' '
 
+
 # Checking ENV for Adminport
-if [ "$adminport" != $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*') ]
+if [ "$adminport" != "" ]
 then
-  echo "Adminport set by ENV does not match port configured in ioBroker installation."
-  echo "Setting Adminport to" $adminport"..."
-    iobroker set admin.0 --port $adminport
-  echo 'Done.'
-  echo ' '
+  if [ "$adminport" != $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*') ]
+  then
+    echo "Adminport set by ENV does not match port configured in ioBroker installation."
+    echo "Setting Adminport to \""$adminport"\"..."
+    bash iobroker set admin.0 --port $adminport
+    echo 'Done.'
+    echo ' '
+  fi
 fi
+
 
 # Checking ENV for AVAHI
-if [ "$avahi" = "true" ]
+if [ "$avahi" != "" ]
 then
-  echo "Avahi-daemon is activated by ENV."
-  chmod 764 /opt/scripts/setup_avahi.sh
-  sh /opt/scripts/setup_avahi.sh
-  echo "Done."
-  echo ' '
+  if [ "$avahi" = "true" ]
+  then
+    echo "Avahi-daemon is activated by ENV."
+    chmod 755 /opt/scripts/setup_avahi.sh
+    bash /opt/scripts/setup_avahi.sh
+    echo "Done."
+    echo ' '
+  fi
 fi
+
 
 # Checking ENV for Z-WAVE
-if [ "$zwave" = "true" ]
+if [ "$zwave" != "" ]
 then
-  echo "Z-Wave is activated by ENV."
-  chmod 764 /opt/scripts/setup_zwave.sh
-  sh /opt/scripts/setup_zwave.sh
-  echo "Done."
-  echo ' '
+  if [ "$zwave" = "true" ]
+  then
+    echo "Z-Wave is activated by ENV."
+    chmod 755 /opt/scripts/setup_zwave.sh
+    bash /opt/scripts/setup_zwave.sh
+    echo "Done."
+    echo ' '
+  fi
 fi
+
 
 # checking ENV for USBDEVICES
-if [ "$usbdevices" != "none" ]
+if [ "$usbdevices" != "" ]
 then
-  echo "Usb-device-support is activated by ENV."
-  
-  IFS=';' read -ra devicearray <<< "$usbdevices"
-    for i in "${devicearray[@]}"
-    do
-      echo "Setting permissions for" $i"..."
-      chown root:dialout $i
-      chmod g+rw $i
-    done
-  echo "Done."
+  if [ "$usbdevices" != "none" ]
+  then
+    echo "Usb-device-support is activated by ENV."
+    IFS=';' read -ra devicearray <<< "$usbdevices"
+      for i in "${devicearray[@]}"
+      do
+        echo "Setting permissions for" $i"..."
+        chown root:dialout $i
+        chmod g+rw $i
+      done
+    echo "Done."
+    echo ' '
+  fi
+fi
+
+
+# Checking ENVs for custom setup of objects db
+if [ "$objectsdbtype" != "" ] || [ "$objectsdbhost" != "" ] || [ "$objectsdbport" != "" ]
+then
+  if [ "$objectsdbtype" != $(jq '.objects.type' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_OBJECTSDB_TYPE is set and value is different from detected ioBroker installation."
+    echo "Setting type of objects db to \""$objectsdbtype"\"..."
+    jq --arg objectsdbtype "$objectsdbtype" '.objects.type = $objectsdbtype' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+    echo "Done."
+  else
+    echo "ENV IOB_OBJECTSDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
+  fi
+  if [ "$objectsdbhost" != $(jq '.objects.host' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_OBJECTSDB_HOST is set and value is different from detected ioBroker installation."
+    echo "Setting host of objects db to \""$objectsdbhost"\"..."
+    jq --arg objectsdbhost "$objectsdbhost" '.objects.host = $objectsdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+    echo "Done."
+  else
+    echo "ENV IOB_OBJECTSDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
+  fi
+  if [ "$objectsdbport" != $(jq '.objects.port' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_OBJECTSDB_PORT is set and value is different from detected ioBroker installation."
+    echo "Setting port of objects db to \""$objectsdbport"\"..."
+    jq --arg objectsdbport "$objectsdbport" '.objects.port = $objectsdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+    echo "Done."
+  else
+    echo "ENV IOB_OBJECTSDB_PORT is set and value meets detected ioBroker installation. Nothing to do here."
+  fi
   echo ' '
 fi
 
-# Checking ENV for REDIS
-if [ "$redis" != "false" ]
+
+# Checking ENVs for custom setup of states db#
+if [ "$statesdbtype" != "" ] || [ "$statesdbhost" != "" ] || [ "$statesdbport" != "" ]
 then
-  echo "Connection to Redis is configured by ENV."
-  echo "Installing prerequisites..."
-  apt-get update 2>&1> /dev/null && apt-get install -y jq 2>&1> /dev/null && rm -rf /var/lib/apt/lists/* 2>&1> /dev/null
-  redisserver=$(echo $redis | sed -E  's/(.*):(.*)/\1/')
-  redisport=$(echo $redis | sed -E  's/(.*):(.*)/\2/')
-  echo "Setting configuration for Redis (Server: "$redisserver", Port: "$redisport") in ioBroker..."
-  cd /opt/iobroker/iobroker-data
-  jq --arg redisserver "$redisserver" --arg redisport "$redisport" '.states.type = "redis" | .states.host = $redisserver | .states.port = $redisport' iobroker.json > iobroker.json.tmp && mv iobroker.json.tmp iobroker.json
-  cd /opt/iobroker
-  echo "Done."
+  if [ "$statesdbtype" != $(jq '.states.type' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_STATESDB_TYPE is set and value is different from detected ioBroker installation."
+    echo "Setting type of states db to \""$statesdbtype"\"..."
+    jq --arg statesdbtype "$statesdbtype" '.states.type = $statesdbtype' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+    echo "Done."
+  else
+    echo "ENV IOB_STATESDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
+  fi
+  if [ "$statesdbhost" != $(jq '.states.host' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_STATESDB_HOST is set and value is different from detected ioBroker installation."
+    echo "Setting host of states db to \""$statesdbhost"\"..."
+    jq --arg statesdbhost "$statesdbhost" '.states.host = $statesdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+    echo "Done."
+  else
+    echo "ENV IOB_STATESDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
+  fi
+  if [ "$statesdbport" != $(jq '.states.port' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_STATESDB_PORT is set and value is different from detected ioBroker installation."
+    echo "Setting port of states db to \""$statesdbport"\"..."
+    jq --arg statesdbport "$statesdbport" '.states.port = $statesdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+    echo "Done."
+  else
+    echo "ENV IOB_STATESDB_PORT is set and value meets detected ioBroker installation. Nothing to do here."
+  fi
   echo ' '
 fi
+
+
+# Checking for Userscripts in /opt/userscripts
+if [ `find /opt/userscripts -type f | wc -l` -lt 1 ]
+then
+  echo "There is no data detected in /opt/userscripts. Restoring exapmple userscripts..."
+  tar -xf /opt/initial_userscripts.tar -C /
+  chmod 755 /opt/userscripts/userscript_firststart_example.sh
+  chmod 755 /opt/userscripts/userscript_everystart_example.sh
+  echo "Done."
+  echo ' '
+elif [ -f /opt/userscripts/userscript_firststart.sh ] || [ -f /opt/userscripts/userscript_everystart.sh ]
+then
+  if [ -f /opt/userscripts/userscript_firststart.sh ] && [ -f /opt/.firstrun ]
+  then
+    echo "Userscript for first start detected and this is the first start of a new container."
+    echo "Running userscript_firststart.sh..."
+    chmod 755 /opt/userscripts/userscript_firststart.sh
+    bash /opt/userscripts/userscript_firststart.sh
+    rm -f /opt/.firstrun
+    echo "Done."
+    echo ' '
+  fi
+  if [ -f /opt/userscripts/userscript_everystart.sh ]
+  then
+    echo "Userscript for every start detected. Running userscript_everystart.sh..."
+    chmod 755 /opt/userscripts/userscript_everystart.sh
+    bash /opt/userscripts/userscript_everystart.sh
+    echo "Done."
+    echo ' '
+  fi
+fi
+
 
 sleep 5
 

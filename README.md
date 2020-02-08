@@ -4,12 +4,12 @@
 
 Source: https://github.com/buanet/docker-iobroker
 
-IoBroker for Docker is an Dockerimage for ioBroker IoT platform (http://www.iobroker.net). 
+IoBroker for Docker is an Dockerimage for ioBroker IoT platform (http://www.iobroker.net).
 
 It is originally made for and always tested on a Synology Disk Station 1515+ with DSM 6 and official Docker package installed. But it also works on other systems with Docker installed!
 
 Version 4 now supports running the Image in Docker on the following architectures: amd64, armv7hf, aarch64.
-Feel free to ask for more architectures by opening an github issue. 
+Feel free to ask for more architectures by opening an github issue.
 
 ## Important notice
 
@@ -29,7 +29,7 @@ The following ways to geht iobroker-container running are only examples. Maybe y
 
 ### Running from commandline
 
-For taking a first look at the iobroker docker container it would be enough to simply run the following basic docker run command: 
+For taking a first look at the iobroker docker container it would be enough to simply run the following basic docker run command:
 
 ```
 docker run -p 8081:8081 --name iobroker -v /opt/iobroker:/iobroker buanet/iobroker:latest
@@ -60,24 +60,30 @@ The following will give a short overview.
 
 ### Environment variables
 
-To configure the ioBroker container on startup it is possible to set some environment variables. 
+To configure the ioBroker container on startup it is possible to set some environment variables.
+You do not have to declare every single variable when stting up your container. Variables you do not set will come up with their default value.
 
 |env|default|description|
 |---|---|---|
-|ADMINPORT|8081|Sets ioBroker adminport on startup|
 |AVAHI|false|Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"|
+|IOB_ADMINPORT|8081|Sets ioBroker adminport on startup|
+|IOB_OBJECTSDB_HOST|127.0.0.1|Sets hostname for ioBroker objects db|
+|IOB_OBJECTSDB_PORT|9001|Sets port for ioBroker objects db|
+|IOB_OBJECTSDB_TYPE|file|Sets type of ioBroker objects db, cloud be "file", "redis" or "couch"|
+|IOB_STATESDB_HOST|127.0.0.1|Sets hostname for ioBroker states db|
+|IOB_STATESDB_PORT|9000|Sets port for ioBroker states db|
+|IOB_STATESDB_TYPE|file|Sets type of ioBroker states db, could be "file" or "redis"|
 |LANG|de_DE.UTF&#x2011;8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |LANGUAGE|de_DE:de|The following locales are pre-generated: de_DE:de, en_US:en|
 |LC_ALL|de_DE.UTF-8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |PACKAGES|vi|Installs additional packages to your container needed by some adapters, packages should be seperated by whitespace like "package1 package2 package3"|
-|REDIS|false|Activates the uses of redis as states-db on startup, fill with "hostname:port" to set redis connection, redis db has to be set up seperately (e.g. in another container)|
 |SETGID|1000|For security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
 |SETUID|1000|For security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
 |TZ|Europe/Berlin|All valid Linux-timezones|
 |USBDEVICES|none|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" like "/dev/ttyACM0;/dev/ttyACM1"|
 |ZWAVE|false|Will install openzwave to support zwave-adapter, can be "true" or "false"|
 
-### Mounting Folder/ Volume
+### Mounting folder/ volume
 
 It is possible to mount an empty folder to /opt/iobroker during first startup of the container. The Startupscript will check this folder and restore content if it is empty.
 Since v4.1.0 it is also possible mount a folder filled up with an iobroker backup file (created with backitup adapter) named like this: "iobroker_2020_01_06-01_09_10_backupiobroker.tar.gz".
@@ -88,9 +94,19 @@ Note: It is absolutely recommended to use a mounted folder or persistent volume 
 You can also mount a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker).
 But watch for the used node version. If the existing installation runs with another major version of node you have do perform additional steps. For more Details see the "Important notice" on top.
 
-### Permission Fixer
+### Permission fixer
 
 After some issues with permissions related to the use of a dedicated user for ioBroker, I added some code for fixing permissions on container startup. This might take a few minutes on first startup. Please take a look at the container logs and be patient!
+
+### Userdefined startup scripts (advanced setting/ beta status)
+
+In some cases it migth be helpful to add some script code to the startup script of the container. This is now possible by mounting an additional folder to the container and place a userscript in there.
+The folder containing your userscripts must be mounted under /opt/userscripts inside the container. If you mount an empty folder you will get two example scripts to be restored in that folder. Just try it out.
+
+Basically there are two different scripts which will be read and called by the startup script. One that will only be called once at the first start of the container (userscript_firststart.sh) and one which will be called for every start of the container (userscript_everystart.sh).
+
+Hint:
+To get familiar with that feature try the following: Create a Container, mount an empty folder to /opt/userscripts, start your container. Two scripts will be restored into the empty folder. Rename the example scripts by simply removing "\_example". Restart your container and take a look at the Log. In "Step 4 of 5: Applying special settings" you will see the messages generated by the example userscripts.
 
 ## Miscellaneous
 
@@ -101,8 +117,12 @@ You will find the channel here: https://t.me/buanet_tutorials
 
 ## Changelog
 
-### v4.1.2beta (2020-02-02)
-* small fix for permissions issues on some systems
+### v4.1.3beta (2020-02-08)
+* added new ENVs for "iobroker setup custom"
+* enhancements in startupscript logging
+* v4.1.2beta (2020-02-02)
+  * added feature userscripts on startup
+  * small fix for permissions issues on some systems
 * v4.1.1beta (2020-01-17)
   * updated openzwave to version 1.6.1007
 
@@ -112,7 +132,7 @@ You will find the channel here: https://t.me/buanet_tutorials
   * added support to restore backup on startup
   * small fixes according to "docker best practices"
 * v4.0.2beta (2019-12-10)
-  * added env for activating redis
+  * ~~added env for activating redis~~
   * enhancements in startupscript and dockerfile
 * v4.0.1beta (2019-11-25)
   * added env for iobroker admin port
@@ -147,7 +167,7 @@ You will find the channel here: https://t.me/buanet_tutorials
   * added permission fixing on first start
 * v2.0.5beta (2019-02-09)
   * added ENV to dockerfile
-  * added EXPOSE for admin 
+  * added EXPOSE for admin
   * final testing
 * v2.0.4beta (2019-01-28)
   * added support for env variables "avahi" and "packages"
@@ -168,12 +188,12 @@ You will find the channel here: https://t.me/buanet_tutorials
 
 ### v2.0.0 (2018-12-05)
 * v1.2.2beta (2018-12-05)  
-  * using node8 instead of node6 
+  * using node8 instead of node6
   * changes for new iobroker setup
 * v1.2.1beta (2018-09-12)
   * added support for firetv-adapter
 
-### v1.2.0 (2018-08-21) 
+### v1.2.0 (2018-08-21)
 * v1.1.3beta (2018-08-21)
   * added ffmpeg-package for yahka to support webcams
 * v1.1.2beta (2018-04-04)
