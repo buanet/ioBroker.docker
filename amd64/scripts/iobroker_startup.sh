@@ -15,7 +15,7 @@ uid=$SETUID
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
 
-# Getting date and time for logging 
+# Getting date and time for logging
 dati=`date '+%Y-%m-%d %H:%M:%S'`
 
 # Logging header
@@ -77,7 +77,7 @@ echo ' '
 
 # Checking and setting uid/gid
 if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $gid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $uid ]
-then 
+then
   echo "Different UID and/ or GID is set by ENV."
   echo "Changing UID to "$uid" and GID to "$gid"..."
   usermod -u $uid iobroker
@@ -142,7 +142,7 @@ echo "-----   Step 3 of 5: Checking ioBroker installation    -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
-# (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"  
+# (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
 echo "(Re)Setting folder permissions (This might take a while! Please be patient!)..."
   chown -R $uid:$gid /opt/iobroker
   chown -R $uid:$gid /opt/scripts
@@ -189,13 +189,16 @@ echo "For more information take a look at readme.md on Github!"
 echo ' '
 
 # Checking ENV for Adminport
-if [ "$adminport" != $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*') ]
+if [ "$adminport" != ""]
 then
-  echo "Adminport set by ENV does not match port configured in ioBroker installation."
-  echo "Setting Adminport to" $adminport"..."
+  if [ "$adminport" != $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*') ]
+  then
+    echo "Adminport set by ENV does not match port configured in ioBroker installation."
+    echo "Setting Adminport to" $adminport"..."
     bash iobroker set admin.0 --port $adminport
-  echo 'Done.'
-  echo ' '
+    echo 'Done.'
+    echo ' '
+  fi
 fi
 
 # Checking ENV for AVAHI
@@ -222,7 +225,7 @@ fi
 if [ "$usbdevices" != "none" ]
 then
   echo "Usb-device-support is activated by ENV."
-  
+
   IFS=';' read -ra devicearray <<< "$usbdevices"
     for i in "${devicearray[@]}"
     do
@@ -235,24 +238,73 @@ then
 fi
 
 # Checking ENVs for custom setup of objects db
-if [ "$redis" != "false" ]
+if [ "$objectsdbtype" != "" ] || [ "$objectsdbhost" != "" ] || [ "$objectsdbport" != "" ]
 then
-  echo "Connection to Redis is configured by ENV."
-  echo "Installing prerequisites..."
-  apt-get update 2>&1> /dev/null && apt-get install -y jq 2>&1> /dev/null && rm -rf /var/lib/apt/lists/* 2>&1> /dev/null
-  redisserver=$(echo $redis | sed -E  's/(.*):(.*)/\1/')
-  redisport=$(echo $redis | sed -E  's/(.*):(.*)/\2/')
-  echo "Setting configuration for Redis (Server: "$redisserver", Port: "$redisport") in ioBroker..."
-  cd /opt/iobroker/iobroker-data
-  jq --arg redisserver "$redisserver" --arg redisport "$redisport" '.states.type = "redis" | .states.host = $redisserver | .states.port = $redisport' iobroker.json > iobroker.json.tmp && mv iobroker.json.tmp iobroker.json
-  cd /opt/iobroker
-  echo "Done."
-  echo ' '
+  if [ "$objectsdbtype" != $(jq '.objects.type' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_OBJECTSDB_TYPE is defined and value is different from detected ioBroker installation."
+    echo "Setting type of objects db to "$objectsdbtype"..."
+
+    echo "Done."
+  else
+    echo "ENV IOB_OBJECTSDB_TYPE is defined and value meets detected ioBroker installation. Nothing to do here."
+  fi
+  if [ "$objectsdbhost" != $(jq '.objects.host' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_OBJECTSDB_HOST is defined and value is different from detected ioBroker installation."
+    echo "Setting host of objects db to "$objectsdbhost"..."
+
+    echo "Done."
+  else
+    echo "ENV IOB_OBJECTSDB_HOST is defined and value meets detected ioBroker installation. Nothing to do here."
+  fi
+  if [ "$objectsdbport" != $(jq '.objects.port' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_OBJECTSDB_PORT is defined and value is different from detected ioBroker installation."
+    echo "Setting port of objects db to "$objectsdbport"..."
+
+    echo "Done."
+  else
+    echo "ENV IOB_OBJECTSDB_PORT is defined and value meets detected ioBroker installation. Nothing to do here."
+  fi
+else
+  echo "No Values for objects db defined by ENV." # Only for debugging, can be removed later
 fi
 
+
 # Checking ENVs for custom setup of states db#
+if [ "$statesdbtype" != "" ] || [ "$statesdbhost" != "" ] || [ "$statesdbport" != "" ]
+then
+  if [ "$statesdbtype" != $(jq '.states.type' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_STATESDB_TYPE is defined and value is different from detected ioBroker installation."
+    echo "Setting type of states db to "$statesdbtype"..."
 
+    echo "Done."
+  else
+    echo "ENV IOB_STATESDB_TYPE is defined and value meets detected ioBroker installation. Nothing to do here."
+  fi
+  if [ "$statesdbhost" != $(jq '.states.host' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_STATESDB_HOST is defined and value is different from detected ioBroker installation."
+    echo "Setting host of states db to "$statesdbhost"..."
 
+    echo "Done."
+  else
+    echo "ENV IOB_STATESDB_HOST is defined and value meets detected ioBroker installation. Nothing to do here."
+  fi
+  if [ "$statesdbport" != $(jq '.states.port' /opt/iobroker/iobroker-data/iobroker.json) ]
+  then
+    echo "ENV IOB_STATESDB_PORT is defined and value is different from detected ioBroker installation."
+    echo "Setting port of states db to "$statesdbport"..."
+
+    echo "Done."
+  else
+    echo "ENV IOB_STATESDB_PORT is defined and value meets detected ioBroker installation. Nothing to do here."
+  fi
+else
+  echo "No Values for states db defined by ENV." # Only for debugging, can be removed later
+fi
 
 
 # Checking for Userscripts in /opt/userscripts

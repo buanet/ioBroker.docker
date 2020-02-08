@@ -1,6 +1,6 @@
 FROM debian:stretch
 
-LABEL maintainer="Andre Germann" \ 
+LABEL maintainer="Andre Germann" \
       url="<https://buanet.de>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     git \
     gnupg2 \
     gosu \
+    jq \
     libavahi-compat-libdnssd-dev \
     libcap2-bin \
     libpam0g-dev \
@@ -80,13 +81,6 @@ RUN chsh -s /bin/bash iobroker \
 # Setting up ENVs
 ENV AVAHI="false" \
     DEBIAN_FRONTEND="teletype" \
-	IOB_ADMINPORT=8081 \
-	IOB_OBJECTSDB_HOST="127.0.0.1" \
-	IOB_OBJECTSDB_PORT="9001" \
-	IOB_OBJECTSDB_TYPE="file" \
-	IOB_STATESDB_HOST="127.0.0.1" \
-	IOB_STATESDB_PORT="9000" \
-	IOB_STATESDB_TYPE="file" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
@@ -96,6 +90,6 @@ ENV AVAHI="false" \
     TZ="Europe/Berlin" \
     USBDEVICES="none" \
     ZWAVE="false"
-	
+
 # Run startup-script
 ENTRYPOINT ["/bin/bash", "-c", "/opt/scripts/iobroker_startup.sh"]
