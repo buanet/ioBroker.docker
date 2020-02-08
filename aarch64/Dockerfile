@@ -1,6 +1,6 @@
 FROM balenalib/aarch64-debian:stretch
 
-LABEL maintainer="Andre Germann" \ 
+LABEL maintainer="Andre Germann" \
       url="<https://buanet.de>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -84,6 +84,6 @@ ENV ADMINPORT=8081 \
     TZ="Europe/Berlin" \
     USBDEVICES="none" \
     ZWAVE="false"
-	
+
 # Run startup-script
 ENTRYPOINT ["/bin/bash", "-c", "/opt/scripts/iobroker_startup.sh"]
