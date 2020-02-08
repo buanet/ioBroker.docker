@@ -43,10 +43,16 @@ echo -n "-----               " && echo -n "$(printf "%-10s %-23s" npm: $(npm -v)
 echo "-----                                                  -----"
 echo "-----                       ENV                        -----"
 if [ "$adminport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ADMINPORT: $adminport)" && echo " -----"; fi
-if [ "$avahi" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $avahi)" && echo " -----"; fi
+if [ "$avahi" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" AVAHI: $avahi)" && echo " -----"; fi
+if [ "$objectsdbhost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
+if [ "$objectsdbport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
+if [ "$objectsdbtype" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
 if [ "$packages" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $packages)" && echo " -----"; fi
 if [ "$setgid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETGID: $setgid)" && echo " -----"; fi
 if [ "$setuid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETUID: $setuid)" && echo " -----"; fi
+if [ "$statesdbhost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_HOST: $statesdbhost)" && echo " -----"; fi
+if [ "$statesdbport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_PORT: $statesdbport)" && echo " -----"; fi
+if [ "$statesdbtype" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
 if [ "$usbdevices" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" USBDEVICES: $usbdevices)" && echo " -----"; fi
 if [ "$zwave" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $zwave)" && echo " -----"; fi
 echo "$(printf -- '-%.0s' {1..60})"
@@ -61,30 +67,30 @@ echo "-----         Step 1 of 5: Preparing container         -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
-# Installing additional packages
-if [ "$packages" != "" ]
+# Installing additional packages and setting uid/gid
+if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]
 then
-  echo "Installing additional packages is set by ENV."
-  echo "The following packages will be installed:" $packages"..."
-  echo $packages > /opt/scripts/.packages
-  bash /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
-  echo "Done."
+  if [ "$packages" != "" ]
+  then
+    echo "Installing additional packages is set by ENV."
+    echo "The following packages will be installed:" $packages"..."
+    echo $packages > /opt/scripts/.packages
+    bash /opt/scripts/setup_packages.sh > /opt/scripts/setup_packages.log 2>&1
+    echo "Done."
+    echo ' '
+  fi
+  if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]
+  then
+    echo "Different UID and/ or GID is set by ENV."
+    echo "Changing UID to "$setuid" and GID to "$setgid"..."
+    usermod -u $setuid iobroker
+    groupmod -g $setgid iobroker
+    echo "Done."
+    echo ' '
+  fi
 else
-  echo "There are no additional packages defined."
+  echo "Nothing to do here."
 fi
-echo ' '
-
-# Checking and setting uid/gid
-if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]
-then
-  echo "Different UID and/ or GID is set by ENV."
-  echo "Changing UID to "$setuid" and GID to "$setgid"..."
-  usermod -u $setuid iobroker
-  groupmod -g $setgid iobroker
-  echo "Done."
-  echo ' '
-fi
-
 
 # Change directory for next steps
 cd /opt/iobroker
