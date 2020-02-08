@@ -3,15 +3,15 @@
 # Reading ENV
 adminport=$IOB_ADMINPORT
 avahi=$AVAHI
-gid=$SETGID
 objectsdbhost=$IOB_OBJECTSDB_HOST
 objectsdbport=$IOB_OBJECTSDB_PORT
 objectsdbtype=$IOB_OBJECTSDB_TYPE
 packages=$PACKAGES
+setgid=$SETGID
+setuid=$SETUID
 statesdbhost=$IOB_STATESDB_HOST
 statesdbport=$IOB_STATESDB_PORT
 statesdbtype=$IOB_STATESDB_TYPE
-uid=$SETUID
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
 
@@ -42,14 +42,13 @@ echo -n "-----               " && echo -n "$(printf "%-10s %-23s" node: $(node -
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" npm: $(npm -v))" && echo " -----"
 echo "-----                                                  -----"
 echo "-----                       ENV                        -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ADMINPORT: $ADMINPORT)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" AVAHI: $AVAHI)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $PACKAGES)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" REDIS: $REDIS)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETGID: $SETGID)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETUID: $SETUID)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" USBDEVICES: $USBDEVICES)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $ZWAVE)" && echo " -----"
+if [ "$adminport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ADMINPORT: $adminport)" && echo " -----"; fi
+if [ "$avahi" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $avahi)" && echo " -----"; fi
+if [ "$packages" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $packages)" && echo " -----"; fi
+if [ "$setgid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETGID: $setgid)" && echo " -----"; fi
+if [ "$setuid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETUID: $setuid)" && echo " -----"; fi
+if [ "$usbdevices" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" USBDEVICES: $usbdevices)" && echo " -----"; fi
+if [ "$zwave" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $zwave)" && echo " -----"; fi
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
@@ -76,17 +75,16 @@ fi
 echo ' '
 
 # Checking and setting uid/gid
-if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $gid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $uid ]
+if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]
 then
   echo "Different UID and/ or GID is set by ENV."
-  echo "Changing UID to "$uid" and GID to "$gid"..."
-  usermod -u $uid iobroker
-  groupmod -g $gid iobroker
+  echo "Changing UID to "$setuid" and GID to "$setgid"..."
+  usermod -u $setuid iobroker
+  groupmod -g $setgid iobroker
   echo "Done."
-else
-  echo "There are no changes in UID/ GID needed."
+  echo ' '
 fi
-echo ' '
+
 
 # Change directory for next steps
 cd /opt/iobroker
@@ -144,8 +142,8 @@ echo ' '
 
 # (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
 echo "(Re)Setting folder permissions (This might take a while! Please be patient!)..."
-  chown -R $uid:$gid /opt/iobroker
-  chown -R $uid:$gid /opt/scripts
+  chown -R $setuid:$setgid /opt/iobroker
+  chown -R $setuid:$setgid /opt/scripts
 echo "Done."
 echo ' '
 
@@ -188,6 +186,7 @@ echo "Some adapters have special requirements/ settings which can be activated b
 echo "For more information take a look at readme.md on Github!"
 echo ' '
 
+
 # Checking ENV for Adminport
 if [ "$adminport" != "" ]
 then
@@ -201,40 +200,51 @@ then
   fi
 fi
 
+
 # Checking ENV for AVAHI
-if [ "$avahi" = "true" ]
+if [ "$avahi" != "" ]
 then
-  echo "Avahi-daemon is activated by ENV."
-  chmod 755 /opt/scripts/setup_avahi.sh
-  bash /opt/scripts/setup_avahi.sh
-  echo "Done."
-  echo ' '
+  if [ "$avahi" = "true" ]
+  then
+    echo "Avahi-daemon is activated by ENV."
+    chmod 755 /opt/scripts/setup_avahi.sh
+    bash /opt/scripts/setup_avahi.sh
+    echo "Done."
+    echo ' '
+  fi
 fi
+
 
 # Checking ENV for Z-WAVE
-if [ "$zwave" = "true" ]
+if [ "$zwave" != "" ]
 then
-  echo "Z-Wave is activated by ENV."
-  chmod 755 /opt/scripts/setup_zwave.sh
-  bash /opt/scripts/setup_zwave.sh
-  echo "Done."
-  echo ' '
+  if [ "$zwave" = "true" ]
+  then
+    echo "Z-Wave is activated by ENV."
+    chmod 755 /opt/scripts/setup_zwave.sh
+    bash /opt/scripts/setup_zwave.sh
+    echo "Done."
+    echo ' '
+  fi
 fi
 
-# checking ENV for USBDEVICES
-if [ "$usbdevices" != "none" ]
-then
-  echo "Usb-device-support is activated by ENV."
 
-  IFS=';' read -ra devicearray <<< "$usbdevices"
-    for i in "${devicearray[@]}"
-    do
-      echo "Setting permissions for" $i"..."
-      chown root:dialout $i
-      chmod g+rw $i
-    done
-  echo "Done."
-  echo ' '
+# checking ENV for USBDEVICES
+if [ "$usbdevices" != "" ]
+then
+  if [ "$usbdevices" != "none" ]
+  then
+    echo "Usb-device-support is activated by ENV."
+    IFS=';' read -ra devicearray <<< "$usbdevices"
+      for i in "${devicearray[@]}"
+      do
+        echo "Setting permissions for" $i"..."
+        chown root:dialout $i
+        chmod g+rw $i
+      done
+    echo "Done."
+    echo ' '
+  fi
 fi
 
 

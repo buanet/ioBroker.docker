@@ -79,17 +79,14 @@ RUN chsh -s /bin/bash iobroker \
     && usermod --home /opt/iobroker iobroker
 
 # Setting up ENVs
-ENV AVAHI="false" \
-    DEBIAN_FRONTEND="teletype" \
+ENV DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
     PACKAGES="vi" \
     SETGID=1000 \
     SETUID=1000 \
-    TZ="Europe/Berlin" \
-    USBDEVICES="none" \
-    ZWAVE="false"
+    TZ="Europe/Berlin"
 
 # Run startup-script
 ENTRYPOINT ["/bin/bash", "-c", "/opt/scripts/iobroker_startup.sh"]
