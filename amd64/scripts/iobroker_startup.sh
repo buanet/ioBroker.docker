@@ -189,12 +189,12 @@ echo "For more information take a look at readme.md on Github!"
 echo ' '
 
 # Checking ENV for Adminport
-if [ "$adminport" != ""]
+if [ "$adminport" != "" ]
 then
   if [ "$adminport" != $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*') ]
   then
     echo "Adminport set by ENV does not match port configured in ioBroker installation."
-    echo "Setting Adminport to" $adminport"..."
+    echo "Setting Adminport to \""$adminport"\"..."
     bash iobroker set admin.0 --port $adminport
     echo 'Done.'
     echo ' '
@@ -243,8 +243,8 @@ then
   if [ "$objectsdbtype" != $(jq '.objects.type' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_OBJECTSDB_TYPE is defined and value is different from detected ioBroker installation."
-    echo "Setting type of objects db to "$objectsdbtype"..."
-
+    echo "Setting type of objects db to \""$objectsdbtype"\"..."
+    jq --arg objectsdbtype "$objectsdbtype" '.objects.type = $objectsdbtype' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
     echo "ENV IOB_OBJECTSDB_TYPE is defined and value meets detected ioBroker installation. Nothing to do here."
@@ -252,8 +252,8 @@ then
   if [ "$objectsdbhost" != $(jq '.objects.host' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_OBJECTSDB_HOST is defined and value is different from detected ioBroker installation."
-    echo "Setting host of objects db to "$objectsdbhost"..."
-
+    echo "Setting host of objects db to \""$objectsdbhost"\"..."
+    jq --arg objectsdbhost "$objectsdbhost" '.objects.host = $objectsdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
     echo "ENV IOB_OBJECTSDB_HOST is defined and value meets detected ioBroker installation. Nothing to do here."
@@ -261,8 +261,8 @@ then
   if [ "$objectsdbport" != $(jq '.objects.port' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_OBJECTSDB_PORT is defined and value is different from detected ioBroker installation."
-    echo "Setting port of objects db to "$objectsdbport"..."
-
+    echo "Setting port of objects db to \""$objectsdbport"\"..."
+    jq --arg objectsdbport "$objectsdbport" '.objects.port = $objectsdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
     echo "ENV IOB_OBJECTSDB_PORT is defined and value meets detected ioBroker installation. Nothing to do here."
@@ -279,7 +279,7 @@ then
   then
     echo "ENV IOB_STATESDB_TYPE is defined and value is different from detected ioBroker installation."
     echo "Setting type of states db to "$statesdbtype"..."
-
+    jq --arg statesdbtype "$statesdbtype" '.states.type = $statesdbtype' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
     echo "ENV IOB_STATESDB_TYPE is defined and value meets detected ioBroker installation. Nothing to do here."
@@ -288,7 +288,7 @@ then
   then
     echo "ENV IOB_STATESDB_HOST is defined and value is different from detected ioBroker installation."
     echo "Setting host of states db to "$statesdbhost"..."
-
+    jq --arg statesdbhost "$statesdbhost" '.states.host = $statesdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
     echo "ENV IOB_STATESDB_HOST is defined and value meets detected ioBroker installation. Nothing to do here."
@@ -297,7 +297,7 @@ then
   then
     echo "ENV IOB_STATESDB_PORT is defined and value is different from detected ioBroker installation."
     echo "Setting port of states db to "$statesdbport"..."
-
+    jq --arg statesdbport "$statesdbport" '.states.port = $statesdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
     echo "ENV IOB_STATESDB_PORT is defined and value meets detected ioBroker installation. Nothing to do here."
