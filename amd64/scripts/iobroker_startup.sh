@@ -237,38 +237,38 @@ then
   echo ' '
 fi
 
+
 # Checking ENVs for custom setup of objects db
 if [ "$objectsdbtype" != "" ] || [ "$objectsdbhost" != "" ] || [ "$objectsdbport" != "" ]
 then
   if [ "$objectsdbtype" != $(jq '.objects.type' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
-    echo "ENV IOB_OBJECTSDB_TYPE is defined and value is different from detected ioBroker installation."
+    echo "ENV IOB_OBJECTSDB_TYPE is set and value is different from detected ioBroker installation."
     echo "Setting type of objects db to \""$objectsdbtype"\"..."
     jq --arg objectsdbtype "$objectsdbtype" '.objects.type = $objectsdbtype' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
-    echo "ENV IOB_OBJECTSDB_TYPE is defined and value meets detected ioBroker installation. Nothing to do here."
+    echo "ENV IOB_OBJECTSDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
   fi
   if [ "$objectsdbhost" != $(jq '.objects.host' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
-    echo "ENV IOB_OBJECTSDB_HOST is defined and value is different from detected ioBroker installation."
+    echo "ENV IOB_OBJECTSDB_HOST is set and value is different from detected ioBroker installation."
     echo "Setting host of objects db to \""$objectsdbhost"\"..."
     jq --arg objectsdbhost "$objectsdbhost" '.objects.host = $objectsdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
-    echo "ENV IOB_OBJECTSDB_HOST is defined and value meets detected ioBroker installation. Nothing to do here."
+    echo "ENV IOB_OBJECTSDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
   fi
   if [ "$objectsdbport" != $(jq '.objects.port' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
-    echo "ENV IOB_OBJECTSDB_PORT is defined and value is different from detected ioBroker installation."
+    echo "ENV IOB_OBJECTSDB_PORT is set and value is different from detected ioBroker installation."
     echo "Setting port of objects db to \""$objectsdbport"\"..."
     jq --arg objectsdbport "$objectsdbport" '.objects.port = $objectsdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
-    echo "ENV IOB_OBJECTSDB_PORT is defined and value meets detected ioBroker installation. Nothing to do here."
+    echo "ENV IOB_OBJECTSDB_PORT is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-else
-  echo "No Values for objects db defined by ENV." # Only for debugging, can be removed later
+  echo ' '
 fi
 
 
@@ -277,33 +277,32 @@ if [ "$statesdbtype" != "" ] || [ "$statesdbhost" != "" ] || [ "$statesdbport" !
 then
   if [ "$statesdbtype" != $(jq '.states.type' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
-    echo "ENV IOB_STATESDB_TYPE is defined and value is different from detected ioBroker installation."
-    echo "Setting type of states db to "$statesdbtype"..."
+    echo "ENV IOB_STATESDB_TYPE is set and value is different from detected ioBroker installation."
+    echo "Setting type of states db to \""$statesdbtype"\"..."
     jq --arg statesdbtype "$statesdbtype" '.states.type = $statesdbtype' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
-    echo "ENV IOB_STATESDB_TYPE is defined and value meets detected ioBroker installation. Nothing to do here."
+    echo "ENV IOB_STATESDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
   fi
   if [ "$statesdbhost" != $(jq '.states.host' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
-    echo "ENV IOB_STATESDB_HOST is defined and value is different from detected ioBroker installation."
-    echo "Setting host of states db to "$statesdbhost"..."
+    echo "ENV IOB_STATESDB_HOST is set and value is different from detected ioBroker installation."
+    echo "Setting host of states db to \""$statesdbhost"\"..."
     jq --arg statesdbhost "$statesdbhost" '.states.host = $statesdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
-    echo "ENV IOB_STATESDB_HOST is defined and value meets detected ioBroker installation. Nothing to do here."
+    echo "ENV IOB_STATESDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
   fi
   if [ "$statesdbport" != $(jq '.states.port' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
-    echo "ENV IOB_STATESDB_PORT is defined and value is different from detected ioBroker installation."
-    echo "Setting port of states db to "$statesdbport"..."
+    echo "ENV IOB_STATESDB_PORT is set and value is different from detected ioBroker installation."
+    echo "Setting port of states db to \""$statesdbport"\"..."
     jq --arg statesdbport "$statesdbport" '.states.port = $statesdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
-    echo "ENV IOB_STATESDB_PORT is defined and value meets detected ioBroker installation. Nothing to do here."
+    echo "ENV IOB_STATESDB_PORT is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-else
-  echo "No Values for states db defined by ENV." # Only for debugging, can be removed later
+  echo ' '
 fi
 
 
@@ -324,9 +323,9 @@ then
     echo "Running userscript_firststart.sh..."
     chmod 755 /opt/userscripts/userscript_firststart.sh
     bash /opt/userscripts/userscript_firststart.sh
-	rm -f /opt/.firstrun
+    rm -f /opt/.firstrun
     echo "Done."
-	echo ' '
+    echo ' '
   fi
   if [ -f /opt/userscripts/userscript_everystart.sh ]
   then
@@ -334,7 +333,7 @@ then
     chmod 755 /opt/userscripts/userscript_everystart.sh
     bash /opt/userscripts/userscript_everystart.sh
     echo "Done."
-	echo ' '
+    echo ' '
   fi
 fi
 
