@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:10-slim
 
 LABEL maintainer="info@thorstenreichelt.de"
 
@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y \
         build-essential \
+	net-tools \
         curl \
         git \
         gnupg2 \
