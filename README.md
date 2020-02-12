@@ -94,6 +94,8 @@ Note: It is absolutely recommended to use a mounted folder or persistent volume 
 You can also mount a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker).
 But watch for the used node version. If the existing installation runs with another major version of node you have do perform additional steps. For more Details see the "Important notice" on top.
 
+Important: If the folder you mount to /opt/iobroker in your container is placed on a mounted device, partition or other storage, the mountpoint on your host should NOT have the "noexec" flag activated. Ohterwise you may get problems executing ioBroker inside the container!    
+
 ### Permission fixer
 
 After some issues with permissions related to the use of a dedicated user for ioBroker, I added some code for fixing permissions on container startup. This might take a few minutes on first startup. Please take a look at the container logs and be patient!
