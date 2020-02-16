@@ -32,7 +32,7 @@ The following ways to geht iobroker-container running are only examples. Maybe y
 For taking a first look at the iobroker docker container it would be enough to simply run the following basic docker run command:
 
 ```
-docker run -p 8081:8081 --name iobroker -v /opt/iobroker:/iobroker buanet/iobroker:latest
+docker run -p 8081:8081 --name iobroker -v iobrokerdata:/opt/iobroker buanet/iobroker:latest
 ```
 
 ### Running with docker-compose
