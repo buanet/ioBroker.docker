@@ -1,25 +1,40 @@
 # docker-iobroker
-Docker image for ioBroker (http://iobroker.net) based on node:10.
+Docker image for ioBroker (http://iobroker.net) based on node:10-slim.
 
 This project creates a Docker image for running ioBroker in a Docker container. 
 
+## Tested configuration and modules
+iobroker.js-controller
+  + iobroker.admin
+  + iobroker.alexa2
+  + iobroker.daswetter
+  + iobroker.feiertage
+  + iobroker.ical
+  + iobroker.info
+  + iobroker.javascript
+  + iobroker.lovelace
+  + iobroker.maxcube
+  + iobroker.mqtt
+  + iobroker.nina
+  + iobroker.node-red
+  + iobroker.octoprint
+  + iobroker.openuv
+  + iobroker.openweathermap
+  + iobroker.pihole
+  + iobroker.pimatic
+  + iobroker.ping
+  + iobroker.shelly
+  + iobroker.sql
+  + iobroker.systeminfo
+  + iobroker.tankerkoenig
+  + iobroker.telegram
+  + iobroker.tr-064-community
+  + iobroker.trashschedule
+  + iobroker.upnp
+  + iobroker.vw-connect
 
-## Installation & Usage
+## Changelog
 
+1.1 Modified startup scripts, removed unused scripts und linked logfile to stdout for docker logs
 
-## Special Settings
-
-### Environment Variables
-
-|env|value|description|
-|---|---|---|
-|PACKAGES|package1 package2 package2|seperateed by whitespace; will install the listed packages on startup<br>(be paitient, this may take some time!)|
-
-### Mounting Folder/ Volume
-
-It is now possible to mount an empty folder to /opt/iobroker during first startup of the container. The Startupscript will check this folder and restore content if empty.
-
-It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
-
-This also works with mounting a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker). 
-
+1.0 Initial Edit and Release
