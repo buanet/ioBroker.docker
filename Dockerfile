@@ -1,12 +1,12 @@
-FROM debian:latest
+FROM node:10-slim
 
 LABEL maintainer="info@thorstenreichelt.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y \
-	apt-utils \
         build-essential \
+	net-tools \
         curl \
         git \
         gnupg2 \
@@ -20,46 +20,37 @@ RUN apt-get update && apt-get install -y \
         wget \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
-RUN apt-get update && apt-get install -y \
-        nodejs \
-    && rm -rf /var/lib/apt/lists/*
-
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
     && \dpkg-reconfigure --frontend=noninteractive locales \
     && \update-locale LANG=de_DE.UTF-8
 RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
-RUN mkdir -p /opt/scripts/ \
-    && chmod 777 /opt/scripts/
-WORKDIR /opt/scripts/
-COPY scripts/iobroker_startup.sh iobroker_startup.sh
-COPY scripts/packages_install.sh packages_install.sh
-RUN chmod +x iobroker_startup.sh \
-	&& chmod +x packages_install.sh
-
 WORKDIR /
-RUN apt-get update \
-    && curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash - \
+RUN curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash - \
     && echo $(hostname) > /opt/iobroker/.install_host \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/iobroker/
 RUN npm install node-gyp -g
 
-
-RUN tar -cf /opt/iobroker/initial_iobroker.tar /opt/iobroker
-
 RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
     && echo "iobroker:iobroker" | chpasswd \
     && adduser iobroker sudo
 
-USER iobroker
-
 ENV DEBIAN_FRONTEND="teletype" \
 	LANG="de_DE.UTF-8" \
-	TZ="Europe/Berlin" \
-	AVAHI="false"
+	TZ="Europe/Berlin"
+
+RUN ln -sf /dev/stdout /opt/iobroker/iobroker-daemon.log 
+
+RUN mkdir -p /opt/scripts/ && chmod -R 777 /opt/scripts/
+WORKDIR /opt/scripts/
+COPY scripts/iobroker_startup.sh iobroker_startup.sh
+RUN chmod +x iobroker_startup.sh
+
+WORKDIR /opt/iobroker/
+
+USER iobroker
 
 EXPOSE 8081/tcp
 VOLUME ["/opt/iobroker"]
