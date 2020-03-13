@@ -35,6 +35,8 @@ iobroker.js-controller
 
 ## Changelog
 
+1.2 Added iputils-ping to packages for iobroker.ping, added more scripts into image and merged startup script into Dockerfile
+
 1.1 Modified startup scripts, removed unused scripts und linked logfile to stdout for docker logs
 
 1.0 Initial Edit and Release

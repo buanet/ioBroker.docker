@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y \
         build-essential \
-	net-tools \
+        net-tools \
         curl \
         git \
         gnupg2 \
@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
         sudo \
         unzip \
         wget \
-	iputils-ping \
+        iputils-ping \
     && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
@@ -31,7 +31,6 @@ RUN curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installe
     && echo $(hostname) > /opt/iobroker/.install_host \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt/iobroker/
 RUN npm install node-gyp -g
 
 RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
@@ -42,18 +41,17 @@ ENV DEBIAN_FRONTEND="teletype" \
 	LANG="de_DE.UTF-8" \
 	TZ="Europe/Berlin"
 
-RUN ln -sf /dev/stdout /opt/iobroker/iobroker-daemon.log 
-
 RUN mkdir -p /opt/scripts/ && chmod -R 777 /opt/scripts/
 WORKDIR /opt/scripts/
-COPY scripts/iobroker_startup.sh iobroker_startup.sh
-RUN chmod +x iobroker_startup.sh
+COPY scripts/iobroker_stop.sh scripts/iobroker_restart.sh /opt/scripts/
+RUN chmod +x iobroker_stop.sh iobroker_restart.sh
 
-WORKDIR /opt/iobroker/
+#RUN iobroker host $(cat /opt/iobroker/.install_host) \
+#    && rm -f /opt/iobroker/.install_host
 
 USER iobroker
 
 EXPOSE 8081/tcp
 VOLUME ["/opt/iobroker"]
 	
-CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
+CMD ["node", "/opt/iobroker/node_modules/iobroker.js-controller/controller.js"]
