@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y \
         build-essential \
-	    net-tools \
+	net-tools \
         curl \
         git \
         gnupg2 \
@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
         sudo \
         unzip \
         wget \
+	iputils-ping \
     && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
