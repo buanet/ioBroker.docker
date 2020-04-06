@@ -117,7 +117,7 @@ You will find the channel here: https://t.me/buanet_tutorials
 
 ### Support the project
 
-The easiest way to support this project is to take a look into the [open issues](https://github.com/buanet/docker-iobroker/issues) and helping me answering questions, fixing bugs or adding new features. ;)<br>Another possible way could be to send me a small donation: <a href="https://www.paypal.me/buanet"><img src="https://buanet.de/wp-content/uploads/2017/08/pp128.png" height="20" width="20"></a>
+The easiest way to support this project is to take a look into the [open issues](https://github.com/buanet/docker-iobroker/issues) and helping me answering questions, fixing bugs or adding new features. ;)<br>Another possible way could be to send me a small donation: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://buanet.de/wp-content/uploads/2017/08/pp128.png" height="20" width="20"></a>
 
 ## Changelog
 
