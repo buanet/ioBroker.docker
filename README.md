@@ -117,9 +117,11 @@ You will find the channel here: https://t.me/buanet_tutorials
 
 ## Changelog
 
-### v4.1.3beta (2020-02-08)
-* added new ENVs for "iobroker setup custom"
-* enhancements in startupscript logging
+### v4.1.4beta (2020-04-06)
+* optimizing installation of packages
+* v4.1.3beta (2020-02-08)
+  * added new ENVs for "iobroker setup custom"
+  * enhancements in startupscript logging
 * v4.1.2beta (2020-02-02)
   * added feature userscripts on startup
   * small fix for permissions issues on some systems
