@@ -110,10 +110,14 @@ To get familiar with that feature try the following: Create a Container, mount a
 
 ## Miscellaneous
 
-### Keep me updated
+### Subscribe to updates
 
 If you want the newest updates about the image and my tutorials at https://buanet.de/tutorials you can simply subscribe to my new "news and updates" channel (only in german) on Telegram.
 You will find the channel here: https://t.me/buanet_tutorials
+
+### Support the project
+
+The easiest way to support this project is to take a look into the [open issues](https://github.com/buanet/docker-iobroker/issues) and helping me answering questions, fixing bugs or adding new features. ;)<br>Another possible way could be to send me a small donation: <a href="https://www.paypal.me/buanet"><img src="https://buanet.de/wp-content/uploads/2017/08/pp128.png" height="20" width="20"></a>
 
 ## Changelog
 
@@ -123,7 +127,7 @@ You will find the channel here: https://t.me/buanet_tutorials
   * added new ENVs for "iobroker setup custom"
   * enhancements in startupscript logging
 * v4.1.2beta (2020-02-02)
-  * added feature userscripts on startup
+  * added feature for running userdefined scripts on startup
   * small fix for permissions issues on some systems
 * v4.1.1beta (2020-01-17)
   * updated openzwave to version 1.6.1007
