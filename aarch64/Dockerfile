@@ -1,4 +1,5 @@
-FROM balenalib/aarch64-debian:stretch
+FROM arm64v8/debian:buster
+# FROM balenalib/aarch64-debian:stretch
 
 LABEL maintainer="Andre Germann" \
       url="<https://buanet.de>"
