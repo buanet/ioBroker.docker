@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM amd64/debian:buster
 
 LABEL maintainer="Andre Germann" \
       url="<https://buanet.de>"

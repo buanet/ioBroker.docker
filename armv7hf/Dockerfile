@@ -1,4 +1,5 @@
-FROM balenalib/armv7hf-debian:stretch
+FROM arm32v7/debian:buster
+# FROM balenalib/armv7hf-debian:stretch
 
 LABEL maintainer="Andre Germann" \
       url="<https://buanet.de>"
@@ -83,7 +84,7 @@ ENV DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
-    PACKAGES="vi" \
+    PACKAGES="vim" \
     SETGID=1000 \
     SETUID=1000 \
     TZ="Europe/Berlin"
