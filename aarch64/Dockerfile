@@ -1,6 +1,7 @@
 FROM balenalib/aarch64-debian:buster
+
 LABEL maintainer="Andre Germann" \
-      url="<https://buanet.de>"
+      url="https://buanet.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 

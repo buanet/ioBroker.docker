@@ -75,7 +75,7 @@ then
     echo "Installing additional packages is set by ENV."
     echo "The following packages will be installed:" $packages"..."
     echo $packages > /opt/scripts/.packages
-    bash /opt/scripts/setup_packages.sh #> /opt/scripts/setup_packages.log 2>&1
+    bash /opt/scripts/setup_packages.sh
     echo "Done."
     echo ' '
   fi

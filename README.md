@@ -63,6 +63,8 @@ The following will give a short overview.
 To configure the ioBroker container on startup it is possible to set some environment variables.
 You do not have to declare every single variable when stting up your container. Variables you do not set will come up with their default value.
 
+**Important: In v4.2.0 the ENVs "ADMINPORT" and "REDIS" were renamed/ reorganized. For Details see the following table!**
+
 |env|default|description|
 |---|---|---|
 |AVAHI|false|Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"|
@@ -94,7 +96,7 @@ Note: It is absolutely recommended to use a mounted folder or persistent volume 
 You can also mount a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker).
 But watch for the used node version. If the existing installation runs with another major version of node you have do perform additional steps. For more Details see the "Important notice" on top.
 
-Important: If the folder you mount to /opt/iobroker in your container is placed on a mounted device, partition or other storage, the mountpoint on your host should NOT have the "noexec" flag activated. Otherwise you may get problems executing ioBroker inside the container!    
+**Important: If the folder you mount to /opt/iobroker in your container is placed on a mounted device, partition or other storage, the mountpoint on your host should NOT have the "noexec" flag activated. Otherwise you may get problems executing ioBroker inside the container!**   
 
 ### Permission fixer
 
@@ -119,15 +121,20 @@ You will find the channel here: https://t.me/buanet_tutorials
 
 ### Support the project
 
-The easiest way to support this project is to take a look into the [open issues](https://github.com/buanet/docker-iobroker/issues) and helping me answering questions, fixing bugs or adding new features. ;)<br>Another possible way could be to send me a small donation: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://buanet.de/wp-content/uploads/2017/08/pp128.png" height="20" width="20"></a>
+The easiest way to support this project is to leave me some likes/ stars on github and docker hub!<br>
+If you want to give something back, feel free to take a look into the [open issues](https://github.com/buanet/docker-iobroker/issues) or the [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) and helping me answering questions, fixing bugs or adding new features!<br>
+And if you want to buy me a beer instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://buanet.de/wp-content/uploads/2017/08/pp128.png" height="20" width="20"></a><br>
+Thank you!
 
 ## Changelog
 
-### v4.1.4beta (2020-04-07)
-* testing buster as base image
-* optimizing installation of packages
+### v4.2.0 (2020-04-14)
+* v4.1.4beta (2020-04-07)
+  * switching base image to buster
+  * optimizing installation of packages defined by ENV "PACKAGES"
 * v4.1.3beta (2020-02-08)
-  * added new ENVs for "iobroker setup custom"
+  * renamed ENV for adminport (new "IOB_ADMINPORT)")
+  * added new ENVs for "iobroker setup custom" (replacing "REDIS")
   * enhancements in startupscript logging
 * v4.1.2beta (2020-02-02)
   * added feature for running userdefined scripts on startup
