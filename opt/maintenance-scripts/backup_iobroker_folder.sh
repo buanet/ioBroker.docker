@@ -2,7 +2,7 @@
 
 # Backupscript fuer ein Backup von ioBroker unter Docker auf einer Synology Disk Station (Sicherung des ioBroker-Verzeichnises).
 # Vorhaltezeit der letzten Backups: 90 Tage, Ã¤ltere Backups werden automatisch geloescht.
-# 
+#
 # By Andre Germann
 # Version 1.1 (22.09.2017)
 #
