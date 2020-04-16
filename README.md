@@ -211,7 +211,7 @@ Thank you!
 
 ### v1.2.0 (2018-08-21)
 * v1.1.3beta (2018-08-21)
-  * added ffmpeg-package for yahka to support webcams
+  * ~~added ffmpeg-package for yahka to support webcams~~
 * v1.1.2beta (2018-04-04)
   * added ENV for timezone issue
 * v1.1.1beta (2018-03-29)
@@ -234,7 +234,7 @@ Thank you!
 * added some maintenance scripts
 
 ### v0.2.1 (2017-08-16)
-* added libfontconfig package (for iobroker.phantomjs)
+* ~~added libfontconfig package (for iobroker.phantomjs)~~
 * added gnupg2 package as prerequisite for installing node version 6
 
 ### v0.2.0 (2017-06-04)
@@ -242,7 +242,7 @@ Thank you!
 * changed node version from 4 to 6
 
 ### v0.1.2 (2017-03-14)
-* added libpcap-dev package (for iobroker.amazon-dash)
+* ~~added libpcap-dev package (for iobroker.amazon-dash)~~
 
 ### v0.1.1 (2017-03-10)
 * added git package
