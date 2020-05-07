@@ -1,8 +1,13 @@
 # ioBroker for Docker
 
-[![Build Status](https://travis-ci.org/buanet/docker-iobroker.svg?branch=master)](https://travis-ci.org/buanet/docker-iobroker)
-
-Source: https://github.com/buanet/docker-iobroker
+[![Release](https://img.shields.io/github/v/release/buanet/docker-iobroker)](https://github.com/buanet/docker-iobroker/releases)
+[![Build Status](https://travis-ci.org/buanet/docker-iobroker.svg?branch=master)](https://travis-ci.org/buanet/docker-iobroker)<br>
+[![Image Size](https://img.shields.io/docker/image-size/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)
+[![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
+[![Source](https://img.shields.io/badge/source-github-blue)](https://github.com/buanet/docker-iobroker)
+[![License](https://img.shields.io/github/license/buanet/docker-iobroker)](https://github.com/buanet/docker-iobroker/blob/master/LICENSE.md)
+[![Donate](https://img.shields.io/badge/donate-paypal-blue)](https://paypal.me/buanet)
 
 IoBroker for Docker is an Dockerimage for ioBroker IoT platform (http://www.iobroker.net).
 
