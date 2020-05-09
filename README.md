@@ -23,13 +23,16 @@ If you are updating an existing installation to a new major version (e.g. from v
 You might avoid these procedure if you use my "Best practise" hint for "upgrading your ioBroker container".
 In any case make a backup first!
 
+By the way, a more comfortable way is to use "iobroker backup" to create a full backup of your existing installation and copy it into a empty folder which you will mount to /opt/iobroker when setting up a new container. The startup script will automatically detect the backup file and restore it to the new container. For more details see "Mounting folder/ volume" section of this readme.md file.
+
 ## Getting started
 
 A detailed tutorial (german, based on v3.0.0) can be found here: [https://buanet.de](https://buanet.de/2019/05/iobroker-unter-docker-auf-der-synology-diskstation-v3/). Please notice that the old tutorial is outdated and does no longer work!
 
-For discussion and support please visit [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support question should be answered in a public place. Thank you.
+For discussion and support please visit [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support question should be answered in a public place. Thanks in advance.
+If you think you found a bug or simply want to request a new feature please open an issue on Github.
 
-The following ways to geht iobroker-container running are only examples. Maybe you have to change, add or replace parameters to configure ioBroker for your environment.
+The following ways to get iobroker-container running are only examples. Maybe you have to change, add or replace parameters to configure ioBroker for fitting your needs.
 
 ### Running from commandline
 
@@ -92,21 +95,21 @@ You do not have to declare every single variable when stting up your container. 
 ### Mounting folder/ volume
 
 It is possible to mount an empty folder to /opt/iobroker during first startup of the container. The Startupscript will check this folder and restore content if it is empty.
-Since v4.1.0 it is also possible mount a folder filled up with an iobroker backup file (created with backitup adapter) named like this: "iobroker_2020_01_06-01_09_10_backupiobroker.tar.gz".
+Since v4.1.0 it is also possible mount a folder filled up with an iobroker backup file (for example created with backitup adapter) named like this: "iobroker_2020_01_06-01_09_10_backupiobroker.tar.gz".
 The startup script will detect this backup and restore it during the start of the container. Plese see container logs when starting the container for more details!
 
 Note: It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
 
 You can also mount a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker).
-But watch for the used node version. If the existing installation runs with another major version of node you have do perform additional steps. For more Details see the "Important notice" on top.
+But watch for the used node version. If the existing installation runs with another major version of node you have do perform additional steps. For more Details see the "Important notice" on top of this readme.md file.
 
 **Important: If the folder you mount to /opt/iobroker in your container is placed on a mounted device, partition or other storage, the mountpoint on your host should NOT have the "noexec" flag activated. Otherwise you may get problems executing ioBroker inside the container!**   
 
-### Permission fixer
+### Mounting USB device 
 
-After some issues with permissions related to the use of a dedicated user for ioBroker, I added some code for fixing permissions on container startup. This might take a few minutes on first startup. Please take a look at the container logs and be patient!
+If you want to use a USB device within ioBroker inside your container don´t forget to [mount the device](https://docs.docker.com/engine/reference/commandline/run/#add-host-device-to-container---device) on container startup and use the environment variable "USBDEVICES".
 
-### Userdefined startup scripts (advanced setting/ beta status)
+### Userdefined startup scripts
 
 In some cases it migth be helpful to add some script code to the startup script of the container. This is now possible by mounting an additional folder to the container and place a userscript in there.
 The folder containing your userscripts must be mounted under /opt/userscripts inside the container. If you mount an empty folder you will get two example scripts to be restored in that folder. Just try it out.
