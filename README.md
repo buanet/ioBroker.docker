@@ -11,7 +11,7 @@
 
 IoBroker for Docker is a Dockerimage for ioBroker IoT platform (http://www.iobroker.net).
 
-It was originally created for a Synology Disk Station 1515+ with DSM 6 and official Docker package installed. After more than three years of development it might be the best documented and still maintained Dockrimage for running ioBroker ioT platform with Docker. 
+It was originally created for a Synology Disk Station 1515+ with DSM 6 and official Docker package installed. After more than three years of development it might be the best documented and still maintained Dockrimage for running ioBroker ioT platform with Docker.
 
 Since v4.0.0 the image is available for the following architectures: amd64, armv7hf, aarch64.<br>
 If you need more please let me know by opening a Github issue.
@@ -20,7 +20,7 @@ If you need more please let me know by opening a Github issue.
 
 Normally a new major version (e.g. v2, v4 and upcoming v5) of the image comes with a new, preinstalled major node version!
 If you are updating an existing installation to a new major version (e.g. from v4 to v5) you have to perform some additional steps inside ioBroker! For more details please see official ioBroker documentation: [EN](https://www.iobroker.net/#en/documentation/install/updatenode.md) | [DE](https://www.iobroker.net/#de/documentation/install/updatenode.md).<br>
-You might avoid these procedure if you use my "Best practise" hint for "upgrading your ioBroker container".
+You might avoid these procedure if you use my "Best practise" hint for "upgrading your container".
 In any case make a backup first!
 
 ## Getting started
@@ -123,7 +123,7 @@ To get familiar with that feature try the following: Create a Container, mount a
 To avoid conflicts when upgrading your container or getting in trouble when accedentially upgrading your container to a new major version I prefer using the version tag like "V4.2.0" instead of "latest" for creating yor container. Just think about when I tell you it is not possible to download a new image version of a specific tag as long as a conrainer depends on it.<br>
 By the way it also makes it more safe to keep your image up to date by using "watchtower" or something like that.
 
-### Upgrading you container
+### Upgrading your container
 
 If you want to upgrade your ioBroker container to a new major version (e.g. from v4 to v5) I would prefer to do that by creating a bockup in ioBroker (by "iobroker backup" or backitup adapter) and restoring it to a completely new container. All you need is time an the following steps:
 * make a backup by Commandline ("iobroker backup") or backitup adapter
