@@ -2,9 +2,11 @@ FROM node:10-slim
 
 LABEL maintainer="info@thorstenreichelt.de"
 
-ENV DEBIAN_FRONTEND noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
+	locales=2.28-10 \
+        tzdata=2020a-0+deb10u1 \
         build-essential \
         net-tools \
         curl \
@@ -12,7 +14,6 @@ RUN apt-get update && apt-get install -y \
         gnupg2 \
         libpam0g-dev \
         libudev-dev \
-        locales \
         procps \
         python \
         sudo \
@@ -26,8 +27,13 @@ RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
     && \update-locale LANG=de_DE.UTF-8
 RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
+ENV LANG="de_DE.UTF-8" \
+    TZ="Europe/Berlin"
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 WORKDIR /
-RUN curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash - \
+RUN curl -sL "https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh" | bash - \
     && echo $(hostname) > /opt/iobroker/.install_host \
     && rm -rf /var/lib/apt/lists/*
 
@@ -50,8 +56,6 @@ RUN chmod +x iobroker_stop.sh iobroker_restart.sh
 #    && rm -f /opt/iobroker/.install_host
 
 USER iobroker
-
 EXPOSE 8081/tcp
-VOLUME ["/opt/iobroker"]
-	
+VOLUME ["/opt/iobroker"]	
 CMD ["node", "/opt/iobroker/node_modules/iobroker.js-controller/controller.js"]
