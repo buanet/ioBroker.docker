@@ -61,7 +61,7 @@ COPY scripts/userscript_everystart_example.sh userscript_everystart_example.sh
 # Install ioBroker
 WORKDIR /
 RUN apt-get update \
-    && curl -sL https://raw.githubusercontent.com/ioBroker/ioBroker/stable-installer/installer.sh | bash - \
+    && curl -sL https://iobroker.net/install.sh | bash - \
     && echo $(hostname) > /opt/iobroker/.install_host \
     && echo $(hostname) > /opt/.firstrun \
     && rm -rf /var/lib/apt/lists/*
