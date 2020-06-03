@@ -168,8 +168,8 @@ then
   echo "Hostname needs to be updated to " $(hostname)"..."
     oldhostname=$(cat /opt/iobroker/.install_host)
     newhostname=$(hostname)
-    sed -i 's/$oldhostname/$newhostname/g' /opt/iobroker/iobroker-data/states.json
-    sed -i 's/$oldhostname/$newhostname/g' /opt/iobroker/iobroker-data/objects.json
+    sed -i "s/$oldhostname/$newhostname/g" /opt/iobroker/iobroker-data/states.json
+    sed -i "s/$oldhostname/$newhostname/g" /opt/iobroker/iobroker-data/objects.json
     # bash iobroker host $(cat /opt/iobroker/.install_host)
     rm -f /opt/iobroker/.install_host
   echo "Done."
