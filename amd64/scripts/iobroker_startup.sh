@@ -166,16 +166,20 @@ if [ -f /opt/iobroker/.install_host ]
 then
   echo "Looks like this is a new and empty installation of ioBroker."
   echo "Hostname needs to be updated to " $(hostname)"..."
-    bash iobroker host $(cat /opt/iobroker/.install_host)
+    oldhostname=$(cat /opt/iobroker/.install_host)
+    newhostname=$(hostname)
+    sed -i 's/$oldhostname/$newhostname/g' /opt/iobroker/iobroker-data/states.json
+    sed -i 's/$oldhostname/$newhostname/g' /opt/iobroker/iobroker-data/objects.json
+    # bash iobroker host $(cat /opt/iobroker/.install_host)
     rm -f /opt/iobroker/.install_host
-  echo 'Done.'
+  echo "Done."
   echo ' '
 elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
 then
   echo "Hostname in ioBroker does not match the hostname of this container."
   echo "Updating hostname to " $(hostname)"..."
     bash iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
-  echo 'Done.'
+  echo "Done."
   echo ' '
 fi
 
@@ -201,7 +205,7 @@ then
     echo "Adminport set by ENV does not match port configured in ioBroker installation."
     echo "Setting Adminport to \""$adminport"\"..."
     bash iobroker set admin.0 --port $adminport
-    echo 'Done.'
+    echo "Done."
     echo ' '
   fi
 fi
