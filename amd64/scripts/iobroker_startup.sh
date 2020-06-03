@@ -178,7 +178,11 @@ elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?
 then
   echo "Hostname in ioBroker does not match the hostname of this container."
   echo "Updating hostname to " $(hostname)"..."
-    bash iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+    oldhostname=$(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+    newhostname=$(hostname)
+    sed -i "s/$oldhostname/$newhostname/g" /opt/iobroker/iobroker-data/states.json
+    sed -i "s/$oldhostname/$newhostname/g" /opt/iobroker/iobroker-data/objects.json
+    # bash iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
   echo "Done."
   echo ' '
 fi
