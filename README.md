@@ -141,7 +141,7 @@ After this the startup script inside the container will automatically detect and
 
 ### Beta testing
 
-If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. You can find the readme.md file for beta versions [here](https://github.com/buanet/docker-iobroker/blob/beta/README.md).
+If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. You can find the readme.md file for beta versions [here](https://github.com/buanet/docker-iobroker/blob/beta/README.md). Please make sure to read the changelog before testing beta versions.
 
 ### Subscribe to updates
 
@@ -157,9 +157,11 @@ Thank you!
 
 ## Changelog
 
-### v4.2.1beta (2020-05-10)
-* using node 12 instead of 10
-* updated documentation in readme.md
+### v4.2.2beta (2020-06-03)
+* workaround for renaming issues on startup
+* v4.2.1beta (2020-05-10)
+  * using node 12 instead of 10
+  * updated documentation in readme.md
 
 ### v4.2.0 (2020-04-14)
 * v4.1.4beta (2020-04-07)
