@@ -158,7 +158,7 @@ Thank you!
 ## Changelog
 
 ### v4.2.2beta (2020-06-03)
-* workaround for renaming issues on startup
+* ~~workaround for renaming issues on startup~~ (fixed in js-controller)
 * v4.2.1beta (2020-05-10)
   * using node 12 instead of 10
   * updated documentation in readme.md
