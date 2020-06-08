@@ -3,6 +3,7 @@
 # Reading ENV
 adminport=$IOB_ADMINPORT
 avahi=$AVAHI
+multihost=$IOB_MULTIHOST
 objectsdbhost=$IOB_OBJECTSDB_HOST
 objectsdbport=$IOB_OBJECTSDB_PORT
 objectsdbtype=$IOB_OBJECTSDB_TYPE
@@ -251,6 +252,89 @@ then
     echo "Done."
     echo ' '
   fi
+fi
+
+
+# Checking ENV for multihost setup
+# Configuring objects db host
+if [ "$multihost" = "master" ] && [ "$objectsdbtype" = "" ] && [ "$objectsdbhost" = "" ] && [ "$objectsdbport" = "" ]
+then
+  echo "Multihost is set as \"master\" by ENV and no external objects db is set."
+  echo "Setting host of objects db to \"0.0.0.0\" to allow external communication..."
+  jq --arg objectsdbhost "0.0.0.0" '.objects.host = $objectsdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+  echo "Done."
+  echo ' '
+elif [ "$multihost" = "master" ] && [ "$objectsdbhost" = "127.0.0.1" ]
+then
+  echo "Multihost is set as \"master\" by ENV. But objects db host is set to \"127.0.0.1\" by ENV too."
+  echo "This configuration will not work! Please change or remove ENV \"IOB_OBJECTSDB_HOST\" and start over!"
+  echo "For more information see readme.md on Github (https://github.com/buanet/docker-iobroker)."
+  exit 1
+elif [ "$multihost" = "master" ] &&  [ "$objectsdbtype" != "" ] && [ "$objectsdbhost" != "" ] && [ "$objectsdbport" != "" ]
+then
+  echo "Multihost is set as \"master\" by ENV and external objects db is set."
+  echo "Skipping this step..."
+  echo "Done."
+  echo ' '
+elif [[ "$multihost" = "slave" ] && [ "$objectsdbtype" = "" ]] || [[ "$multihost" = "slave" ] && [ "$objectsdbhost" = "" ]] || [[ "$multihost" = "slave" ] && [ "$objectsdbport" = "" ]]
+then
+  echo "Multihost is set as \"slave\" by ENV. But no external objects db is set."
+  echo "You have to configure ENVs \"IOB_OBJECTSDB_TYPE\", \"IOB_OBJECTSDB_HOST\" and \"IOB_OBJECTSDB_PORT\" to connect to a maser objects db."
+  echo "Please check your settings and start over."
+  echo "For more information see readme.md on Github (https://github.com/buanet/docker-iobroker)."
+  exit 1
+elif [ "$multihost" = "slave" ] && [ "$objectsdbtype" != "" ] && [ "$objectsdbhost" != "" ] && [ "$objectsdbport" != "" ]
+then
+  echo "Multihost is set as \"slave\" by ENV and external objects db is set."
+  echo "Skipping this step..."
+  echo "Done."
+  echo ' '
+elif [ "$multihost" != "" ]
+then
+  echo "Multihost is set but it seems like some configuration is missing."
+  echo "Please checke if you have configured the ENVs \"MULTIHOST\", \"IOB_OBJECTSDB_TYPE\", \"IOB_OBJECTSDB_HOST\" and \"IOB_OBJECTSDB_PORT\" correctly and start over."
+  echo "For more information see readme.md on Github (https://github.com/buanet/docker-iobroker)."
+  exit 1
+fi
+#Configuring states db host
+if [ "$multihost" = "master" ] && [ "$statesdbtype" = "" ] && [ "$statesdbhost" = "" ] && [ "$statesdbport" = "" ]
+then
+  echo "Multihost is set as \"master\" by ENV and no external states db is set."
+  echo "Setting host of states db to \"0.0.0.0\" to allow external communication..."
+  jq --arg statesdbhost "0.0.0.0" '.states.host = $statesdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+  echo "Done."
+  echo ' '
+elif [ "$multihost" = "master" ] && [ "$statesdbhost" = "127.0.0.1" ]
+then
+  echo "Multihost is set as \"master\" by ENV. But states db host is set to \"127.0.0.1\" by ENV too."
+  echo "This configuration will not work! Please change or remove ENV \"IOB_STATESDB_HOST\" and start over!"
+  echo "For more information see readme.md on Github (https://github.com/buanet/docker-iobroker)."
+  exit 1
+elif [ "$multihost" = "master" ] && [ "$statesdbtype" != "" ] && [ "$statesdbhost" != "" ] && [ "$statesdbport" != "" ]
+then
+  echo "Multihost is set as \"master\" by ENV and external states db is set."
+  echo "Skipping this step..."
+  echo "Done."
+  echo ' '
+elif [[ "$multihost" = "slave" ] && [ "$statesdbtype" = "" ]] || [[ "$multihost" = "slave" ] && [ "$statesdbhost" = "" ]] || [[ "$multihost" = "slave" ] && [ "$statesdbport" = "" ]]
+then
+  echo "Multihost is set as \"slave\" by ENV. But no external states db is set."
+  echo "You have to configure ENVs \"IOB_STATESDB_TYPE\", \"IOB_STATESDB_HOST\" and \"IOB_STATESDB_PORT\" to connect to a maser states db."
+  echo "Please check your settings and start over."
+  echo "For more information see readme.md on Github (https://github.com/buanet/docker-iobroker)."
+  exit 1
+elif [ "$multihost" = "slave" ] && [ "$statesdbtype" != "" ] && [ "$statesdbhost" != "" ] && [ "$statesdbport" != "" ]
+then
+  echo "Multihost is set as \"slave\" by ENV and external states db is set."
+  echo "Skipping this step..."
+  echo "Done."
+  echo ' '
+elif [ "$multihost" != "" ]
+then
+  echo "Multihost is set but it seems like some configuration is missing."
+  echo "Please checke if you have configured the ENVs \"MULTIHOST\", \"IOB_STATESDB_TYPE\", \"IOB_STATESDB_HOST\" and \"IOB_STATESTDB_PORT\" correctly and start over."
+  echo "For more information see readme.md on Github (https://github.com/buanet/docker-iobroker)."
+  exit 1
 fi
 
 
