@@ -276,7 +276,7 @@ then
   echo "Skipping this step..."
   echo "Done."
   echo ' '
-elif [[ "$multihost" = "slave" ] && [ "$objectsdbtype" = "" ]] || [[ "$multihost" = "slave" ] && [ "$objectsdbhost" = "" ]] || [[ "$multihost" = "slave" ] && [ "$objectsdbport" = "" ]]
+elif ([ "$multihost" = "slave" ] && [ "$objectsdbtype" = "" ]) || ([ "$multihost" = "slave" ] && [ "$objectsdbhost" = "" ]) || ([ "$multihost" = "slave" ] && [ "$objectsdbport" = "" ])
 then
   echo "Multihost is set as \"slave\" by ENV. But no external objects db is set."
   echo "You have to configure ENVs \"IOB_OBJECTSDB_TYPE\", \"IOB_OBJECTSDB_HOST\" and \"IOB_OBJECTSDB_PORT\" to connect to a maser objects db."
@@ -316,7 +316,7 @@ then
   echo "Skipping this step..."
   echo "Done."
   echo ' '
-elif [[ "$multihost" = "slave" ] && [ "$statesdbtype" = "" ]] || [[ "$multihost" = "slave" ] && [ "$statesdbhost" = "" ]] || [[ "$multihost" = "slave" ] && [ "$statesdbport" = "" ]]
+elif ([ "$multihost" = "slave" ] && [ "$statesdbtype" = "" ]) || ([ "$multihost" = "slave" ] && [ "$statesdbhost" = "" ]) || ([ "$multihost" = "slave" ] && [ "$statesdbport" = "" ])
 then
   echo "Multihost is set as \"slave\" by ENV. But no external states db is set."
   echo "You have to configure ENVs \"IOB_STATESDB_TYPE\", \"IOB_STATESDB_HOST\" and \"IOB_STATESDB_PORT\" to connect to a maser states db."
