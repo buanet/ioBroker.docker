@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM node:12-slim
 
 LABEL maintainer="info@thorstenreichelt.de"
 
@@ -27,53 +27,28 @@ RUN apt-get update -qq && apt-get install -y \
     && cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash 
-
-RUN apt-get update -qq && apt-get install -y \
-        nodejs \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /opt/scripts/ \
-    && mkdir -p /opt/iobroker/ \
-    && chmod 777 /opt/scripts/
-
-WORKDIR /opt/scripts/
-
-COPY scripts/iobroker_startup.sh iobroker_startup.sh
-
-COPY scripts/packages_install.sh packages_install.sh
-
-RUN chmod +x iobroker_startup.sh \
-	&& chmod +x packages_install.sh
-
 WORKDIR /
-
-#RUN npm config set registry http://registry.npmjs.org/ \
-#	&& npm install node-gyp -g
 
 RUN npm install node-gyp -g
 
 RUN apt-get update -qq \
     && curl -sL https://iobroker.net/install.sh | bash - \
-    && echo $(hostname) > /opt/iobroker/.install_host \
     && rm -rf /var/lib/apt/lists/*
 
-RUN iobroker repo set latest
+RUN iobroker repo set latest 
 
 RUN echo 'iobroker ALL=(ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo \
     && echo "iobroker:iobroker" | chpasswd \
     && adduser iobroker sudo
 
-USER iobroker
-
 ENV DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     TZ="Europe/Berlin" 
 
-#RUN apt-get purge -y \
-#	apt-utils \
-#	tzdata 
-
+USER iobroker
+	
 EXPOSE 8081/tcp
 
-CMD ["sh", "/opt/scripts/iobroker_startup.sh"]
+CMD ["node", "/opt/iobroker/node_modules/iobroker.js-controller/controller.js"]
+
+HEALTHCHECK --interval=60s --timeout=10s --start-period=120s --retries=3 CMD ["curl -f http://localhost:8081 || exit 1"]
