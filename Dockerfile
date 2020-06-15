@@ -8,7 +8,6 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     curl \
     locales \ 
     tzdata \ 
-    net-tools \
     ca-certificates \
     && sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
     && \dpkg-reconfigure --frontend=noninteractive locales \
