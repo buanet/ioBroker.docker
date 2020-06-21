@@ -79,7 +79,9 @@ RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker \
 
 # Setting up iobroker-user (shell and home directory)
 RUN chsh -s /bin/bash iobroker \
-    && usermod --home /opt/iobroker iobroker
+    && usermod --home /opt/iobroker iobroker \
+    && usermod -u 901 iobroker \
+    && groupmod -g 901 iobroker
 
 # Setting up ENVs
 ENV DEBIAN_FRONTEND="teletype" \
@@ -87,8 +89,8 @@ ENV DEBIAN_FRONTEND="teletype" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
     PACKAGES="vi" \
-    SETGID=1000 \
-    SETUID=1000 \
+    SETGID=901 \
+    SETUID=901 \
     TZ="Europe/Berlin"
 
 # Run startup-script
