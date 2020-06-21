@@ -94,4 +94,4 @@ ENV DEBIAN_FRONTEND="teletype" \
 # Run startup-script
 # ENTRYPOINT ["/bin/bash", "-c", "/opt/scripts/iobroker_startup.sh"]
 ENTRYPOINT ["/opt/scripts/iobroker_startup.sh"]
-CMD ["gosu iobroker node node_modules/iobroker.js-controller/controller.js"]
+CMD ["iob"]

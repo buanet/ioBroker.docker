@@ -1,5 +1,8 @@
 #!/bin/bash
+set -e
 
+if [ "$1" = 'iob' ];
+then
 # Reading ENV
 adminport=$IOB_ADMINPORT
 avahi=$AVAHI
@@ -451,7 +454,11 @@ echo ' '
 echo "Starting ioBroker..."
 echo ' '
 
-# gosu iobroker node node_modules/iobroker.js-controller/controller.js
+exec gosu iobroker node node_modules/iobroker.js-controller/controller.js "$@"
+
+fi
+
+exec "$@"
 
 # Preventing container restart by keeping a process alive even if iobroker will be stopped
 # tail -f /dev/null
