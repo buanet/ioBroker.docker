@@ -451,7 +451,7 @@ echo ' '
 echo "Starting ioBroker..."
 echo ' '
 
-gosu iobroker node node_modules/iobroker.js-controller/controller.js
+# gosu iobroker node node_modules/iobroker.js-controller/controller.js
 
 # Preventing container restart by keeping a process alive even if iobroker will be stopped
-tail -f /dev/null
+# tail -f /dev/null
