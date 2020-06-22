@@ -439,9 +439,6 @@ then
 fi
 
 
-sleep 5
-
-
 #####
 # Starting ioBroker
 #####
@@ -452,7 +449,19 @@ echo ' '
 echo "Starting ioBroker..."
 echo ' '
 
-exec gosu iobroker node node_modules/iobroker.js-controller/controller.js
+# Function for graceful shutdown by SIGTERM signal
+shut_down() {
+  echo ' '
+  echo "Recived termination signal (SIGTERM)."
+  echo "Shutting down ioBroker..."
+  pid=$(ps -ef | awk '/[j]s.controller/{print $2}')
+  kill -SIGTERM "$pid"
+  exit
+}
+
+trap 'shut_down' SIGTERM
+
+gosu iobroker node node_modules/iobroker.js-controller/controller.js & wait
 
 # Preventing container restart by keeping a process alive even if iobroker will be stopped
 tail -f /dev/null
