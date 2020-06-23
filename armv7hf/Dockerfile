@@ -79,14 +79,15 @@ RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker \
 
 # Setting up iobroker-user (shell and home directory)
 RUN chsh -s /bin/bash iobroker \
-    && usermod --home /opt/iobroker iobroker
+    && usermod --home /opt/iobroker iobroker \
+    && usermod -u 1000 iobroker \
+    && groupmod -g 1000 iobroker
 
 # Setting up ENVs
 ENV DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
-    PACKAGES="vim" \
     SETGID=1000 \
     SETUID=1000 \
     TZ="Europe/Berlin"

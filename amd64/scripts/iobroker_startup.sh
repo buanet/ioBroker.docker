@@ -459,9 +459,11 @@ shut_down() {
   exit
 }
 
+# Trap to get signal for graceful shutdown
 trap 'shut_down' SIGTERM
 
+# IoBroker start
 gosu iobroker node node_modules/iobroker.js-controller/controller.js & wait
 
-# Preventing container restart by keeping a process alive even if iobroker will be stopped
+# Fallback process for keeping container running when ioBroker is stopped for maintenance (e.g. js-controller update)
 tail -f /dev/null
