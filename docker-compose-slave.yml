@@ -5,6 +5,7 @@ services:
     iobroker:
         build: ./armv7hf
         image: samosir/iobroker-slave:latest
+        env_file: iob-slave.env
         hostname: iobroker_slave
         container_name: iobroker-slave
         restart: always
@@ -19,23 +20,6 @@ services:
            - "1886:1886"
         cap_add:
            - NET_ADMIN
-        environment:
-           - TZ=Europe/Berlin
-           - IOB_ADMINPORT=8081
-           - SETGID=1000
-           - SETUID=1000
-           - USBDEVICES=none
-           - ZWAVE=false
-           - AVAHI=false
-           - PACKAGES=nano
-           - IOB_MULTIHOST=slave
-           - IOB_OBJECTSDB_HOST=192.168.2.10
-           - IOB_OBJECTSDB_PORT=6379
-           - IOB_OBJECTSDB_TYPE=redis
-           - IOB_STATESDB_HOST=192.168.2.10
-           - IOB_STATESDB_PORT=6379
-           - IOB_STATESDB_TYPE=redis
-
         volumes:
            - /opt/iobroker/:/opt/iobroker/
         

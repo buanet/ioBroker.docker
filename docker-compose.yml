@@ -5,6 +5,7 @@ services:
     iobroker:
         build: ./amd64
         image: samosir/iobroker:latest
+        env_file: iob-master.env
         hostname: iobroker_neu
         container_name: iobroker
         restart: always
@@ -24,22 +25,6 @@ services:
            - "8284:8284"
         cap_add:
            - NET_ADMIN
-        environment:
-           - TZ=Europe/Berlin
-           - IOB_ADMINPORT=8081
-           - SETGID=1000
-           - SETUID=1000
-           - USBDEVICES=none
-           - ZWAVE=false
-           - AVAHI=false
-           - PACKAGES=vim
-           - IOB_MULTIHOST=master
-           - IOB_OBJECTSDB_HOST=host.docker.internal
-           - IOB_OBJECTSDB_PORT=6379
-           - IOB_OBJECTSDB_TYPE=redis
-           - IOB_STATESDB_HOST=host.docker.internal
-           - IOB_STATESDB_PORT=6379
-           - IOB_STATESDB_TYPE=redis
         volumes:
            - ~/Docker/iobroker/:/opt/iobroker/:cached
         depends_on:
