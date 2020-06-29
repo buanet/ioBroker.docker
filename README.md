@@ -20,7 +20,9 @@ If you need more please let me know by opening a Github issue.
 
 Normally a new major version (e.g. v2, v4, v5) of the image comes with a new, preinstalled major node version!
 If you are updating an existing installation to a new major version (e.g. from v4 to v5) you have to perform some additional steps inside ioBroker! For more details please see official ioBroker documentation: [EN](https://www.iobroker.net/#en/documentation/install/updatenode.md) | [DE](https://www.iobroker.net/#de/documentation/install/updatenode.md).<br>
+
 You might avoid these procedure if you use my "Best practice" hint for "upgrading your ioBroker container".<br>
+
 In any case make a backup first!
 
 By the way, a more comfortable way is to use "iobroker backup" to create a full backup of your existing installation and copy it into a empty folder which you will mount to /opt/iobroker when setting up a new container. The startup script will automatically detect the backup file and restore it to the new container. For more details see "Mounting folder/ volume" section of this readme.md file.
@@ -131,7 +133,7 @@ Details will follow soon.
 To avoid conflicts when upgrading your container or getting in trouble when accidentally upgrading your container to a new major version I prefer using the version tag like "V4.2.0" instead of "latest" for creating your container. Just think about when I tell you it is not possible to download a new image version of a specific tag as long as a container depends on it.<br>
 By the way it also makes it more safe to keep your image up to date by using "watchtower" or something like that.
 
-### Upgrading you container
+### Upgrading your container
 
 If you want to upgrade your ioBroker container to a new major version (e.g. from v4 to v5) I would prefer to do that by creating a backup in ioBroker (by "iobroker backup" or backitup adapter) and restoring it to a completely new container. All you need is time an the following steps:
 * make a backup by command line ("iobroker backup") or backitup adapter
