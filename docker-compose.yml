@@ -1,0 +1,79 @@
+version: "3.7"
+
+services:
+
+    iobroker:
+        build: ./amd64
+        image: samosir/iobroker:latest
+        env_file: iob-master.env
+        hostname: iobroker_neu
+        container_name: iobroker
+        restart: always
+        network_mode: bridge
+        expose:
+           - "8081" 
+           - "8082"
+        ports:
+           - "8081:8081"
+           - "8082:8082"
+           - "8084:8084"
+           - "8087:8087"
+           - "1880:1880"
+           - "1883:1883"
+           - "1886:1886"
+           - "8282:8282"
+           - "8284:8284"
+        cap_add:
+           - NET_ADMIN
+        volumes:
+           - ~/Docker/iobroker/:/opt/iobroker/:cached
+        depends_on:
+           - redis
+           - influxdb
+
+
+    redis:
+        image: redis
+        hostname: redisdb
+        container_name: redisdb
+        restart: always
+        network_mode: bridge
+        expose:
+           - "6379"
+        ports:
+           - "6379:6379"
+        volumes:
+           - ~/Docker/redis/:/data/:cached
+
+
+    influxdb:
+        image: influxdb
+        hostname: influxdb
+        container_name: influxdb
+        restart: always
+        network_mode: bridge
+        expose:
+           - "8083"
+           - "8086"
+        ports:
+           - "8083:8083"
+           - "8086:8086"
+        volumes:
+           - ~/Docker/influxdb/:/var/lib/influxdb/:cached
+
+
+    grafana:
+        image: grafana/grafana
+        hostname: grafana
+        container_name: grafana
+        restart: always
+        network_mode: bridge
+        expose:
+           - "3000"
+        ports:
+           - "3000:3000"
+        volumes:
+           - ~/Docker/grafana/:/var/lib/grafana/:cached
+        depends_on:
+           - influxdb
+

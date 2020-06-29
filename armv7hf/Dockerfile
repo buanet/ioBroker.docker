@@ -30,8 +30,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Install node10
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash \
+# Install node
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash \
     && apt-get update && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
@@ -76,14 +76,15 @@ RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker \
 
 # Setting up iobroker-user (shell and home directory)
 RUN chsh -s /bin/bash iobroker \
-    && usermod --home /opt/iobroker iobroker
+    && usermod --home /opt/iobroker iobroker \
+    && usermod -u 1000 iobroker \
+    && groupmod -g 1000 iobroker
 
 # Setting up ENVs
 ENV DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
-    PACKAGES="vim" \
     SETGID=1000 \
     SETUID=1000 \
     TZ="Europe/Berlin"
