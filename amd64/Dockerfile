@@ -70,9 +70,6 @@ RUN apt-get update \
 WORKDIR /opt/iobroker/
 RUN npm install -g node-gyp
 
-# Temporary updating js-controller to not stable version
-RUN npm install iobroker.js-controller@3.1.6
-
 # Backup initial ioBroker and userscript folder
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker \
     && tar -cf /opt/initial_userscripts.tar /opt/userscripts

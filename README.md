@@ -22,11 +22,10 @@ If you need more please let me know by opening a Github issue.
 
 ## Important notice
 
-Normally a new major version (e.g. v2, v4 and upcoming v5) of the image comes with a new, preinstalled major node version!
+Normally a new major version (e.g. v2, v4, v5) of the image comes with a new, preinstalled major node version!
 If you are updating an existing installation to a new major version (e.g. from v4 to v5) you have to perform some additional steps inside ioBroker! For more details please see official ioBroker documentation: [EN](https://www.iobroker.net/#en/documentation/install/updatenode.md) | [DE](https://www.iobroker.net/#de/documentation/install/updatenode.md).<br>
 
 You might avoid these procedure if you use my "Best practice" hint for "upgrading your ioBroker container".<br>
-=======
 
 In any case make a backup first!
 
@@ -169,13 +168,14 @@ Thank you!
 
 ## Changelog
 
-### v4.2.4beta (2020-06-23)
-* added graceful shutdown
-* small fix for GID/UID handling
-* adding new ENV "IOB_MULTIHOST" for multihost support
-* small syntax fixes in iobroker_startup.sh
+### v5.0.0 (2020-06-29)
+* v4.2.4beta (2020-06-23)
+  * added graceful shutdown
+  * small fix for GID/UID handling
+  * adding new ENV "IOB_MULTIHOST" for multihost support
+  * small syntax fixes in iobroker_startup.sh
 * v4.2.3beta (2020-06-05)
-  * updating js-controller to not stable version 3.1.5 to fix renaming issue
+  * ~~updating js-controller to not stable version 3.1.5 to fix renaming issue~~ (is stable now)
 * v4.2.2beta (2020-06-03)
   * ~~workaround for renaming issues on startup~~ (fixed in js-controller)
 * v4.2.1beta (2020-05-10)
