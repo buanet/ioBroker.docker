@@ -114,7 +114,7 @@ then
 elif [ -f /opt/iobroker/iobroker ]
 then
   echo "Existing installation of ioBroker detected in /opt/iobroker."
-elif [ $(ls iobroker_20* 2> /dev/null | wc -l) != "0" ] && [ $(tar -ztvf /opt/iobroker/iobroker_20*.tar.gz "backup/backup.json" 2> /dev/null | wc -l) != "0" ]
+elif [ $(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l) != "0" ] && [ $(tar -ztvf /opt/iobroker/*_backupiobroker.tar.gz "backup/backup.json" 2> /dev/null | wc -l) != "0" ]
 then
   echo "ioBroker backup file detected in /opt/iobroker. Restoring ioBroker..."
     mv /opt/iobroker/*.tar.gz /opt/
