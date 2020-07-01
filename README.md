@@ -74,25 +74,25 @@ You do not have to declare every single variable when setting up your container.
 
 **Important: In v4.2.0 the ENVs "ADMINPORT" and "REDIS" were renamed/ reorganized. For Details see the following table!**
 
-|env|default|description|
+|ENV|Default|Description|
 |---|---|---|
 |AVAHI|false|Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"|
 |IOB_ADMINPORT|8081|Sets ioBroker adminport on startup|
-|IOB_MULTIHOST|master|Sets ioBroker instance as "master" or "slave" for multihost (additional config for objectsdb and statesdb needed)|
-|IOB_OBJECTSDB_HOST|127.0.0.1|Sets hostname for ioBroker objects db|
+|IOB_MULTIHOST|[not set]|Sets ioBroker instance as "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)|
+|IOB_OBJECTSDB_HOST|127.0.0.1|Sets host for ioBroker objects db|
 |IOB_OBJECTSDB_PORT|9001|Sets port for ioBroker objects db|
 |IOB_OBJECTSDB_TYPE|file|Sets type of ioBroker objects db, cloud be "file", "redis" or "couch"|
-|IOB_STATESDB_HOST|127.0.0.1|Sets hostname for ioBroker states db|
+|IOB_STATESDB_HOST|127.0.0.1|Sets host for ioBroker states db|
 |IOB_STATESDB_PORT|9000|Sets port for ioBroker states db|
 |IOB_STATESDB_TYPE|file|Sets type of ioBroker states db, could be "file" or "redis"|
 |LANG|de_DE.UTF&#x2011;8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |LANGUAGE|de_DE:de|The following locales are pre-generated: de_DE:de, en_US:en|
 |LC_ALL|de_DE.UTF-8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
-|PACKAGES|vi|Installs additional packages to your container needed by some adapters, packages should be seperated by whitespace like "package1 package2 package3"|
-|SETGID|1000|For security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
-|SETUID|1000|For security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
+|PACKAGES|[not set]|Installs additional linux packages to your container, packages should be seperated by whitespace like this: "package1 package2 package3"|
+|SETGID|1000|For some reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
+|SETUID|1000|For some reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
 |TZ|Europe/Berlin|All valid Linux-timezones|
-|USBDEVICES|none|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" like "/dev/ttyACM0;/dev/ttyACM1"|
+|USBDEVICES|none|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" like this: "/dev/ttyACM0;/dev/ttyACM1"|
 |ZWAVE|false|Will install openzwave to support zwave-adapter, can be "true" or "false"|
 
 ### Mounting folder/ volume
@@ -164,7 +164,7 @@ Thank you!
 
 ## Changelog
 
-### v5.0.1beta (2020-06-30)
+### v5.0.1beta (2020-07-01)
 * fixing backup detection in startup script
 * fixing permission issue on iobroker restored
 * extended Logging
