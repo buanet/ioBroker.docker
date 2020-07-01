@@ -98,8 +98,8 @@ You do not have to declare every single variable when setting up your container.
 ### Mounting folder/ volume
 
 It is possible to mount an empty folder to /opt/iobroker during first startup of the container. The startup script will check this folder and restore content if it is empty.
-Since v4.1.0 it is also possible mount a folder filled up with an iobroker backup file (for example created with backitup adapter) named like this: "iobroker_2020_01_06-01_09_10_backupiobroker.tar.gz".
-The startup script will detect this backup and restore it during the start of the container. Please see container logs when starting the container for more details!
+Since v4.1.0 it is also possible mount a folder filled up with an iobroker backup file created using "iobroker backup" command or backitup adapter. Please take care of the name of your backup file ending like this: "*_backupiobroker.tar.gz".
+The startup script will then detect this backup and restore it during the start of the container. Please see container logs when starting the container for more details!
 
 Note: It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
 
@@ -163,6 +163,12 @@ And if you want to buy me a beer instead, you can do this here: <a href="https:/
 Thank you!
 
 ## Changelog
+
+### v5.0.1beta (2020-06-30)
+* fixing backup detection in startup script
+* fixing permission issue on iobroker restored
+* extended Logging
+* optimize multihost support
 
 ### v5.0.0 (2020-06-29)
 * v4.2.4beta (2020-06-23)
