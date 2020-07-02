@@ -11,11 +11,7 @@
 
 IoBroker for Docker is a Docker image for ioBroker IoT platform (http://www.iobroker.net).
 
-
 It was originally created for a Synology Disk Station 1515+ with DSM 6 and official Docker package installed. After more than three years of development it might be the best documented and still maintained Docker image for running ioBroker IoT platform with Docker.
-=======
-
-
 
 Since v4.0.0 the image is available for the following architectures: amd64, armv7hf, aarch64.<br>
 If you need more please let me know by opening a Github issue.
