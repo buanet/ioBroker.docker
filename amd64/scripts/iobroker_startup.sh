@@ -353,7 +353,7 @@ fi
 # Checking ENVs for custom setup of objects db
 if [ "$objectsdbtype" != "" ] || [ "$objectsdbhost" != "" ] || [ "$objectsdbport" != "" ]
 then
-  if [ "$objectsdbtype" != $(jq '.objects.type' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$objectsdbtype" != $(jq '.objects.type' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
   then
     echo "ENV IOB_OBJECTSDB_TYPE is set and value is different from detected ioBroker installation."
     echo "Setting type of objects db to \""$objectsdbtype"\"..."
@@ -363,7 +363,7 @@ then
   else
     echo "ENV IOB_OBJECTSDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$objectsdbhost" != $(jq '.objects.host' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$objectsdbhost" != $(jq '.objects.host' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
   then
     echo "ENV IOB_OBJECTSDB_HOST is set and value is different from detected ioBroker installation."
     echo "Setting host of objects db to \""$objectsdbhost"\"..."
@@ -373,11 +373,11 @@ then
   else
     echo "ENV IOB_OBJECTSDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$objectsdbport" != $(jq '.objects.port' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$objectsdbport" != $(jq '.objects.port' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
   then
     echo "ENV IOB_OBJECTSDB_PORT is set and value is different from detected ioBroker installation."
     echo "Setting port of objects db to \""$objectsdbport"\"..."
-      jq --arg objectsdbport "$objectsdbport" '.objects.port = $objectsdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+      jq --arg objectsdbport $objectsdbport '.objects.port = $objectsdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
       chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
@@ -390,7 +390,7 @@ fi
 # Checking ENVs for custom setup of states db#
 if [ "$statesdbtype" != "" ] || [ "$statesdbhost" != "" ] || [ "$statesdbport" != "" ]
 then
-  if [ "$statesdbtype" != $(jq '.states.type' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$statesdbtype" != $(jq '.states.type' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
   then
     echo "ENV IOB_STATESDB_TYPE is set and value is different from detected ioBroker installation."
     echo "Setting type of states db to \""$statesdbtype"\"..."
@@ -400,7 +400,7 @@ then
   else
     echo "ENV IOB_STATESDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$statesdbhost" != $(jq '.states.host' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$statesdbhost" != $(jq '.states.host' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
   then
     echo "ENV IOB_STATESDB_HOST is set and value is different from detected ioBroker installation."
     echo "Setting host of states db to \""$statesdbhost"\"..."
@@ -410,11 +410,11 @@ then
   else
     echo "ENV IOB_STATESDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$statesdbport" != $(jq '.states.port' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$statesdbport" != $(jq '.states.port' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
   then
     echo "ENV IOB_STATESDB_PORT is set and value is different from detected ioBroker installation."
     echo "Setting port of states db to \""$statesdbport"\"..."
-      jq --arg statesdbport "$statesdbport" '.states.port = $statesdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+      jq --arg statesdbport $statesdbport '.states.port = $statesdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
       chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
