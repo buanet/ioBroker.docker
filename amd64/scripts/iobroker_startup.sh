@@ -353,7 +353,7 @@ fi
 # Checking ENVs for custom setup of objects db
 if [ "$objectsdbtype" != "" ] || [ "$objectsdbhost" != "" ] || [ "$objectsdbport" != "" ]
 then
-  if [ "$objectsdbtype" != $(jq '.objects.type' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
+  if [ "$objectsdbtype" != $(jq -r '.objects.type' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_OBJECTSDB_TYPE is set and value is different from detected ioBroker installation."
     echo "Setting type of objects db to \""$objectsdbtype"\"..."
@@ -363,7 +363,7 @@ then
   else
     echo "ENV IOB_OBJECTSDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$objectsdbhost" != $(jq '.objects.host' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
+  if [ "$objectsdbhost" != $(jq -r '.objects.host' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_OBJECTSDB_HOST is set and value is different from detected ioBroker installation."
     echo "Setting host of objects db to \""$objectsdbhost"\"..."
@@ -373,7 +373,7 @@ then
   else
     echo "ENV IOB_OBJECTSDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$objectsdbport" != $(jq '.objects.port' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
+  if [ "$objectsdbport" != $(jq -r '.objects.port' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_OBJECTSDB_PORT is set and value is different from detected ioBroker installation."
     echo "Setting port of objects db to \""$objectsdbport"\"..."
@@ -390,7 +390,7 @@ fi
 # Checking ENVs for custom setup of states db#
 if [ "$statesdbtype" != "" ] || [ "$statesdbhost" != "" ] || [ "$statesdbport" != "" ]
 then
-  if [ "$statesdbtype" != $(jq '.states.type' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
+  if [ "$statesdbtype" != $(jq -r '.states.type' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_STATESDB_TYPE is set and value is different from detected ioBroker installation."
     echo "Setting type of states db to \""$statesdbtype"\"..."
@@ -400,7 +400,7 @@ then
   else
     echo "ENV IOB_STATESDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$statesdbhost" != $(jq '.states.host' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
+  if [ "$statesdbhost" != $(jq -r '.states.host' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_STATESDB_HOST is set and value is different from detected ioBroker installation."
     echo "Setting host of states db to \""$statesdbhost"\"..."
@@ -410,7 +410,7 @@ then
   else
     echo "ENV IOB_STATESDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$statesdbport" != $(jq '.states.port' /opt/iobroker/iobroker-data/iobroker.json | sed 's/\"//g') ]
+  if [ "$statesdbport" != $(jq -r '.states.port' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_STATESDB_PORT is set and value is different from detected ioBroker installation."
     echo "Setting port of states db to \""$statesdbport"\"..."
