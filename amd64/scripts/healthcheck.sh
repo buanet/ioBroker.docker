@@ -2,14 +2,19 @@
 
 # Script checks health of running container
 
-if [ "$(cat /opt/iobroker/.docker_config/.healthcheck)" == "starting" ] || [ "$(cat /opt/iobroker/.docker_config/.healthcheck)" == "maintenance" ]
+if [ "$(cat /opt/iobroker/.docker_config/.healthcheck)" == "starting" ]
 then
+  echo 'Health status: OK - Startup script is still running.'
   exit 0
-else
-  if [ "ps -fe|grep "[i]obroker.js-controller"|awk '{print $2}'" != "" ]
-  then
-    exit 0
-  fi
+elif [ "$(cat /opt/iobroker/.docker_config/.healthcheck)" == "maintenance" ]
+then
+  echo 'Health status: OK - Container running in maintenance mode.'
+  exit 0
+elif [ "$(ps -fe|grep "[i]obroker.js-controller"|awk '{print $2}')" != "" ]
+then
+  echo 'Health status: OK - Main process (js-controller) is running.'
+  exit 0
 fi
 
+echo 'Health status: !!! NOT OK !!! - Something went wrong. Please see Container Logs for more details.'
 exit 1
