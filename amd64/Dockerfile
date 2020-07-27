@@ -50,10 +50,12 @@ COPY scripts/iobroker_startup.sh iobroker_startup.sh
 COPY scripts/setup_avahi.sh setup_avahi.sh
 COPY scripts/setup_packages.sh setup_packages.sh
 COPY scripts/setup_zwave.sh setup_zwave.sh
+COPY scripts/healthcheck.sh healthcheck.sh
 RUN chmod +x iobroker_startup.sh \
     && chmod +x setup_avahi.sh \
     && chmod +x setup_packages.sh \
-    && chmod +x setup_zwave.sh
+    && chmod +x setup_zwave.sh \
+    && chmod +x healthcheck.sh
 WORKDIR /opt/userscripts/
 COPY scripts/userscript_firststart_example.sh userscript_firststart_example.sh
 COPY scripts/userscript_everystart_example.sh userscript_everystart_example.sh
@@ -62,7 +64,9 @@ COPY scripts/userscript_everystart_example.sh userscript_everystart_example.sh
 WORKDIR /
 RUN apt-get update \
     && curl -sL https://iobroker.net/install.sh | bash - \
-    && echo $(hostname) > /opt/iobroker/.install_host \
+    && mkdir -p /opt/iobroker/.docker_config/ \
+    && echo $(hostname) > /opt/iobroker/.docker_config/.install_host \
+    && echo "starting" > /opt/iobroker/.docker_config/.healthcheck \
     && echo $(hostname) > /opt/.firstrun \
     && rm -rf /var/lib/apt/lists/*
 
@@ -88,6 +92,10 @@ ENV DEBIAN_FRONTEND="teletype" \
     SETGID=1000 \
     SETUID=1000 \
     TZ="Europe/Berlin"
+
+# healthcheck
+HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
+    CMD ["/bin/bash", "-c", "/opt/scripts/healthcheck.sh"]
 
 # Run startup-script
 ENTRYPOINT ["/bin/bash", "-c", "/opt/scripts/iobroker_startup.sh"]
