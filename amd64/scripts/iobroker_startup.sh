@@ -90,7 +90,7 @@ echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
 # Installing additional packages and setting uid/gid
-if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]
+if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ] || [ -f /opt/.firstrun ]
 then
   if [ "$packages" != "" ]
   then
@@ -107,6 +107,13 @@ then
     echo "Changing UID to "$setuid" and GID to "$setgid"..."
       usermod -u $setuid iobroker
       groupmod -g $setgid iobroker
+    echo "Done."
+    echo ' '
+  fi
+  if [ -f /opt/.firstrun ]
+  then
+    echo "Registering maintenance-mode script as command."
+    echo "alias maintenance-mode=\'/opt/scripts/maintenance-mode.sh\'" >> /root/.bashrc
     echo "Done."
     echo ' '
   fi
