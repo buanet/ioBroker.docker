@@ -112,8 +112,9 @@ then
   fi
   if [ -f /opt/.firstrun ]
   then
-    echo "Registering maintenance-mode script as command."
-    echo "alias maintenance-mode=\'/opt/scripts/maintenance-mode.sh\'" >> /root/.bashrc
+    echo "Registering maintenance script as command."
+    echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+    rm -f /opt/.firstrun
     echo "Done."
     echo ' '
   fi

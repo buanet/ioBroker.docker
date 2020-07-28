@@ -126,6 +126,20 @@ To get familiar with that feature try the following: Create a Container, mount a
 
 Details will follow soon.
 
+### Healthcheck (beta)
+
+Since v5.0.2beta the image contains a simple Docker healthcheck. At the moment it only checks if js-controller is running inside the container and reports "healthy" or "unhealthy" to the Docker daemon. Further development is planned.
+
+Hint: As the Docker daemon itself gives no opportunity to automatically restart an unhealthy container you might want to setup some kind of "watchdog container" like this simple one: https://hub.docker.com/r/willfarrell/autoheal/ (works great so far!).
+
+### Maintenance script (beta)
+
+Within the implementation of the docker health check (above) some manual maintenance actions, like stopping ioBroker for upgrading js-controller, would cause the container to get "unhealthy" and may cause an external watchdog to automatically restart it.
+
+In this case you can use the new maintenance command line tool inside the container. By simply typing `maintenance on` it will activate some kind of "maintenance mode" and automatically stop ioBroker while the container stays healthy.
+
+After your maintenance is done just type `maintenance off`. Depending on the selected restart policy of your container the command will stop (and automatically restart) it.
+
 ## Best practices
 
 ### Avoid using "latest" tag
@@ -164,11 +178,16 @@ Thank you!
 
 ## Changelog
 
-### v5.0.1beta (2020-07-01)
-* fixing backup detection in startup script
-* fixing permission issue on iobroker restored
-* extended Logging
-* optimize multihost support
+### v5.0.2beta (2020-07-28)
+* extend readme.md doku
+* added maintenance script
+* added container healthcheck
+* fixed configuration procedure and logging for objects and states db setup
+* v5.0.1beta (2020-07-01)
+  * fixing backup detection in startup script
+  * fixing permission issue on iobroker restored
+  * extended Logging
+  * optimize multihost support
 
 ### v5.0.0 (2020-06-29)
 * v4.2.4beta (2020-06-23)

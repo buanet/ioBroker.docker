@@ -51,13 +51,13 @@ COPY scripts/setup_avahi.sh setup_avahi.sh
 COPY scripts/setup_packages.sh setup_packages.sh
 COPY scripts/setup_zwave.sh setup_zwave.sh
 COPY scripts/healthcheck.sh healthcheck.sh
-COPY scripts/maintenance-mode.sh maintenance-mode.sh
+COPY scripts/maintenance.sh maintenance.sh
 RUN chmod +x iobroker_startup.sh \
     && chmod +x setup_avahi.sh \
     && chmod +x setup_packages.sh \
     && chmod +x setup_zwave.sh \
     && chmod +x healthcheck.sh \
-    && chmod +x maintenance-mode.sh
+    && chmod +x maintenance.sh
 WORKDIR /opt/userscripts/
 COPY scripts/userscript_firststart_example.sh userscript_firststart_example.sh
 COPY scripts/userscript_everystart_example.sh userscript_everystart_example.sh

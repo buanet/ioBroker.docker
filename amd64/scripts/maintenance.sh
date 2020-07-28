@@ -13,16 +13,17 @@ then
   fi
 elif [ "$1" == "on" ]
 then
-  echo 'This will stop ioBroker and enable maintenance mode for this container.'
-  read -p 'Continue? Type yes or no: ' A
-  if [ "$A" == "y" ] || [ "$A" == "yes" ]
+  echo 'You are going to stop ioBroker and activating maintenance mode for this container.'
+  read -p 'Do you want to continue [yes/no]? ' A
+  if [ "$A" == "y" ] || [ "$A" == "Y" ] || [ "$A" == "yes" ]
   then
-    echo 'Enabling maintenance mode...'
+    echo 'Activating maintenance mode...'
     echo "maintenance" > /opt/iobroker/.docker_config/.healthcheck
+    sleep 1
     echo 'Done.'
-    sleep 2
     echo 'Stopping ioBroker...'
     pkill -u iobroker
+    sleep 1
     echo 'Done.'
     exit 0
   else
@@ -30,12 +31,12 @@ then
   fi
 elif [ "$1" == "off" ]
 then
-  echo 'Depending of the restart policy of this container, this will force it to stop (and restart) immediately.'
-  echo 'Maintenance mode will be disabled after the restart.'
-  read -p 'Continue? Type yes or no: ' A
-  if [ "$A" == "y" ] || [ "$A" == "yes" ]
+  echo 'You are going to deactivate maintenance mode for this container.'
+  echo 'Depending of the restart policy of this container, this will stop/ restart your container immediately.'
+  read -p 'Do you want to continue [yes/no]? ' A
+  if [ "$A" == "y" ] || [ "$A" == "Y" ] || [ "$A" == "yes" ]
   then
-    echo 'Disabling maintenance mode and forcing container to stop/ restart...'
+    echo 'Deactivating maintenance mode and forcing container to stop/ restart...'
     echo "maintenance" > /opt/iobroker/.docker_config/.healthcheck
     pkill -u root
     exit 0
