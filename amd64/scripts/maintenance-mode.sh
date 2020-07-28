@@ -2,11 +2,11 @@
 
 if [ "$1" == "status" ]
 then
-  if [ "$cat /opt/iobroker/.docker_config/.healthcheck" == "maintenance" ]
+  if [ $(cat /opt/iobroker/.docker_config/.healthcheck) == 'maintenance' ]
   then
     echo 'Maintenance mode is ON.'
     exit 0
-  elif [ "$cat /opt/iobroker/.docker_config/.healthcheck" != "maintenance" ]
+  elif [ $(cat /opt/iobroker/.docker_config/.healthcheck) != 'maintenance' ]
   then
     echo 'Maintenance mode is OFF.'
     exit 0
@@ -35,7 +35,7 @@ then
   read -p 'Continue? Type yes or no: ' A
   if [ "$A" == "y" ] || [ "$A" == "yes" ]
   then
-    echo "Disabling maintenance mode and forcing container to stop/ restart..."
+    echo 'Disabling maintenance mode and forcing container to stop/ restart...'
     echo "maintenance" > /opt/iobroker/.docker_config/.healthcheck
     pkill -u root
     exit 0
