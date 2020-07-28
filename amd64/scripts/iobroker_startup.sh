@@ -114,7 +114,6 @@ then
   then
     echo "Registering maintenance script as command."
     echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
-    rm -f /opt/.firstrun
     echo "Done."
     echo ' '
   fi
@@ -469,7 +468,6 @@ then
     echo "Running userscript_firststart.sh..."
       chmod 755 /opt/userscripts/userscript_firststart.sh
       bash /opt/userscripts/userscript_firststart.sh
-      rm -f /opt/.firstrun
     echo "Done."
     echo ' '
   fi
@@ -483,6 +481,11 @@ then
   fi
 fi
 
+# Removing first run marker when exists
+if [ -f /opt/.firstrun ]
+then
+rm -f /opt/.firstrun
+fi
 
 #####
 # Starting ioBroker

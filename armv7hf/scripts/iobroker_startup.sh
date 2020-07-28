@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Setting healthcheck status to "starting"
+echo "starting" > /opt/iobroker/.docker_config/.healthcheck
+
 # Reading ENV
 adminport=$IOB_ADMINPORT
 avahi=$AVAHI
@@ -15,6 +18,23 @@ statesdbport=$IOB_STATESDB_PORT
 statesdbtype=$IOB_STATESDB_TYPE
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
+
+# Writing necessary ENVs to /opt/iobroker/.docker_config/container.config for using it in other scripts
+
+echo '# Simple config file to store ENVs' > /opt/iobroker/.docker_config/container.config
+echo ' ' >> /opt/iobroker/.docker_config/container.config
+if [ "$multihost" = "" ]
+then
+  echo "multihost=master" >> /opt/iobroker/.docker_config/container.config
+else
+  echo "multihost=$multihost" >> /opt/iobroker/.docker_config/container.config
+fi
+if [ "$adminport" = "" ]
+then
+  echo "adminport=8081" >> /opt/iobroker/.docker_config/container.config
+else
+  echo "adminport=$adminport" >> /opt/iobroker/.docker_config/container.config
+fi
 
 # Getting date and time for logging
 dati=`date '+%Y-%m-%d %H:%M:%S'`
@@ -70,7 +90,7 @@ echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
 # Installing additional packages and setting uid/gid
-if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]
+if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ] || [ -f /opt/.firstrun ]
 then
   if [ "$packages" != "" ]
   then
@@ -87,6 +107,13 @@ then
     echo "Changing UID to "$setuid" and GID to "$setgid"..."
       usermod -u $setuid iobroker
       groupmod -g $setgid iobroker
+    echo "Done."
+    echo ' '
+  fi
+  if [ -f /opt/.firstrun ]
+  then
+    echo "Registering maintenance script as command."
+    echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
     echo "Done."
     echo ' '
   fi
@@ -173,12 +200,12 @@ echo "Done."
 echo ' '
 
 # Checking for first run of a new installation and renaming ioBroker
-if [ -f /opt/iobroker/.install_host ]
+if [ -f /opt/iobroker/.docker_config/.install_host ]
 then
   echo "Looks like this is a new and empty installation of ioBroker."
   echo "Hostname needs to be updated to " $(hostname)"..."
-    bash iobroker host $(cat /opt/iobroker/.install_host)
-    rm -f /opt/iobroker/.install_host
+    bash iobroker host $(cat /opt/iobroker/.docker_config/.install_host)
+    rm -f /opt/iobroker/.docker_config/.install_host
   echo "Done."
   echo ' '
 elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
@@ -353,7 +380,7 @@ fi
 # Checking ENVs for custom setup of objects db
 if [ "$objectsdbtype" != "" ] || [ "$objectsdbhost" != "" ] || [ "$objectsdbport" != "" ]
 then
-  if [ "$objectsdbtype" != $(jq '.objects.type' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$objectsdbtype" != $(jq -r '.objects.type' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_OBJECTSDB_TYPE is set and value is different from detected ioBroker installation."
     echo "Setting type of objects db to \""$objectsdbtype"\"..."
@@ -363,7 +390,7 @@ then
   else
     echo "ENV IOB_OBJECTSDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$objectsdbhost" != $(jq '.objects.host' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$objectsdbhost" != $(jq -r '.objects.host' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_OBJECTSDB_HOST is set and value is different from detected ioBroker installation."
     echo "Setting host of objects db to \""$objectsdbhost"\"..."
@@ -373,11 +400,11 @@ then
   else
     echo "ENV IOB_OBJECTSDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$objectsdbport" != $(jq '.objects.port' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$objectsdbport" != $(jq -r '.objects.port' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_OBJECTSDB_PORT is set and value is different from detected ioBroker installation."
     echo "Setting port of objects db to \""$objectsdbport"\"..."
-      jq --arg objectsdbport "$objectsdbport" '.objects.port = $objectsdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+      jq --arg objectsdbport $objectsdbport '.objects.port = $objectsdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
       chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
@@ -390,7 +417,7 @@ fi
 # Checking ENVs for custom setup of states db#
 if [ "$statesdbtype" != "" ] || [ "$statesdbhost" != "" ] || [ "$statesdbport" != "" ]
 then
-  if [ "$statesdbtype" != $(jq '.states.type' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$statesdbtype" != $(jq -r '.states.type' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_STATESDB_TYPE is set and value is different from detected ioBroker installation."
     echo "Setting type of states db to \""$statesdbtype"\"..."
@@ -400,7 +427,7 @@ then
   else
     echo "ENV IOB_STATESDB_TYPE is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$statesdbhost" != $(jq '.states.host' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$statesdbhost" != $(jq -r '.states.host' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_STATESDB_HOST is set and value is different from detected ioBroker installation."
     echo "Setting host of states db to \""$statesdbhost"\"..."
@@ -410,11 +437,11 @@ then
   else
     echo "ENV IOB_STATESDB_HOST is set and value meets detected ioBroker installation. Nothing to do here."
   fi
-  if [ "$statesdbport" != $(jq '.states.port' /opt/iobroker/iobroker-data/iobroker.json) ]
+  if [ "$statesdbport" != $(jq -r '.states.port' /opt/iobroker/iobroker-data/iobroker.json) ]
   then
     echo "ENV IOB_STATESDB_PORT is set and value is different from detected ioBroker installation."
     echo "Setting port of states db to \""$statesdbport"\"..."
-      jq --arg statesdbport "$statesdbport" '.states.port = $statesdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
+      jq --arg statesdbport $statesdbport '.states.port = $statesdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
       chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
     echo "Done."
   else
@@ -441,7 +468,6 @@ then
     echo "Running userscript_firststart.sh..."
       chmod 755 /opt/userscripts/userscript_firststart.sh
       bash /opt/userscripts/userscript_firststart.sh
-      rm -f /opt/.firstrun
     echo "Done."
     echo ' '
   fi
@@ -455,6 +481,11 @@ then
   fi
 fi
 
+# Removing first run marker when exists
+if [ -f /opt/.firstrun ]
+then
+rm -f /opt/.firstrun
+fi
 
 #####
 # Starting ioBroker
@@ -465,6 +496,9 @@ echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 echo "Starting ioBroker..."
 echo ' '
+
+# Setting healthcheck status to "running"
+echo "running" > /opt/iobroker/.docker_config/.healthcheck
 
 # Function for graceful shutdown by SIGTERM signal
 shut_down() {

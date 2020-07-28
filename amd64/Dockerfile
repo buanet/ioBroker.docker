@@ -95,7 +95,7 @@ ENV DEBIAN_FRONTEND="teletype" \
     SETUID=1000 \
     TZ="Europe/Berlin"
 
-# healthcheck
+# Healthcheck
 HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
     CMD ["/bin/bash", "-c", "/opt/scripts/healthcheck.sh"]
 
