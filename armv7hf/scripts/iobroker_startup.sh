@@ -19,23 +19,6 @@ statesdbtype=$IOB_STATESDB_TYPE
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
 
-# Writing necessary ENVs to /opt/scripts/.docker_config/container.config for using it in other scripts
-
-echo '# Simple config file to store ENVs' > /opt/scripts/.docker_config/container.config
-echo ' ' >> /opt/scripts/.docker_config/container.config
-if [ "$multihost" = "" ]
-then
-  echo "multihost=master" >> /opt/scripts/.docker_config/container.config
-else
-  echo "multihost=$multihost" >> /opt/scripts/.docker_config/container.config
-fi
-if [ "$adminport" = "" ]
-then
-  echo "adminport=8081" >> /opt/scripts/.docker_config/container.config
-else
-  echo "adminport=$adminport" >> /opt/scripts/.docker_config/container.config
-fi
-
 # Getting date and time for logging
 dati=`date '+%Y-%m-%d %H:%M:%S'`
 
