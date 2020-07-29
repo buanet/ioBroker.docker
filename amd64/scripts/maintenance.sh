@@ -2,11 +2,11 @@
 
 if [ "$1" == "status" ]
 then
-  if [ $(cat /opt/iobroker/.docker_config/.healthcheck) == 'maintenance' ]
+  if [ $(cat /opt/scripts/.docker_config/.healthcheck) == 'maintenance' ]
   then
     echo 'Maintenance mode is ON.'
     exit 0
-  elif [ $(cat /opt/iobroker/.docker_config/.healthcheck) != 'maintenance' ]
+  elif [ $(cat /opt/scripts/.docker_config/.healthcheck) != 'maintenance' ]
   then
     echo 'Maintenance mode is OFF.'
     exit 0
@@ -18,7 +18,7 @@ then
   if [ "$A" == "y" ] || [ "$A" == "Y" ] || [ "$A" == "yes" ]
   then
     echo 'Activating maintenance mode...'
-    echo "maintenance" > /opt/iobroker/.docker_config/.healthcheck
+    echo "maintenance" > /opt/scripts/.docker_config/.healthcheck
     sleep 1
     echo 'Done.'
     echo 'Stopping ioBroker...'
@@ -37,7 +37,7 @@ then
   if [ "$A" == "y" ] || [ "$A" == "Y" ] || [ "$A" == "yes" ]
   then
     echo 'Deactivating maintenance mode and forcing container to stop/ restart...'
-    echo "maintenance" > /opt/iobroker/.docker_config/.healthcheck
+    echo "maintenance" > /opt/scripts/.docker_config/.healthcheck
     pkill -u root
     exit 0
   else

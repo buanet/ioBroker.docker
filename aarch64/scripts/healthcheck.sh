@@ -2,11 +2,11 @@
 
 # Script checks health of running container
 
-if [ "$(cat /opt/iobroker/.docker_config/.healthcheck)" == "starting" ]
+if [ "$(cat /opt/scripts/.docker_config/.healthcheck)" == "starting" ]
 then
   echo 'Health status: OK - Startup script is still running.'
   exit 0
-elif [ "$(cat /opt/iobroker/.docker_config/.healthcheck)" == "maintenance" ]
+elif [ "$(cat /opt/scripts/.docker_config/.healthcheck)" == "maintenance" ]
 then
   echo 'Health status: OK - Container is running in maintenance mode.'
   exit 0
