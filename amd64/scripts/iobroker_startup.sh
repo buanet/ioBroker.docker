@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Setting healthcheck status to "starting"
-echo "starting" > /opt/iobroker/.docker_config/.healthcheck
+echo "starting" > /opt/scripts/.docker_config/.healthcheck
 
 # Reading ENV
 adminport=$IOB_ADMINPORT
@@ -19,21 +19,21 @@ statesdbtype=$IOB_STATESDB_TYPE
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
 
-# Writing necessary ENVs to /opt/iobroker/.docker_config/container.config for using it in other scripts
+# Writing necessary ENVs to /opt/scripts/.docker_config/container.config for using it in other scripts
 
-echo '# Simple config file to store ENVs' > /opt/iobroker/.docker_config/container.config
-echo ' ' >> /opt/iobroker/.docker_config/container.config
+echo '# Simple config file to store ENVs' > /opt/scripts/.docker_config/container.config
+echo ' ' >> /opt/scripts/.docker_config/container.config
 if [ "$multihost" = "" ]
 then
-  echo "multihost=master" >> /opt/iobroker/.docker_config/container.config
+  echo "multihost=master" >> /opt/scripts/.docker_config/container.config
 else
-  echo "multihost=$multihost" >> /opt/iobroker/.docker_config/container.config
+  echo "multihost=$multihost" >> /opt/scripts/.docker_config/container.config
 fi
 if [ "$adminport" = "" ]
 then
-  echo "adminport=8081" >> /opt/iobroker/.docker_config/container.config
+  echo "adminport=8081" >> /opt/scripts/.docker_config/container.config
 else
-  echo "adminport=$adminport" >> /opt/iobroker/.docker_config/container.config
+  echo "adminport=$adminport" >> /opt/scripts/.docker_config/container.config
 fi
 
 # Getting date and time for logging
@@ -200,12 +200,12 @@ echo "Done."
 echo ' '
 
 # Checking for first run of a new installation and renaming ioBroker
-if [ -f /opt/iobroker/.docker_config/.install_host ]
+if [ -f /opt/scripts/.docker_config/.install_host ]
 then
   echo "Looks like this is a new and empty installation of ioBroker."
   echo "Hostname needs to be updated to " $(hostname)"..."
-    bash iobroker host $(cat /opt/iobroker/.docker_config/.install_host)
-    rm -f /opt/iobroker/.docker_config/.install_host
+    bash iobroker host $(cat /opt/scripts/.docker_config/.install_host)
+    rm -f /opt/scripts/.docker_config/.install_host
   echo "Done."
   echo ' '
 elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
@@ -498,7 +498,7 @@ echo "Starting ioBroker..."
 echo ' '
 
 # Setting healthcheck status to "running"
-echo "running" > /opt/iobroker/.docker_config/.healthcheck
+echo "running" > /opt/scripts/.docker_config/.healthcheck
 
 # Function for graceful shutdown by SIGTERM signal
 shut_down() {
