@@ -134,11 +134,14 @@ then
     echo "For more information see readme.md on Github (https://github.com/buanet/docker-iobroker)."
     exit 1
   else
-    echo "IoBroker backup file detected in /opt/iobroker. Restoring ioBroker..."
+    echo "IoBroker backup file detected in /opt/iobroker. Preparing restore..."
       mv /opt/iobroker/*.tar.gz /opt/
       tar -xf /opt/initial_iobroker.tar -C /
       mkdir /opt/iobroker/backups
       mv /opt/*.tar.gz /opt/iobroker/backups/
+      chown -R $setuid:$setgid /opt/iobroker                        # fixes permission error during restore
+    echo "Done."
+    echo "Restoring ioBroker..."
       iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
     echo "Done."
     echo ' '
