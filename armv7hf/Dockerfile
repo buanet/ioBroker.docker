@@ -50,10 +50,14 @@ COPY scripts/iobroker_startup.sh iobroker_startup.sh
 COPY scripts/setup_avahi.sh setup_avahi.sh
 COPY scripts/setup_packages.sh setup_packages.sh
 COPY scripts/setup_zwave.sh setup_zwave.sh
+COPY scripts/healthcheck.sh healthcheck.sh
+COPY scripts/maintenance.sh maintenance.sh
 RUN chmod +x iobroker_startup.sh \
     && chmod +x setup_avahi.sh \
     && chmod +x setup_packages.sh \
-    && chmod +x setup_zwave.sh
+    && chmod +x setup_zwave.sh \
+    && chmod +x healthcheck.sh \
+    && chmod +x maintenance.sh
 WORKDIR /opt/userscripts/
 COPY scripts/userscript_firststart_example.sh userscript_firststart_example.sh
 COPY scripts/userscript_everystart_example.sh userscript_everystart_example.sh
@@ -62,16 +66,15 @@ COPY scripts/userscript_everystart_example.sh userscript_everystart_example.sh
 WORKDIR /
 RUN apt-get update \
     && curl -sL https://iobroker.net/install.sh | bash - \
-    && echo $(hostname) > /opt/iobroker/.install_host \
+    && mkdir -p /opt/scripts/.docker_config/ \
+    && echo $(hostname) > /opt/scripts/.docker_config/.install_host \
+    && echo "starting" > /opt/scripts/.docker_config/.healthcheck \
     && echo $(hostname) > /opt/.firstrun \
     && rm -rf /var/lib/apt/lists/*
 
 # Install node-gyp
 WORKDIR /opt/iobroker/
 RUN npm install -g node-gyp
-
-# Temporary updating js-controller to not stable version
-RUN npm install iobroker.js-controller@3.1.6
 
 # Backup initial ioBroker and userscript folder
 RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker \
@@ -91,6 +94,10 @@ ENV DEBIAN_FRONTEND="teletype" \
     SETGID=1000 \
     SETUID=1000 \
     TZ="Europe/Berlin"
+
+# Healthcheck
+HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
+    CMD ["/bin/bash", "-c", "/opt/scripts/healthcheck.sh"]
 
 # Run startup-script
 ENTRYPOINT ["/bin/bash", "-c", "/opt/scripts/iobroker_startup.sh"]

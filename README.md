@@ -9,30 +9,33 @@
 [![License](https://img.shields.io/github/license/buanet/docker-iobroker)](https://github.com/buanet/docker-iobroker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue)](https://paypal.me/buanet)
 
-IoBroker for Docker is a Docker image for ioBroker IoT platform (http://www.iobroker.net).
+IoBroker for Docker is a ready to use Docker image for ioBroker IoT platform (http://www.iobroker.net).
 
-It was originally created for a Synology Disk Station 1515+ with DSM 6 and official Docker package installed. After more than three years of development it might be the best documented and still maintained Docker image for running ioBroker IoT platform with Docker.
+It was originally created for a Synology Disk Station 1515+ with DSM 6 and official Docker package installed but should run on any other Linux based Docker host too.
+
+After more than three years of development it might be the best documented and still maintained Docker image for running ioBroker IoT platform with Docker.
 
 Since v4.0.0 the image is available for the following architectures: amd64, armv7hf, aarch64.<br>
 If you need more please let me know by opening a Github issue.
 
 ## Important notice
 
-Normally a new major version (e.g. v2, v4, v5) of the image comes with a new, preinstalled major node version!
+In general a new major version (e.g. v2, v4, v5) of the image comes with a new, preinstalled major node version!
 If you are updating an existing installation to a new major version (e.g. from v4 to v5) you have to perform some additional steps inside ioBroker! For more details please see official ioBroker documentation: [EN](https://www.iobroker.net/#en/documentation/install/updatenode.md) | [DE](https://www.iobroker.net/#de/documentation/install/updatenode.md).<br>
 
-You might avoid these procedure if you use my "Best practice" hint for "upgrading your ioBroker container".<br>
+You might avoid these procedure if you use my "Best practice" hint for "upgrading your ioBroker container".
 
 In any case make a backup first!
 
-By the way, a more comfortable way is to use "iobroker backup" to create a full backup of your existing installation and copy it into a empty folder which you will mount to /opt/iobroker when setting up a new container. The startup script will automatically detect the backup file and restore it to the new container. For more details see "Mounting folder/ volume" section of this readme.md file.
-
 ## Getting started
 
-A detailed tutorial (German, based on v3.0.0) can be found here: [https://buanet.de](https://buanet.de/2019/05/iobroker-unter-docker-auf-der-synology-diskstation-v3/). Please notice that the old tutorial is outdated and does no longer work!
+A detailed tutorial (German, based on v3.0.0) can be found here: [https://smarthome.buanet.de](https://smarthome.buanet.de/2019/05/iobroker-unter-docker-auf-der-synology-diskstation-v3/). Please notice that the old tutorial is outdated and does no longer work!
 
-For discussion and support please visit [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial. Please do not contact me directly for any support-reasons. Every support question should be answered in a public place. Thanks in advance.
-If you think you found a bug or simply want to request a new feature please open an issue on Github.
+For discussion and support please visit [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial.
+
+Please do not contact me directly for any support-reasons. Every support question should be answered in a public place so every user can benefit from it . Thanks in advance.
+
+If you think you found a bug or simply want to request a new feature please open an issue on Github so we can talk about.
 
 The following ways to get iobroker-container running are only examples. Maybe you have to change, add or replace parameters to configure ioBroker for fitting your needs.
 
@@ -74,32 +77,34 @@ You do not have to declare every single variable when setting up your container.
 
 **Important: In v4.2.0 the ENVs "ADMINPORT" and "REDIS" were renamed/ reorganized. For Details see the following table!**
 
-|env|default|description|
+|ENV|Default|Description|
 |---|---|---|
 |AVAHI|false|Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"|
 |IOB_ADMINPORT|8081|Sets ioBroker adminport on startup|
-|IOB_MULTIHOST|master|Sets ioBroker instance as "master" or "slave" for multihost (additional config for objectsdb and statesdb needed)|
-|IOB_OBJECTSDB_HOST|127.0.0.1|Sets hostname for ioBroker objects db|
+|IOB_MULTIHOST|[not set]|Sets ioBroker instance as "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)|
+|IOB_OBJECTSDB_HOST|127.0.0.1|Sets host for ioBroker objects db|
 |IOB_OBJECTSDB_PORT|9001|Sets port for ioBroker objects db|
-|IOB_OBJECTSDB_TYPE|file|Sets type of ioBroker objects db, cloud be "file", "redis" or "couch"|
-|IOB_STATESDB_HOST|127.0.0.1|Sets hostname for ioBroker states db|
+|IOB_OBJECTSDB_TYPE|file|Sets type of ioBroker objects db, cloud be "file", "redis" or "couch"<br>(at the moment redis as objects db is [not supported by ioBroker](https://github.com/ioBroker/ioBroker#databases))|
+|IOB_STATESDB_HOST|127.0.0.1|Sets host for ioBroker states db|
 |IOB_STATESDB_PORT|9000|Sets port for ioBroker states db|
 |IOB_STATESDB_TYPE|file|Sets type of ioBroker states db, could be "file" or "redis"|
 |LANG|de_DE.UTF&#x2011;8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
 |LANGUAGE|de_DE:de|The following locales are pre-generated: de_DE:de, en_US:en|
 |LC_ALL|de_DE.UTF-8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
-|PACKAGES|vi|Installs additional packages to your container needed by some adapters, packages should be seperated by whitespace like "package1 package2 package3"|
-|SETGID|1000|For security reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
-|SETUID|1000|For security reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
+|PACKAGES|[not set]|Installs additional linux packages to your container, packages should be seperated by whitespace like this: "package1 package2 package3"|
+|SETGID|1000|For some reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
+|SETUID|1000|For some reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
 |TZ|Europe/Berlin|All valid Linux-timezones|
-|USBDEVICES|none|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" like "/dev/ttyACM0;/dev/ttyACM1"|
+|USBDEVICES|none|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" like this: "/dev/ttyACM0;/dev/ttyACM1"|
 |ZWAVE|false|Will install openzwave to support zwave-adapter, can be "true" or "false"|
 
 ### Mounting folder/ volume
 
 It is possible to mount an empty folder to /opt/iobroker during first startup of the container. The startup script will check this folder and restore content if it is empty.
-Since v4.1.0 it is also possible mount a folder filled up with an iobroker backup file (for example created with backitup adapter) named like this: "iobroker_2020_01_06-01_09_10_backupiobroker.tar.gz".
-The startup script will detect this backup and restore it during the start of the container. Please see container logs when starting the container for more details!
+
+Since v4.1.0 it is also possible mount a folder filled up with an iobroker backup file created using `iobroker backup` command or backitup adapter. Please make sure the name of your backup file ends like this: `*_backupiobroker.tar.gz"`.
+
+The startup script will then detect this backup and restore it during the start of the container. Please see container logs when starting the container for more details!
 
 Note: It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
 
@@ -112,26 +117,45 @@ But watch for the used node version. If the existing installation runs with anot
 
 If you want to use a USB device within ioBroker inside your container don´t forget to [mount the device](https://docs.docker.com/engine/reference/commandline/run/#add-host-device-to-container---device) on container startup and use the environment variable "USBDEVICES".
 
-### Userdefined startup scripts
+### User defined startup scripts
 
-In some cases it might be helpful to add some script code to the startup script of the container. This is now possible by mounting an additional folder to the container and place a userscript in there.
-The folder containing your userscripts must be mounted under /opt/userscripts inside the container. If you mount an empty folder you will get two example scripts to be restored in that folder. Just try it out.
+It is possible to add some script code to container startup with the help of the userscripts feature. You can get this to work by mounting an additional folder to `/opt/userscripts` into the container.
 
-Basically there are two different scripts which will be read and called by the startup script. One that will only be called once at the first start of the container (userscript_firststart.sh) and one which will be called for every start of the container (userscript_everystart.sh).
+When you mount an empty folder the startup script will restore two example scripts in there. To activate the scripts you have to remove the `_example` part of the name. The "userscript_firststart.sh" will execute only at the very first start of a new container, while the "userscript_everystart.sh" will execute on every container start.
 
-Hint:
-To get familiar with that feature try the following: Create a Container, mount an empty folder to /opt/userscripts, start your container. Two scripts will be restored into the empty folder. Rename the example scripts by simply removing "\_example". Restart your container and take a look at the Log. In "Step 4 of 5: Applying special settings" you will see the messages generated by the example userscripts.
+Feel free to test it with my example code. Take a look at the log. In "Step 4 of 5: Applying special settings" you will see the messages generated by the example userscripts.
 
 ### Multihost
 
-Details will follow soon.
+With the help of the ENV "IOB_MULTIHOST" and the ENVs for objects and states db connections (see ENVs table above) it is now possible to run a container as standalone, multihost master or multihost slave. This is more or less a feature for advanced users. Please make sure you know how ioBroker multihost is working and set the ENVs as with `ìobroker setup custom`.
+
+There is no need for executing `iobroker multihost enable` or `iobroker multihost connect` inside the container. Just configure the mentioned ENVs. The startup script will do all the magic.
+
+For general information about iobroker multihost feature please see [official ioBroker documentation](https://www.iobroker.net/docu/index-24.htm?page_id=3068&lang=de).
+
+### Healthcheck
+
+Since v5.1.0 the image contains a simple Docker healthcheck. At the moment it only checks if js-controller is running inside the container and reports "healthy" or "unhealthy" to the Docker daemon. Further development is planned.
+
+The healthcheck is configured to 5 retries in an 15s interval with a timeout of 5s. So a container needs a minimum of one minute to get unhealthy.   
+
+Hint: As the Docker daemon itself gives no opportunity to automatically restart an unhealthy container you might want to setup some kind of "watchdog container" like this simple one: https://github.com/buanet/docker-watchdog.
+
+### Maintenance script (beta)
+
+Within the implementation of the docker health check (above) some manual maintenance actions, like stopping ioBroker for upgrading js-controller, would cause the container to get "unhealthy" and may cause an external watchdog to automatically restart it.
+
+In this case you can use the new maintenance command line tool inside the container. By simply typing `maintenance on` it will activate some kind of "maintenance mode" and automatically stop ioBroker while the container stays healthy.
+
+After your maintenance is done just type `maintenance off`. Depending on the selected restart policy of your container, the command will stop (and automatically restart) it.
 
 ## Best practices
 
-### Avoid using "latest" tag
+### Avoid using "latest" docker tag
 
-To avoid conflicts when upgrading your container or getting in trouble when accidentally upgrading your container to a new major version I prefer using the version tag like "V4.2.0" instead of "latest" for creating your container. Just think about when I tell you it is not possible to download a new image version of a specific tag as long as a container depends on it.<br>
-By the way it also makes it more safe to keep your image up to date by using "watchtower" or something like that.
+To avoid conflicts when upgrading your container or getting in trouble when accidentally upgrading your container to a new major version I prefer using a version docker tag like "v4.2.0" instead of "latest" for creating your container.
+
+With v5.1.0 an additional docker tag "latest-[major version]" is available. This gives you the possibility update your container automatically while always staying in the same major version.
 
 ### Upgrading your container
 
@@ -142,7 +166,7 @@ If you want to upgrade your ioBroker container to a new major version (e.g. from
 * create a new container as your old or as you need it and use the new data folder/ volume for the /opt/iobroker mount point
 * follow the log output of the container and be patient
 
-After this the startup script inside the container will automatically detect and restore your backup to a new ioBroker instance. When iobroker is started after the restore it will install your adapters to the new ioBroker instance by itself. This might take some time but will get you the best and cleanest results...
+After this steps the startup script inside the container will automatically detect and restore your backup to a new ioBroker instance. When iobroker is started after the restore it will install your adapters to the new ioBroker instance by itself. This might take some time but will give you the best and cleanest results...
 
 ## Miscellaneous
 
@@ -152,7 +176,7 @@ If you want to get the newest features and changes feel free to use/ test the be
 
 ### Subscribe to updates
 
-If you want the newest updates about the image and my tutorials at https://buanet.de/tutorials you can simply subscribe to my new "news and updates" channel (only in German) on Telegram.
+If you want the newest updates about the image and my tutorials at https://smarthome.buanet.de you can simply subscribe to my new "news and updates" channel (only in German) on Telegram.
 You will find the channel here: https://t.me/buanet_tutorials
 
 ### Support the project
@@ -163,6 +187,19 @@ And if you want to buy me a beer instead, you can do this here: <a href="https:/
 Thank you!
 
 ## Changelog
+
+### v5.1.0 (2020-11-05)
+* v5.0.2beta (2020-07-28)
+  * added docker tag for majorversion latest
+  * extend readme.md doku
+  * added maintenance script
+  * added container healthcheck
+  * fixed configuration procedure and logging for objects and states db setup
+* v5.0.1beta (2020-07-01)
+  * fixing backup detection in startup script
+  * fixing permission issue on iobroker restored
+  * extended Logging
+  * optimize multihost support
 
 ### v5.0.0 (2020-06-29)
 * v4.2.4beta (2020-06-23)
