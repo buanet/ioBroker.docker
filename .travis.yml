@@ -15,6 +15,7 @@ env:
   - secure: "iqK7JBsQiYceKOvRkmSa6okzXn3BygEPZjffby4agaVCwIt2SYLAcBOisOoKDpyAX+DUWlHz3gITImVa+uIna6Ue7k4C2AGJVDr87G6iq57Tn6yjrfhPs/TW9/CWvKg/G4uvKEnycMiLDXdcctSMwRr3ZwzJEdeEdmNZVsd2LP/5U0I/2K2Io22tNciSKhqlSaIfhK4f6Jk7xffnQFjwy+P9qPN18oI1fDyeHx6ZWyN3YhQQ4eGyxHjxZjlhCxSvu5R4DMf1jFIoLRAr6G5jrQacn0pG8PtBVLoYT4RsPy+fwUtXmnWWjeXK0IrU1njZf/DUteI9xnaDcHzZYj+d7MeSUc6BuWOyx9lO3ZwBWDNycYsKaF5so4RpdzoY/gfJMlK3uWDbADb46dWzPD5gb3pEROKau3fBDHS5eaR5e1Bxzz6FGoYWYfsQHqpg9g7v4BRFq+Jh0+v47fdyMxgK/Nm4+r7+ht77Usu29+X6X8F4iwrBJ/ix5xIf7iMoH/ZGvq6BEKi/1t9zdXMugcWOqwlYx9k6J9bQhBfw8YucLmgl3ynzrPaLlPEpY9cnb7hcOUDZoHI7KK2zF/y3yfNr2BqlRbm39HFWfnwuJPO5VLYGs5QubeVj9u1M+5Qo4erPuQBBc4mHP4eF2PmRA+wiVWki0z+U2skFQppkCfrbH8c="
   - secure: "iqoZUcWgZueNQrNldF/ugwyU1LR5E+doTfjY0exQqAKjntG5n2QqYZ/+dX1gqvkfy1kuMINTBWfqSALbhfTTK7EfUjqmcnaks4CMVZQkhH/FyCOYHqSBSSN7j4XeHt1sXn1FRiSpyrZOUoOuyqoBRe3JoWhdQZAGxNzX3sJllwnKa6M0D6D2l9tUyTWO/jxhgTIoYBSrXvb68ZsCU9jlNBJbylfvEFwuSlwvfa+Mz9vAeCTuza9XDnvcxgwVq3r+YGxfmAhK9fOAvN+lPN+KA0LcIzBaW0sh24voqjfh/pLpsl03zeGNdWzS9r2qYPCP0N3asb5P6CVEbbAGYO1T5PvU78ILXGi4+/x/32O6/I9oXpMVQCFHNn0Gn/8BPRHY4ZOYI9ItnhV9Ncp7hhAWAAqf3KC5GM89l9R5KxFY3bhN/p8nuGresUDU5d57YkaV8rOhPpr0dbAyKFtuzG0+bT1N2ekXyTyMHeAGKiGwfD9bAS4qx6asFO5uw6UriBHNzJ59Cy3GT+W1CctaEuvqJlc6Iqz2KaBozEqnNFcpE2Grny4bzr5fp+b1qCO9TE2LhHU/LR5FTLjQ2wf9/raTM6yboq+guKeXxpySa2w8ABDq0OUAw4mrKqJQJohzBkl3oYTpWUG2JGEyMAJxjkmH0/3GwZESPNLaaYVjQByTDDY="
   - VERSION="$(cat .VERSION)"
+  - MAJORVERSION="$(cat .version | cut -c 1-2 | sed -r 's#^(.{0})#\1latest-#')"
 
 before_install:
   - wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64 -O manifest-tool
@@ -78,11 +79,17 @@ after_success:
       #manifest for image: buanet/iobroker:latest
       cat manifest.yaml | sed "s/\$DOCKERTAG/latest/g" > manifestlatest.yaml
 
+      #manifest for image: buanet/iobroker:latest-majorversion
+      cat manifest.yaml | sed "s/\$DOCKERTAG/${MAJORVERSION}/g" > manifestmajorversion.yaml
+
       #push to hub
       mv manifestversion.yaml iobroker.yaml
       ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
 
       mv manifestlatest.yaml iobroker.yaml
+      ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
+
+      mv manifestmajorversion.yaml iobroker.yaml
       ./manifest-tool --username $HUB_USER --password $HUB_PASS push from-spec iobroker.yaml
     fi
 
