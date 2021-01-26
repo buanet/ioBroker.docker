@@ -64,6 +64,9 @@ services:
       - "8081:8081"
     volumes:
       - iobrokerdata:/opt/iobroker
+
+volumes:
+    iobrokerdata:
 ```
 
 ## Special settings and features
