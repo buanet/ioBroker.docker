@@ -1,12 +1,12 @@
-# ioBroker for Docker
+# Official Docker Image for ioBroker
 
-[![Release](https://img.shields.io/github/v/release/buanet/docker-iobroker)](https://github.com/buanet/docker-iobroker/releases)
+[![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/releases)
 [![Build Status](https://travis-ci.org/buanet/docker-iobroker.svg?branch=master)](https://travis-ci.org/buanet/docker-iobroker)<br>
 [![Image Size](https://img.shields.io/docker/image-size/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
-[![Source](https://img.shields.io/badge/source-github-blue)](https://github.com/buanet/docker-iobroker)
-[![License](https://img.shields.io/github/license/buanet/docker-iobroker)](https://github.com/buanet/docker-iobroker/blob/master/LICENSE.md)
+[![Source](https://img.shields.io/badge/source-github-blue)](https://github.com/buanet/ioBroker.docker)
+[![License](https://img.shields.io/github/license/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue)](https://paypal.me/buanet)
 
 IoBroker for Docker is a ready to use Docker image for ioBroker IoT platform (http://www.iobroker.net).
@@ -172,7 +172,7 @@ After this steps the startup script inside the container will automatically dete
 
 ### Beta testing
 
-If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. You can find the readme.md file for beta versions [here](https://github.com/buanet/docker-iobroker/blob/beta/README.md). Please make sure to read the changelog before testing beta versions.
+If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. You can find the readme.md file for beta versions [here](https://github.com/buanet/ioBroker.docker/blob/beta/README.md). Please make sure to read the changelog before testing beta versions.
 
 ### Subscribe to updates
 
@@ -182,7 +182,7 @@ You will find the channel here: https://t.me/buanet_tutorials
 ### Support the project
 
 The easiest way to support this project is to leave me some likes/ stars on Github and Docker hub!<br>
-If you want to give something back, feel free to take a look into the [open issues](https://github.com/buanet/docker-iobroker/issues) or the [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) and helping me answering questions, fixing bugs or adding new features!<br>
+If you want to give something back, feel free to take a look into the [open issues](https://github.com/buanet/ioBroker.docker/issues) or the [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) and helping me answering questions, fixing bugs or adding new features!<br>
 And if you want to buy me a beer instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://buanet.de/wp-content/uploads/2017/08/pp128.png" height="20" width="20"></a><br>
 Thank you!
 
