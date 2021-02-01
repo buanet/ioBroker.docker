@@ -9,9 +9,9 @@
 [![License](https://img.shields.io/github/license/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue)](https://paypal.me/buanet)
 
-This Image is a ready to use Docker image for ioBroker IoT platform (http://www.iobroker.net).
+This image is a ready to use Docker image for ioBroker IoT platform (http://www.iobroker.net).
 
-It was originally created for running on a Synology Disk Station 1515+ with DSM 6 and official Docker package installed, but should run on any other Linux based Docker host too.
+It was originally created for running on a Synology DiskStation 1515+ with DSM 6 and official Docker package installed, but should run on any other Linux based Docker host too.
 
 After years of development it might be the best documented and maintained Docker image for running ioBroker IoT platform with Docker.
 
