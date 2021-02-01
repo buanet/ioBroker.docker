@@ -1,7 +1,7 @@
 # Official Docker Image for ioBroker
 
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/releases)
-[![Build Status](https://travis-ci.org/buanet/docker-iobroker.svg?branch=master)](https://travis-ci.org/buanet/docker-iobroker)<br>
+[![Build Status](https://travis-ci.org/buanet/ioBroker.docker.svg?branch=master)](https://travis-ci.org/buanet/ioBroker.docker)<br>
 [![Image Size](https://img.shields.io/docker/image-size/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
@@ -9,14 +9,15 @@
 [![License](https://img.shields.io/github/license/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue)](https://paypal.me/buanet)
 
-IoBroker for Docker is a ready to use Docker image for ioBroker IoT platform (http://www.iobroker.net).
+This image is a ready to use Docker image for ioBroker IoT platform (http://www.iobroker.net).
 
-It was originally created for a Synology Disk Station 1515+ with DSM 6 and official Docker package installed but should run on any other Linux based Docker host too.
+It was originally created for running on a Synology DiskStation 1515+ with DSM 6 and official Docker package installed, but should run on any other Linux based Docker host too.
 
-After more than three years of development it might be the best documented and still maintained Docker image for running ioBroker IoT platform with Docker.
+After years of development it might be the best documented and maintained Docker image for running ioBroker IoT platform with Docker.
 
-Since v4.0.0 the image is available for the following architectures: amd64, armv7hf, aarch64.<br>
-If you need more please let me know by opening a Github issue.
+Since v4.0.0 the image is available for the following architectures: amd64, armv7hf, aarch64.
+
+In v5.1.0 it became the official Docker Image for the ioBroker Project.
 
 ## Important notice
 
@@ -188,161 +189,7 @@ Thank you!
 
 ## Changelog
 
-### v5.1.0 (2020-11-05)
-* v5.0.2beta (2020-07-28)
-  * added docker tag for majorversion latest
-  * extend readme.md doku
-  * added maintenance script
-  * added container healthcheck
-  * fixed configuration procedure and logging for objects and states db setup
-* v5.0.1beta (2020-07-01)
-  * fixing backup detection in startup script
-  * fixing permission issue on iobroker restored
-  * extended Logging
-  * optimize multihost support
-
-### v5.0.0 (2020-06-29)
-* v4.2.4beta (2020-06-23)
-  * added graceful shutdown
-  * small fix for GID/UID handling
-  * adding new ENV "IOB_MULTIHOST" for multihost support
-  * small syntax fixes in iobroker_startup.sh
-* v4.2.3beta (2020-06-05)
-  * ~~updating js-controller to not stable version 3.1.5 to fix renaming issue~~ (is stable now)
-* v4.2.2beta (2020-06-03)
-  * ~~workaround for renaming issues on startup~~ (fixed in js-controller)
-* v4.2.1beta (2020-05-10)
-  * using node 12 instead of 10
-  * updated documentation in readme.md
-
-### v4.2.0 (2020-04-14)
-* v4.1.4beta (2020-04-07)
-  * switching base image to buster
-  * optimizing installation of packages defined by ENV "PACKAGES"
-* v4.1.3beta (2020-02-08)
-  * renamed ENV for adminport (new "IOB_ADMINPORT)")
-  * added new ENVs for "iobroker setup custom" (replacing "REDIS")
-  * enhancements in startup script logging
-* v4.1.2beta (2020-02-02)
-  * added feature for running user defined scripts on startup
-  * small fix for permissions issues on some systems
-* v4.1.1beta (2020-01-17)
-  * updated openzwave to version 1.6.1007
-
-### v4.1.0 (2020-01-17)
-* improved readme.md
-* v4.0.3beta (2020-01-06)
-  * added support to restore backup on startup
-  * small fixes according to "docker best practices"
-* v4.0.2beta (2019-12-10)
-  * ~~added env for activating redis~~
-  * enhancements in startup script and docker file
-* v4.0.1beta (2019-11-25)
-  * added env for iobroker admin port
-  * added env for usb-devices (setting permissions)
-  * updateing prerequisites for iobroker installation
-  * some small code fixes
-
-### v4.0.0 (2019-10-25)
-* v3.1.4beta (2019-10-23)
-  * added env for zwave support
-* v3.1.3beta (2019-10-17)
-  * enhanced logging of startup-script
-  * multi arch support (amd64, aarch64, armv7hf)
-* v3.1.2beta (2019-09-03)
-  * using node 10 instead of node 8
-* v3.1.1beta (2019-09-02)
-  * adding env for setting uid/ gid for iobroker-user
-
-### v3.1.0 (2019-08-21)
-* v3.0.3beta (2019-08-21)
-  * switching base image from "debian:latest" to "debian:stretch"
-* v3.0.2beta (2019-06-13)
-  * using gosu instead of sudo
-  * changing output of ioBroker logging
-* v3.0.1beta (2019-05-18)
-  * ~~switching back to iobroker-daemon for startup~~
-
-### v3.0.0 (2019-05-09)
-* v2.0.6beta (2019-04-14)
-  * added some additional logging
-  * fixing some issues for language env
-  * added permission fixing on first start
-* v2.0.5beta (2019-02-09)
-  * added ENV to docker file
-  * added EXPOSE for admin
-  * final testing
-* v2.0.4beta (2019-01-28)
-  * added support for env variables "avahi" and "packages"
-  * moving avahi-daemon installation into avahi startup script
-  * added script for installing optional packages
-  * optimizing logging output
-* v2.0.3beta (2019-01-24)
-  * added support for running ioBroker under iobroker user
-  * optimizing logging output
-  * optimizing scripts
-* v2.0.2beta (2019-01-23)
-  * optimizing and rearranged docker file
-  * changes for new ioBroker install script
-  * added restoring for empty mounted /opt/iobroker folder
-  * some more small fixes
-* v2.0.1beta (2019-01-07)
-  * some changes for supporting other docker-environments than synology ds
-
-### v2.0.0 (2018-12-05)
-* v1.2.2beta (2018-12-05)  
-  * using node8 instead of node6
-  * changes for new iobroker setup
-* v1.2.1beta (2018-09-12)
-  * added support for firetv-adapter
-
-### v1.2.0 (2018-08-21)
-* v1.1.3beta (2018-08-21)
-  * ~~added ffmpeg-package for yahka to support webcams~~
-* v1.1.2beta (2018-04-04)
-  * added ENV for timezone issue
-* v1.1.1beta (2018-03-29)
-  * added wget package
-  * updated readme.md
-
-###  v1.1.0 (2017-12-10)
-* v1.0.2beta (2017-12-10)
-  * changed startup call to fix restart issue
-  * fixed avahi startup issue
-  * fixed hostname issue
-  * added z-wave support
-  * added logging to /opt/scripts/docker_iobroker_log.txt
-* v1.0.1beta (2017-08-25)
-  * fixed locales issue
-
-### v1.0.0 (2017-08-22)
-* moved and renamed iobroker startup script
-* disabled iobroker daemon to (hopefully) fix restart issue
-* added some maintenance scripts
-
-### v0.2.1 (2017-08-16)
-* ~~added libfontconfig package (for iobroker.phantomjs)~~
-* added gnupg2 package as prerequisite for installing node version 6
-
-### v0.2.0 (2017-06-04)
-* fixed startup issue in startup.sh
-* changed node version from 4 to 6
-
-### v0.1.2 (2017-03-14)
-* ~~added libpcap-dev package (for iobroker.amazon-dash)~~
-
-### v0.1.1 (2017-03-10)
-* added git package
-
-### v0.1.0 (2017-03-08)
-* moved avahi-start.sh to seperate directory
-* fixed timezone issue (sets now timezone to Europe/Berlin)
-
-### v0.0.2 (2017-03-06)
-* added support for avahi-daemon (installation and autostart)
-
-### v0.0.1 (2017-01-31)
-* project started / initial release
+Moved to [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
