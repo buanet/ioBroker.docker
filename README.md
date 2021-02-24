@@ -1,11 +1,11 @@
 # Official Docker Image for ioBroker
 
+[![Source](https://img.shields.io/badge/source-github-blue)](https://github.com/buanet/ioBroker.docker)
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/releases)
-[![Build Status](https://travis-ci.org/buanet/ioBroker.docker.svg?branch=master)](https://travis-ci.org/buanet/ioBroker.docker)<br>
-[![Image Size](https://img.shields.io/docker/image-size/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)
+[![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/issues)<br>
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
-[![Source](https://img.shields.io/badge/source-github-blue)](https://github.com/buanet/ioBroker.docker)
 [![License](https://img.shields.io/github/license/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue)](https://paypal.me/buanet)
 
