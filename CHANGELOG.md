@@ -1,5 +1,10 @@
 ## Changelog
 
+### v5.2.0beta (2021-04-02)
+* some renaming to optimize automated build
+* changes in versioning
+* delete travis for automated build
+
 ### v5.1.0 (2020-11-05)
 * v5.0.2beta (2020-07-28)
   * added docker tag for majorversion latest

@@ -1,0 +1,8 @@
+image: buanet/iobroker:$VERSION-arm64v8
+manifests:
+  -
+    image: buanet/iobroker:$VERSION-arm64v8
+    platform:
+      architecture: arm64
+      variant: v8
+      os: linux
