@@ -1,0 +1,8 @@
+image: buanet/iobroker:$VERSION-arm32v7
+manifests:
+  -
+    image: buanet/iobroker:$VERSION-arm32v7
+    platform:
+      architecture: arm
+      variant: v7
+      os: linux

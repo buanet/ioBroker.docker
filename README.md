@@ -1,13 +1,13 @@
 # Official Docker Image for ioBroker
 
-[![Source](https://img.shields.io/badge/source-github-blue)](https://github.com/buanet/ioBroker.docker)
-[![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/releases)
-[![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/issues)<br>
-[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest)](https://hub.docker.com/repository/docker/buanet/iobroker)
-[![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)
-[![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
-[![License](https://img.shields.io/github/license/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
-[![Donate](https://img.shields.io/badge/donate-paypal-blue)](https://paypal.me/buanet)
+[![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
+[![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
+[![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
+[![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
+[![License](https://img.shields.io/github/license/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
+[![Donate](https://img.shields.io/badge/donate-paypal-blue?style=flat)](https://paypal.me/buanet)
 
 This image is a ready to use Docker image for ioBroker IoT platform (http://www.iobroker.net).
 
