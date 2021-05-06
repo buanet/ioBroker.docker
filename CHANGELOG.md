@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v5.2.1beta (2021-05-04)
+* added upgrade parameter to maintenance script
 * added expose for default admin ui port (#172)
 * added shortform for maintenance script
 * v5.2.0beta (2021-04-02)
