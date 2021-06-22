@@ -85,7 +85,7 @@ You do not have to declare every single variable when setting up your container.
 |IOB_MULTIHOST|[not set]|Sets ioBroker instance as "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)|
 |IOB_OBJECTSDB_HOST|127.0.0.1|Sets host for ioBroker objects db|
 |IOB_OBJECTSDB_PORT|9001|Sets port for ioBroker objects db|
-|IOB_OBJECTSDB_TYPE|file|Sets type of ioBroker objects db, cloud be "file", "redis" or "couch"<br>(at the moment redis as objects db is [not supported by ioBroker](https://github.com/ioBroker/ioBroker#databases))|
+|IOB_OBJECTSDB_TYPE|file|Sets type of ioBroker objects db, cloud be "file" or "redis"<br>(at the moment redis as objects db is [not supported by ioBroker](https://github.com/ioBroker/ioBroker#databases))|
 |IOB_STATESDB_HOST|127.0.0.1|Sets host for ioBroker states db|
 |IOB_STATESDB_PORT|9000|Sets port for ioBroker states db|
 |IOB_STATESDB_TYPE|file|Sets type of ioBroker states db, could be "file" or "redis"|
