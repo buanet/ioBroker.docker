@@ -71,6 +71,9 @@ echo "-----         Step 1 of 5: Preparing container         -----"
 echo "$(printf -- '-%.0s' {1..60})"
 echo ' '
 
+# Adding ckeck file for easy docker detection by ioBroker
+echo "$VERSION" > /opt/scripts/.docker_config/.thisisdocker
+
 # Installing additional packages and setting uid/gid
 if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ] || [ -f /opt/.firstrun ]
 then
