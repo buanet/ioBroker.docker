@@ -177,7 +177,7 @@ If you want to switch states db from file to redis on a n existing installation 
 
 ### Detecting this Docker image by ioBroker (feature for adapter developers)
 
-For adapter developers it is now possible to easily detect if ioBroker is running inside the official docker container. Please simply check if the file `/opt/scripts/.docker_config/.thisisdocker"` exists. The content of the file will tell the image version.  
+For adapter developers it is now possible to easily detect if ioBroker is running inside the official docker container. Please simply check if the file `/opt/scripts/.docker_config/.thisisdocker` exists. The content of the file will tell the image version.  
 
 ### Beta testing
 
