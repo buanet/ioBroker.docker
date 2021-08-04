@@ -1,5 +1,35 @@
 #!/bin/bash
 
+# function to display help text
+display_help() {
+  echo "This script is build to manage your ioBroker container!"
+  echo "Usage: maintenance [ COMMAND ] [ OPTIONS ]"
+  echo "       maint [ COMMAND ] [ OPTIONS ]"
+  echo ''
+  echo "COMMANDS"
+  echo "------------------"
+  echo "       status     > gives the current state of maintenance mode"
+  echo "       on         > switches mantenance mode ON"
+  echo "       off        > switches mantenance mode OFF and shuts down/ restarts container"
+  echo "       upgrade    > will put container to maintenance mode and upgrade iobroker"
+  echo ''
+  echo "OPTIONS"
+  echo "------------------"
+  echo "       -h|--help  > shows this help"  
+  echo "       -y|--yes   > confirms the used command without asking"
+  echo ''  
+  exit 0
+}
+
+while getopts h opt
+do
+  case $opt in
+    h | --help)
+      display_help ;;
+  esac
+exit 0;
+done
+
 if [ "$1" == "status" ]
 then
   if [ $(cat /opt/scripts/.docker_config/.healthcheck) == 'maintenance' ]
