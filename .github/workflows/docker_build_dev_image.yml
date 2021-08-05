@@ -43,6 +43,9 @@ jobs:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1.2.0
+        with:
+          image: multiarch/qemu-user-static:register
+          platforms: all
 
       - name: Set up Docker Buildx
         id: buildx
