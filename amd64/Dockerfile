@@ -36,7 +36,7 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash \
     && rm -rf /var/lib/apt/lists/*
 
 # Testing
-RUN setcap 'cap_net_bind_service,cap_net_raw+eip' $(eval readlink -f `which node`)
+RUN cat /proc/self/cgroup
 
 # Generating locales
 RUN sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
