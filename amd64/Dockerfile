@@ -35,6 +35,9 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash \
     && apt-get update && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
+# Testing
+RUN setcap 'cap_net_bind_service,cap_net_raw+eip' $(eval readlink -f `which node`)
+
 # Generating locales
 RUN sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
     && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
