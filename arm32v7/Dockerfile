@@ -5,6 +5,10 @@ LABEL maintainer="Andre Germann" \
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# Workaround for building image with buildx
+RUN ln -s /usr/bin/dpkg-split /usr/sbin/dpkg-split && \
+    ln -s /usr/bin/dpkg-deb /usr/sbin/dpkg-deb
+
 # Install prerequisites (as listed in iobroker installer.sh)
 RUN apt-get update && apt-get install -y \
     acl \
