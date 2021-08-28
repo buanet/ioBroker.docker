@@ -31,15 +31,18 @@ jobs:
           echo "This is the Buildnumber/Timestamp: $DATI"
           echo "dati=$DATI" >> $GITHUB_ENV
           # amd64
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./amd64/scripts/iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./amd64/scripts/iobroker_startup.sh > ./amd64/scripts/iobroker_startup.tmp
+          mv -f ./amd64/scripts/iobroker_startup.tmp ./amd64/scripts/iobroker_startup.sh
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./amd64/Dockerfile > ./amd64/Dockerfile.tmp
           mv -f ./amd64/Dockerfile.tmp ./amd64/Dockerfile
           # arm32v7
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./arm32v7/scripts/iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./arm32v7/scripts/iobroker_startup.sh > ./arm32v7/scripts/iobroker_startup.tmp
+          mv -f ./arm32v7/scripts/iobroker_startup.tmp ./arm32v7/scripts/iobroker_startup.sh
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./arm32v7/Dockerfile > ./arm32v7/Dockerfile.tmp
           mv -f ./arm32v7/Dockerfile.tmp ./arm32v7/Dockerfile
           # arm64v8
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./arm64v8/scripts/iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./arm64v8/scripts/iobroker_startup.sh > ./arm64v8/scripts/iobroker_startup.tmp
+          mv -f ./arm64v8/scripts/iobroker_startup.tmp ./arm64v8/scripts/iobroker_startup.sh
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./arm64v8/Dockerfile > ./arm64v8/Dockerfile.tmp
           mv -f ./arm64v8/Dockerfile.tmp ./arm64v8/Dockerfile
 
