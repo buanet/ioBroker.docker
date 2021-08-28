@@ -76,9 +76,9 @@ jobs:
       - name: Create and push manifests
         run: |
           sed -e "s/\${VERSION}/dev-slim/g" -e "s/\${DOCKERTAG}/dev-slim/g" ./manifest.yml > manifest_dev-slim.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev-slim.yaml
+#          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev-slim.yaml
           sed -e "s/\${VERSION}/dev-slim/g" -e "s/\${DOCKERTAG}/dev-slim/g" ./manifest_ghcr.yml > manifest_ghcr_dev-slim.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev-slim.yaml
+#          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev-slim.yaml
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v3
