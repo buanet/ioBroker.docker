@@ -40,8 +40,11 @@ echo "-----                                                  -----"
 echo "-----                      System                      -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" arch: $(uname -m))" && echo " -----"
 echo "-----                                                  -----"
+echo "-----                   Docker-Image                   -----"
+echo -n "-----               " && echo -n "$(printf "%-10s %-23s" image: ${VERSION})" && echo " -----"
+echo -n "-----               " && echo -n "$(printf "%-10s %-23s" build: ${BUILD})" && echo " -----"
+echo "-----                                                  -----"
 echo "-----                     Versions                     -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" image: $VERSION)" && echo " -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" node: $(node -v))" && echo " -----"
 echo -n "-----               " && echo -n "$(printf "%-10s %-23s" npm: $(npm -v))" && echo " -----"
 echo "-----                                                  -----"
@@ -74,15 +77,27 @@ echo ' '
 # Adding ckeck file for easy docker detection by ioBroker
 echo "$VERSION" > /opt/scripts/.docker_config/.thisisdocker
 
-# Installing additional packages and setting uid/gid
+# Installing/ updating additional packages and setting uid/gid
 if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ] || [ -f /opt/.firstrun ]
 then
+    if [ -f /opt/.firstrun ]
+  then
+    echo "Updating Linux packages on first run..."
+      bash /opt/scripts/setup_packages.sh -update
+    echo "Done."
+    echo ' '
+    echo "Registering maintenance script as command..."
+    echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+    echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+    echo "Done."
+    echo ' '
+  fi
   if [ "$packages" != "" ]
   then
     echo "Installing additional packages is set by ENV."
     echo "The following packages will be installed:" $packages"..."
     echo $packages > /opt/scripts/.packages
-      bash /opt/scripts/setup_packages.sh
+      bash /opt/scripts/setup_packages.sh -install
     echo "Done."
     echo ' '
   fi
@@ -92,14 +107,6 @@ then
     echo "Changing UID to "$setuid" and GID to "$setgid"..."
       usermod -u $setuid iobroker
       groupmod -g $setgid iobroker
-    echo "Done."
-    echo ' '
-  fi
-  if [ -f /opt/.firstrun ]
-  then
-    echo "Registering maintenance script as command."
-    echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
-    echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
     echo "Done."
     echo ' '
   fi

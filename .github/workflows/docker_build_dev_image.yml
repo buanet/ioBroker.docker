@@ -30,10 +30,16 @@ jobs:
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
           echo "This is the Buildnumber/Timestamp: $DATI"
           echo "dati=$DATI" >> $GITHUB_ENV
+          # amd64
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./amd64/scripts/iobroker_startup.sh
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./amd64/Dockerfile > ./amd64/Dockerfile.tmp
           mv -f ./amd64/Dockerfile.tmp ./amd64/Dockerfile
+          # arm32v7
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./arm32v7/scripts/iobroker_startup.sh
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./arm32v7/Dockerfile > ./arm32v7/Dockerfile.tmp
           mv -f ./arm32v7/Dockerfile.tmp ./arm32v7/Dockerfile
+          # arm64v8
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./arm64v8/scripts/iobroker_startup.sh
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./arm64v8/Dockerfile > ./arm64v8/Dockerfile.tmp
           mv -f ./arm64v8/Dockerfile.tmp ./arm64v8/Dockerfile
 
@@ -42,24 +48,12 @@ jobs:
           wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64 -O manifest-tool
           chmod +x manifest-tool
 
-#      - name: Set up QEMU
-#        run: docker run --rm --privileged multiarch/qemu-user-static:register
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1.2.0
 
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1.5.1
-
-      # Just for troubleshooting
-      - name: Inspect builder
-        run: |
-          echo "Name:      ${{ steps.buildx.outputs.name }}"
-          echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
-          echo "Status:    ${{ steps.buildx.outputs.status }}"
-          echo "Flags:     ${{ steps.buildx.outputs.flags }}"
-          echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
 
       - name: Login to DockerHub
         uses: docker/login-action@v1.10.0
