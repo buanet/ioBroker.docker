@@ -35,9 +35,6 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash \
     && apt-get update && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Testing
-RUN cat /proc/self/cgroup
-
 # Generating locales
 RUN sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
     && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
