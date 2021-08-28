@@ -87,7 +87,7 @@ jobs:
         uses: docker/build-push-action@v2.6.1
         with:
           context: ./debian
-          file: ./debian/Dockerfile-arm84v8
+          file: ./debian/Dockerfile-arm64v8
           push: true
           platforms: linux/arm64/v8
           tags: |
