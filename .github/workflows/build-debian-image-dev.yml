@@ -1,5 +1,5 @@
 # Github action to build Docker image from dev branch (tag: dev)
-name: Build debian based image from dev
+name: Build debian based image (dev)
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
       - dev
 
 jobs:
-  bulid-dev:
+  bulid-dev-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo (dev)
@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Build Docker image (slim-amd64)
+      - name: Build Docker image (amd64)
         uses: docker/build-push-action@v2.6.1
         with:
           context: ./debian
@@ -72,12 +72,34 @@ jobs:
             buanet/iobroker:dev-amd64,
             ghcr.io/buanet/iobroker:dev-amd64
 
+      - name: Build Docker image (arm32v7)
+        uses: docker/build-push-action@v2.6.1
+        with:
+          context: ./debian
+          file: ./debian/Dockerfile-arm32v7
+          push: true
+          platforms: linux/arm/v7
+          tags: |
+            buanet/iobroker:dev-arm32v7,
+            ghcr.io/buanet/iobroker:dev-arm32v7
+
+      - name: Build Docker image (arm64v8)
+        uses: docker/build-push-action@v2.6.1
+        with:
+          context: ./debian
+          file: ./debian/Dockerfile-arm84v8
+          push: true
+          platforms: linux/arm64/v8
+          tags: |
+            buanet/iobroker:dev-arm64v8,
+            ghcr.io/buanet/iobroker:dev-arm64v8
+
       - name: Create and push manifests
         run: |
           sed -e "s/\${VERSION}/dev/g" -e "s/\${DOCKERTAG}/dev/g" ./manifest.yml > manifest_dev.yaml
-          #./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev.yaml
           sed -e "s/\${VERSION}/dev/g" -e "s/\${DOCKERTAG}/dev/g" ./manifest_ghcr.yml > manifest_ghcr_dev.yaml
-          #./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev.yaml
+          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev.yaml
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v3
