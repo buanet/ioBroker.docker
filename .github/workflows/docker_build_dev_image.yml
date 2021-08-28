@@ -3,6 +3,7 @@
 name: Build Docker image from dev
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - dev
