@@ -1,7 +1,12 @@
 FROM balenalib/aarch64-debian:buster
 
-LABEL maintainer="Andre Germann" \
-      url="https://buanet.de"
+LABEL org.opencontainers.image.title="ioBroker Docker Image" \
+      org.opencontainers.image.description="Docker image for ioBroker smarthome software" \
+      org.opencontainers.image.authors="info@buanet.de" \
+      org.opencontainers.image.url="https://github.com/buanet/ioBroker.docker" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.created="${DATI}"
+
 
 ENV DEBIAN_FRONTEND noninteractive
 

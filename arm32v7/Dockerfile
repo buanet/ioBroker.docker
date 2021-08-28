@@ -1,14 +1,13 @@
 FROM balenalib/armv7hf-debian:buster
 
-LABEL maintainer="Andre Germann" \
-      url="https://buanet.de"
+LABEL org.opencontainers.image.title="ioBroker Docker Image" \
+      org.opencontainers.image.description="Docker image for ioBroker smarthome software" \
+      org.opencontainers.image.authors="info@buanet.de" \
+      org.opencontainers.image.url="https://github.com/buanet/ioBroker.docker" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.created="${DATI}"
 
 ENV DEBIAN_FRONTEND noninteractive
-
-# Workaround for building image with buildx
-#RUN ln -s /usr/bin/dpkg-split /usr/sbin/dpkg-split && \
-#    ln -s /usr/bin/dpkg-deb /usr/sbin/dpkg-deb && \
-#    ln -s /bin/tar /usr/sbin/tar
 
 # Install prerequisites (as listed in iobroker installer.sh)
 RUN apt-get update && apt-get install -y \
