@@ -1,0 +1,101 @@
+# Github action to build Docker image from dev branch (tag: dev)
+
+name: Build slim image from dev
+
+on:
+  workflow_dispatch:
+#  push:
+#    branches:
+#      - dev
+
+jobs:
+  bulid-dev-slim:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo (dev)
+        uses: actions/checkout@v2.3.4
+        with:
+          repository: 'buanet/ioBroker.docker'
+          ref: 'dev'
+
+      - name: Get and write version and date
+        id: version
+        run: |
+          VERSION="$(cat .VERSION)"
+          MAJORVERSION="$(cat .VERSION | cut -c 1-2 | sed -r 's#^(.{0})#\1latest-#')"
+          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          echo "This is the Version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "This is the Major Version: $MAJORVERSION"
+          echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
+          echo "This is the Buildnumber/Timestamp: $DATI"
+          echo "dati=$DATI" >> $GITHUB_ENV
+          # startup script
+          sed -e "s/\${VERSION}/$VERSION-slim-dev/" -e "s/\${BUILD}/$DATI/" ./slim/scripts/iobroker_startup.sh > ./slim/scripts/iobroker_startup.tmp
+          mv -f ./slim/scripts/iobroker_startup.tmp ./slim/scripts/iobroker_startup.sh
+          # amd64
+          sed -e "s/\${VERSION}/$VERSION-slim-dev/" -e "s/\${DATI}/$DATI/" ./slim/Dockerfile-slim-amd64 > ./slim/Dockerfile-slim-amd64.tmp 
+          mv -f ./slim/Dockerfile-slim-amd64.tmp ./slim/Dockerfile-slim-amd64
+
+      - name: Set up manifest tool
+        run: |
+          wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64 -O manifest-tool
+          chmod +x manifest-tool
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1.2.0
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1.5.1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1.10.0
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1.10.0
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.PACKAGES_USER }}
+          password: ${{ secrets.PACKAGES_PASS }}
+
+      - name: Build Docker image (slim-amd64)
+        uses: docker/build-push-action@v2.6.1
+        with:
+          context: ./slim
+          file: ./slim/Dockerfile-slim-amd64
+          push: true
+          platforms: linux/amd64
+          tags: |
+            buanet/iobroker:dev-slim-amd64,
+            ghcr.io/buanet/iobroker:dev-slim-amd64
+
+      - name: Create and push manifests
+        run: |
+          sed -e "s/\${VERSION}/dev-slim/g" -e "s/\${DOCKERTAG}/dev-slim/g" ./manifest.yml > manifest_dev-slim.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev-slim.yaml
+          sed -e "s/\${VERSION}/dev-slim/g" -e "s/\${DOCKERTAG}/dev-slim/g" ./manifest_ghcr.yml > manifest_ghcr_dev-slim.yaml
+          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev-slim.yaml
+
+      - name: Delete untagged images from GitHub packages
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.PACKAGES_PASS }}
+          script: |
+            const response = await github.request("GET /users/${{ env.OWNER }}/packages/container/${{ env.PACKAGE_NAME }}/versions",
+              { per_page: ${{ env.PER_PAGE }}
+            });
+            for(version of response.data) {
+                if (version.metadata.container.tags.length == 0) {
+                    console.log("delete " + version.id)
+                    const deleteResponse = await github.request("DELETE /user/packages/container/${{ env.PACKAGE_NAME }}/versions/" + version.id, { });
+                    console.log("status " + deleteResponse.status)
+                }
+            }
+        env:
+          OWNER: buanet
+          PACKAGE_NAME: iobroker
+          PER_PAGE: 100      
