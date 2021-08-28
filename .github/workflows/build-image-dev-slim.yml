@@ -1,5 +1,4 @@
 # Github action to build Docker image from dev branch (tag: dev)
-
 name: Build slim image from dev
 
 on:

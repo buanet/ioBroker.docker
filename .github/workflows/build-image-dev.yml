@@ -1,6 +1,5 @@
 # Github action to build Docker image from dev branch (tag: dev)
-
-name: Build Docker image from dev
+name: Build image from dev
 
 on:
   workflow_dispatch:
