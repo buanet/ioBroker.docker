@@ -35,10 +35,10 @@ RUN mkdir -p /opt/scripts/ \
     && chmod 777 /opt/scripts/ \
     && chmod 777 /opt/userscripts/
 WORKDIR /opt/scripts/
-COPY scripts/*.sh *.sh
+COPY scripts/* ./
 RUN chmod +x *.sh
 WORKDIR /opt/userscripts/
-COPY scripts/*.sh *.sh
+COPY scripts/* ./
 RUN chmod +x *.sh
 
 # Install ioBroker
