@@ -1,5 +1,5 @@
 # Github action to build Docker image from dev branch (tag: dev)
-name: Build image from dev
+name: Build debian based image (dev-node14)
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
       - dev
 
 jobs:
-  bulid_dev:
+  bulid-dev-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo (dev)
@@ -29,21 +29,12 @@ jobs:
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
           echo "This is the Buildnumber/Timestamp: $DATI"
           echo "dati=$DATI" >> $GITHUB_ENV
+          # startup script
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
+          mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # amd64
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./amd64/scripts/iobroker_startup.sh > ./amd64/scripts/iobroker_startup.tmp
-          mv -f ./amd64/scripts/iobroker_startup.tmp ./amd64/scripts/iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./amd64/Dockerfile > ./amd64/Dockerfile.tmp
-          mv -f ./amd64/Dockerfile.tmp ./amd64/Dockerfile
-          # arm32v7
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./arm32v7/scripts/iobroker_startup.sh > ./arm32v7/scripts/iobroker_startup.tmp
-          mv -f ./arm32v7/scripts/iobroker_startup.tmp ./arm32v7/scripts/iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./arm32v7/Dockerfile > ./arm32v7/Dockerfile.tmp
-          mv -f ./arm32v7/Dockerfile.tmp ./arm32v7/Dockerfile
-          # arm64v8
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./arm64v8/scripts/iobroker_startup.sh > ./arm64v8/scripts/iobroker_startup.tmp
-          mv -f ./arm64v8/scripts/iobroker_startup.tmp ./arm64v8/scripts/iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./arm64v8/Dockerfile > ./arm64v8/Dockerfile.tmp
-          mv -f ./arm64v8/Dockerfile.tmp ./arm64v8/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./debian/node14/Dockerfile > ./debian/node14/Dockerfile.tmp 
+          mv -f ./debian/node14/Dockerfile.tmp ./debian/node14/Dockerfile
 
       - name: Set up manifest tool
         run: |
@@ -70,45 +61,45 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Build Docker image (amd64)
+      - name: Build Docker image (node14-amd64)
         uses: docker/build-push-action@v2.6.1
         with:
-          context: ./amd64
-          file: ./amd64/Dockerfile
+          context: ./debian
+          file: ./debian/node14/Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
-            buanet/iobroker:dev-amd64,
-            ghcr.io/buanet/iobroker:dev-amd64
+            buanet/iobroker:dev-node14-amd64,
+            ghcr.io/buanet/iobroker:dev-node14-amd64
 
-      - name: Build Docker image (armv32v7)
+      - name: Build Docker image (node14-arm32v7)
         uses: docker/build-push-action@v2.6.1
         with:
-          context: ./arm32v7
-          file: ./arm32v7/Dockerfile
+          context: ./debian
+          file: ./debian/node14/Dockerfile
           push: true
           platforms: linux/arm/v7
           tags: |
-            buanet/iobroker:dev-arm32v7,
-            ghcr.io/buanet/iobroker:dev-arm32v7
+            buanet/iobroker:dev-node14-arm32v7,
+            ghcr.io/buanet/iobroker:dev-node14-arm32v7
 
-      - name: Build Docker image (arm64v8)
+      - name: Build Docker image (node14-arm64v8)
         uses: docker/build-push-action@v2.6.1
         with:
-          context: ./arm64v8
-          file: ./arm64v8/Dockerfile
+          context: ./debian
+          file: ./debian/node14/Dockerfile
           push: true
-          platforms: linux/arm64
+          platforms: linux/arm64/v8
           tags: |
-            buanet/iobroker:dev-arm64v8,
-            ghcr.io/buanet/iobroker:dev-arm64v8
+            buanet/iobroker:dev-node14-arm64v8,
+            ghcr.io/buanet/iobroker:dev-node14-arm64v8
 
       - name: Create and push manifests
         run: |
-          sed -e "s/\${VERSION}/dev/g" -e "s/\${DOCKERTAG}/dev/g" ./manifest.yml > manifest_dev.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev.yaml
-          sed -e "s/\${VERSION}/dev/g" -e "s/\${DOCKERTAG}/dev/g" ./manifest_ghcr.yml > manifest_ghcr_dev.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev.yaml
+          sed -e "s/\${VERSION}/dev-node14/g" -e "s/\${DOCKERTAG}/dev-node14/g" ./manifest.yml > manifest_dev-node14.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev-node14.yaml
+          sed -e "s/\${VERSION}/dev-node14/g" -e "s/\${DOCKERTAG}/dev-node14/g" ./manifest_ghcr.yml > manifest_ghcr_dev-node14.yaml
+          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev-node14.yaml
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v3
