@@ -24,54 +24,54 @@ dati=`date '+%Y-%m-%d %H:%M:%S'`
 
 # Logging header
 echo ' '
-echo "$(printf -- '-%.0s' {1..60})"
-echo -n "$(printf -- '-%.0s' {1..15})" && echo -n "     "$dati"      " && echo "$(printf -- '-%.0s' {1..15})"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo -n "$(printf -- '-%.0s' {1..25})" && echo -n "     "$dati"      " && echo "$(printf -- '-%.0s' {1..25})"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----       Welcome to your ioBroker-container!        -----"
-echo "-----          Startupscript is now running.           -----"
-echo "-----                Please be patient!                -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                 Welcome to your ioBroker-container!                  -----"
+echo "-----                    Startupscript is now running.                     -----"
+echo "-----                          Please be patient!                          -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----              Debugging information               -----"
-echo "-----                                                  -----"
-echo "-----                      System                      -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" arch: $(uname -m))" && echo " -----"
-echo "-----                                                  -----"
-echo "-----                   Docker-Image                   -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" image: ${VERSION})" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" build: ${BUILD})" && echo " -----"
-echo "-----                                                  -----"
-echo "-----                     Versions                     -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" node: $(node -v))" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" npm: $(npm -v))" && echo " -----"
-echo "-----                                                  -----"
-echo "-----                       ENV                        -----"
-if [ "$adminport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
-if [ "$avahi" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" AVAHI: $avahi)" && echo " -----"; fi
-if [ "$multihost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_MULTIHOST: $multihost)" && echo " -----"; fi
-if [ "$objectsdbhost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
-if [ "$objectsdbport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
-if [ "$objectsdbtype" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
-if [ "$packages" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $packages)" && echo " -----"; fi
-if [ "$setgid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETGID: $setgid)" && echo " -----"; fi
-if [ "$setuid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETUID: $setuid)" && echo " -----"; fi
-if [ "$statesdbhost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_HOST: $statesdbhost)" && echo " -----"; fi
-if [ "$statesdbport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_PORT: $statesdbport)" && echo " -----"; fi
-if [ "$statesdbtype" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
-if [ "$usbdevices" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" USBDEVICES: $usbdevices)" && echo " -----"; fi
-if [ "$zwave" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $zwave)" && echo " -----"; fi
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                        Debugging information                         -----"
+echo "-----                                                                      -----"
+echo "-----                                System                                -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" arch: $(uname -m))" && echo " -----"
+echo "-----                                                                      -----"
+echo "-----                             Docker-Image                             -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" image: ${VERSION})" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" build: ${BUILD})" && echo " -----"
+echo "-----                                                                      -----"
+echo "-----                               Versions                               -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" node: $(node -v))" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" npm: $(npm -v))" && echo " -----"
+echo "-----                                                                      -----"
+echo "-----                                 ENV                                  -----"
+if [ "$adminport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
+if [ "$avahi" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" AVAHI: $avahi)" && echo " -----"; fi
+if [ "$multihost" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_MULTIHOST: $multihost)" && echo " -----"; fi
+if [ "$objectsdbhost" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
+if [ "$objectsdbport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
+if [ "$objectsdbtype" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
+if [ "$packages" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES: $packages)" && echo " -----"; fi
+if [ "$setgid" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: $setgid)" && echo " -----"; fi
+if [ "$setuid" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: $setuid)" && echo " -----"; fi
+if [ "$statesdbhost" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_HOST: $statesdbhost)" && echo " -----"; fi
+if [ "$statesdbport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PORT: $statesdbport)" && echo " -----"; fi
+if [ "$statesdbtype" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
+if [ "$usbdevices" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" USBDEVICES: $usbdevices)" && echo " -----"; fi
+if [ "$zwave" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" ZWAVE: $zwave)" && echo " -----"; fi
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 #####
 # STEP 1 - Preparing container
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----         Step 1 of 5: Preparing container         -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                  Step 1 of 5: Preparing container                   -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 # Adding ckeck file for easy docker detection by ioBroker
@@ -122,9 +122,9 @@ cd /opt/iobroker
 #####
 # Detecting ioBroker-Installation
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----   Step 2 of 5: Detecting ioBroker installation   -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----             Step 2 of 5: Detecting ioBroker installation             -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 if [ `find /opt/iobroker -type f | wc -l` -lt 1 ]
@@ -176,9 +176,9 @@ echo ' '
 #####
 # Checking ioBroker-Installation
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----   Step 3 of 5: Checking ioBroker installation    -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----             Step 3 of 5: Checking ioBroker installation              -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 # (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
@@ -218,9 +218,9 @@ fi
 #####
 # Setting up prerequisites for some ioBroker-adapters
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----      Step 4 of 5: Applying special settings      -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                Step 4 of 5: Applying special settings                -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 echo "Some adapters have special requirements/ settings which can be activated by the use of environment variables."
@@ -487,9 +487,9 @@ fi
 #####
 # Starting ioBroker
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----          Step 5 of 5: ioBroker startup           -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                    Step 5 of 5: ioBroker startup                     -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 echo "Starting ioBroker..."
 echo ' '

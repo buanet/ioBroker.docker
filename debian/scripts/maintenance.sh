@@ -4,9 +4,7 @@
 ##### default settings #####
 ############################
 
-autoconfirm=no              # yould be set to true by commandline option
-switch=none
-
+autoconfirm=no              # could be set to true by commandline option
 
 ####################################
 ##### declaration of functions #####
@@ -86,17 +84,33 @@ switch_on() {
 
 # turn maintenance mode OFF
 switch_off() {
-  echo 'You are now going to deactivate maintenance mode for this container.'
-  echo 'Depending on the restart policy, your container will be stopped/ restarted immediately.'
-  read -p 'Do you want to continue [yes/no]? ' A
-  if [ "$A" == "y" ] || [ "$A" == "Y" ] || [ "$A" == "yes" ]
+  if [ $(cat /opt/scripts/.docker_config/.healthcheck) == 'maintenance' ] && [ "$autoconfirm" == "no" ] # maintenance mode ON / autoconfirm = no
   then
+    echo 'You are now going to deactivate maintenance mode for this container.'
+    echo 'Depending on the restart policy, your container will be stopped/ restarted immediately.'
+    read -p 'Do you want to continue [yes/no]? ' A
+    if [ "$A" == "y" ] || [ "$A" == "Y" ] || [ "$A" == "yes" ]
+    then
+      echo 'Deactivating maintenance mode and forcing container to stop/ restart...'
+      echo "stopping" > /opt/scripts/.docker_config/.healthcheck
+      pkill -u root
+      echo 'Done.'
+      exit 0
+    else
+      exit 0
+    fi
+  elif [ $(cat /opt/scripts/.docker_config/.healthcheck) == 'maintenance' ] && [ "$autoconfirm" == "yes" ] # maintenance mode ON / autoconfirm = yes
+  then
+    echo 'You are now going to deactivate maintenance mode for this container.'
+    echo 'Depending on the restart policy, your container will be stopped/ restarted immediately.'
+    echo 'This command was already confirmed by -y or --yes option.'
     echo 'Deactivating maintenance mode and forcing container to stop/ restart...'
     echo "stopping" > /opt/scripts/.docker_config/.healthcheck
     pkill -u root
+    echo 'Done.'
     exit 0
   else
-    exit 0
+    echo 'Maintenance mode is already turned OFF.'
   fi
 }
 
@@ -147,22 +161,27 @@ for i in $reverse; do
   case $i in
     help|-h|--help)
       display_help        # calling function to display help text
-      exit
+      break
       ;;
     status)
       check_status        # calling function to check maintenance mode status
+      break
       ;;
     on)
       switch_on           # calling function to switch maintenance mode on
+      break
       ;;
     off)
       switch_off          # calling function to switch maintenance mode off
+      break
       ;;
     upgrade)
       upgrade             # calling function to upgrade js-controller
+      break
       ;;
     -y|--yes)
       autoconfirm=yes     # setting autoconfrm option to "yes"
+      shift
       ;;
     -a=*|--argument=*)    # dummy exaple for parsing option with value
       ARGUMENT="${i#*=}"
