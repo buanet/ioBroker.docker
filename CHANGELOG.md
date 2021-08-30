@@ -1,11 +1,13 @@
 ## Changelog
 
 ### * v5.2.0-beta2 (2021-08-28)
+* redesign maintenance script
+* switching amd64 base image to debian bullseye slim 
 * optimizing log output
 * adding labels in OCI standard format
 * adding packages update on first start
 * adding file for docker detection by ioBroker adapters
-* adding best practice for states db migation
+* adding best practice for states db migation in readme
 * removing couchdb option for states db (no longer supported)
 * v5.2.0-beta1 (2021-05-04)
   * added upgrade parameter to maintenance script

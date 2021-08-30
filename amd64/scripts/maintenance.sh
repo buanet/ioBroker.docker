@@ -129,9 +129,39 @@ upgrade() {
   fi
 }
 
-##############################
-##### parsing parameters #####
-##############################
+########################################
+##### parsing commands and options #####
+########################################
+
+for i in "$@"; do
+  case $i in
+    help|-h|--help)
+      display_help        # calling function to display help text
+      exit
+      ;;
+    status)
+      check_status        # calling function to check maintenance mode status
+      ;;
+    -y|--yes)
+      autoconfirm=yes     # answers prompts with "yes"
+      ;;
+    on|-on)
+      switch_on           # calling function to switch maintenance mode on
+      exit
+      ;;
+    -a=*|--argument=*)    # dummy exaple for parsing option with value
+      ARGUMENT="${i#*=}"
+      shift
+      ;;
+    -?*)
+      printf 'WARN: Unknown option (ignored): %s\n' "$1"
+      ;;
+    *)                    # Default case: No more options, so break out of the loop.
+      break
+      ;;
+  esac
+done
+
 while :; do
   case $1 in
     -h|--help)
