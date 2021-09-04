@@ -2,7 +2,6 @@
 name: Build debian based image (beta-node14)
 
 on:
-  workflow_dispatch:
   pull_request:
     branches:
       - beta
@@ -10,6 +9,7 @@ on:
       - closed
   schedule:
     - cron: '42 3 * * 1'
+  workflow_dispatch:
 
 jobs:
   bulid-beta-node14-image:
@@ -104,9 +104,9 @@ jobs:
           ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_beta-node14.yaml
           sed -e "s/\${VERSION}/${{ env.version }}-node14/g" -e "s/\${DOCKERTAG}/beta-node14/g" ./manifest_ghcr.yml > manifest_ghcr_beta-node14.yaml
           ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_beta-node14.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}-node14/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest.yml > manifest_version-node14.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}-node14/g" -e "s/\${DOCKERTAG}/${{ env.version }}-node14/g" ./manifest.yml > manifest_version-node14.yaml
           ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_version-node14.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}-node14/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest_ghcr.yml > manifest_ghcr_version-node14.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}-node14/g" -e "s/\${DOCKERTAG}/${{ env.version }}-node14/g" ./manifest_ghcr.yml > manifest_ghcr_version-node14.yaml
           ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_version-node14.yaml
 
       - name: Delete untagged images from GitHub packages

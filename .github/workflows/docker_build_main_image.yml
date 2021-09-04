@@ -3,9 +3,10 @@
 name: Build Docker image from main
 
 on:
-  release:
-    types:
-      - published
+  workflow_dispatch:
+  #release:
+  #  types:
+  #    - published
       
 jobs:
   bulid_latest:
