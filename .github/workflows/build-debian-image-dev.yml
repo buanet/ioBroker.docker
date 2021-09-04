@@ -8,7 +8,7 @@ on:
       - dev
 
 jobs:
-  bulid-dev-node14-image:
+  bulid-dev-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo (dev)

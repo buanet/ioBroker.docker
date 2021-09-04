@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.title="ioBroker Docker Image" \
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install prerequisites
+# Install prerequisites (including node) and generating locales
 RUN apt-get update && apt-get install -y \
     curl \
     gosu \
@@ -19,17 +19,14 @@ RUN apt-get update && apt-get install -y \
     sudo \
     udev \
     wget \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install node
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash \
+    # Generating locales
+    && sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
+    && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+    && locale-gen \
+    # Install node
+    && curl -sL https://deb.nodesource.com/setup_12.x | bash \
     && apt-get update && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
-
-# Generating locales
-RUN sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
-    && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
-    && locale-gen
 
 # Create scripts directorys and copy scripts
 RUN mkdir -p /opt/scripts/ \
@@ -40,7 +37,7 @@ WORKDIR /opt/scripts/
 COPY scripts/* ./
 RUN chmod +x *.sh
 WORKDIR /opt/userscripts/
-COPY scripts/* ./
+COPY userscripts/* ./
 RUN chmod +x *.sh
 
 # Install ioBroker
@@ -51,11 +48,10 @@ RUN apt-get update \
     && echo $(hostname) > /opt/scripts/.docker_config/.install_host \
     && echo "starting" > /opt/scripts/.docker_config/.healthcheck \
     && echo $(hostname) > /opt/.firstrun \
+    # Backup initial ioBroker and userscript folder
+    && tar -cf /opt/initial_iobroker.tar /opt/iobroker \
+    && tar -cf /opt/initial_userscripts.tar /opt/userscripts \
     && rm -rf /var/lib/apt/lists/*
-
-# Backup initial ioBroker and userscript folder
-RUN tar -cf /opt/initial_iobroker.tar /opt/iobroker \
-    && tar -cf /opt/initial_userscripts.tar /opt/userscripts
 
 # Setting up iobroker-user (shell and home directory)
 RUN chsh -s /bin/bash iobroker \
@@ -63,7 +59,7 @@ RUN chsh -s /bin/bash iobroker \
     && usermod -u 1000 iobroker \
     && groupmod -g 1000 iobroker
 
-# Setting up ENVs
+# Setting up default ENVs
 ENV DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \

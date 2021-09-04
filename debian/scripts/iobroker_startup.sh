@@ -75,12 +75,12 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 # Adding ckeck file for easy docker detection by ioBroker
-echo "$VERSION" > /opt/scripts/.docker_config/.thisisdocker
+echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker
 
-# Installing/ updating additional packages and setting uid/gid
+# Installing/updating additional packages, registering maintenance script and setting uid/gid
 if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ] || [ -f /opt/.firstrun ]
 then
-    if [ -f /opt/.firstrun ]
+  if [ -f /opt/.firstrun ]
   then
     echo "Updating Linux packages on first run..."
       bash /opt/scripts/setup_packages.sh -update
@@ -120,7 +120,7 @@ cd /opt/iobroker
 
 
 #####
-# Detecting ioBroker-Installation
+# STEP 2 - Detecting ioBroker-Installation
 #####
 echo "$(printf -- '-%.0s' {1..80})"
 echo "-----             Step 2 of 5: Detecting ioBroker installation             -----"
@@ -131,6 +131,8 @@ if [ `find /opt/iobroker -type f | wc -l` -lt 1 ]
 then
   echo "There is no data detected in /opt/iobroker. Restoring initial ioBroker installation..."
     tar -xf /opt/initial_iobroker.tar -C /
+    # Removing UUID generated on docker image build
+    iobroker unsetup 
   echo "Done."
 elif [ -f /opt/iobroker/iobroker ]
 then
@@ -167,14 +169,14 @@ then
   fi
 else
   echo "There is data detected in /opt/iobroker but it looks like it is no instance of ioBroker or a valid backup file!"
-  echo "Please check/ recreate mounted folder/ volume and start over."
+  echo "Please check/ recreate mounted folder or volume and start over."
   exit 1
 fi
 echo ' '
 
 
 #####
-# Checking ioBroker-Installation
+# STEP 3 - Checking ioBroker-Installation
 #####
 echo "$(printf -- '-%.0s' {1..80})"
 echo "-----             Step 3 of 5: Checking ioBroker installation              -----"
@@ -196,16 +198,8 @@ echo "Fixing \"sudo-bug\" by replacing sudo in iobroker with gosu..."
 echo "Done."
 echo ' '
 
-# Checking for first run of a new installation and renaming ioBroker
-if [ -f /opt/scripts/.docker_config/.install_host ]
-then
-  echo "Looks like this is a new and empty installation of ioBroker."
-  echo "Hostname needs to be updated to " $(hostname)"..."
-    bash iobroker host $(cat /opt/scripts/.docker_config/.install_host)
-    rm -f /opt/scripts/.docker_config/.install_host
-  echo "Done."
-  echo ' '
-elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
+# checking hostname in ioBroker to match container hostname
+if [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
 then
   echo "Hostname in ioBroker does not match the hostname of this container."
   echo "Updating hostname to " $(hostname)"..."
@@ -214,9 +208,27 @@ then
   echo ' '
 fi
 
+# Checking for first run of a new installation and renaming ioBroker
+#if [ -f /opt/scripts/.docker_config/.install_host ]
+#then
+#  echo "Looks like this is a new and empty installation of ioBroker."
+#  echo "Hostname needs to be updated to " $(hostname)"..."
+#    bash iobroker host $(cat /opt/scripts/.docker_config/.install_host)
+#    rm -f /opt/scripts/.docker_config/.install_host
+#  echo "Done."
+#  echo ' '
+#elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
+#then
+#  echo "Hostname in ioBroker does not match the hostname of this container."
+#  echo "Updating hostname to " $(hostname)"..."
+#    bash iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+#  echo "Done."
+#  echo ' '
+#fi
+
 
 #####
-# Setting up prerequisites for some ioBroker-adapters
+# STEP 4 - Setting up prerequisites for some ioBroker-adapters
 #####
 echo "$(printf -- '-%.0s' {1..80})"
 echo "-----                Step 4 of 5: Applying special settings                -----"
@@ -485,7 +497,7 @@ rm -f /opt/.firstrun
 fi
 
 #####
-# Starting ioBroker
+# STEP 5 - Starting ioBroker
 #####
 echo "$(printf -- '-%.0s' {1..80})"
 echo "-----                    Step 5 of 5: ioBroker startup                     -----"

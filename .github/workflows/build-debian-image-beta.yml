@@ -1,21 +1,25 @@
-# Github action to build Docker image from dev branch (tag: dev)
-name: Build debian based image (dev-node14)
+# Github action to build Docker image from beta branch (tag: beta)
+name: Build debian based image (beta)
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
-      - dev
+      - beta
+    types:
+      - closed
+    schedule:
+    - cron: '42 3 * * 1'
 
 jobs:
-  bulid-dev-node14-image:
+  bulid-beta-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo (dev)
+      - name: Checkout repo (beta)
         uses: actions/checkout@v2.3.4
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: 'dev'
+          ref: 'beta'
 
       - name: Get and write version and date
         id: version
@@ -30,11 +34,11 @@ jobs:
           echo "This is the Buildnumber/Timestamp: $DATI"
           echo "dati=$DATI" >> $GITHUB_ENV
           # startup script
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
           mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # amd64
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./debian/node14/Dockerfile > ./debian/node14/Dockerfile.tmp 
-          mv -f ./debian/node14/Dockerfile.tmp ./debian/node14/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node12/Dockerfile > ./debian/node12/Dockerfile.tmp 
+          mv -f ./debian/node12/Dockerfile.tmp ./debian/node12/Dockerfile
 
       - name: Set up manifest tool
         run: |
@@ -61,45 +65,49 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Build Docker image (node14-amd64)
+      - name: Build Docker image (amd64)
         uses: docker/build-push-action@v2.6.1
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/node12/Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
-            buanet/iobroker:dev-node14-amd64,
-            ghcr.io/buanet/iobroker:dev-node14-amd64
+            buanet/iobroker:${{ env.version }}-amd64,
+            ghcr.io/buanet/iobroker:${{ env.version }}-amd64
 
-      - name: Build Docker image (node14-arm32v7)
+      - name: Build Docker image (arm32v7)
         uses: docker/build-push-action@v2.6.1
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/node12/Dockerfile
           push: true
           platforms: linux/arm/v7
           tags: |
-            buanet/iobroker:dev-node14-arm32v7,
-            ghcr.io/buanet/iobroker:dev-node14-arm32v7
+            buanet/iobroker:${{ env.version }}-arm32v7,
+            ghcr.io/buanet/iobroker:${{ env.version }}-arm32v7
 
-      - name: Build Docker image (node14-arm64v8)
+      - name: Build Docker image (arm64v8)
         uses: docker/build-push-action@v2.6.1
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/node12/Dockerfile
           push: true
           platforms: linux/arm64/v8
           tags: |
-            buanet/iobroker:dev-node14-arm64v8,
-            ghcr.io/buanet/iobroker:dev-node14-arm64v8
+            buanet/iobroker:${{ env.version }}-arm64v8,
+            ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8
 
       - name: Create and push manifests
         run: |
-          sed -e "s/\${VERSION}/dev-node14/g" -e "s/\${DOCKERTAG}/dev-node14/g" ./manifest.yml > manifest_dev-node14.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev-node14.yaml
-          sed -e "s/\${VERSION}/dev-node14/g" -e "s/\${DOCKERTAG}/dev-node14/g" ./manifest_ghcr.yml > manifest_ghcr_dev-node14.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev-node14.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/beta/g" ./manifest.yml > manifest_beta.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_beta.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/beta/g" ./manifest_ghcr.yml > manifest_ghcr_beta.yaml
+          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_beta.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest.yml > manifest_version.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_version.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest_ghcr.yml > manifest_ghcr_version.yaml
+          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_version.yaml
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v3
