@@ -129,10 +129,11 @@ echo ' '
 
 if [ `find /opt/iobroker -type f | wc -l` -lt 1 ]
 then
-  echo "There is no data detected in /opt/iobroker. Restoring initial ioBroker installation..."
+  echo "There is no data detected in /opt/iobroker."
+  echo "Restoring initial ioBroker installation..."
     tar -xf /opt/initial_iobroker.tar -C /
     # Removing UUID generated on docker image build
-    iobroker unsetup 
+    bash iobroker unsetup -y
   echo "Done."
 elif [ -f /opt/iobroker/iobroker ]
 then
@@ -147,15 +148,22 @@ then
     echo "For more information see readme.md on Github (https://github.com/buanet/ioBroker.docker)."
     exit 1
   else
-    echo "IoBroker backup file detected in /opt/iobroker. Preparing restore..."
+    echo "IoBroker backup file detected in /opt/iobroker."
+    echo "Preparing restore..."
       mv /opt/iobroker/*.tar.gz /opt/
       tar -xf /opt/initial_iobroker.tar -C /
       mkdir /opt/iobroker/backups
       mv /opt/*.tar.gz /opt/iobroker/backups/
-      chown -R $setuid:$setgid /opt/iobroker                        # fixes permission error during restore
+      # fixing permission errors during restore
+      chown -R $setuid:$setgid /opt/iobroker
     echo "Done."
     echo "Restoring ioBroker..."
-      iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
+      bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
+      # fixing hostname issues when restoring on different host - open issue https://github.com/ioBroker/ioBroker.js-controller/issues/1450
+      #if [ $(jq -r .system.hostname ./iobroker-data/iobroker.json) != $(hostname) ]
+      #then
+      #  bash iobroker host $(jq -r .system.hostname ./iobroker-data/iobroker.json)
+      #fi
     echo "Done."
     echo ' '
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
