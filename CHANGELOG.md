@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v5.2.0-beta3 (2021-09-04)
+* changes for backitup compatibility
 * reducing layers in dockerfile
 * making hostname check mandatory for startup
 * optimize startup log
