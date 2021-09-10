@@ -1,9 +1,12 @@
 FROM debian:bullseye-slim
 
-LABEL org.opencontainers.image.title="ioBroker Docker Image" \
-      org.opencontainers.image.description="Docker image for ioBroker smarthome software" \
-      org.opencontainers.image.authors="info@buanet.de" \
+LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
+      org.opencontainers.image.description="Officical Docker image for ioBroker smarthome software (https://www.iobroker.net)" \
+      org.opencontainers.image.documentation="https://github.com/buanet/ioBroker.docker#readme" \
+      org.opencontainers.image.authors="André Germann <info@buanet.de>" \
       org.opencontainers.image.url="https://github.com/buanet/ioBroker.docker" \
+      org.opencontainers.image.source="https://github.com/buanet/ioBroker.docker" \
+      org.opencontainers.image.base.name="docker.io/library/debian:bullseye-slim" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.created="${DATI}"
 
@@ -53,11 +56,13 @@ RUN apt-get update \
     && tar -cf /opt/initial_userscripts.tar /opt/userscripts \
     && rm -rf /var/lib/apt/lists/*
 
-# Setting up iobroker-user (shell and home directory)
+# Setting up iobroker-user (shell, home dir and rights)
 RUN chsh -s /bin/bash iobroker \
     && usermod --home /opt/iobroker iobroker \
     && usermod -u 1000 iobroker \
-    && groupmod -g 1000 iobroker
+    && groupmod -g 1000 iobroker \
+    && chown root:iobroker /usr/sbin/gosu \
+    && chmod +s /usr/sbin/gosu
 
 # Setting up default ENVs
 ENV DEBIAN_FRONTEND="teletype" \
@@ -70,6 +75,9 @@ ENV DEBIAN_FRONTEND="teletype" \
 
 # Expose default admin ui port
 EXPOSE 8081
+
+# Change work dir
+WORKDIR /opt/iobroker/
 
 # Healthcheck
 HEALTHCHECK --interval=15s --timeout=5s --retries=5 \

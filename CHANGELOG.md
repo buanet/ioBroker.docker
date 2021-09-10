@@ -1,10 +1,14 @@
 ## Changelog
 
-### v5.2.0-beta3 (2021-09-04)
-* changes for backitup compatibility
-* reducing layers in dockerfile
-* making hostname check mandatory for startup
-* optimize startup log
+### v5.2.0-beta4 (2021-09-10)
+* adding iobroker user rights for "gosu"
+* adding more labels in OCI standard format
+* fixing workdir bug
+* adding backitup compatibility 
+* v5.2.0-beta3 (2021-09-04)
+  * reducing layers in dockerfile
+  * making hostname check mandatory for startup
+  * optimize startup log
 * v5.2.0-beta2 (2021-08-28)
   * redesign maintenance script
   * switching amd64 base image to debian bullseye slim 
