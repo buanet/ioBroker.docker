@@ -5,6 +5,7 @@
 ############################
 
 autoconfirm=no              # could be set to true by commandline option
+killbyname=no               # could be set to true by commandline option / undocumented, only for use with backitup restore scripts
 
 ####################################
 ##### declaration of functions #####
@@ -46,7 +47,19 @@ check_status() {
 
 # turn maintenance mode ON
 switch_on() {
-  if [ $(cat /opt/scripts/.docker_config/.healthcheck) != 'maintenance' ] && [ "$autoconfirm" == "no" ] # maintenance mode OFF / autoconfirm = no
+  if [ $(cat /opt/scripts/.docker_config/.healthcheck) != 'maintenance' ] && [ "$killbyname" == "yes" ] # maintenance mode OFF / killbyname = yes  / undocumented, only for use with backitup restore scripts
+  then
+    echo 'This command will activate maintenance mode and stop all node processes.'
+    echo 'Activating maintenance mode...'
+    echo "maintenance" > /opt/scripts/.docker_config/.healthcheck
+    sleep 1
+    echo 'Done.'
+    echo 'Stopping ioBroker...'
+    pkill node
+    sleep 1
+    echo 'Done.'
+    exit 0
+  elif [ $(cat /opt/scripts/.docker_config/.healthcheck) != 'maintenance' ] && [ "$autoconfirm" == "no" ] # maintenance mode OFF / autoconfirm = no
   then
     echo 'You are now going to stop ioBroker and activating maintenance mode for this container.'
     read -p 'Do you want to continue [yes/no]? ' A
@@ -181,6 +194,10 @@ for i in $reverse; do
       ;;
     -y|--yes)
       autoconfirm=yes     # setting autoconfrm option to "yes"
+      shift
+      ;;
+    -kbn|--killbyname)
+      killbyname=yes     # setting killbyname option to "yes"
       shift
       ;;
     -a=*|--argument=*)    # dummy exaple for parsing option with value
