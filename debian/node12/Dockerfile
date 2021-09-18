@@ -52,7 +52,7 @@ RUN apt-get update \
     && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
     && echo $(hostname) > /opt/.firstrun \
     # Deleting UUID from build
-    && iobroker unsetup -y
+    && iobroker unsetup -y \
     # Backup initial ioBroker and userscript folder
     && tar -cf /opt/initial_iobroker.tar /opt/iobroker \
     && tar -cf /opt/initial_userscripts.tar /opt/userscripts \
