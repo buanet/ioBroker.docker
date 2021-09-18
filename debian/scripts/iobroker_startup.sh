@@ -75,7 +75,7 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 # Adding ckeck file for easy docker detection by ioBroker
-echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker
+# echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker # <<< moved to dockerfile
 
 # Installing/updating additional packages, registering maintenance script and setting uid/gid
 if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ] || [ -f /opt/.firstrun ]
@@ -133,12 +133,11 @@ then
   echo "Restoring initial ioBroker installation..."
     tar -xf /opt/initial_iobroker.tar -C /
     # Removing UUID generated on docker image build
-    bash iobroker unsetup -y
+    #bash iobroker unsetup -y # <<< moved to dockerfile
   echo "Done."
 elif [ -f /opt/iobroker/iobroker ]
 then
   echo "Existing installation of ioBroker detected in /opt/iobroker."
-    rm -f /opt/scripts/.docker_config/.install_host
 elif [ $(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l) != "0" ] && [ $(tar -ztvf /opt/iobroker/*_backupiobroker.tar.gz "backup/backup.json" 2> /dev/null | wc -l) != "0" ]
 then
   if [ "$multihost" = "slave" ]
@@ -215,24 +214,6 @@ then
   echo "Done."
   echo ' '
 fi
-
-# Checking for first run of a new installation and renaming ioBroker
-#if [ -f /opt/scripts/.docker_config/.install_host ]
-#then
-#  echo "Looks like this is a new and empty installation of ioBroker."
-#  echo "Hostname needs to be updated to " $(hostname)"..."
-#    bash iobroker host $(cat /opt/scripts/.docker_config/.install_host)
-#    rm -f /opt/scripts/.docker_config/.install_host
-#  echo "Done."
-#  echo ' '
-#elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
-#then
-#  echo "Hostname in ioBroker does not match the hostname of this container."
-#  echo "Updating hostname to " $(hostname)"..."
-#    bash iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
-#  echo "Done."
-#  echo ' '
-#fi
 
 
 #####

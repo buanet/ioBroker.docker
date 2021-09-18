@@ -48,9 +48,11 @@ WORKDIR /
 RUN apt-get update \
     && curl -sL https://iobroker.net/install.sh | bash - \
     && mkdir -p /opt/scripts/.docker_config/ \
-    && echo $(hostname) > /opt/scripts/.docker_config/.install_host \
     && echo "starting" > /opt/scripts/.docker_config/.healthcheck \
+    && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
     && echo $(hostname) > /opt/.firstrun \
+    # Deleting UUID from build
+    && iobroker unsetup -y
     # Backup initial ioBroker and userscript folder
     && tar -cf /opt/initial_iobroker.tar /opt/iobroker \
     && tar -cf /opt/initial_userscripts.tar /opt/userscripts \
