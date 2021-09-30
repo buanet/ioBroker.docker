@@ -93,7 +93,7 @@ You could use environment variables to auto configure your ioBroker container on
 ### Activate special features: 
 
 * `AVAHI` (optional, default: false) Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"
-* `ZWAVE` false|Will install openzwave to support zwave-adapter, can be "true" or "false"|
+* `ZWAVE` (optional, default: false) Installs openzwave to support zwave-adapter, can be "true" or "false"
 
 ### Configure environment:
 
