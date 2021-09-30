@@ -1,24 +1,25 @@
 # Github action to build Docker image from main branch (tag: latest)
-
-name: Build Docker image from main
+name: Build debian based image (latest)
 
 on:
   workflow_dispatch:
-  #release:
-  #  types:
-  #    - published
-      
+  release:
+    types:
+      - published
+  schedule:
+    - cron: '42 3 * * 5'
+
 jobs:
-  bulid_latest:
+  bulid-latest-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (main)
+      - name: Checkout repo (main)
         uses: actions/checkout@v2.3.4
         with:
           repository: 'buanet/ioBroker.docker'
           ref: 'main'
 
-      - name: Get and wirte version and date
+      - name: Get and write version and date
         id: version
         run: |
           VERSION="$(cat .VERSION)"
@@ -30,83 +31,83 @@ jobs:
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
           echo "This is the Buildnumber/Timestamp: $DATI"
           echo "dati=$DATI" >> $GITHUB_ENV
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./amd64/Dockerfile > ./amd64/Dockerfile.tmp
-          mv -f ./amd64/Dockerfile.tmp ./amd64/Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./arm32v7/Dockerfile > ./arm32v7/Dockerfile.tmp
-          mv -f ./arm32v7/Dockerfile.tmp ./arm32v7/Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./arm64v8/Dockerfile > ./arm64v8/Dockerfile.tmp
-          mv -f ./arm64v8/Dockerfile.tmp ./arm64v8/Dockerfile
+          # startup script
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
+          mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
+          # amd64
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node12/Dockerfile > ./debian/node12/Dockerfile.tmp 
+          mv -f ./debian/node12/Dockerfile.tmp ./debian/node12/Dockerfile
 
       - name: Set up manifest tool
         run: |
           wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64 -O manifest-tool
           chmod +x manifest-tool
-  
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1.2.0
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v1.3.0
+        uses: docker/setup-buildx-action@v1.5.1
 
-      - name: Login to DockerHub
+      - name: Login to DockerHub (buanet)
         uses: docker/login-action@v1.10.0
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
-          
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.10.0
         with:
           registry: ghcr.io
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
-  
+
       - name: Build Docker image (amd64)
         uses: docker/build-push-action@v2.6.1
         with:
-          context: ./amd64
-          file: ./amd64/Dockerfile
+          context: ./debian
+          file: ./debian/node12/Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
             buanet/iobroker:${{ env.version }}-amd64,
             ghcr.io/buanet/iobroker:${{ env.version }}-amd64
-          
-      - name: Build Docker image (armv32v7)
+
+      - name: Build Docker image (arm32v7)
         uses: docker/build-push-action@v2.6.1
         with:
-          context: ./arm32v7
-          file: ./arm32v7/Dockerfile
+          context: ./debian
+          file: ./debian/node12/Dockerfile
           push: true
           platforms: linux/arm/v7
           tags: |
             buanet/iobroker:${{ env.version }}-arm32v7,
             ghcr.io/buanet/iobroker:${{ env.version }}-arm32v7
-      
+
       - name: Build Docker image (arm64v8)
         uses: docker/build-push-action@v2.6.1
         with:
-          context: ./arm64v8
-          file: ./arm64v8/Dockerfile
+          context: ./debian
+          file: ./debian/node12/Dockerfile
           push: true
-          platforms: linux/arm64
+          platforms: linux/arm64/v8
           tags: |
             buanet/iobroker:${{ env.version }}-arm64v8,
             ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8
-          
-      - name: Create and push manifests
+
+      - name: Create and push manifests (buanet)
         run: |
           sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/latest/g" ./manifest.yml > manifest_latest.yaml
           ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_latest.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.majorversion }}/g" ./manifest.yml > manifest_latestmajor.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_latestmajor.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest.yml > manifest_version.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_version.yaml
           sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/latest/g" ./manifest_ghcr.yml > manifest_ghcr_latest.yaml
           ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_latest.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.majorversion }}/g" ./manifest_ghcr.yml > manifest_ghcr_latestmajor.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_latestmajor.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.majorversion }}/g" ./manifest.yml > manifest_majorversion.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_majorversion.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.majorversion }}/g" ./manifest_ghcr.yml > manifest_ghcr_majorversion.yaml
+          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_majorversion.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest.yml > manifest_version.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_version.yaml
           sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest_ghcr.yml > manifest_ghcr_version.yaml
           ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_version.yaml
 
@@ -128,4 +129,4 @@ jobs:
         env:
           OWNER: buanet
           PACKAGE_NAME: iobroker
-          PER_PAGE: 100
+          PER_PAGE: 100      
