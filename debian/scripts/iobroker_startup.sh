@@ -74,9 +74,6 @@ echo "-----                  Step 1 of 5: Preparing container                   
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
-# Adding ckeck file for easy docker detection by ioBroker
-# echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker # <<< moved to dockerfile
-
 # Installing/updating additional packages, registering maintenance script and setting uid/gid
 if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ] || [ -f /opt/.firstrun ]
 then
@@ -132,8 +129,6 @@ then
   echo "There is no data detected in /opt/iobroker."
   echo "Restoring initial ioBroker installation..."
     tar -xf /opt/initial_iobroker.tar -C /
-    # Removing UUID generated on docker image build
-    #bash iobroker unsetup -y # <<< moved to dockerfile
   echo "Done."
 elif [ -f /opt/iobroker/iobroker ]
 then
@@ -158,11 +153,6 @@ then
     echo "Done."
     echo "Restoring ioBroker..."
       bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
-      # fixing hostname issues when restoring on different host - open issue https://github.com/ioBroker/ioBroker.js-controller/issues/1450
-      #if [ $(jq -r .system.hostname ./iobroker-data/iobroker.json) != $(hostname) ]
-      #then
-      #  bash iobroker host $(jq -r .system.hostname ./iobroker-data/iobroker.json)
-      #fi
     echo "Done."
     echo ' '
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"

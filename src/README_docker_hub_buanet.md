@@ -1,4 +1,4 @@
- <img src="./img/iobroker_logo.png" width="600" title="ioBroker Logo">
+ <img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
@@ -19,6 +19,7 @@
 * Where to report issues: [Github Repository Issues](https://github.com/buanet/ioBroker.docker/issues)
 * Supported architectures: amd64, arm32v7, arm64v8
 * Changelog: [Github Repository Changelog](https://github.com/buanet/ioBroker.docker/blob/main/CHANGELOG.md)
+* Source code: [Github Repository](https://github.com/buanet/ioBroker.docker)
 * All other questions should be answered here: [Github Repository Readme](https://github.com/buanet/ioBroker.docker#readme) or [iobroker.net](https://www.iobroker.net/)
 
 # Supported tags
@@ -29,7 +30,9 @@
 
 # What is ioBroker?
 
-Text coming soon.
+IoBroker is a open source IoT platform written in JavaScript that easily connects smarthome componets from different manufactures. With the help of plugins (called: "adapters") ioBroker is able to communicate with a big variety of IoT hardware and services using different protocols and APIs.<br>
+All data is stored in a central database that all adapters can access. With this it is very easy to build up logical connections, automation scripts and beautiful visualisations.<br>
+For further details please check out [iobroker.net](https://www.iobroker.net).
 
 # How to use this image?
 
@@ -102,6 +105,16 @@ You could use environment variables to auto configure your ioBroker container on
 * `SETUID` (optional, default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host
 * `TZ` (optional, default: Europe/Berlin) Specifys the timeszone
 * `USBDEVICES` (optional) Sets relevant permissions on mounted devices like "/dev/ttyACM0". For more than one device separate with ";".
+
+## Notes about Docker networks
+
+The examples above are dealing with the Docker default bridge network. In general there are [some reasons](https://docs.docker.com/network/bridge/#differences-between-user-defined-bridges-and-the-default-bridge) why it might be the better choice to use a user-defined bridge network. 
+
+Using a Docker bridge network works fine for taking a first look and with most of the ioBroker adapters (if you dont forget to redirect the ports your adapers use).<br>
+But some ioBroker adapters are using techniques like [Multicast](https://en.wikipedia.org/wiki/Multicast) or [Broadcast](https://en.wikipedia.org/wiki/Broadcasting_(networking)) for automatic detection of IoT devices<br>
+In this case it may be useful to switch to [host](https://docs.docker.com/network/host/) or [MACVLAN](https://docs.docker.com/network/macvlan/) network. 
+
+For more information about networking with Docker please refer to the [official Docker docs](https://docs.docker.com/network/). 
 
 # Support the Project
 
