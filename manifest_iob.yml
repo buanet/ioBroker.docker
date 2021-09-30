@@ -1,18 +1,18 @@
-image: buanet/iobroker:${DOCKERTAG}
+image: iobroker/iobroker:${DOCKERTAG}
 manifests:
   -
-    image: buanet/iobroker:${VERSION}-amd64
+    image: iobroker/iobroker:${VERSION}-amd64
     platform:
       architecture: amd64
       os: linux
   -
-    image: buanet/iobroker:${VERSION}-arm64v8
+    image: iobroker/iobroker:${VERSION}-arm64v8
     platform:
       architecture: arm64
       variant: v8
       os: linux
   -
-    image: buanet/iobroker:${VERSION}-arm32v7
+    image: iobroker/iobroker:${VERSION}-arm32v7
     platform:
       architecture: arm
       variant: v7

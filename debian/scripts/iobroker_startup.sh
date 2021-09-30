@@ -24,62 +24,77 @@ dati=`date '+%Y-%m-%d %H:%M:%S'`
 
 # Logging header
 echo ' '
-echo "$(printf -- '-%.0s' {1..60})"
-echo -n "$(printf -- '-%.0s' {1..15})" && echo -n "     "$dati"      " && echo "$(printf -- '-%.0s' {1..15})"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo -n "$(printf -- '-%.0s' {1..25})" && echo -n "     "$dati"      " && echo "$(printf -- '-%.0s' {1..25})"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----       Welcome to your ioBroker-container!        -----"
-echo "-----          Startupscript is now running.           -----"
-echo "-----                Please be patient!                -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                 Welcome to your ioBroker-container!                  -----"
+echo "-----                    Startupscript is now running.                     -----"
+echo "-----                          Please be patient!                          -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----              Debugging information               -----"
-echo "-----                                                  -----"
-echo "-----                      System                      -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" arch: $(uname -m))" && echo " -----"
-echo "-----                                                  -----"
-echo "-----                     Versions                     -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" image: $VERSION)" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" node: $(node -v))" && echo " -----"
-echo -n "-----               " && echo -n "$(printf "%-10s %-23s" npm: $(npm -v))" && echo " -----"
-echo "-----                                                  -----"
-echo "-----                       ENV                        -----"
-if [ "$adminport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
-if [ "$avahi" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" AVAHI: $avahi)" && echo " -----"; fi
-if [ "$multihost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_MULTIHOST: $multihost)" && echo " -----"; fi
-if [ "$objectsdbhost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
-if [ "$objectsdbport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
-if [ "$objectsdbtype" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
-if [ "$packages" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" PACKAGES: $packages)" && echo " -----"; fi
-if [ "$setgid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETGID: $setgid)" && echo " -----"; fi
-if [ "$setuid" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" SETUID: $setuid)" && echo " -----"; fi
-if [ "$statesdbhost" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_HOST: $statesdbhost)" && echo " -----"; fi
-if [ "$statesdbport" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_PORT: $statesdbport)" && echo " -----"; fi
-if [ "$statesdbtype" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
-if [ "$usbdevices" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" USBDEVICES: $usbdevices)" && echo " -----"; fi
-if [ "$zwave" != "" ]; then echo -n "-----               " && echo -n "$(printf "%-10s %-23s" ZWAVE: $zwave)" && echo " -----"; fi
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                        Debugging information                         -----"
+echo "-----                                                                      -----"
+echo "-----                                System                                -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" arch: $(uname -m))" && echo " -----"
+echo "-----                                                                      -----"
+echo "-----                             Docker-Image                             -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" image: ${VERSION})" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" build: ${BUILD})" && echo " -----"
+echo "-----                                                                      -----"
+echo "-----                               Versions                               -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" node: $(node -v))" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" npm: $(npm -v))" && echo " -----"
+echo "-----                                                                      -----"
+echo "-----                                 ENV                                  -----"
+if [ "$adminport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
+if [ "$avahi" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" AVAHI: $avahi)" && echo " -----"; fi
+if [ "$multihost" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_MULTIHOST: $multihost)" && echo " -----"; fi
+if [ "$objectsdbhost" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
+if [ "$objectsdbport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
+if [ "$objectsdbtype" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
+if [ "$packages" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES: $packages)" && echo " -----"; fi
+if [ "$setgid" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: $setgid)" && echo " -----"; fi
+if [ "$setuid" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: $setuid)" && echo " -----"; fi
+if [ "$statesdbhost" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_HOST: $statesdbhost)" && echo " -----"; fi
+if [ "$statesdbport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PORT: $statesdbport)" && echo " -----"; fi
+if [ "$statesdbtype" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
+if [ "$usbdevices" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" USBDEVICES: $usbdevices)" && echo " -----"; fi
+if [ "$zwave" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" ZWAVE: $zwave)" && echo " -----"; fi
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 #####
 # STEP 1 - Preparing container
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----         Step 1 of 5: Preparing container         -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                  Step 1 of 5: Preparing container                   -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
-# Installing additional packages and setting uid/gid
+# Installing/updating additional packages, registering maintenance script and setting uid/gid
 if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ] || [ -f /opt/.firstrun ]
 then
+  if [ -f /opt/.firstrun ]
+  then
+    echo "Updating Linux packages on first run..."
+      bash /opt/scripts/setup_packages.sh -update
+    echo "Done."
+    echo ' '
+    echo "Registering maintenance script as command..."
+    echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+    echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+    echo "Done."
+    echo ' '
+  fi
   if [ "$packages" != "" ]
   then
     echo "Installing additional packages is set by ENV."
     echo "The following packages will be installed:" $packages"..."
     echo $packages > /opt/scripts/.packages
-      bash /opt/scripts/setup_packages.sh
+      bash /opt/scripts/setup_packages.sh -install
     echo "Done."
     echo ' '
   fi
@@ -89,13 +104,6 @@ then
     echo "Changing UID to "$setuid" and GID to "$setgid"..."
       usermod -u $setuid iobroker
       groupmod -g $setgid iobroker
-    echo "Done."
-    echo ' '
-  fi
-  if [ -f /opt/.firstrun ]
-  then
-    echo "Registering maintenance script as command."
-    echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
     echo "Done."
     echo ' '
   fi
@@ -109,22 +117,22 @@ cd /opt/iobroker
 
 
 #####
-# Detecting ioBroker-Installation
+# STEP 2 - Detecting ioBroker-Installation
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----   Step 2 of 5: Detecting ioBroker installation   -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----             Step 2 of 5: Detecting ioBroker installation             -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 if [ `find /opt/iobroker -type f | wc -l` -lt 1 ]
 then
-  echo "There is no data detected in /opt/iobroker. Restoring initial ioBroker installation..."
+  echo "There is no data detected in /opt/iobroker."
+  echo "Restoring initial ioBroker installation..."
     tar -xf /opt/initial_iobroker.tar -C /
   echo "Done."
 elif [ -f /opt/iobroker/iobroker ]
 then
   echo "Existing installation of ioBroker detected in /opt/iobroker."
-    rm -f /opt/scripts/.docker_config/.install_host
 elif [ $(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l) != "0" ] && [ $(tar -ztvf /opt/iobroker/*_backupiobroker.tar.gz "backup/backup.json" 2> /dev/null | wc -l) != "0" ]
 then
   if [ "$multihost" = "slave" ]
@@ -134,15 +142,17 @@ then
     echo "For more information see readme.md on Github (https://github.com/buanet/ioBroker.docker)."
     exit 1
   else
-    echo "IoBroker backup file detected in /opt/iobroker. Preparing restore..."
+    echo "IoBroker backup file detected in /opt/iobroker."
+    echo "Preparing restore..."
       mv /opt/iobroker/*.tar.gz /opt/
       tar -xf /opt/initial_iobroker.tar -C /
       mkdir /opt/iobroker/backups
       mv /opt/*.tar.gz /opt/iobroker/backups/
-      chown -R $setuid:$setgid /opt/iobroker                        # fixes permission error during restore
+      # fixing permission errors during restore
+      chown -R $setuid:$setgid /opt/iobroker
     echo "Done."
     echo "Restoring ioBroker..."
-      iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
+      bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
     echo "Done."
     echo ' '
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -156,18 +166,18 @@ then
   fi
 else
   echo "There is data detected in /opt/iobroker but it looks like it is no instance of ioBroker or a valid backup file!"
-  echo "Please check/ recreate mounted folder/ volume and start over."
+  echo "Please check/ recreate mounted folder or volume and start over."
   exit 1
 fi
 echo ' '
 
 
 #####
-# Checking ioBroker-Installation
+# STEP 3 - Checking ioBroker-Installation
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----   Step 3 of 5: Checking ioBroker installation    -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----             Step 3 of 5: Checking ioBroker installation              -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 # (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
@@ -185,16 +195,8 @@ echo "Fixing \"sudo-bug\" by replacing sudo in iobroker with gosu..."
 echo "Done."
 echo ' '
 
-# Checking for first run of a new installation and renaming ioBroker
-if [ -f /opt/scripts/.docker_config/.install_host ]
-then
-  echo "Looks like this is a new and empty installation of ioBroker."
-  echo "Hostname needs to be updated to " $(hostname)"..."
-    bash iobroker host $(cat /opt/scripts/.docker_config/.install_host)
-    rm -f /opt/scripts/.docker_config/.install_host
-  echo "Done."
-  echo ' '
-elif [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
+# checking hostname in ioBroker to match container hostname
+if [ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]
 then
   echo "Hostname in ioBroker does not match the hostname of this container."
   echo "Updating hostname to " $(hostname)"..."
@@ -205,11 +207,11 @@ fi
 
 
 #####
-# Setting up prerequisites for some ioBroker-adapters
+# STEP 4 - Setting up prerequisites for some ioBroker-adapters
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----      Step 4 of 5: Applying special settings      -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                Step 4 of 5: Applying special settings                -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 echo "Some adapters have special requirements/ settings which can be activated by the use of environment variables."
@@ -474,11 +476,11 @@ rm -f /opt/.firstrun
 fi
 
 #####
-# Starting ioBroker
+# STEP 5 - Starting ioBroker
 #####
-echo "$(printf -- '-%.0s' {1..60})"
-echo "-----          Step 5 of 5: ioBroker startup           -----"
-echo "$(printf -- '-%.0s' {1..60})"
+echo "$(printf -- '-%.0s' {1..80})"
+echo "-----                    Step 5 of 5: ioBroker startup                     -----"
+echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 echo "Starting ioBroker..."
 echo ' '
