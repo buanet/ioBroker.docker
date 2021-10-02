@@ -14,39 +14,41 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install prerequisites (including node) and generating locales
 RUN apt-get update && apt-get install -y \
+    apt-utils \
+    cifs-utils \
     curl \
     gosu \
     jq \
     locales \
+    nfs-common \
     procps \
+    python3 \
+    python3-dev \
     sudo \
+    tar \
+    tzdata \
     udev \
     wget \
-    # Generating locales
-    && sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
-    && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
-    && locale-gen \
     # Install node
     && curl -sL https://deb.nodesource.com/setup_14.x | bash \
     && apt-get update && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
+    # Install node-gyp
+    && npm install -g node-gyp \
+    # Generating locales
+    && sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
+    && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+    && locale-gen
 
-# Create scripts directorys and copy scripts
-RUN mkdir -p /opt/scripts/ \
-    && mkdir -p /opt/userscripts/ \
-    && chmod 777 /opt/scripts/ \
-    && chmod 777 /opt/userscripts/
-WORKDIR /opt/scripts/
-COPY scripts/* ./
-RUN chmod +x *.sh
-WORKDIR /opt/userscripts/
-COPY userscripts/* ./
-RUN chmod +x *.sh
+# Create directorys and copy scripts
+COPY scripts /opt/scripts
+COPY userscripts /opt/userscripts
+RUN chmod 777 /opt/scripts/ \
+    && chmod 777 /opt/userscripts/ \
+    && chmod +x /opt/scripts/*.sh \
+    && chmod +x /opt/userscripts/*.sh
 
 # Install ioBroker
-WORKDIR /
-RUN apt-get update \
-    && curl -sL https://iobroker.net/install.sh | bash - \
+RUN curl -sL https://iobroker.net/install.sh | bash - \
     && mkdir -p /opt/scripts/.docker_config/ \
     && echo "starting" > /opt/scripts/.docker_config/.healthcheck \
     && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
@@ -56,15 +58,20 @@ RUN apt-get update \
     # Backup initial ioBroker and userscript folder
     && tar -cf /opt/initial_iobroker.tar /opt/iobroker \
     && tar -cf /opt/initial_userscripts.tar /opt/userscripts \
-    && rm -rf /var/lib/apt/lists/*
-
-# Setting up iobroker-user (shell, home dir and rights)
-RUN chsh -s /bin/bash iobroker \
+    # Setting up iobroker-user (shell, home dir and rights)
+    && chsh -s /bin/bash iobroker \
     && usermod --home /opt/iobroker iobroker \
     && usermod -u 1000 iobroker \
     && groupmod -g 1000 iobroker \
     && chown root:iobroker /usr/sbin/gosu \
-    && chmod +s /usr/sbin/gosu
+    && chmod +s /usr/sbin/gosu \
+    # Clean up installation cache
+    && apt-get autoclean -y \
+    && apt-get autoremove \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/tmp/* \
+    && rm -rf /root/.cache/* /root/.npm/* \
+    && rm -rf /var/lib/apt/lists/*
 
 # Setting up default ENVs
 ENV DEBIAN_FRONTEND="teletype" \
