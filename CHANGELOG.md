@@ -1,10 +1,15 @@
 ## Changelog
 
-### v5.2.0-beta4 (2021-09-10)
-* adding iobroker user rights for "gosu"
-* adding more labels in OCI standard format
-* fixing workdir bug
-* adding backitup compatibility 
+### v5.3.0-beta (2021-10-03)
+* adding packages for backitup
+* reorganizing Dockerfile
+
+### v5.2.0 (2021-09-30)
+* v5.2.0-beta4 (2021-09-10)
+  * adding iobroker user rights for "gosu"
+  * adding more labels in OCI standard format
+  * fixing workdir bug
+  * adding backitup compatibility 
 * v5.2.0-beta3 (2021-09-04)
   * reducing layers in dockerfile
   * making hostname check mandatory for startup
