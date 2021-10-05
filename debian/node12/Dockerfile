@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     cifs-utils \
     curl \
     gosu \
+    iputils-ping \
     jq \
     locales \
     nfs-common \

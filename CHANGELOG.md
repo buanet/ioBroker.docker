@@ -1,6 +1,8 @@
 ## Changelog
 
 ### v5.3.0-beta (2021-10-03)
+* adding check for PACKAGES (#201)
+* adding packages for discovery
 * adding packages for backitup
 * reorganizing Dockerfile
 
