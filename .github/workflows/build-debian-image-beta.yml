@@ -50,7 +50,7 @@ jobs:
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v1.5.1
+        uses: docker/setup-buildx-action@v1.6.0
 
       - name: Login to DockerHub
         uses: docker/login-action@v1.10.0
@@ -66,7 +66,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build Docker image (amd64)
-        uses: docker/build-push-action@v2.6.1
+        uses: docker/build-push-action@v2.7.0
         with:
           context: ./debian
           file: ./debian/node12/Dockerfile
@@ -77,7 +77,7 @@ jobs:
             ghcr.io/buanet/iobroker:${{ env.version }}-amd64
 
       - name: Build Docker image (arm32v7)
-        uses: docker/build-push-action@v2.6.1
+        uses: docker/build-push-action@v2.7.0
         with:
           context: ./debian
           file: ./debian/node12/Dockerfile
@@ -88,7 +88,7 @@ jobs:
             ghcr.io/buanet/iobroker:${{ env.version }}-arm32v7
 
       - name: Build Docker image (arm64v8)
-        uses: docker/build-push-action@v2.6.1
+        uses: docker/build-push-action@v2.7.0
         with:
           context: ./debian
           file: ./debian/node12/Dockerfile
@@ -110,7 +110,7 @@ jobs:
           ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_version.yaml
 
       - name: Delete untagged images from GitHub packages
-        uses: actions/github-script@v3
+        uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.PACKAGES_PASS }}
           script: |

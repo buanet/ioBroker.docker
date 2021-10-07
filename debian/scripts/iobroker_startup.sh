@@ -92,8 +92,8 @@ then
   if [ "$packages" != "" ]
   then
     echo "Installing additional packages is set by ENV."
-    echo "The following packages will be installed:" $packages"..."
-    echo $packages > /opt/scripts/.packages
+    echo "Checking the following Packages:" $packages"..."
+    echo $packages > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
     echo "Done."
     echo ' '
