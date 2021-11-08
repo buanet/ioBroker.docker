@@ -1,5 +1,7 @@
 # Official Docker Image for ioBroker
 
+![Logo](https://raw.githubusercontent.com/ioBroker/ioBroker.js-controller/master/packages/controller/lib/img/iobroker.png)
+
 [![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
 [![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
