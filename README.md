@@ -1,5 +1,7 @@
 # Official Docker Image for ioBroker
 
+ <img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/iobroker_logo.png" width="600" title="ioBroker Logo">
+
 [![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
 [![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
@@ -203,7 +205,7 @@ Moved to [CHANGELOG.md](CHANGELOG.md).
 
 MIT License
 
-Copyright (c) 2017 [André Germann]
+Copyright (c) 2017-2021 [André Germann]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
