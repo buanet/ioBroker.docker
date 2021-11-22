@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y \
     udev \
     wget \
     # Install node
-    && curl -sL https://deb.nodesource.com/setup_14.x | bash \
+    && curl -sL https://deb.nodesource.com/setup_16.x | bash \
     && apt-get update && apt-get install -y nodejs \
     # Install node-gyp
     && npm install -g node-gyp \
