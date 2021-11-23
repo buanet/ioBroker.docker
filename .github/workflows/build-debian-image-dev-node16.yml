@@ -1,5 +1,5 @@
 # Github action to build Docker image from dev branch (tag: dev)
-name: Build debian based image (dev-node14)
+name: Build debian based image (dev-node16)
 
 on:
   workflow_dispatch:
@@ -8,11 +8,11 @@ on:
       - dev
 
 jobs:
-  bulid-dev-node14-image:
+  bulid-dev-node16-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo (dev)
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.4.0
         with:
           repository: 'buanet/ioBroker.docker'
           ref: 'dev'
@@ -33,8 +33,8 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
           mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # amd64
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./debian/node14/Dockerfile > ./debian/node14/Dockerfile.tmp 
-          mv -f ./debian/node14/Dockerfile.tmp ./debian/node14/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./debian/node16/Dockerfile > ./debian/node16/Dockerfile.tmp 
+          mv -f ./debian/node16/Dockerfile.tmp ./debian/node16/Dockerfile
 
       - name: Set up manifest tool
         run: |
@@ -61,45 +61,45 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Build Docker image (node14-amd64)
+      - name: Build Docker image (node16-amd64)
         uses: docker/build-push-action@v2.7.0
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/node16/Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
-            buanet/iobroker:dev-node14-amd64,
-            ghcr.io/buanet/iobroker:dev-node14-amd64
+            buanet/iobroker:dev-node16-amd64,
+            ghcr.io/buanet/iobroker:dev-node16-amd64
 
-      - name: Build Docker image (node14-arm32v7)
+      - name: Build Docker image (node16-arm32v7)
         uses: docker/build-push-action@v2.7.0
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/node16/Dockerfile
           push: true
           platforms: linux/arm/v7
           tags: |
-            buanet/iobroker:dev-node14-arm32v7,
-            ghcr.io/buanet/iobroker:dev-node14-arm32v7
+            buanet/iobroker:dev-node16-arm32v7,
+            ghcr.io/buanet/iobroker:dev-node16-arm32v7
 
-      - name: Build Docker image (node14-arm64v8)
+      - name: Build Docker image (node16-arm64v8)
         uses: docker/build-push-action@v2.7.0
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/node16/Dockerfile
           push: true
           platforms: linux/arm64/v8
           tags: |
-            buanet/iobroker:dev-node14-arm64v8,
-            ghcr.io/buanet/iobroker:dev-node14-arm64v8
+            buanet/iobroker:dev-node16-arm64v8,
+            ghcr.io/buanet/iobroker:dev-node16-arm64v8
 
       - name: Create and push manifests
         run: |
-          sed -e "s/\${VERSION}/dev-node14/g" -e "s/\${DOCKERTAG}/dev-node14/g" ./manifest.yml > manifest_dev-node14.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev-node14.yaml
-          sed -e "s/\${VERSION}/dev-node14/g" -e "s/\${DOCKERTAG}/dev-node14/g" ./manifest_ghcr.yml > manifest_ghcr_dev-node14.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev-node14.yaml
+          sed -e "s/\${VERSION}/dev-node16/g" -e "s/\${DOCKERTAG}/dev-node16/g" ./manifest.yml > manifest_dev-node16.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev-node16.yaml
+          sed -e "s/\${VERSION}/dev-node16/g" -e "s/\${DOCKERTAG}/dev-node16/g" ./manifest_ghcr.yml > manifest_ghcr_dev-node16.yaml
+          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev-node16.yaml
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v5
