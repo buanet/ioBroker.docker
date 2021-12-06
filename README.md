@@ -14,6 +14,8 @@
 
 The code provided in this repo is used to automatically generate the official Docker Image for ioBroker.
 
+Because this README has become more and more confusing, I decided to convert it into a full documentation and moved it to a ["better place"](https://docs.buanet.de/iobroker-docker-image/docs/).  
+
 ## :rocket: Quick links 
 
 Don't know what's ioBroker? :arrow_right: [iobroker.net](https://www.iobroker.net)<br>
@@ -24,11 +26,11 @@ Looking for documentation? :arrow_right: [docs.buanet.de](https://docs.buanet.de
 
 ### How to run the image? 
 
-You con find some basic information about the image amd how to run it on the [Docker Hub page](https://hub.docker.com/r/buanet/iobroker) or [here](https://github.com/buanet/ioBroker.docker/blob/main/src/README_docker_hub_buanet.md).
+You can find some basic information about the image amd how to run it on the [Docker Hub page](https://hub.docker.com/r/buanet/iobroker) or [here](https://github.com/buanet/ioBroker.docker/blob/main/src/README_docker_hub_buanet.md).
 
 ### Is there a more detailed documentation?
 
-You con find a detailed documentation of the image on the new [docs page](https://docs.buanet.de/iobroker-docker-image/docs/). 
+You can find a detailed documentation of the image on the new [docs page](https://docs.buanet.de/iobroker-docker-image/docs/). 
 
 ### Where can I pull the image?
 
@@ -40,43 +42,33 @@ You can pull the Docker image from:
 ### Where can I get help?
 
 If you have any questions or need help please contact the ioBroker community:
-* [ioBroker Forum]()
-* [Discord Channel]()
-* [Facebook Group]()
-* [Telegram Group]()
+* [ioBroker forum](https://forum.iobroker.net/)
+* [Discord channel](https://discord.gg/Ne3y6fUac3)
+* [Facebook group](https://www.facebook.com/groups/440499112958264/)
 
 ### How to report an issue or request a feature?
 
 If you think you found an issue let us know by opening an [GitHub issue](https://github.com/buanet/ioBroker.docker/issues). Make sure you have googled it before. 
 Please do not use the issues for support questions. Not every error message is worth a new report. Use [discussions](https://github.com/buanet/ioBroker.docker/discussions) if you are not sure.
 
-### Is there something else I have to know?
-
-Always have an actual valid backup of your ioBroker. You can easily create a backup by using the `iobroker backup` command or the preinstalled backitup adapter.
-
-## :memo: Miscellaneous
+## :eyes: Miscellaneous
 
 ### Beta testing
 
-If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. You can find the readme.md file for beta versions [here](https://github.com/buanet/ioBroker.docker/blob/beta/README.md). Please make sure to read the changelog before testing beta versions.
-
-### Subscribe to updates
-
-If you want the newest updates about the image and my tutorials at https://smarthome.buanet.de you can simply subscribe to my new "news and updates" channel (only in German) on Telegram.
-You will find the channel here: https://t.me/buanet_tutorials
+If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. You can find the changelog for beta versions [here](https://github.com/buanet/ioBroker.docker/blob/dev/CHANGELOG.md). For more details and beta support join us at the "docker-image" chat on the [ioBroker Discord channel](https://discord.gg/Ne3y6fUac3).
 
 ### Support the project
 
 The easiest way to support this project is to leave me some likes/ stars on Github and Docker hub!<br>
-If you want to give something back, feel free to take a look into the [open issues](https://github.com/buanet/ioBroker.docker/issues) or the [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) and helping me answering questions, fixing bugs or adding new features!<br>
-And if you want to buy me a beer instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://buanet.de/wp-content/uploads/2017/08/pp128.png" height="20" width="20"></a><br>
+If you want to give something back to the community, feel free to take a look into the [open issues](https://github.com/buanet/ioBroker.docker/issues) or the [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) and help me answering questions, fixing bugs or adding new features!<br>
+If that doesn't work for you and you want to buy me a beer instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/pp_logo.png" height="15" width="15"></a><br>
 Thank you!
 
-## Changelog
+## :memo: Changelog
 
 Moved to [CHANGELOG.md](CHANGELOG.md).
 
-## License
+## :copyright: License
 
 MIT License
 
@@ -100,6 +92,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Credits
+## :star: Credits
 
 Inspired by https://github.com/MehrCurry/docker-iobroker
