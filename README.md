@@ -14,13 +14,13 @@
 
 The code provided in this repo is used to automatically generate the official Docker Image for ioBroker.
 
-## Quick links
+## :rocket: Quick links 
 
 Don't know what's ioBroker? :arrow_right: [iobroker.net](https://www.iobroker.net)<br>
 Don't know what's Docker? :arrow_right: [docker.com](https://docker.com)<br>
 Looking for documentation? :arrow_right: [docs.buanet.de](https://docs.buanet.de/iobroker-docker-image/docs/)
 
-## FAQ (frequently asked questions)
+## :question: FAQ (frequently asked questions)
 
 ### How to run the image? 
 
@@ -54,7 +54,7 @@ Please do not use the issues for support questions. Not every error message is w
 
 Always have an actual valid backup of your ioBroker. You can easily create a backup by using the `iobroker backup` command or the preinstalled backitup adapter.
 
-## Miscellaneous
+## :memo: Miscellaneous
 
 ### Beta testing
 
