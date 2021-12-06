@@ -2,39 +2,42 @@
 
  <img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
-[![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
-[![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
-[![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/buanet/ioBroker.docker/Build%20debian%20based%20image%20\(latest\))](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-main.yml)
+[![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
+[![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
+[![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
 [![License](https://img.shields.io/github/license/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue?style=flat)](https://paypal.me/buanet)
 
 The code provided in this repo is used to automatically generate the official Docker Image for ioBroker.
 
-If you don't know what ioBroker is, please check out [iobroker.net](https://www.iobroker.net)
+## Quick links
 
-If you dont know what Docker is, please check out [docker.com](https://docker.com)
+Don't know what's ioBroker? :arrow_right: [iobroker.net](https://www.iobroker.net)<br>
+Don't know what's Docker? :arrow_right: [docker.com](https://docker.com)<br>
+Looking for documentation? :arrow_right: [docs.buanet.de](https://docs.buanet.de/iobroker-docker-image/docs/)
 
-## Getting started
+## FAQ (frequently asked questions)
 
-### Basic Information 
+### How to run the image? 
 
-You will find some basic information about the image amd how to use it on the [Docker Hub page](https://hub.docker.com/r/buanet/iobroker) or [here](https://github.com/buanet/ioBroker.docker/blob/main/src/README_docker_hub_buanet.md).
+You con find some basic information about the image amd how to run it on the [Docker Hub page](https://hub.docker.com/r/buanet/iobroker) or [here](https://github.com/buanet/ioBroker.docker/blob/main/src/README_docker_hub_buanet.md).
 
-### Detailed documentation
+### Is there a more detailed documentation?
 
-You will find a detailed documentation of the image at the new [docs page](https://docs.buanet.de/iobroker-docker-image/docs/). 
+You con find a detailed documentation of the image on the new [docs page](https://docs.buanet.de/iobroker-docker-image/docs/). 
 
-### Get the image
+### Where can I pull the image?
 
 You can pull the Docker image from:
 * [Docker Hub (buanet)](https://hub.docker.com/r/buanet/iobroker)
 * [Docker Hub (iobroker)](https://hub.docker.com/r/iobroker/iobroker)
 * [GitHub Container Repo](https://github.com/buanet/ioBroker.docker/pkgs/container/iobroker)
 
-### Get help
+### Where can I get help?
 
 If you have any questions or need help please contact the ioBroker community:
 * [ioBroker Forum]()
@@ -42,18 +45,14 @@ If you have any questions or need help please contact the ioBroker community:
 * [Facebook Group]()
 * [Telegram Group]()
 
-### Report an issue or request a feature
+### How to report an issue or request a feature?
 
-If you found an issue or missing some feature please let us know by opening an [GitHub issue](https://github.com/buanet/ioBroker.docker/issues).
+If you think you found an issue let us know by opening an [GitHub issue](https://github.com/buanet/ioBroker.docker/issues). Make sure you have googled it before. 
+Please do not use the issues for support questions. Not every error message is worth a new report. Use [discussions](https://github.com/buanet/ioBroker.docker/discussions) if you are not sure.
 
-## Important notice
+### Is there something else I have to know?
 
-In general a new major version (e.g. v2, v4, v5) of the image comes with a new, preinstalled major node version!
-If you are updating an existing installation to a new major version (e.g. from v4 to v5) you have to perform some additional steps inside ioBroker! For more details please see official ioBroker documentation: [EN](https://www.iobroker.net/#en/documentation/install/updatenode.md) | [DE](https://www.iobroker.net/#de/documentation/install/updatenode.md).<br>
-
-You might avoid these procedure if you use my "Best practice" hint for "upgrading your ioBroker container".
-
-In any case make a backup first!
+Always have an actual valid backup of your ioBroker. You can easily create a backup by using the `iobroker backup` command or the preinstalled backitup adapter.
 
 ## Miscellaneous
 

@@ -12,7 +12,7 @@
 
 # Important Note
 
-New major image versions (e.g. v4, v5, v6) always come with a new major version of node! This might lead to problems when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see "Best Practices" section at the brand new [Official ioBroker Docker Image Docs](https://docs.buanet.de/iobroker-docker-image/docs/).
+New major image versions (e.g. v4, v5, v6) always come with a new major version of node! This might lead to problems when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see "Best Practices" section at our new [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/).
 
 # Quick reference
 
@@ -22,7 +22,7 @@ New major image versions (e.g. v4, v5, v6) always come with a new major version 
 * Supported architectures: amd64, arm32v7, arm64v8
 * Changelog: [Github Repository Changelog](https://github.com/buanet/ioBroker.docker/blob/main/CHANGELOG.md)
 * Source code: [Github Repository](https://github.com/buanet/ioBroker.docker)
-* All other questions should be answered here: [Official ioBroker Docker Image Docs](https://docs.buanet.de/iobroker-docker-image/docs/) or [iobroker.net](https://www.iobroker.net/)
+* All other questions should be answered here: [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/) or [iobroker.net](https://www.iobroker.net/)
 
 # Supported tags
 
