@@ -1,12 +1,15 @@
 ## Changelog
 
-### v6.0.0-beta1 (2021-10-07)
-* upgrading node version to recommended v14 
-* adding beta-node16 tag for betatest
+### v6.0.0 (2021-12-09)
+* moving docu/ restructuring readme
+* v6.0.0-beta1 (2021-10-07)
+  * upgrading node version to recommended node14 
+  * adding beta-node16 tag for beta testing node16
+  * updating documentation
 * v5.3.0-beta1 (2021-10-07)
-  * adding check for PACKAGES on startup (#201)
-  * adding packages for discovery
-  * adding packages for backitup
+  * adding check  (installed) PACKAGES on startup (#201)
+  * adding packages for discovery adapter
+  * adding packages for backitup adapter
   * reorganizing Dockerfile
 
 ### v5.2.0 (2021-09-30)

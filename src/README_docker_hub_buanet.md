@@ -3,14 +3,16 @@
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/buanet/ioBroker.docker/Build%20debian%20based%20image%20\(beta\))](https://github.com/buanet/docker.watchdog/actions/workflows/docker_build_main_image.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/buanet/ioBroker.docker/Build%20debian%20based%20image%20\(latest\))](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-main.yml)
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
 [![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
 [![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
 [![License](https://img.shields.io/github/license/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue?style=flat)](https://paypal.me/buanet)
 
-**Note:** New major versions (e.g. v4, v5, v6) of the image always come with a new major verson of node (preinstalled). To avoid issues when upgrading into a new major version the best practice recommendation is to migrate using backup and restore procedure. For more details please see "Best Practices" section on official  [readme.md](https://github.com/buanet/ioBroker.docker#best-practices).
+# Important Note
+
+New major image versions (e.g. v4, v5, v6) always come with a new major version of node! This might lead to problems when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the new [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
 
 # Quick reference
 
@@ -20,11 +22,17 @@
 * Supported architectures: amd64, arm32v7, arm64v8
 * Changelog: [Github Repository Changelog](https://github.com/buanet/ioBroker.docker/blob/main/CHANGELOG.md)
 * Source code: [Github Repository](https://github.com/buanet/ioBroker.docker)
-* All other questions should be answered here: [Github Repository Readme](https://github.com/buanet/ioBroker.docker#readme) or [iobroker.net](https://www.iobroker.net/)
+* All other questions should be answered here: [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/) or [iobroker.net](https://www.iobroker.net/)
 
 # Supported tags
 
-* [`v5.2.0`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`v5.2.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`v5.2.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`v5.2.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`latest-v5`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile)
+It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-vX` tag instead.
+
+### Node 14 versions
+* [`v6.0.0`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`latest-v6`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile)
+
+### Node 12 versions
+* [`v5.2.0`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`v5.2.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`v5.2.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`v5.2.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`latest-v5`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile)
 * [`v5.1.0`](https://github.com/buanet/ioBroker.docker/blob/v5.1.0/amd64/Dockerfile), [`v5.1.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v5.1.0/amd64/Dockerfile), [`v5.1.0-armv7hf`](https://github.com/buanet/ioBroker.docker/blob/v5.1.0/armv7hf/Dockerfile), [`v5.1.0-aarch64`](https://github.com/buanet/ioBroker.docker/blob/v5.1.0/aarch64/Dockerfile)
 * [`v5.0.0`](https://github.com/buanet/ioBroker.docker/blob/v5.0.0/amd64/Dockerfile), [`v5.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v5.0.0/amd64/Dockerfile), [`v5.0.0-armv7hf`](https://github.com/buanet/ioBroker.docker/blob/v5.0.0/armv7hf/Dockerfile), [`v5.0.0-aarch64`](https://github.com/buanet/ioBroker.docker/blob/v5.0.0/aarch64/Dockerfile)
 
