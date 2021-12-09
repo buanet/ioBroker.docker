@@ -2,210 +2,77 @@
 
  <img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
-[![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
-[![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
-[![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/buanet/ioBroker.docker/Build%20debian%20based%20image%20\(latest\))](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-main.yml)
+[![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
+[![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
+[![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
 [![License](https://img.shields.io/github/license/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue?style=flat)](https://paypal.me/buanet)
 
-This image is a ready to use Docker image for ioBroker IoT platform (http://www.iobroker.net).
+The code provided in this repo is used to automatically generate the official Docker Image for ioBroker.
 
-It was originally created for running on a Synology DiskStation 1515+ with DSM 6 and official Docker package installed, but should run on any other Linux based Docker host too.
+Because this README has become more and more confusing, I decided to convert it into a full documentation and moved it to a ["better place"](https://docs.buanet.de/iobroker-docker-image/docs/).  
 
-After years of development it might be the best documented and maintained Docker image for running ioBroker IoT platform with Docker.
+## :rocket: Quick links 
 
-Since v4.0.0 the image is available for the following architectures: amd64, armv7hf, aarch64.
+Don't know what's ioBroker? :arrow_right: [iobroker.net](https://www.iobroker.net)<br>
+Don't know what's Docker? :arrow_right: [docker.com](https://docker.com)<br>
+Looking for documentation? :arrow_right: [docs.buanet.de](https://docs.buanet.de/iobroker-docker-image/docs/)
 
-In v5.1.0 it became the official Docker Image for the ioBroker Project.
+## :question: FAQ (frequently asked questions)
 
-## Important notice
+### How to run the image? 
 
-In general a new major version (e.g. v2, v4, v5) of the image comes with a new, preinstalled major node version!
-If you are updating an existing installation to a new major version (e.g. from v4 to v5) you have to perform some additional steps inside ioBroker! For more details please see official ioBroker documentation: [EN](https://www.iobroker.net/#en/documentation/install/updatenode.md) | [DE](https://www.iobroker.net/#de/documentation/install/updatenode.md).<br>
+You can find some basic information about the image amd how to run it on the [Docker Hub page](https://hub.docker.com/r/buanet/iobroker) or [here](https://github.com/buanet/ioBroker.docker/blob/main/src/README_docker_hub_buanet.md).
 
-You might avoid these procedure if you use my "Best practice" hint for "upgrading your ioBroker container".
+### Is there a more detailed documentation?
 
-In any case make a backup first!
+You can find a detailed documentation of the image on the new [docs page](https://docs.buanet.de/iobroker-docker-image/docs/). 
 
-## Getting started
+### Where can I pull the image?
 
-A detailed tutorial (German, based on v3.0.0) can be found here: [https://smarthome.buanet.de](https://smarthome.buanet.de/2019/05/iobroker-unter-docker-auf-der-synology-diskstation-v3/). Please notice that the old tutorial is outdated and does no longer work!
+You can pull the Docker image from:
+* [Docker Hub (buanet)](https://hub.docker.com/r/buanet/iobroker)
+* [Docker Hub (iobroker)](https://hub.docker.com/r/iobroker/iobroker)
+* [GitHub Container Repo](https://github.com/buanet/ioBroker.docker/pkgs/container/iobroker)
 
-For discussion and support please visit [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) or use the comments section at the linked tutorial.
+### Where can I get help?
 
-Please do not contact me directly for any support-reasons. Every support question should be answered in a public place so every user can benefit from it . Thanks in advance.
+If you have any questions or need help please visit the ioBroker community:
+* [ioBroker forum](https://forum.iobroker.net/)
+* [Discord channel](https://discord.gg/Ne3y6fUac3)
+* [Facebook group](https://www.facebook.com/groups/440499112958264/)
 
-If you think you found a bug or simply want to request a new feature please open an issue on Github so we can talk about.
+### How to report an issue or request a feature?
 
-The following ways to get iobroker-container running are only examples. Maybe you have to change, add or replace parameters to configure ioBroker for fitting your needs.
+If you think you found an issue let us know by opening a [GitHub issue](https://github.com/buanet/ioBroker.docker/issues). Make sure you have googled it before. 
+Please do not use the issues for support questions. Not every error message is worth a new report. Use [discussions](https://github.com/buanet/ioBroker.docker/discussions) if you are not sure.
 
-### Running from command line
-
-For taking a first look at the iobroker docker container it would be enough to simply run the following basic docker run command:
-
-```
-docker run -p 8081:8081 --name iobroker -v iobrokerdata:/opt/iobroker buanet/iobroker:latest
-```
-
-### Running with docker-compose
-
-You can also run iobroker by using docker-compose. Here is an example:
-
-```
-version: '2'
-
-services:
-  iobroker:
-    restart: always
-    image: buanet/iobroker:latest
-    container_name: iobroker
-    hostname: iobroker
-    ports:
-      - "8081:8081"
-    volumes:
-      - iobrokerdata:/opt/iobroker
-```
-
-## Special settings and features
-
-The following will give a short overview.
-
-### Environment variables
-
-To configure the ioBroker container on startup it is possible to set some environment variables.
-You do not have to declare every single variable when setting up your container. Variables you do not set will come up with their default value.
-
-**Important: In v4.2.0 the ENVs "ADMINPORT" and "REDIS" were renamed/ reorganized. For Details see the following table!**
-
-|ENV|Default|Description|
-|---|---|---|
-|AVAHI|false|Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"|
-|IOB_ADMINPORT|8081|Sets ioBroker adminport on startup|
-|IOB_MULTIHOST|[not set]|Sets ioBroker instance as "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)|
-|IOB_OBJECTSDB_HOST|127.0.0.1|Sets host for ioBroker objects db|
-|IOB_OBJECTSDB_PORT|9001|Sets port for ioBroker objects db|
-|IOB_OBJECTSDB_TYPE|file|Sets type of ioBroker objects db, cloud be "file" or "redis" <br>(at the moment redis as objects db is [not officially supported by ioBroker](https://github.com/ioBroker/ioBroker#databases))|
-|IOB_STATESDB_HOST|127.0.0.1|Sets host for ioBroker states db|
-|IOB_STATESDB_PORT|9000|Sets port for ioBroker states db|
-|IOB_STATESDB_TYPE|file|Sets type of ioBroker states db, could be "file" or "redis"|
-|LANG|de_DE.UTF&#x2011;8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
-|LANGUAGE|de_DE:de|The following locales are pre-generated: de_DE:de, en_US:en|
-|LC_ALL|de_DE.UTF-8|The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8|
-|PACKAGES|[not set]|Installs additional linux packages to your container, packages should be seperated by whitespace like this: "package1 package2 package3"|
-|SETGID|1000|For some reasons it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host|
-|SETUID|1000|For some reasons it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host|
-|TZ|Europe/Berlin|All valid Linux-timezones|
-|USBDEVICES|none|Sets relevant permissions on mounted devices like "/dev/ttyACM0", for more than one device separate with ";" like this: "/dev/ttyACM0;/dev/ttyACM1"|
-|ZWAVE|false|Will install openzwave to support zwave-adapter, can be "true" or "false"|
-
-### Mounting folder/ volume
-
-It is possible to mount an empty folder to /opt/iobroker during first startup of the container. The startup script will check this folder and restore content if it is empty.
-
-Since v4.1.0 it is also possible mount a folder filled up with an iobroker backup file created using `iobroker backup` command or backitup adapter. Please make sure the name of your backup file ends like this: `*_backupiobroker.tar.gz"`.
-
-The startup script will then detect this backup and restore it during the start of the container. Please see container logs when starting the container for more details!
-
-Note: It is absolutely recommended to use a mounted folder or persistent volume for /opt/iobroker folder!
-
-You can also mount a folder containing an existing ioBroker-installation (e.g. when moving an existing installation to docker).
-But watch for the used node version. If the existing installation runs with another major version of node you have do perform additional steps. For more Details see the "Important notice" on top of this readme.md file.
-
-**Important: If the folder you mount to /opt/iobroker in your container is placed on a mounted device, partition or other storage, the mountpoint on your host should NOT have the "noexec" flag activated. Otherwise you may get problems executing ioBroker inside the container!**   
-
-### Mounting USB device
-
-If you want to use a USB device within ioBroker inside your container don´t forget to [mount the device](https://docs.docker.com/engine/reference/commandline/run/#add-host-device-to-container---device) on container startup and use the environment variable "USBDEVICES".
-
-### User defined startup scripts
-
-It is possible to add some script code to container startup with the help of the userscripts feature. You can get this to work by mounting an additional folder to `/opt/userscripts` into the container.
-
-When you mount an empty folder the startup script will restore two example scripts in there. To activate the scripts you have to remove the `_example` part of the name. The "userscript_firststart.sh" will execute only at the very first start of a new container, while the "userscript_everystart.sh" will execute on every container start.
-
-Feel free to test it with my example code. Take a look at the log. In "Step 4 of 5: Applying special settings" you will see the messages generated by the example userscripts.
-
-### Multihost
-
-With the help of the ENV "IOB_MULTIHOST" and the ENVs for objects and states db connections (see ENVs table above) it is now possible to run a container as standalone, multihost master or multihost slave. This is more or less a feature for advanced users. Please make sure you know how ioBroker multihost is working and set the ENVs as with `ìobroker setup custom`.
-
-There is no need for executing `iobroker multihost enable` or `iobroker multihost connect` inside the container. Just configure the mentioned ENVs. The startup script will do all the magic.
-
-For general information about iobroker multihost feature please see [official ioBroker documentation](https://www.iobroker.net/docu/index-24.htm?page_id=3068&lang=de).
-
-### Healthcheck
-
-Since v5.1.0 the image contains a simple Docker healthcheck. At the moment it only checks if js-controller is running inside the container and reports "healthy" or "unhealthy" to the Docker daemon. Further development is planned.
-
-The healthcheck is configured to 5 retries in an 15s interval with a timeout of 5s. So a container needs a minimum of one minute to get unhealthy.   
-
-Hint: As the Docker daemon itself gives no opportunity to automatically restart an unhealthy container you might want to setup some kind of "watchdog container" like this simple one: https://github.com/buanet/docker-watchdog.
-
-### Maintenance script (beta)
-
-Within the implementation of the docker health check (above) some manual maintenance actions, like stopping ioBroker for upgrading js-controller, would cause the container to get "unhealthy" and may cause an external watchdog to automatically restart it.
-
-In this case you can use the new maintenance command line tool inside the container. By simply typing `maintenance on` it will activate some kind of "maintenance mode" and automatically stop ioBroker while the container stays healthy.
-
-After your maintenance is done just type `maintenance off`. Depending on the selected restart policy of your container, the command will stop (and automatically restart) it.
-
-## Best practices
-
-### Avoid using "latest" docker tag
-
-To avoid conflicts when upgrading your container or getting in trouble when accidentally upgrading your container to a new major version I prefer using a version docker tag like "v4.2.0" instead of "latest" for creating your container.
-
-With v5.1.0 an additional docker tag "latest-[major version]" is available. This gives you the possibility update your container automatically while always staying in the same major version.
-
-### Upgrading your container
-
-If you want to upgrade your ioBroker container to a new major version (e.g. from v4 to v5) I would prefer to do that by creating a backup in ioBroker (by "iobroker backup" or backitup adapter) and restoring it to a completely new container. All you need is time an the following steps:
-* make a backup by command line ("iobroker backup") or backitup adapter
-* stop the old container
-* create a new and empty data folder or volume and place your backup file in it
-* create a new container as your old or as you need it and use the new data folder/ volume for the /opt/iobroker mount point
-* follow the log output of the container and be patient
-
-After this steps the startup script inside the container will automatically detect and restore your backup to a new ioBroker instance. When iobroker is started after the restore it will install your adapters to the new ioBroker instance by itself. This might take some time but will give you the best and cleanest results...
-
-### Switching states db from file to redis
-
-If you want to switch states db from file to redis on a n existing installation you might want to keep all your actual states. As simply setting the needed ENVs won't migrate your existing states into the redis db it is best practice to first run "iobroker setup custom" inside your container before adding the ENVs. This will give you the choice to migrate your states. 
-
-## Miscellaneous
-
-### Detecting this Docker image by ioBroker (feature for adapter developers)
-
-For adapter developers it is now possible to easily detect if ioBroker is running inside the official docker container. Please simply check if the file `/opt/scripts/.docker_config/.thisisdocker` exists. The content of the file will tell the image version.  
+## :eyes: Miscellaneous
 
 ### Beta testing
 
-If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. You can find the readme.md file for beta versions [here](https://github.com/buanet/ioBroker.docker/blob/beta/README.md). Please make sure to read the changelog before testing beta versions.
-
-### Subscribe to updates
-
-If you want the newest updates about the image and my tutorials at https://smarthome.buanet.de you can simply subscribe to my new "news and updates" channel (only in German) on Telegram.
-You will find the channel here: https://t.me/buanet_tutorials
+If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. You can find the changelog for beta versions [here](https://github.com/buanet/ioBroker.docker/blob/dev/CHANGELOG.md). For more details and beta support join us at the "docker-image" chat on the [ioBroker Discord channel](https://discord.gg/Ne3y6fUac3).
 
 ### Support the project
 
 The easiest way to support this project is to leave me some likes/ stars on Github and Docker hub!<br>
-If you want to give something back, feel free to take a look into the [open issues](https://github.com/buanet/ioBroker.docker/issues) or the [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) and helping me answering questions, fixing bugs or adding new features!<br>
-And if you want to buy me a beer instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://buanet.de/wp-content/uploads/2017/08/pp128.png" height="20" width="20"></a><br>
+If you want to give something back to the community, feel free to take a look into the [open issues](https://github.com/buanet/ioBroker.docker/issues) or the [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) and help me answering questions, fixing bugs or adding new features!<br>
+If that doesn't work for you and you want to buy me a beer instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/pp_logo.png" height="15" width="15"></a><br>
 Thank you!
 
-## Changelog
+## :memo: Changelog
 
 Moved to [CHANGELOG.md](CHANGELOG.md).
 
-## License
+## :copyright: License
 
 MIT License
 
-Copyright (c) 2017-2021 [André Germann]
+Copyright (c) 2017-2021 André Germann
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -225,6 +92,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Credits
+## :star: Credits
 
 Inspired by https://github.com/MehrCurry/docker-iobroker

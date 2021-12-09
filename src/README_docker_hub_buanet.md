@@ -3,14 +3,16 @@
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/buanet/ioBroker.docker/Build%20debian%20based%20image%20\(beta\))](https://github.com/buanet/docker.watchdog/actions/workflows/docker_build_main_image.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/buanet/ioBroker.docker/Build%20debian%20based%20image%20\(latest\))](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-main.yml)
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
 [![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
 [![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
 [![License](https://img.shields.io/github/license/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue?style=flat)](https://paypal.me/buanet)
 
-**Note:** New major versions (e.g. v4, v5, v6) of the image always come with a new major verson of node (preinstalled). To avoid issues when upgrading into a new major version the best practice recommendation is to migrate using backup and restore procedure. For more details please see "Best Practices" section on official  [readme.md](https://github.com/buanet/ioBroker.docker#best-practices).
+# Important Note
+
+New major image versions (e.g. v4, v5, v6) always come with a new major version of node! This might lead to problems when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the new [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
 
 # Quick reference
 
@@ -20,17 +22,23 @@
 * Supported architectures: amd64, arm32v7, arm64v8
 * Changelog: [Github Repository Changelog](https://github.com/buanet/ioBroker.docker/blob/main/CHANGELOG.md)
 * Source code: [Github Repository](https://github.com/buanet/ioBroker.docker)
-* All other questions should be answered here: [Github Repository Readme](https://github.com/buanet/ioBroker.docker#readme) or [iobroker.net](https://www.iobroker.net/)
+* All other questions should be answered here: [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/) or [iobroker.net](https://www.iobroker.net/)
 
 # Supported tags
 
-* `v5.2.0`, `v5.2.0-amd64`, `v5.2.0-arm32v7`, `v5.2.0-arm64v8`, `latest-v5`, `latest`
-* `v5.2.0-node14`, `v5.2.0-node14-amd64`, `v5.2.0-node14-arm32v7`, `v5.2.0-node14-arm64v8`, `latest-v5-node14`, `latest-node14`
-* `v5.1.0`, `v5.2.0-amd64`, `v5.2.0-armv7hf`, `v5.2.0-aarch64`
+It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-vX` tag instead.
+
+### Node 14 versions
+* [`v6.0.0`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`latest-v6`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile)
+
+### Node 12 versions
+* [`v5.2.0`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`v5.2.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`v5.2.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`v5.2.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile), [`latest-v5`](https://github.com/buanet/ioBroker.docker/blob/v5.2.0/debian/node12/Dockerfile)
+* [`v5.1.0`](https://github.com/buanet/ioBroker.docker/blob/v5.1.0/amd64/Dockerfile), [`v5.1.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v5.1.0/amd64/Dockerfile), [`v5.1.0-armv7hf`](https://github.com/buanet/ioBroker.docker/blob/v5.1.0/armv7hf/Dockerfile), [`v5.1.0-aarch64`](https://github.com/buanet/ioBroker.docker/blob/v5.1.0/aarch64/Dockerfile)
+* [`v5.0.0`](https://github.com/buanet/ioBroker.docker/blob/v5.0.0/amd64/Dockerfile), [`v5.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v5.0.0/amd64/Dockerfile), [`v5.0.0-armv7hf`](https://github.com/buanet/ioBroker.docker/blob/v5.0.0/armv7hf/Dockerfile), [`v5.0.0-aarch64`](https://github.com/buanet/ioBroker.docker/blob/v5.0.0/aarch64/Dockerfile)
 
 # What is ioBroker?
 
-IoBroker is a open source IoT platform written in JavaScript that easily connects smarthome componets from different manufactures. With the help of plugins (called: "adapters") ioBroker is able to communicate with a big variety of IoT hardware and services using different protocols and APIs.<br>
+IoBroker is a open source IoT platform written in JavaScript that easily connects smarthome components from different manufactures. With the help of plugins (called: "adapters") ioBroker is able to communicate with a big variety of IoT hardware and services using different protocols and APIs.<br>
 All data is stored in a central database that all adapters can access. With this it is very easy to build up logical connections, automation scripts and beautiful visualisations.<br>
 For further details please check out [iobroker.net](https://www.iobroker.net).
 
@@ -41,7 +49,7 @@ For further details please check out [iobroker.net](https://www.iobroker.net).
 For taking a first look at iobroker on docker it would be enough to simply run the following basic docker run command:
 
 ```
-docker run -p 8081:8081 --name iobroker -h iobroker iobroker/iobroker
+docker run -p 8081:8081 --name iobroker -h iobroker buanet/iobroker
 ```
 
 ## Running with docker-compose
@@ -54,7 +62,7 @@ version: '2'
 services:
   iobroker:
     container_name: iobroker
-    image: iobroker/iobroker
+    image: buanet/iobroker
     hostname: iobroker
     restart: always
     ports:
@@ -100,17 +108,17 @@ You could use environment variables to auto configure your ioBroker container on
 * `LANG` (optional, default: de_DE.UTF&#x2011;8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
 * `LANGUAGE` (optional, default: de_DE:de) The following locales are pre-generated: de_DE:de, en_US:en
 * `LC_ALL` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
-* `PACKAGES` (optional) Installs additional linux packages to your container, packages should be seperated by whitespace like this: "package1 package2 package3".
+* `PACKAGES` (optional) Installs additional linux packages to your container, packages should be separated by whitespace like this: "package1 package2 package3".
 * `SETGID` (optional, default: 1000) In some cases it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host
 * `SETUID` (optional, default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host
-* `TZ` (optional, default: Europe/Berlin) Specifys the timeszone
+* `TZ` (optional, default: Europe/Berlin) Specifies the time zone
 * `USBDEVICES` (optional) Sets relevant permissions on mounted devices like "/dev/ttyACM0". For more than one device separate with ";".
 
 ## Notes about Docker networks
 
 The examples above are dealing with the Docker default bridge network. In general there are [some reasons](https://docs.docker.com/network/bridge/#differences-between-user-defined-bridges-and-the-default-bridge) why it might be the better choice to use a user-defined bridge network. 
 
-Using a Docker bridge network works fine for taking a first look and with most of the ioBroker adapters (if you dont forget to redirect the ports your adapers use).<br>
+Using a Docker bridge network works fine for taking a first look and with most of the ioBroker adapters (if you don't forget to redirect the ports your adapters use).<br>
 But some ioBroker adapters are using techniques like [Multicast](https://en.wikipedia.org/wiki/Multicast) or [Broadcast](https://en.wikipedia.org/wiki/Broadcasting_(networking)) for automatic detection of IoT devices<br>
 In this case it may be useful to switch to [host](https://docs.docker.com/network/host/) or [MACVLAN](https://docs.docker.com/network/macvlan/) network. 
 
