@@ -41,14 +41,14 @@ You can pull the Docker image from:
 
 ### Where can I get help?
 
-If you have any questions or need help please contact the ioBroker community:
+If you have any questions or need help please visit the ioBroker community:
 * [ioBroker forum](https://forum.iobroker.net/)
 * [Discord channel](https://discord.gg/Ne3y6fUac3)
 * [Facebook group](https://www.facebook.com/groups/440499112958264/)
 
 ### How to report an issue or request a feature?
 
-If you think you found an issue let us know by opening an [GitHub issue](https://github.com/buanet/ioBroker.docker/issues). Make sure you have googled it before. 
+If you think you found an issue let us know by opening a [GitHub issue](https://github.com/buanet/ioBroker.docker/issues). Make sure you have googled it before. 
 Please do not use the issues for support questions. Not every error message is worth a new report. Use [discussions](https://github.com/buanet/ioBroker.docker/discussions) if you are not sure.
 
 ## :eyes: Miscellaneous

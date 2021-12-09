@@ -12,7 +12,7 @@
 
 # Important Note
 
-New major image versions (e.g. v4, v5, v6) always come with a new major version of node! This might lead to problems when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see "Best Practices" section at our new [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/).
+New major image versions (e.g. v4, v5, v6) always come with a new major version of node! This might lead to problems when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the new [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
 
 # Quick reference
 
