@@ -1,15 +1,17 @@
- <img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/iobroker_logo.png" width="600" title="ioBroker Logo">
+###### [iobroker/iobroker](https://hub.docker.com/r/iobroker/iobroker) is an alias for [buanet/iobroker](https://hub.docker.com/r/buanet/iobroker) 
+ 
+<img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
-[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
-[![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
-[![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/r/buanet/iobroker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/r/buanet/iobroker)
+[![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/r/buanet/iobroker)<br>
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/buanet/ioBroker.docker/Build%20debian%20based%20image%20\(latest\))](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-main.yml)
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
 [![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
 [![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
 [![License](https://img.shields.io/github/license/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 
-# Important Note
+# Important note
 
 New major image versions (e.g. v4, v5, v6) always come with a new major version of node! This might lead to problems when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the new [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
 

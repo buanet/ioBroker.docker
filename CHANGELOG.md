@@ -1,5 +1,8 @@
 ## Changelog
 
+### v6.1.0-beta.1 (2021-12-14)
+* added alias "m" for maintenance script
+
 ### v6.0.0 (2021-12-09)
 * moving docu/ restructuring readme
 * v6.0.0-beta1 (2021-10-07)
@@ -29,12 +32,12 @@
   * adding labels in OCI standard format
   * adding packages update on first start
   * adding file for docker detection by ioBroker adapters
-  * adding best practice for states db migation in readme
+  * adding best practice for states db migration in readme
   * removing couchdb option for states db (no longer supported)
 * v5.2.0-beta1 (2021-05-04)
   * added upgrade parameter to maintenance script
   * added expose for default admin ui port (#172)
-  * added shortform for maintenance script
+  * added short form for maintenance script
 * v5.2.0-beta (2021-04-02)
   * some renaming to optimize automated build
   * changes in versioning
@@ -43,7 +46,7 @@
 ### v5.1.0 (2020-11-05)
 * v5.0.2-beta (2020-07-28)
   * added docker tag for majorversion latest
-  * extend readme.md doku
+  * extend readme.md docu
   * added maintenance script
   * added container healthcheck
   * fixed configuration procedure and logging for objects and states db setup

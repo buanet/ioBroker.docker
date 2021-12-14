@@ -1,5 +1,5 @@
 # Github action to build Docker image from main branch (tag: latest)
-name: Build debian based image (latest)
+name: Build debian image (latest)
 
 on:
   workflow_dispatch:

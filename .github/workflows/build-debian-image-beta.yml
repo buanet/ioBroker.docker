@@ -1,5 +1,5 @@
 # Github action to build Docker image from beta branch (tag: beta)
-name: Build debian based image (beta)
+name: Build debian image (beta)
 
 on:
   workflow_dispatch:

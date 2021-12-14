@@ -17,6 +17,7 @@ display_help() {
   echo ''
   echo "Usage: maintenance [ COMMAND ] [ OPTION ]"
   echo "       maint [ COMMAND ] [ OPTION ]"
+  echo "       m [ COMMAND ] [ OPTION ]"
   echo ''
   echo "COMMANDS"
   echo "------------------"

@@ -1,7 +1,8 @@
 # Github action to build Docker image from beta branch (tag: beta)
-name: Build debian based image (beta-node16)
+name: Build debian image (beta-node16)
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - beta
@@ -9,7 +10,6 @@ on:
       - closed
   schedule:
     - cron: '42 3 * * 1'
-  workflow_dispatch:
 
 jobs:
   bulid-beta-node16-image:
