@@ -94,7 +94,7 @@ You could use environment variables to auto configure your ioBroker container on
 * `IOB_MULTIHOST`(optional) Sets ioBroker "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)
 * `IOB_OBJECTSDB_HOST` (optional, default: 127.0.0.1) Sets host for ioBroker objects db
 * `IOB_OBJECTSDB_PORT` (optional, default: 9001) Sets port for ioBroker objects db
-* `IOB_OBJECTSDB_TYPE` (optional, default: file) Sets type of ioBroker objects db, cloud be "file" or "redis" ([not officially supported](https://github.com/ioBroker/ioBroker#databases)).
+* `IOB_OBJECTSDB_TYPE` (optional, default: file) Sets type of ioBroker objects db, could be "file" or "redis" ([not officially supported](https://github.com/ioBroker/ioBroker#databases)).
 * `IOB_STATESDB_HOST` (optional, default: 127.0.0.1) Sets host for ioBroker states db
 * `IOB_STATESDB_PORT` (optional, default: 9000) Sets port for ioBroker states db
 * `IOB_STATESDB_TYPE` (optional, default: file) Sets type of ioBroker states db, could be "file" or "redis"
