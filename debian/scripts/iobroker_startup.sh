@@ -86,6 +86,7 @@ then
     echo "Registering maintenance script as command..."
     echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
     echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+    echo "alias m=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
     echo "Done."
     echo ' '
   fi
