@@ -30,8 +30,8 @@ display_help() {
   echo "OPTIONS"
   echo "------------------"
   echo "       -y|--yes   > confirms the used command without asking"
-  echo "       -h|--help  > shows this help"  
-  echo ''  
+  echo "       -h|--help  > shows this help"
+  echo ''
   exit 0
 }
 
@@ -131,7 +131,7 @@ switch_off() {
 # upgrade js-controller
 upgrade() {
   if [ "$autoconfirm" == "no" ]
-  then 
+  then
     echo 'You are now going to upgrade your js-controller.'
     echo 'As this will change data in /opt/iobroker, make sure you have a backup!'
     echo 'During the upgrade process the container will automatically switch into maintenance mode and stop ioBroker.'
@@ -161,8 +161,8 @@ upgrade() {
       exit 0
     fi
   elif [ "$autoconfirm" == "yes" ]
-  then 
-     echo 'You are now going to upgrade your js-controller.'
+  then
+    echo 'You are now going to upgrade your js-controller.'
     echo 'As this will change data in /opt/iobroker, make sure you have a backup!'
     echo 'During the upgrade process the container will automatically switch into maintenance mode and stop ioBroker.'
     echo 'Depending of the restart policy, your container will be stopped or restarted automatically after the upgrade.'
@@ -198,7 +198,7 @@ for i in "$@"; do
   reverse="$i $reverse"
 done
 
-# checking the arguments 
+# checking the arguments
 for i in $reverse; do
   case $i in
     help|-h|--help)
