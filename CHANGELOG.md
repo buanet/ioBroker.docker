@@ -1,5 +1,9 @@
 ## Changelog
 
+### v6.1.0-beta.1 (2021-12-20)
+* added autoconfirm parameter to upgrade function in maintenance script ([#229 @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
+* added alias "m" for maintenance script
+
 ### v6.0.0 (2021-12-09)
 * moving docu/ restructuring readme
 * v6.0.0-beta1 (2021-10-07)
@@ -7,7 +11,7 @@
   * adding beta-node16 tag for beta testing node16
   * updating documentation
 * v5.3.0-beta1 (2021-10-07)
-  * adding check  (installed) PACKAGES on startup (#201)
+  * adding check  (installed) PACKAGES on startup (fixes [#201](https://github.com/buanet/ioBroker.docker/issues/201))
   * adding packages for discovery adapter
   * adding packages for backitup adapter
   * reorganizing Dockerfile
@@ -29,12 +33,12 @@
   * adding labels in OCI standard format
   * adding packages update on first start
   * adding file for docker detection by ioBroker adapters
-  * adding best practice for states db migation in readme
+  * adding best practice for states db migration in readme
   * removing couchdb option for states db (no longer supported)
 * v5.2.0-beta1 (2021-05-04)
   * added upgrade parameter to maintenance script
-  * added expose for default admin ui port (#172)
-  * added shortform for maintenance script
+  * added expose for default admin ui port (fixes [#172](https://github.com/buanet/ioBroker.docker/issues/172))
+  * added short form for maintenance script
 * v5.2.0-beta (2021-04-02)
   * some renaming to optimize automated build
   * changes in versioning
@@ -43,7 +47,7 @@
 ### v5.1.0 (2020-11-05)
 * v5.0.2-beta (2020-07-28)
   * added docker tag for majorversion latest
-  * extend readme.md doku
+  * extend readme.md docu
   * added maintenance script
   * added container healthcheck
   * fixed configuration procedure and logging for objects and states db setup
@@ -84,7 +88,7 @@
 ### v4.1.0 (2020-01-17)
 * improved readme.md
 * v4.0.3-beta (2020-01-06)
-  * added support to restore backup on startup
+  * added support to restore backup on startup ([#56 @duffbeer2000](https://github.com/buanet/ioBroker.docker/pull/56))
   * small fixes according to "docker best practices"
 * v4.0.2-beta (2019-12-10)
   * ~~added env for activating redis~~
@@ -104,13 +108,13 @@
 * v3.1.2-beta (2019-09-03)
   * using node 10 instead of node 8
 * v3.1.1-beta (2019-09-02)
-  * adding env for setting uid/ gid for iobroker-user
+  * adding env for setting uid/ gid for iobroker-user ([#33 @mplogas](https://github.com/buanet/ioBroker.docker/pull/33))
 
 ### v3.1.0 (2019-08-21)
 * v3.0.3-beta (2019-08-21)
   * switching base image from "debian:latest" to "debian:stretch"
 * v3.0.2-beta (2019-06-13)
-  * using gosu instead of sudo
+  * using gosu instead of sudo ([#26 @SchumyHao](https://github.com/buanet/ioBroker.docker/pull/26))
   * changing output of ioBroker logging
 * v3.0.1-beta (2019-05-18)
   * ~~switching back to iobroker-daemon for startup~~
