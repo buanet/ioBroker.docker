@@ -130,62 +130,43 @@ switch_off() {
 
 # upgrade js-controller
 upgrade() {
+  echo 'You are now going to upgrade your js-controller.'
+  echo 'As this will change data in /opt/iobroker, make sure you have a backup!'
+  echo 'During the upgrade process the container will automatically switch into maintenance mode and stop ioBroker.'
+  echo 'Depending of the restart policy, your container will be stopped or restarted automatically after the upgrade.'
+
   if [ "$autoconfirm" == "no" ]
   then
-    echo 'You are now going to upgrade your js-controller.'
-    echo 'As this will change data in /opt/iobroker, make sure you have a backup!'
-    echo 'During the upgrade process the container will automatically switch into maintenance mode and stop ioBroker.'
-    echo 'Depending of the restart policy, your container will be stopped or restarted automatically after the upgrade.'
     read -p 'Do you want to continue [yes/no]? ' A
     if [ "$A" == "y" ] || [ "$A" == "Y" ] || [ "$A" == "yes" ]
     then
-      echo 'Activating maintenance mode...'
-      echo "maintenance" > /opt/scripts/.docker_config/.healthcheck
-      sleep 1
-      echo 'Done.'
-      echo 'Stopping ioBroker...'
-      pkill -u iobroker
-      sleep 1
-      echo 'Done.'
-      echo 'Upgrading js-controller...'
-      iobroker update
-      iobroker upgrade self
-      sleep 1
-      echo 'Done.'
-      echo 'Container will be stopped or restarted in 5 seconds...'
-      sleep 5
-      echo "stopping" > /opt/scripts/.docker_config/.healthcheck
-      pkill -u root
-      exit 0
+      : # Continue.
     else
       exit 0
     fi
   elif [ "$autoconfirm" == "yes" ]
   then
-    echo 'You are now going to upgrade your js-controller.'
-    echo 'As this will change data in /opt/iobroker, make sure you have a backup!'
-    echo 'During the upgrade process the container will automatically switch into maintenance mode and stop ioBroker.'
-    echo 'Depending of the restart policy, your container will be stopped or restarted automatically after the upgrade.'
     echo 'This command was already confirmed by -y or --yes option.'
-    echo 'Activating maintenance mode...'
-    echo "maintenance" > /opt/scripts/.docker_config/.healthcheck
-    sleep 1
-    echo 'Done.'
-    echo 'Stopping ioBroker...'
-    pkill -u iobroker
-    sleep 1
-    echo 'Done.'
-    echo 'Upgrading js-controller...'
-    iobroker update
-    iobroker upgrade self
-    sleep 1
-    echo 'Done.'
-    echo 'Container will be stopped or restarted in 5 seconds...'
-    sleep 5
-    echo "stopping" > /opt/scripts/.docker_config/.healthcheck
-    pkill -u root
-    exit 0
   fi
+
+  echo 'Activating maintenance mode...'
+  echo "maintenance" > /opt/scripts/.docker_config/.healthcheck
+  sleep 1
+  echo 'Done.'
+  echo 'Stopping ioBroker...'
+  pkill -u iobroker
+  sleep 1
+  echo 'Done.'
+  echo 'Upgrading js-controller...'
+  iobroker update
+  iobroker upgrade self
+  sleep 1
+  echo 'Done.'
+  echo 'Container will be stopped or restarted in 5 seconds...'
+  sleep 5
+  echo "stopping" > /opt/scripts/.docker_config/.healthcheck
+  pkill -u root
+  exit 0
 }
 
 ########################################
