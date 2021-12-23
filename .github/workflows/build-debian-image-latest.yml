@@ -1,5 +1,5 @@
 # Github action to build Docker image from main branch (tag: latest)
-name: Build image (buanet/iobroker:latest)
+name: Build buanet/iobroker:latest
 
 on:
   release:

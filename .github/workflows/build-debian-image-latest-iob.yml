@@ -1,5 +1,5 @@
 # Github action to build Docker image from main branch for iobroker/iobroker (tag: latest)
-name: Build image (iobroker/iobroker:latest)
+name: Build iobroker/iobroker:latest
 
 on:
   release:

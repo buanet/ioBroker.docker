@@ -1,5 +1,5 @@
 # Github action to build Docker image from dev branch (tag: dev)
-name: Build debian image (dev)
+name: Build buanet/iobroker:dev
 
 on:
   workflow_dispatch:
