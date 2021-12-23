@@ -1,5 +1,5 @@
 # Github action to build Docker image from main branch (tag: latest)
-name: Build debian image (latest)
+name: Build image (buanet/iobroker:latest)
 
 on:
   release:
@@ -7,7 +7,7 @@ on:
       - released
 
 jobs:
-  bulid-latest-image:
+  build-latest-image:
     runs-on: ubuntu-latest
     steps:
       - name: Getting published release tag

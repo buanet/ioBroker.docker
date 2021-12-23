@@ -1,23 +1,23 @@
 # Github action to build Docker image from main branch for iobroker/iobroker (tag: latest)
-name: Build debian based image (latest)
+name: Build image (iobroker/iobroker:latest)
 
 on:
-  workflow_dispatch:
   release:
     types:
-      - published
-  schedule:
-    - cron: '42 3 * * 5'
+      - released
 
 jobs:
-  bulid-latest-image:
+  build-latest-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo (main)
+      - name: Getting published release tag
+        run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+    
+      - name: Checkout repo
         uses: actions/checkout@v2.4.0
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: 'main'
+          ref: ${{ env.RELEASE_TAG }}
 
       - name: Get and write version and date
         id: version

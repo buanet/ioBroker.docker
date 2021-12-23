@@ -3,19 +3,16 @@ name: Build debian based image (dev-node16)
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - dev
 
 jobs:
-  bulid-dev-node16-image:
+  build-dev-node16-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo (dev)
         uses: actions/checkout@v2.4.0
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: 'dev'
+          ref: 'main'
 
       - name: Get and write version and date
         id: version
