@@ -10,6 +10,8 @@ LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.created="${DATI}"
 
+ARG NODE_MAJOR_VERSION=14
+
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install prerequisites (including node) and generating locales
@@ -31,7 +33,7 @@ RUN apt-get update && apt-get install -y \
     udev \
     wget \
     # Install node
-    && curl -sL https://deb.nodesource.com/setup_14.x | bash \
+    && curl -sL https://deb.nodesource.com/setup_${NODE_MAJOR_VERSION}.x | bash \
     && apt-get update && apt-get install -y nodejs \
     # Install node-gyp
     && npm install -g node-gyp \

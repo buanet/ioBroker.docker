@@ -1,5 +1,5 @@
 # Github action to build Docker image from main branch (tag: latest)
-name: Build buanet/iobroker:latest
+name: Build iobroker container image
 
 on:
   release:
@@ -9,10 +9,13 @@ on:
 jobs:
   build-latest-image:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node_major_version: [14, 16]
     steps:
       - name: Getting published release tag
         run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-    
+
       - name: Checkout repo
         uses: actions/checkout@v2.4.0
         with:
@@ -35,13 +38,8 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
           mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # amd64
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node14/Dockerfile > ./debian/node14/Dockerfile.tmp 
-          mv -f ./debian/node14/Dockerfile.tmp ./debian/node14/Dockerfile
-
-      - name: Set up manifest tool
-        run: |
-          wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64 -O manifest-tool
-          chmod +x manifest-tool
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/Dockerfile > ./debian/Dockerfile.tmp
+          mv -f ./debian/Dockerfile.tmp ./debian/Dockerfile
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1.2.0
@@ -56,6 +54,12 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
 
+      - name: Login to DockerHub (iobroker)
+        uses: docker/login-action@v1.12.0
+        with:
+          username: ${{ secrets.DOCKER_USER_IOB }}
+          password: ${{ secrets.DOCKER_PASS_IOB }}
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1.12.0
         with:
@@ -63,53 +67,53 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Build Docker image (amd64)
+      - if: ${{ matrix.node_major_version }} == 14
+        name: Build Docker image Node ${{ matrix.node_major_version }}
         uses: docker/build-push-action@v2.7.0
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/Dockerfile
           push: true
-          platforms: linux/amd64
-          tags: |
-            buanet/iobroker:${{ env.version }}-amd64,
-            ghcr.io/buanet/iobroker:${{ env.version }}-amd64
+          build-args:
+            - NODE_MAJOR_VERSION=${{ matrix.node_major_version }}
+          platforms:
+            - linux/amd64
+            - linux/arm/v7
+            - linux/arm64
+          tags:
+            - buanet/iobroker:latest
+            - buanet/iobroker:latest-v${{ env.majorversion }}
+            - buanet/iobroker:${{ env.version }}
+            - buanet/iobroker:${{ env.version }}-node${{ matrix.node_major_version }}
+            - ghcr.io/buanet/iobroker:latest
+            - ghcr.io/buanet/iobroker:latest-v${{ env.majorversion }}
+            - ghcr.io/buanet/iobroker:${{ env.version }}
+            - ghcr.io/buanet/iobroker:${{ env.version }}-node${{ matrix.node_major_version }}
+            - iobroker/iobroker:latest
+            - iobroker/iobroker:latest-v${{ env.majorversion }}
+            - iobroker/iobroker:${{ env.version }}
+            - iobroker/iobroker:${{ env.version }}-node${{ matrix.node_major_version }}
 
-      - name: Build Docker image (arm32v7)
+      - if: ${{ matrix.node_major_version }} == 16
+        name: Build Docker image Node ${{ matrix.node_major_version }}
         uses: docker/build-push-action@v2.7.0
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/Dockerfile
           push: true
-          platforms: linux/arm/v7
-          tags: |
-            buanet/iobroker:${{ env.version }}-arm32v7,
-            ghcr.io/buanet/iobroker:${{ env.version }}-arm32v7
-
-      - name: Build Docker image (arm64v8)
-        uses: docker/build-push-action@v2.7.0
-        with:
-          context: ./debian
-          file: ./debian/node14/Dockerfile
-          push: true
-          platforms: linux/arm64/v8
-          tags: |
-            buanet/iobroker:${{ env.version }}-arm64v8,
-            ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8
-
-      - name: Create and push manifests (buanet)
-        run: |
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/latest/g" ./manifest.yml > manifest_latest.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_latest.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/latest/g" ./manifest_ghcr.yml > manifest_ghcr_latest.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_latest.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.majorversion }}/g" ./manifest.yml > manifest_majorversion.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_majorversion.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.majorversion }}/g" ./manifest_ghcr.yml > manifest_ghcr_majorversion.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_majorversion.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest.yml > manifest_version.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_version.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest_ghcr.yml > manifest_ghcr_version.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_version.yaml
+          build-args:
+            - NODE_MAJOR_VERSION=${{ matrix.node_major_version }}
+          platforms:
+            - linux/amd64
+            - linux/arm/v7
+            - linux/arm64
+          tags:
+            - buanet/iobroker:latest-v${{ env.majorversion }}
+            - buanet/iobroker:${{ env.version }}-node${{ matrix.node_major_version }}
+            - ghcr.io/buanet/iobroker:latest-v${{ env.majorversion }}
+            - ghcr.io/buanet/iobroker:${{ env.version }}-node${{ matrix.node_major_version }}
+            - iobroker/iobroker:latest-v${{ env.majorversion }}
+            - iobroker/iobroker:${{ env.version }}-node${{ matrix.node_major_version }}
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v5
@@ -129,4 +133,4 @@ jobs:
         env:
           OWNER: buanet
           PACKAGE_NAME: iobroker
-          PER_PAGE: 100      
+          PER_PAGE: 100
