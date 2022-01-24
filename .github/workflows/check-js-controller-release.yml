@@ -1,0 +1,49 @@
+name: Trigger build on new js-controller release
+
+on:
+  schedule:
+    - cron:  '42 23 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-and-trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2.4.0
+        with:
+          repository: 'buanet/ioBroker.docker'
+          token: ${{ secrets.ACTIONS_PAT }}
+
+      - name: Fetch js-controller release version
+        run: |
+          curl -sL https://api.github.com/repos/ioBroker/ioBroker.js-controller/releases/latest | \
+          jq -r ".tag_name" > .github/dependencies/.js-controller-version
+
+      - name: Check for modified files
+        id: git-check
+        run: echo ::set-output name=modified::$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")
+
+      - name: Commit latest release version
+        if: steps.git-check.outputs.modified == 'true'
+        run: |
+          git config --global user.name 'buanet'
+          git config --global user.email 'info@buanet.de'
+          git commit -am "new js-controller release"
+          git push
+
+      - name: Trigger build (buanet)
+        if: steps.git-check.outputs.modified == 'true'
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: Build buanet/iobroker:latest
+          repo: buanet/ioBroker.docker
+          token: ${{ secrets.ACTIONS_PAT }}
+
+      - name: Trigger build (iobroker)
+        if: steps.git-check.outputs.modified == 'true'
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: Build iobroker/iobroker:latest
+          repo: buanet/ioBroker.docker
+          token: ${{ secrets.ACTIONS_PAT }}
