@@ -1,4 +1,4 @@
-name: Trigger build on new js-controller release
+name: Check js-controller release version
 
 on:
   schedule:
