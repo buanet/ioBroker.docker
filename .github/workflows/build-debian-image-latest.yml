@@ -23,7 +23,7 @@ jobs:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
 
-      - name: Get and write version and date
+      - name: Fetching and adding version tag and date
         id: version
         run: |
           VERSION="$(cat .VERSION)"
