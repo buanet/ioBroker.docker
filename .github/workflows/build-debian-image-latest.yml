@@ -11,9 +11,12 @@ jobs:
   build-latest-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Getting published release tag
-        run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-    
+      - name: Fetching latest release tag
+        run: |
+          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
+          echo "Latest release tag : $LATESTRELEASE"
+          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
+
       - name: Checkout repo
         uses: actions/checkout@v2.4.0
         with:
