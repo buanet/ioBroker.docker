@@ -148,17 +148,20 @@ upgrade() {
   then
     echo 'This command was already confirmed by -y or --yes option.'
   fi
-
-  echo 'Activating maintenance mode...'
-  echo "maintenance" > /opt/scripts/.docker_config/.healthcheck
-  sleep 1
-  echo 'Done.'
-  echo 'Stopping ioBroker...'
-  pkill -u iobroker
-  sleep 1
-  echo 'Done.'
+  if [ $(cat /opt/scripts/.docker_config/.healthcheck) != 'maintenance' ]
+  then
+    echo 'Activating maintenance mode...'
+    echo "maintenance" > /opt/scripts/.docker_config/.healthcheck
+    sleep 1
+    echo 'Done.'  
+    echo 'Stopping ioBroker...'
+    pkill -u iobroker
+    sleep 5
+    echo 'Done.'
+  fi
   echo 'Upgrading js-controller...'
   iobroker update
+  sleep 1
   iobroker upgrade self
   sleep 1
   echo 'Done.'

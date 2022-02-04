@@ -1,9 +1,11 @@
 ## Changelog
 
-### v6.1.0-beta.1 (2021-12-23)
-* some more corrections in maintenance script ([#232 @agross](https://github.com/buanet/ioBroker.docker/pull/232)) 
-* added autoconfirm parameter to upgrade function in maintenance script ([#229 @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
-* added alias "m" for maintenance script
+### v6.1.0-beta.2 (upcoming)
+* adding breaks and optimizing maintenance script (fixes [#233](https://github.com/buanet/ioBroker.docker/issues/233))
+* v6.1.0-beta.1 (2021-12-23)
+  * some more corrections in maintenance script ([#232 @agross](https://github.com/buanet/ioBroker.docker/pull/232)) 
+  * added autoconfirm parameter to upgrade function in maintenance script ([#229 @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
+  * added alias "m" for maintenance script
 
 ### v6.0.0 (2021-12-09)
 * moving docu/ restructuring readme
