@@ -1,6 +1,8 @@
 ## Changelog
 
 ### v6.1.0-beta.2 (upcoming)
+* remove hostname check for multihost slave
+* optimize startup script logging
 * adding breaks and optimizing maintenance script (fixes [#233](https://github.com/buanet/ioBroker.docker/issues/233))
 * v6.1.0-beta.1 (2021-12-23)
   * some more corrections in maintenance script ([#232 @agross](https://github.com/buanet/ioBroker.docker/pull/232)) 
