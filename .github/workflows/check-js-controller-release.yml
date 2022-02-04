@@ -1,4 +1,4 @@
-name: Check js-controller release version
+name: Check js-controller release
 
 on:
   schedule:
@@ -32,18 +32,18 @@ jobs:
           git commit -am "new js-controller release"
           git push
 
-      - name: Trigger build (buanet)
+      - name: Trigger build debian latest (buanet)
         if: steps.git-check.outputs.modified == 'true'
         uses: benc-uk/workflow-dispatch@v1.1
         with:
-          workflow: Build buanet/iobroker:latest
+          workflow: Build debian latest (buanet)
           repo: buanet/ioBroker.docker
           token: ${{ secrets.ACTIONS_PAT }}
 
-      - name: Trigger build (iobroker)
+      - name: Trigger build debian latest (iobroker)
         if: steps.git-check.outputs.modified == 'true'
         uses: benc-uk/workflow-dispatch@v1.1
         with:
-          workflow: Build iobroker/iobroker:latest
+          workflow: Build debian latest (iobroker)
           repo: buanet/ioBroker.docker
           token: ${{ secrets.ACTIONS_PAT }}

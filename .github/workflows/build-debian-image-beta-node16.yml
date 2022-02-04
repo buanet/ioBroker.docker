@@ -1,5 +1,5 @@
 # Github action to build Docker image from beta branch (tag: beta)
-name: Build buanet/iobroker:beta-node16
+name: Build debian beta-node16
 
 on:
   release:
