@@ -1,0 +1,42 @@
+# Github action for testing the Docker image
+name: Testing Docker image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Testing with docker run
+        run: |
+          docker run -d -p 8081:8081 --name iobroker -v iobrokerdata:/opt/iobroker buanet/iobroker:latest
+          sleep 30
+          docker logs iobroker >& testrun.log
+          curl --insecure http://127.0.0.1:8081 2> /dev/null | grep '<title>Admin</title>' &> /dev/null || exit 1
+
+      - name: Send notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          # Required mail server address:
+          server_address: ${{secrets.MAIL_SERVER}}
+          # Required mail server port:
+          server_port: 465
+          # Optional (recommended): mail server username:
+          username: ${{secrets.MAIL_USER}}
+          # Optional (recommended) mail server password:
+          password: ${{secrets.MAIL_PASS}}
+          # Required mail subject:
+          subject: \[GitHub Actions\] ioBroker.Docker - Testing Docker image
+          # Required recipients' addresses:
+          to: andre@buanet.de
+          # Required sender full name (address can be skipped):
+          from: GitHub Actions Notification <noreply@buanet.de>
+          # Optional whether this connection use TLS (default is true if server_port is 465)
+          secure: true
+          # Optional plain body:
+          body: Job completed successfully!
+          # Optional unsigned/invalid certificates allowance:
+          ignore_cert: true
+          # Optional attachments:
+          attachments: testrun.log
