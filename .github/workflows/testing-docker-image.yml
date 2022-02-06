@@ -16,19 +16,18 @@ jobs:
           curl --insecure http://127.0.0.1:8081 2> /dev/null | grep '<title>Admin</title>' &> /dev/null || exit 1
 
       - name: Send email
-        uses: devellany/send-mail@v1.0.2
+        uses: devellany/send-mail@v1
         with:
           host: mail.buanet.de
           account: ${{secrets.MAIL_USER}}
           password: ${{secrets.MAIL_PASS}}
-          sender: devellany
+          sender: Notify
           from: noreply@buanet.de
           to: andre@buanet.de
           subject: \[GitHub Actions\] ioBroker.Docker - Testing Docker image
           body: Test
           contentType: text/html
           attachments: file://testrun.log
-
 
 #      - name: Send notification
 #        uses: dawidd6/action-send-mail@v3
