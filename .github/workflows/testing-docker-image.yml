@@ -24,7 +24,7 @@ jobs:
           sender: Notify
           from: noreply@buanet.de
           to: andre@buanet.de
-          subject: \[GitHub Actions\] ioBroker.Docker - Testing Docker image
+          subject: GitHub Actions - ioBroker.Docker - Testing Docker image
           body: Test
           contentType: text/html
           attachments: file://testrun.log
