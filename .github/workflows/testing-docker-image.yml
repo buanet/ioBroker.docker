@@ -16,7 +16,7 @@ jobs:
           curl --insecure http://127.0.0.1:8081 2> /dev/null | grep '<title>Admin</title>' &> /dev/null || exit 1
 
       - name: Send email
-        uses: devellany/send-mail@v1
+        uses: devellany/send-mail@v1.0.2
         with:
           host: mail.buanet.de
           account: ${{secrets.MAIL_USER}}
