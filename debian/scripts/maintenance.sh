@@ -50,13 +50,13 @@ check_status() {
 switch_on() {
   if [ $(cat /opt/scripts/.docker_config/.healthcheck) != 'maintenance' ] && [ "$killbyname" == "yes" ] # maintenance mode OFF / killbyname = yes  / undocumented, only for use with backitup restore scripts
   then
-    echo 'This command will activate maintenance mode and stop all node processes.'
+    echo 'This command will activate maintenance mode and stop js-controller.'
     echo 'Activating maintenance mode...'
     echo "maintenance" > /opt/scripts/.docker_config/.healthcheck
     sleep 1
     echo 'Done.'
     echo 'Stopping ioBroker...'
-    pkill node
+    pkill -u iobroker -f iobroker.js-controller
     sleep 1
     echo 'Done.'
     exit 0

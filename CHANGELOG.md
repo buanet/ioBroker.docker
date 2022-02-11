@@ -1,25 +1,27 @@
 ## Changelog
 
-### v6.1.0-beta.2 (upcoming)
+### v6.1.0-beta.2 (2022-02-11)
+* fix -kbn option in maintenance script
+* optimize shutdown/ prevent warnings on upgrade
 * remove hostname check for multihost slave
 * optimize startup script logging
-* adding breaks and optimizing maintenance script (fixes [#233](https://github.com/buanet/ioBroker.docker/issues/233))
+* add breaks and optimize maintenance script (fixes [#233](https://github.com/buanet/ioBroker.docker/issues/233))
 * v6.1.0-beta.1 (2021-12-23)
   * some more corrections in maintenance script ([#232 @agross](https://github.com/buanet/ioBroker.docker/pull/232)) 
-  * added autoconfirm parameter to upgrade function in maintenance script ([#229 @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
-  * added alias "m" for maintenance script
+  * add autoconfirm parameter to upgrade function in maintenance script ([#229 @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
+  * add alias "m" for maintenance script
 
 ### v6.0.0 (2021-12-09)
-* moving docu/ restructuring readme
+* move docu/ restructuring readme
 * v6.0.0-beta1 (2021-10-07)
-  * upgrading node version to recommended node14 
-  * adding beta-node16 tag for beta testing node16
-  * updating documentation
+  * upgrade node version to recommended node14 
+  * add beta-node16 tag for beta testing node16
+  * update documentation
 * v5.3.0-beta1 (2021-10-07)
-  * adding check  (installed) PACKAGES on startup (fixes [#201](https://github.com/buanet/ioBroker.docker/issues/201))
-  * adding packages for discovery adapter
-  * adding packages for backitup adapter
-  * reorganizing Dockerfile
+  * add check  (installed) PACKAGES on startup (fixes [#201](https://github.com/buanet/ioBroker.docker/issues/201))
+  * add packages for discovery adapter
+  * add packages for backitup adapter
+  * reorganize Dockerfile
 
 ### v5.2.0 (2021-09-30)
 * v5.2.0-beta4 (2021-09-10)
