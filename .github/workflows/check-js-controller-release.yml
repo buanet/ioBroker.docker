@@ -17,8 +17,10 @@ jobs:
 
       - name: Fetch js-controller release version
         run: |
-          curl -sL https://api.github.com/repos/ioBroker/ioBroker.js-controller/releases/latest | \
-          jq -r ".tag_name" > .github/dependencies/.js-controller-version
+          curl -sL https://repo.iobroker.live/sources-dist.json | \
+          jq -r '."js-controller".version' > .github/dependencies/.js-controller-version
+          # curl -sL https://api.github.com/repos/ioBroker/ioBroker.js-controller/releases/latest | \
+          # jq -r ".tag_name" > .github/dependencies/.js-controller-version
           echo "[LOG] Fetched js-controller version is $(cat .github/dependencies/.js-controller-version)"
 
       - name: Check for modified files
