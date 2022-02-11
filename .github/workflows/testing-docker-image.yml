@@ -1,0 +1,33 @@
+# Github action for testing the Docker image
+name: Testing Docker image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Testing with docker run
+        run: |
+          echo "[LOG] Starting ioBroker Container..."
+          docker run -d -p 8081:8081 --name iobroker -v iobrokerdata:/opt/iobroker buanet/iobroker:latest
+          echo "[LOG] Done."
+          echo ' '
+          echo "[LOG] Waiting for Startup Script..."
+          sleep 30
+          echo "[LOG] Done."
+          echo ' '
+          echo "[LOG] Writing Logs..."
+          docker logs iobroker >& testrun.log
+          echo "[LOG] Done."
+          echo ' '
+          echo "[LOG] Checking Web UI..."
+          curl --insecure http://127.0.0.1:8081 2> /dev/null | grep '<title>Admin</title>' &> /dev/null || exit 1
+          echo "[LOG] Done."
+          echo ' '
+          echo "[LOG] Output testrun.log:"
+          cat testrun.log
+          echo ' '
+          echo "[LOG] Test sucesssful."
+          echo ' '
