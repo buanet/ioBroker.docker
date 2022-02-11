@@ -19,6 +19,7 @@ jobs:
         run: |
           curl -sL https://api.github.com/repos/ioBroker/ioBroker.js-controller/releases/latest | \
           jq -r ".tag_name" > .github/dependencies/.js-controller-version
+          echo "[LOG] Fetched js-controller version is $(cat .github/dependencies/.js-controller-version)"
 
       - name: Check for modified files
         id: git-check
