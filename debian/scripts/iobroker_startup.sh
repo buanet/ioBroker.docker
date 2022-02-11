@@ -499,7 +499,7 @@ shut_down() {
   echo "Recived termination signal (SIGTERM)."
   echo "Shutting down ioBroker..."
   pid=$(ps -ef | awk '/[j]s.controller/{print $2}')
-  kill -SIGTERM "$pid"
+  [[ -n "$pid" ]] && kill -SIGTERM "$pid"
   exit
 }
 
