@@ -3,8 +3,8 @@ name: Build debian beta-node16
 
 on:
   release:
-    types:
-      - prereleased
+    types: [prereleased]
+  workflow_dispatch:
 
 jobs:
   build-beta-node16-image:
