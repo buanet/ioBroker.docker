@@ -161,8 +161,10 @@ stop_and_wait() {
   # pgrep exits with status 1 when there are no matches, i.e. everyone exited.
   while pgrep "$@" > /dev/null; (( $? != 1 )); do
     if (($(date +%s) > timeout)); then
-      printf 'timed out\n'
-      return 1
+      printf 'timed out, killing remaining processes:\n'
+      pgrep --list-full "$@"
+      pkill --signal SIGKILL "$@"
+      return
     fi
 
     printf '.'
