@@ -3,10 +3,11 @@
 # Bash strict mode.
 set -euo pipefail
 
-autoconfirm=    # Can be set to 'yes' by command line option.
-killbyname=     # Can be set to 'yes' by command line option /
-                # undocumented, only for use with backitup restore scripts.
+autoconfirm=       # Can be set to 'yes' by command line option.
+killbyname=        # Can be set to 'yes' by command line option /
+                   # undocumented, only for use with backitup restore scripts.
 healthcheck=/opt/scripts/.docker_config/.healthcheck
+sigterm_timeout=15 # seconds
 
 display_help() {
   echo 'This script manages your ioBroker container.'
@@ -53,7 +54,7 @@ enable_maintenance() {
     echo 'Activating maintenance mode...'
     echo 'maintenance' > "$healthcheck"
     echo 'Stopping ioBroker...'
-    stop_and_wait 60 -u iobroker -f iobroker.js-controller
+    stop_and_wait "$sigterm_timeout" -u iobroker -f iobroker.js-controller
     echo 'Done.'
     return
   fi
@@ -76,7 +77,7 @@ enable_maintenance() {
   echo 'Activating maintenance mode...'
   echo 'maintenance' > "$healthcheck"
   echo 'Stopping ioBroker...'
-  stop_and_wait 60 -u iobroker
+  stop_and_wait "$sigterm_timeout" -u iobroker
 }
 
 disable_maintenance() {
@@ -103,7 +104,7 @@ disable_maintenance() {
 
   echo 'Deactivating maintenance mode and forcing container to stop or restart...'
   echo 'stopping' > "$healthcheck"
-  stop_and_wait 60 -u root
+  stop_and_wait "$sigterm_timeout" -u root
 }
 
 upgrade_jscontroller() {
@@ -137,7 +138,7 @@ upgrade_jscontroller() {
 
   echo 'Container will be stopped or restarted...'
   echo 'stopping' > "$healthcheck"
-  stop_and_wait 60 -u root
+  stop_and_wait "$sigterm_timeout" -u root
 }
 
 stop_and_wait() {
@@ -146,7 +147,7 @@ stop_and_wait() {
   timeout="${1:?Need timeout in seconds}"
   shift
 
-  timeout="$(date --date='now + 60 sec' +%s)"
+  timeout="$(date --date="now + $timeout sec" +%s)"
   pkill "$@"
   status=$?
   if (( status >= 2 )); then # Syntax error or fatal error.
