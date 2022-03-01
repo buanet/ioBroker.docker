@@ -108,7 +108,7 @@ jobs:
           ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_version.yaml
 
       - name: Delete untagged images from GitHub packages
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.PACKAGES_PASS }}
           script: |
