@@ -1,6 +1,6 @@
 # Official Docker Image for ioBroker
 
- <img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/iobroker_logo.png" width="600" title="ioBroker Logo">
+ <img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
 [![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/buanet/ioBroker.docker?include_prereleases&label=pre-release)](https://github.com/buanet/ioBroker.docker/releases)
@@ -31,7 +31,7 @@ Looking for documentation? :arrow_right: [docs.buanet.de](https://docs.buanet.de
 
 ### How to run the image? 
 
-You can find some basic information about the image amd how to run it on the [Docker Hub page](https://hub.docker.com/r/buanet/iobroker) or [here](https://github.com/buanet/ioBroker.docker/blob/main/src/README_docker_hub_buanet.md).
+You can find some basic information about the image amd how to run it on the [Docker Hub page](https://hub.docker.com/r/buanet/iobroker) or [here](https://github.com/buanet/ioBroker.docker/blob/main/docs/README_docker_hub_buanet.md).
 
 ### Is there a more detailed documentation?
 
@@ -66,7 +66,7 @@ If you want to get the newest features and changes feel free to use/ test the be
 
 The easiest way to support this project is to leave me some likes/ stars on Github and Docker hub!<br>
 If you want to give something back to the community, feel free to take a look into the [open issues](https://github.com/buanet/ioBroker.docker/issues) or the [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) and help me answering questions, fixing bugs or adding new features!<br>
-If that doesn't work for you and you want to buy me a beer instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/pp_logo.png" height="15" width="15"></a><br>
+If that doesn't work for you and you want to buy me a beer instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/pp_logo.png" height="15" width="15"></a><br>
 Thank you!
 
 ## :memo: Changelog

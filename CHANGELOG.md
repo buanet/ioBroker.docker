@@ -1,14 +1,15 @@
 ## Changelog
 
-### v6.1.0-beta.2 (2022-02-11)
-* fix -kbn option in maintenance script
-* optimize shutdown/ prevent warnings on upgrade
-* remove hostname check for multihost slave
-* optimize startup script logging
-* add breaks and optimize maintenance script (fixes [#233](https://github.com/buanet/ioBroker.docker/issues/233))
+### v6.1.0 (2022-03-01)
+* v6.1.0-beta.2 (2022-02-11)
+  * fix -kbn option in maintenance script
+  * optimize shutdown/ prevent warnings on upgrade
+  * remove hostname check for multihost slave
+  * optimize startup script logging
+  * add breaks and optimize maintenance script (fixes [#233](https://github.com/buanet/ioBroker.docker/issues/233))
 * v6.1.0-beta.1 (2021-12-23)
   * some more corrections in maintenance script ([#232 @agross](https://github.com/buanet/ioBroker.docker/pull/232)) 
-  * add autoconfirm parameter to upgrade function in maintenance script ([#229 @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
+  * add auto confirm parameter to upgrade function in maintenance script ([#229 @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
   * add alias "m" for maintenance script
 
 ### v6.0.0 (2021-12-09)

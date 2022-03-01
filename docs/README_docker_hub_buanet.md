@@ -1,4 +1,4 @@
-<img src="https://github.com/buanet/ioBroker.docker/raw/main/src/img/iobroker_logo.png" width="600" title="ioBroker Logo">
+<img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/r/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/r/buanet/iobroker)
