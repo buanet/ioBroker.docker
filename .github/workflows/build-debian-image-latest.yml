@@ -18,7 +18,7 @@ jobs:
           echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
 
       - name: Checkout repo
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
