@@ -109,8 +109,8 @@ You could use environment variables to auto configure your ioBroker container on
 * `LANGUAGE` (optional, default: de_DE:de) The following locales are pre-generated: de_DE:de, en_US:en
 * `LC_ALL` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
 * `PACKAGES` (optional) Installs additional linux packages to your container, packages should be separated by whitespace like this: "package1 package2 package3".
-* `SETGID` (optional, default: 1000) In some cases it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host
-* `SETUID` (optional, default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host
+* `SETGID` (default: 1000) In some cases it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host
+* `SETUID` (default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host
 * `TZ` (optional, default: Europe/Berlin) Specifies the time zone
 * `USBDEVICES` (optional) Sets relevant permissions on mounted devices like "/dev/ttyACM0". For more than one device separate with ";".
 
