@@ -499,6 +499,8 @@ shut_down() {
   echo "Recived termination signal (SIGTERM)."
   echo "Shutting down ioBroker..."
   pkill -SIGTERM -u iobroker -f iobroker.js-controller
+  timeout 10 tail --pid=`pgrep -f iobroker.js-controller` -f /dev/null
+  echo "ioBroker stopped"
   exit
 }
 
