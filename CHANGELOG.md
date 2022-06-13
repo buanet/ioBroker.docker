@@ -1,4 +1,7 @@
 ## Changelog
+### v6.2.0-beta.1 (2022-06-13)
+* rewrite maintenance script ([#243 by @agross](https://github.com/buanet/ioBroker.docker/pull/243))
+* optimize container shutdown on SIGTERM ([as requested with #264 by @buzz0r](https://github.com/buanet/ioBroker.docker/pull/264))
 
 ### v6.1.0 (2022-03-01)
 * v6.1.0-beta.2 (2022-02-11)
@@ -8,8 +11,8 @@
   * optimize startup script logging
   * add breaks and optimize maintenance script (fixes [#233](https://github.com/buanet/ioBroker.docker/issues/233))
 * v6.1.0-beta.1 (2021-12-23)
-  * some more corrections in maintenance script ([#232 @agross](https://github.com/buanet/ioBroker.docker/pull/232)) 
-  * add auto confirm parameter to upgrade function in maintenance script ([#229 @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
+  * some more corrections in maintenance script ([#232 by @agross](https://github.com/buanet/ioBroker.docker/pull/232)) 
+  * add auto confirm parameter to upgrade function in maintenance script ([#229 by @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
   * add alias "m" for maintenance script
 
 ### v6.0.0 (2021-12-09)
@@ -96,7 +99,7 @@
 ### v4.1.0 (2020-01-17)
 * improved readme.md
 * v4.0.3-beta (2020-01-06)
-  * added support to restore backup on startup ([#56 @duffbeer2000](https://github.com/buanet/ioBroker.docker/pull/56))
+  * added support to restore backup on startup ([#56 by @duffbeer2000](https://github.com/buanet/ioBroker.docker/pull/56))
   * small fixes according to "docker best practices"
 * v4.0.2-beta (2019-12-10)
   * ~~added env for activating redis~~
@@ -116,13 +119,13 @@
 * v3.1.2-beta (2019-09-03)
   * using node 10 instead of node 8
 * v3.1.1-beta (2019-09-02)
-  * adding env for setting uid/ gid for iobroker-user ([#33 @mplogas](https://github.com/buanet/ioBroker.docker/pull/33))
+  * adding env for setting uid/ gid for iobroker-user ([#33 by @mplogas](https://github.com/buanet/ioBroker.docker/pull/33))
 
 ### v3.1.0 (2019-08-21)
 * v3.0.3-beta (2019-08-21)
   * switching base image from "debian:latest" to "debian:stretch"
 * v3.0.2-beta (2019-06-13)
-  * using gosu instead of sudo ([#26 @SchumyHao](https://github.com/buanet/ioBroker.docker/pull/26))
+  * using gosu instead of sudo ([#26 by @SchumyHao](https://github.com/buanet/ioBroker.docker/pull/26))
   * changing output of ioBroker logging
 * v3.0.1-beta (2019-05-18)
   * ~~switching back to iobroker-daemon for startup~~

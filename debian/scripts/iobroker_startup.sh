@@ -19,6 +19,8 @@ statesdbtype=$IOB_STATESDB_TYPE
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
 
+pkill_timeout=10      # timeout for iobroker shutdown in seconds
+
 # Getting date and time for logging
 dati=`date '+%Y-%m-%d %H:%M:%S'`
 
@@ -497,8 +499,35 @@ echo "running" > /opt/scripts/.docker_config/.healthcheck
 shut_down() {
   echo ' '
   echo "Recived termination signal (SIGTERM)."
-  echo "Shutting down ioBroker..."
-  pkill -SIGTERM -u iobroker -f iobroker.js-controller
+  echo -n "Shutting down ioBroker"
+
+  local status timeout
+
+  timeout="$(date --date="now + $pkill_timeout sec" +%s)"
+  pkill -u iobroker -f iobroker.js-controller
+  status=$?
+  if (( status >= 2 )); then      # syntax error or fatal error
+    return 1
+  fi
+
+  if (( status == 1 )); then      # no processes matched
+    return
+  fi
+
+  # pgrep exits with status 1 when there are no matches
+  while pgrep -u iobroker > /dev/null; (( $? != 1 )); do
+    if (($(date +%s) > timeout)); then
+      echo -e '\nTimeout reached. Killing remaining processes...'
+      pkill --signal SIGKILL -u iobroker
+      echo 'Done.'
+      exit
+    fi
+
+    echo -n '.'
+    sleep 1
+  done
+
+  echo -e '\nDone.'
   exit
 }
 
