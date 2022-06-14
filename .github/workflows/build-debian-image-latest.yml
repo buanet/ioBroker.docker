@@ -48,7 +48,7 @@ jobs:
           chmod +x manifest-tool
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1.2.0
+        uses: docker/setup-qemu-action@v2.0.0
 
       - name: Set up Docker Buildx
         id: buildx
