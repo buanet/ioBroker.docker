@@ -1,15 +1,16 @@
 ## Changelog
-### v6.2.0-beta.1 (2022-06-13)
+### v6.2.0-beta.1 (coming soon)
 * rewrite maintenance script ([#243 by @agross](https://github.com/buanet/ioBroker.docker/pull/243))
-* optimize container shutdown on SIGTERM ([as requested with #264 by @buzz0r](https://github.com/buanet/ioBroker.docker/pull/264))
+* enhance container shutdown on SIGTERM ([as requested with #264 by @buzz0r](https://github.com/buanet/ioBroker.docker/pull/264))
+* enhance startup script logging
 
 ### v6.1.0 (2022-03-01)
 * v6.1.0-beta.2 (2022-02-11)
   * fix -kbn option in maintenance script
-  * optimize shutdown/ prevent warnings on upgrade
+  * enhance shutdown/ prevent warnings on upgrade
   * remove hostname check for multihost slave
-  * optimize startup script logging
-  * add breaks and optimize maintenance script (fixes [#233](https://github.com/buanet/ioBroker.docker/issues/233))
+  * enhance startup script logging
+  * add breaks and enhance maintenance script (fixes [#233](https://github.com/buanet/ioBroker.docker/issues/233))
 * v6.1.0-beta.1 (2021-12-23)
   * some more corrections in maintenance script ([#232 by @agross](https://github.com/buanet/ioBroker.docker/pull/232)) 
   * add auto confirm parameter to upgrade function in maintenance script ([#229 by @thost96](https://github.com/buanet/ioBroker.docker/pull/229))
@@ -36,7 +37,7 @@
 * v5.2.0-beta3 (2021-09-04)
   * reducing layers in dockerfile
   * making hostname check mandatory for startup
-  * optimize startup log
+  * enhance startup log
 * v5.2.0-beta2 (2021-08-28)
   * redesign maintenance script
   * switching amd64 base image to debian bullseye slim 
@@ -51,7 +52,7 @@
   * added expose for default admin ui port (fixes [#172](https://github.com/buanet/ioBroker.docker/issues/172))
   * added short form for maintenance script
 * v5.2.0-beta (2021-04-02)
-  * some renaming to optimize automated build
+  * some renaming to enhance automated build
   * changes in versioning
   * delete travis for automated build
 
@@ -66,7 +67,7 @@
   * fixing backup detection in startup script
   * fixing permission issue on iobroker restored
   * extended Logging
-  * optimize multihost support
+  * enhance multihost support
 
 ### v5.0.0 (2020-06-29)
 * v4.2.4-beta (2020-06-23)
