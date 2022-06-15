@@ -86,7 +86,7 @@ then
       bash /opt/scripts/setup_packages.sh -update
     echo "Done."
     echo ' '
-    echo "Registering maintenance script as command..."
+    echo -n "Registering maintenance script as command... "
     echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
     echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
     echo "alias m=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
@@ -240,7 +240,6 @@ then
     echo "Avahi-daemon is activated by ENV."
       chmod 755 /opt/scripts/setup_avahi.sh
       bash /opt/scripts/setup_avahi.sh
-    echo "Done."
     echo ' '
   fi
 fi
@@ -253,7 +252,6 @@ then
     echo "Z-Wave is activated by ENV."
       chmod 755 /opt/scripts/setup_zwave.sh
       bash /opt/scripts/setup_zwave.sh
-    echo "Done."
     echo ' '
   fi
 fi
@@ -502,7 +500,7 @@ shut_down() {
     if (($(date +%s) > timeout)); then
       echo -e '\nTimeout reached. Killing remaining processes...'
       pkill --signal SIGKILL -u iobroker
-      echo 'Done.'
+      echo 'Done. Have a nice day!'
       exit
     fi
 
@@ -510,7 +508,7 @@ shut_down() {
     sleep 1
   done
 
-  echo -e '\nDone.'
+  echo -e '\nDone. Have a nice day!'
   exit
 }
 

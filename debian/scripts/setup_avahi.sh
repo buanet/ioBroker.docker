@@ -1,19 +1,20 @@
 #!/bin/bash
 
-echo "Checking avahi-daemon installation state..."
-
 if [ -e /usr/sbin/avahi-daemon ] && [ -e /var/run/dbus ]
 then
-  echo "Avahi is already installed..."
+  echo 'Avahi is already installed. Nothing to do here.'
 else
-  echo "Avahi-daemon is NOT installed. Going to install it now..."
-  apt-get update > /opt/scripts/avahi_startup.log 2>&1
-  apt-get install -y libavahi-compat-libdnssd-dev avahi-daemon >> /opt/scripts/avahi_startup.log 2>&1
-  rm -rf /var/lib/apt/lists/* >> /opt/scripts/avahi_startup.log 2>&1
-  echo "Configuring avahi-daemon..."
-  sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
-  echo "Configuring dbus..."
-  mkdir /var/run/dbus/
+  echo -n 'Avahi-daemon is NOT installed. Going to install it now... '
+    apt-get update > /opt/scripts/avahi_startup.log 2>&1
+    apt-get install -y libavahi-compat-libdnssd-dev avahi-daemon >> /opt/scripts/avahi_startup.log 2>&1
+    rm -rf /var/lib/apt/lists/* >> /opt/scripts/avahi_startup.log 2>&1
+  echo 'Done.'
+  echo -n 'Configuring avahi-daemon... '
+    sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
+  echo 'Done.'
+  echo -n 'Configuring dbus... '
+    mkdir /var/run/dbus/
+  echo 'Done.'
 fi
 
 if [ -f /var/run/dbus/pid ];
@@ -26,10 +27,12 @@ then
   rm -f /var/run/avahi-daemon//pid
 fi
 
-echo "Starting dbus..."
-dbus-daemon --system
+echo -n "Starting dbus... "
+  dbus-daemon --system >> /opt/scripts/avahi_startup.log 2>&1
+echo 'Done.'
 
-echo "Starting avahi-daemon..."
-/etc/init.d/avahi-daemon start
+echo -n "Starting avahi-daemon... "
+  /etc/init.d/avahi-daemon start >> /opt/scripts/avahi_startup.log 2>&1
+echo 'Done.'
 
 exit 0
