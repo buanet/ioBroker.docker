@@ -4,7 +4,7 @@
 * enhance container shutdown on SIGTERM ([as requested with #264 by @buzz0r](https://github.com/buanet/ioBroker.docker/pull/264))
 * enhance startup script logging
 * enhance logging for avahi & zwave install scripts
-* add new env for offline_mode (fixes [#255](https://github.com/buanet/ioBroker.docker/issues/255))
+* add new env for offline mode (fixes [#255](https://github.com/buanet/ioBroker.docker/issues/255))
 
 ### v6.1.0 (2022-03-01)
 * v6.1.0-beta.2 (2022-02-11)

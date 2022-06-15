@@ -2,17 +2,17 @@
 
 if [ -e /usr/sbin/avahi-daemon ] && [ -e /var/run/dbus ]
 then
-  echo 'Avahi is already installed. Nothing to do here.'
+  echo '[setup_avahi.sh] Avahi is already installed. Nothing to do here.'
 else
-  echo -n 'Avahi-daemon is NOT installed. Going to install it now... '
+  echo -n '[setup_avahi.sh] Avahi-daemon is NOT installed. Going to install it now... '
     apt-get update > /opt/scripts/avahi_startup.log 2>&1
     apt-get install -y libavahi-compat-libdnssd-dev avahi-daemon >> /opt/scripts/avahi_startup.log 2>&1
     rm -rf /var/lib/apt/lists/* >> /opt/scripts/avahi_startup.log 2>&1
   echo 'Done.'
-  echo -n 'Configuring avahi-daemon... '
+  echo -n '[setup_avahi.sh] Configuring avahi-daemon... '
     sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
   echo 'Done.'
-  echo -n 'Configuring dbus... '
+  echo -n '[setup_avahi.sh] Configuring dbus... '
     mkdir /var/run/dbus/
   echo 'Done.'
 fi

@@ -247,10 +247,12 @@ fi
 if [ "$avahi" = "true" ] && [ "$offlinemode" = "true" ]; then
   echo 'Avahi-daemon is activated by ENV but offline mode is activated!'
   echo 'Skipping Avahi daemon setup.'
-else
+elif [ "$avahi" = "true" ]; then
   echo 'Avahi-daemon is activated by ENV.'
+  echo "Running setup script..."
     chmod 755 /opt/scripts/setup_avahi.sh
     bash /opt/scripts/setup_avahi.sh
+  echo 'Done.'
   echo ' '
 fi
 
@@ -258,24 +260,26 @@ fi
 if [ "$zwave" = "true" ] && [ "$offlinemode" = "true" ]; then
   echo 'Z-Wave is activated by ENV but offline mode is activated!'
   echo 'Skipping Z-Wave setup.'
-else
+elif [ "$zwave" = "true" ]; then
   echo "Z-Wave is activated by ENV."
+  echo "Running setup script..."
     chmod 755 /opt/scripts/setup_zwave.sh
     bash /opt/scripts/setup_zwave.sh
+  echo 'Done.'    
   echo ' '
 fi
 
 # checking ENV for USBDEVICES
-if [ "$usbdevices" != "none" ]; then
+if [ "$usbdevices" != "" ] && [ "$usbdevices" != "none" ]; then
   echo "Usb-device-support is activated by ENV."
   IFS=';' read -ra devicearray <<< "$usbdevices"
     for i in "${devicearray[@]}"
     do
-      echo -n "Setting permissions for" $i"... "
-      chown root:dialout $i
-      chmod g+rw $i
+      echo -n "Setting permissions for "$i"... "
+        chown root:dialout $i
+        chmod g+rw $i
+      echo 'Done.'
     done
-  echo 'Done.'
   echo ' '
 fi
 
