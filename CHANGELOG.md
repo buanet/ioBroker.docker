@@ -4,6 +4,7 @@
 * enhance container shutdown on SIGTERM ([as requested with #264 by @buzz0r](https://github.com/buanet/ioBroker.docker/pull/264))
 * enhance startup script logging
 * enhance logging for avahi & zwave install scripts
+* add new env for offline_mode (fixes [#255](https://github.com/buanet/ioBroker.docker/issues/255))
 
 ### v6.1.0 (2022-03-01)
 * v6.1.0-beta.2 (2022-02-11)
@@ -24,7 +25,7 @@
   * add beta-node16 tag for beta testing node16
   * update documentation
 * v5.3.0-beta1 (2021-10-07)
-  * add check  (installed) PACKAGES on startup (fixes [#201](https://github.com/buanet/ioBroker.docker/issues/201))
+  * add check (installed) PACKAGES on startup (fixes [#201](https://github.com/buanet/ioBroker.docker/issues/201))
   * add packages for discovery adapter
   * add packages for backitup adapter
   * reorganize Dockerfile

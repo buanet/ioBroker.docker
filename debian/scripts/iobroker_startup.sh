@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Setting healthcheck status to "starting"
-echo "starting" > /opt/scripts/.docker_config/.healthcheck
+echo 'starting' > /opt/scripts/.docker_config/.healthcheck
 
 # Reading ENV
 adminport=$IOB_ADMINPORT
 avahi=$AVAHI
 multihost=$IOB_MULTIHOST
+offlinemode=$OFFLINE_MODE
 objectsdbhost=$IOB_OBJECTSDB_HOST
 objectsdbport=$IOB_OBJECTSDB_PORT
 objectsdbtype=$IOB_OBJECTSDB_TYPE
@@ -52,18 +53,19 @@ echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" node: $(n
 echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" npm: $(npm -v))" && echo " -----"
 echo "-----                                                                      -----"
 echo "-----                                 ENV                                  -----"
-if [ "$adminport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
 if [ "$avahi" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" AVAHI: $avahi)" && echo " -----"; fi
+if [ "$adminport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
 if [ "$multihost" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_MULTIHOST: $multihost)" && echo " -----"; fi
 if [ "$objectsdbhost" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
 if [ "$objectsdbport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
 if [ "$objectsdbtype" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
-if [ "$packages" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES: "$packages")" && echo " -----"; fi
-if [ "$setgid" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: $setgid)" && echo " -----"; fi
-if [ "$setuid" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: $setuid)" && echo " -----"; fi
 if [ "$statesdbhost" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_HOST: $statesdbhost)" && echo " -----"; fi
 if [ "$statesdbport" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PORT: $statesdbport)" && echo " -----"; fi
 if [ "$statesdbtype" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
+if [ "$offlinemode" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" OFFLINE_MODE: $offlinemode)" && echo " -----"; fi
+if [ "$packages" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES: "$packages")" && echo " -----"; fi
+if [ "$setgid" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: $setgid)" && echo " -----"; fi
+if [ "$setuid" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: $setuid)" && echo " -----"; fi
 if [ "$usbdevices" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" USBDEVICES: $usbdevices)" && echo " -----"; fi
 if [ "$zwave" != "" ]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" ZWAVE: $zwave)" && echo " -----"; fi
 echo "$(printf -- '-%.0s' {1..80})"
@@ -77,42 +79,51 @@ echo "-----                  Step 1 of 5: Preparing container                   
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
-# Installing/updating additional packages, registering maintenance script and setting uid/gid
-if [ "$packages" != "" ] || [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ] || [ -f /opt/.firstrun ]
-then
-  if [ -f /opt/.firstrun ]
-  then
-    echo "Updating Linux packages on first run..."
+# Actions running on first start only
+if [ -f /opt/.firstrun ]; then
+  # Updating Linux packages
+  if [ "$offlinemode" = "true" ]; then
+    echo 'Offline mode is activated by ENV. Skipping Linux package updates on first run.'
+    echo ' '
+  else
+    echo 'Updating Linux packages on first run...'
       bash /opt/scripts/setup_packages.sh -update
-    echo "Done."
-    echo ' '
-    echo -n "Registering maintenance script as command... "
-    echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
-    echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
-    echo "alias m=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
-    echo "Done."
-    echo ' '
-  fi
-  if [ "$packages" != "" ]
-  then
-    echo "Installing additional packages is set by ENV..."
-    echo "Checking the following Packages:" $packages"..."
-    echo $packages > /opt/scripts/.docker_config/.packages
-      bash /opt/scripts/setup_packages.sh -install
-    echo "Done."
-    echo ' '
-  fi
-  if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]
-  then
-    echo "Different UID and/ or GID is set by ENV."
-    echo -n "Changing UID to "$setuid" and GID to "$setgid"... "
-      usermod -u $setuid iobroker
-      groupmod -g $setgid iobroker
     echo 'Done.'
     echo ' '
   fi
+  # Register maintenance script
+  echo -n 'Registering maintenance script as command... '
+  echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+  echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+  echo "alias m=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+  echo 'Done.'
+  echo ' '
 else
-  echo "Nothing to do here."
+  echo 'This is not the first run of this container. Skipping first run preparation.'
+  echo ' '
+fi
+
+# Installing packages from ENV
+if [ "$packages" != "" ] && [ "$offlinemode" = "true" ]; then
+  echo 'Installing additional packages is set by ENV but offline mode is activated!'
+  echo 'Skipping Linux packages installation.'
+  echo ' '
+else
+  echo 'Installing additional packages is set by ENV.'
+  echo "Checking the following Packages:" $packages"..."
+  echo $packages > /opt/scripts/.docker_config/.packages
+    bash /opt/scripts/setup_packages.sh -install
+  echo 'Done.'
+  echo ' '
+fi
+
+# Setting UID and/ or GID
+if [ $(cat /etc/group | grep 'iobroker:' | cut -d':' -f3) != $setgid ] || [ $(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3) != $setuid ]; then
+  echo "Different UID and/ or GID is set by ENV."
+  echo -n "Changing UID to "$setuid" and GID to "$setgid"... "
+    usermod -u $setuid iobroker
+    groupmod -g $setgid iobroker
+  echo 'Done.'
   echo ' '
 fi
 
@@ -233,45 +244,39 @@ then
 fi
 
 # Checking ENV for AVAHI
-if [ "$avahi" != "" ]
-then
-  if [ "$avahi" = "true" ]
-  then
-    echo "Avahi-daemon is activated by ENV."
-      chmod 755 /opt/scripts/setup_avahi.sh
-      bash /opt/scripts/setup_avahi.sh
-    echo ' '
-  fi
+if [ "$avahi" = "true" ] && [ "$offlinemode" = "true" ]; then
+  echo 'Avahi-daemon is activated by ENV but offline mode is activated!'
+  echo 'Skipping Avahi daemon setup.'
+else
+  echo 'Avahi-daemon is activated by ENV.'
+    chmod 755 /opt/scripts/setup_avahi.sh
+    bash /opt/scripts/setup_avahi.sh
+  echo ' '
 fi
 
 # Checking ENV for Z-WAVE
-if [ "$zwave" != "" ]
-then
-  if [ "$zwave" = "true" ]
-  then
-    echo "Z-Wave is activated by ENV."
-      chmod 755 /opt/scripts/setup_zwave.sh
-      bash /opt/scripts/setup_zwave.sh
-    echo ' '
-  fi
+if [ "$zwave" = "true" ] && [ "$offlinemode" = "true" ]; then
+  echo 'Z-Wave is activated by ENV but offline mode is activated!'
+  echo 'Skipping Z-Wave setup.'
+else
+  echo "Z-Wave is activated by ENV."
+    chmod 755 /opt/scripts/setup_zwave.sh
+    bash /opt/scripts/setup_zwave.sh
+  echo ' '
 fi
 
 # checking ENV for USBDEVICES
-if [ "$usbdevices" != "" ]
-then
-  if [ "$usbdevices" != "none" ]
-  then
-    echo "Usb-device-support is activated by ENV."
-    IFS=';' read -ra devicearray <<< "$usbdevices"
-      for i in "${devicearray[@]}"
-      do
-        echo -n "Setting permissions for" $i"... "
-        chown root:dialout $i
-        chmod g+rw $i
-      done
-    echo 'Done.'
-    echo ' '
-  fi
+if [ "$usbdevices" != "none" ]; then
+  echo "Usb-device-support is activated by ENV."
+  IFS=';' read -ra devicearray <<< "$usbdevices"
+    for i in "${devicearray[@]}"
+    do
+      echo -n "Setting permissions for" $i"... "
+      chown root:dialout $i
+      chmod g+rw $i
+    done
+  echo 'Done.'
+  echo ' '
 fi
 
 # Checking ENV for multihost setup
