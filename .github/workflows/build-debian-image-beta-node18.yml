@@ -1,18 +1,23 @@
-# Github action to build Docker image from dev branch (tag: dev)
-name: Build debian dev
+# Github action to build Docker image from beta branch (tag: beta)
+name: Build debian beta-node18
 
 on:
+  release:
+    types: [prereleased]
   workflow_dispatch:
 
 jobs:
-  build-dev-image:
+  build-beta-node18-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo (dev)
+      - name: Getting published prerelease tag
+        run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+    
+      - name: Checkout repo
         uses: actions/checkout@v3
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: 'main'
+          ref: ${{ env.RELEASE_TAG }}
 
       - name: Get and write version and date
         id: version
@@ -27,11 +32,11 @@ jobs:
           echo "This is the Buildnumber/Timestamp: $DATI"
           echo "dati=$DATI" >> $GITHUB_ENV
           # startup script
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
           mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # amd64
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./debian/node16/Dockerfile > ./debian/node16/Dockerfile.tmp 
-          mv -f ./debian/node16/Dockerfile.tmp ./debian/node16/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node18/Dockerfile > ./debian/node18/Dockerfile.tmp 
+          mv -f ./debian/node18/Dockerfile.tmp ./debian/node18/Dockerfile
 
       - name: Set up manifest tool
         run: |
@@ -58,45 +63,49 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Build Docker image (amd64)
+      - name: Build Docker image (node18-amd64)
         uses: docker/build-push-action@v3.0.0
         with:
           context: ./debian
-          file: ./debian/node16/Dockerfile
+          file: ./debian/node18/Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
-            buanet/iobroker:dev-amd64,
-            ghcr.io/buanet/iobroker:dev-amd64
+            buanet/iobroker:${{ env.version }}-node18-amd64,
+            ghcr.io/buanet/iobroker:${{ env.version }}-node18-amd64
 
-      - name: Build Docker image (arm32v7)
+      - name: Build Docker image (node18-arm32v7)
         uses: docker/build-push-action@v3.0.0
         with:
           context: ./debian
-          file: ./debian/node16/Dockerfile
+          file: ./debian/node18/Dockerfile
           push: true
           platforms: linux/arm/v7
           tags: |
-            buanet/iobroker:dev-arm32v7,
-            ghcr.io/buanet/iobroker:dev-arm32v7
+            buanet/iobroker:${{ env.version }}-node18-arm32v7,
+            ghcr.io/buanet/iobroker:${{ env.version }}-node18-arm32v7
 
-      - name: Build Docker image (arm64v8)
+      - name: Build Docker image (node18-arm64v8)
         uses: docker/build-push-action@v3.0.0
         with:
           context: ./debian
-          file: ./debian/node16/Dockerfile
+          file: ./debian/node18/Dockerfile
           push: true
           platforms: linux/arm64/v8
           tags: |
-            buanet/iobroker:dev-arm64v8,
-            ghcr.io/buanet/iobroker:dev-arm64v8
+            buanet/iobroker:${{ env.version }}-node18-arm64v8,
+            ghcr.io/buanet/iobroker:${{ env.version }}-node18-arm64v8
 
       - name: Create and push manifests
         run: |
-          sed -e "s/\${VERSION}/dev/g" -e "s/\${DOCKERTAG}/dev/g" ./manifest.yml > manifest_dev.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev.yaml
-          sed -e "s/\${VERSION}/dev/g" -e "s/\${DOCKERTAG}/dev/g" ./manifest_ghcr.yml > manifest_ghcr_dev.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}-node18/g" -e "s/\${DOCKERTAG}/beta-node18/g" ./manifest.yml > manifest_beta-node18.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_beta-node18.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}-node18/g" -e "s/\${DOCKERTAG}/beta-node18/g" ./manifest_ghcr.yml > manifest_ghcr_beta-node18.yaml
+          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_beta-node18.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}-node18/g" -e "s/\${DOCKERTAG}/${{ env.version }}-node18/g" ./manifest.yml > manifest_version-node18.yaml
+          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_version-node18.yaml
+          sed -e "s/\${VERSION}/${{ env.version }}-node18/g" -e "s/\${DOCKERTAG}/${{ env.version }}-node18/g" ./manifest_ghcr.yml > manifest_ghcr_version-node18.yaml
+          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_version-node18.yaml
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v6

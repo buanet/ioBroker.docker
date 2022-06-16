@@ -1,5 +1,6 @@
 ## Changelog
-### v6.2.0-beta.1 (coming soon)
+### v7.0.0-beta.1 (16.06.2022)
+* upgrade node version to recommended node16 
 * rewrite maintenance script ([#243 by @agross](https://github.com/buanet/ioBroker.docker/pull/243))
 * enhance container shutdown on SIGTERM ([as requested with #264 by @buzz0r](https://github.com/buanet/ioBroker.docker/pull/264))
 * enhance startup script logging
