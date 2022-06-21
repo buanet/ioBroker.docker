@@ -39,8 +39,8 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
           mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # amd64
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node14/Dockerfile > ./debian/node14/Dockerfile.tmp 
-          mv -f ./debian/node14/Dockerfile.tmp ./debian/node14/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node16/Dockerfile > ./debian/node16/Dockerfile.tmp 
+          mv -f ./debian/node16/Dockerfile.tmp ./debian/node16/Dockerfile
 
       - name: Set up manifest tool
         run: |
@@ -71,7 +71,7 @@ jobs:
         uses: docker/build-push-action@v3.0.0
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/node16/Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
@@ -82,7 +82,7 @@ jobs:
         uses: docker/build-push-action@v3.0.0
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/node16/Dockerfile
           push: true
           platforms: linux/arm/v7
           tags: |
@@ -93,7 +93,7 @@ jobs:
         uses: docker/build-push-action@v3.0.0
         with:
           context: ./debian
-          file: ./debian/node14/Dockerfile
+          file: ./debian/node16/Dockerfile
           push: true
           platforms: linux/arm64/v8
           tags: |
