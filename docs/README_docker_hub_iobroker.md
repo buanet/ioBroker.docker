@@ -27,10 +27,13 @@ New major image versions (e.g. v4, v5, v6) always come with a new major version 
 
 # Supported tags
 
-It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-vX` tag instead.
+It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[X]` tag instead.
+
+### Node 16 versions
+* [`v7.0.0`](https://github.com/buanet/ioBroker.docker/blob/v7.0.0/debian/node16/Dockerfile), [`v7.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.0.0/debian/node16/Dockerfile), [`v7.0.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.0.0/debian/node16/Dockerfile), [`v7.0.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.0.0/debian/node16/Dockerfile), [`latest-v7`](https://github.com/buanet/ioBroker.docker/blob/v7.0.0/debian/node16/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v7.0.0/debian/node16/Dockerfile)
 
 ### Node 14 versions
-* [`v6.1.0`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`latest-v6`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile)
+* [`v6.1.0`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`latest-v6`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile)
 * [`v6.0.0`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile)
 
 ### Node 12 versions
@@ -110,6 +113,7 @@ You could use environment variables to auto configure your ioBroker container on
 * `LANG` (optional, default: de_DE.UTF&#x2011;8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
 * `LANGUAGE` (optional, default: de_DE:de) The following locales are pre-generated: de_DE:de, en_US:en
 * `LC_ALL` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
+* `OFFLINE_MODE` (optional & experimental, default: false) Set true if you container has no or limited internet connection
 * `PACKAGES` (optional) Installs additional linux packages to your container, packages should be separated by whitespace like this: "package1 package2 package3".
 * `SETGID` (default: 1000) In some cases it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host
 * `SETUID` (default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host

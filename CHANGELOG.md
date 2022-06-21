@@ -1,11 +1,13 @@
 ## Changelog
-### v7.0.0-beta.1 (16.06.2022)
-* upgrade node version to recommended node16 
-* rewrite maintenance script ([#243 by @agross](https://github.com/buanet/ioBroker.docker/pull/243))
-* enhance container shutdown on SIGTERM ([as requested with #264 by @buzz0r](https://github.com/buanet/ioBroker.docker/pull/264))
-* enhance startup script logging
-* enhance logging for avahi & zwave install scripts
-* add new env for offline mode (fixes [#255](https://github.com/buanet/ioBroker.docker/issues/255))
+### v7.0.0 (21.06.2022)
+* update docs & ci
+* v7.0.0-beta.1 (16.06.2022)
+  * upgrade node version to recommended node16 
+  * rewrite maintenance script ([#243 by @agross](https://github.com/buanet/ioBroker.docker/pull/243))
+  * enhance container shutdown on SIGTERM ([as requested with #264 by @buzz0r](https://github.com/buanet/ioBroker.docker/pull/264))
+  * enhance startup script logging
+  * enhance logging for avahi & zwave install scripts
+  * add new env for offline mode (fixes [#255](https://github.com/buanet/ioBroker.docker/issues/255))
 
 ### v6.1.0 (2022-03-01)
 * v6.1.0-beta.2 (2022-02-11)
@@ -20,7 +22,7 @@
   * add alias "m" for maintenance script
 
 ### v6.0.0 (2021-12-09)
-* move docu/ restructuring readme
+* move docs/ restructuring readme
 * v6.0.0-beta1 (2021-10-07)
   * upgrade node version to recommended node14 
   * add beta-node16 tag for beta testing node16
