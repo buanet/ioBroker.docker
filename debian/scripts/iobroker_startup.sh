@@ -171,7 +171,7 @@ then
     echo ' '
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     echo "!!!!!                             IMPORTANT NOTE                             !!!!!"
-    echo "!!!!!        The sartup script restored iobroker from a backup file.         !!!!!"
+    echo "!!!!!        The startup script restored iobroker from a backup file.        !!!!!"
     echo "!!!!! Check /opt/iobroker/log/restore.log to see if restore was successful.  !!!!!"
     echo "!!!!! When ioBroker now starts it will reinstall all Adapters automatically. !!!!!"
     echo "!!!!!         This might be take a looooong time! Please be patient!         !!!!!"
