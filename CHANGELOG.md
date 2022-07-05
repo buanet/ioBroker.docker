@@ -1,4 +1,8 @@
 ## Changelog
+
+### v7.0.1-beta.1 (05.07.2022)
+* backitup restore patch
+
 ### v7.0.0 (21.06.2022)
 * update docs & ci
 * v7.0.0-beta.1 (16.06.2022)

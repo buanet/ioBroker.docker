@@ -54,13 +54,16 @@ enable_maintenance() {
 
   if [[ "$killbyname" == yes ]]; then
     # undocumented option, only for use with backitup restore scripts
+    # stops iobroker by terminating js-controller process by name (the old way)
     echo 'This command will activate maintenance mode and stop js-controller.'
     echo 'Activating maintenance mode...'
     echo 'maintenance' > "$healthcheck"
     sleep 1
     echo 'Done.'
     echo -n 'Stopping ioBroker...'
-    stop_iob
+    pkill -u iobroker -f iobroker.js-controller
+    sleep 5
+    echo 'Done.'
     return
   fi
 
