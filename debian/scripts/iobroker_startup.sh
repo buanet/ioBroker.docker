@@ -37,8 +37,8 @@ echo -n "$(printf -- '-%.0s' {1..25})" && echo -n "     "$dati"      " && echo "
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----                 Welcome to your ioBroker-container!                  -----"
-echo "-----                    Startupscript is now running.                     -----"
+echo "-----              Welcome to your ioBroker Docker container!              -----"
+echo "-----                    Startupscript is now running!                     -----"
 echo "-----                          Please be patient!                          -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
@@ -486,6 +486,7 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 echo "Starting ioBroker..."
 echo ' '
+echo "##### #### ### ## # iobroker.js-controller log output # ## ### #### #####"
 
 # Setting healthcheck status to "running"
 echo "running" > /opt/scripts/.docker_config/.healthcheck

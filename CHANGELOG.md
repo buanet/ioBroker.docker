@@ -1,8 +1,10 @@
 ## Changelog
 
 ### v7.1.0-beta.1 (coming soon)
-* testing strict mode for iobroker-startup.sh
-* fixing "unary operator expected" error
+* add restart option to maintenance script
+* enhance logging
+* test strict mode for iobroker-startup.sh
+* fix "unary operator expected" error
 
 ### v7.0.1 (05.07.2022)
 * backitup restore patch
