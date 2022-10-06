@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v7.1.0-beta.1 (coming soon)
+* enhance build process
 * add restart option to maintenance script
 * enhance logging
 * test strict mode for iobroker-startup.sh
