@@ -39,7 +39,7 @@ jobs:
         run: |
           git config --global user.name 'buanet'
           git config --global user.email 'info@buanet.de'
-          git commit -am "new js-controller release"
+          git commit -am "new ioBroker versions"
           git push
 
       - name: Trigger build debian latest (buanet)

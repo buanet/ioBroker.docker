@@ -214,7 +214,7 @@ echo 'Done.'
 echo ' '
 
 # checking hostname in ioBroker to match container hostname
-if [[ $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*') != $(hostname) ]] && [[ "$multihost" != "slave" ]]
+if [[ "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')" != "$(hostname)" ]] && [[ "$multihost" != "slave" ]]
 then
   echo "Hostname in ioBroker does not match the hostname of this container."
   echo -n "Updating hostname to " $(hostname)"... "
