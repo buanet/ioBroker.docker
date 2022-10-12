@@ -111,6 +111,7 @@ You could use environment variables to auto configure your ioBroker container on
 
 ### Configure environment:
 
+* `DEBUG` (optional, default: false) Set true to get extended logging messages on container startup
 * `LANG` (optional, default: de_DE.UTF&#x2011;8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
 * `LANGUAGE` (optional, default: de_DE:de) The following locales are pre-generated: de_DE:de, en_US:en
 * `LC_ALL` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8

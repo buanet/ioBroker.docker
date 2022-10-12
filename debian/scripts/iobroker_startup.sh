@@ -88,7 +88,7 @@ echo ' '
 if [[ -f /opt/.firstrun ]]; then
   # Updating Linux packages
   if [[ "$offlinemode" = "true" ]]; then
-    echo 'Offline mode is activated by ENV. Skipping Linux package updates on first run.'
+    echo 'OFFLINE_MODE is \"true\". Skipping Linux package updates on first run.'
     echo ' '
   else
     echo 'Updating Linux packages on first run...'
@@ -98,11 +98,10 @@ if [[ -f /opt/.firstrun ]]; then
   fi
   # Installing packages from ENV
   if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
-    echo 'Installing additional packages is set by ENV but offline mode is activated!'
-    echo 'Skipping Linux packages installation.'
+    echo 'PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation.'
     echo ' '
   else
-    echo 'Installing additional packages is set by ENV.'
+    echo 'PACKAGES is set. Installing additional Linux packages.'
     echo "Checking the following packages:" $packages"..."
     echo $packages > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
@@ -123,7 +122,7 @@ fi
 
 # Setting UID and/ or GID
 if [[ "$setgid" != "$(cat /etc/group | grep 'iobroker:' | cut -d':' -f3)" || "$setuid" != "$(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3)" ]]; then
-  echo "Different UID and/ or GID is set by ENV."
+  echo "SETUID and/ or SETGID are set to individual values."
   echo -n "Changing UID to "$setuid" and GID to "$setgid"... "
     usermod -u $setuid iobroker
     groupmod -g $setgid iobroker
@@ -260,7 +259,7 @@ echo ' '
 # Checking ENV for Adminport
 if [[ "$adminport" != "" ]]; then
   if [[ "$adminport" != "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*')" ]]; then
-    echo "Adminport set by ENV does not match port configured in ioBroker installation."
+    echo "IOB_ADMINPORT is set and does not match port configured in ioBroker."
     if [[ "$debug" == "true" ]]; then
       echo "[DEBUG] Detected Admin Port in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*')
     fi
@@ -273,11 +272,9 @@ fi
 
 # Checking ENV for AVAHI
 if [[ "$avahi" = "true" && "$offlinemode" = "true" ]]; then
-  echo 'Avahi-daemon is activated by ENV but offline mode is activated!'
-  echo 'Skipping Avahi daemon setup.'
+  echo 'AVAHI is \"true\", but OFFLINE_MODE is also \"true\". Skipping Avahi daemon setup.'
 elif [[ "$avahi" = "true" ]]; then
-  echo 'Avahi-daemon is activated by ENV.'
-  echo "Running setup script..."
+  echo 'AVAHI is \"true\". Running setup script...'
     chmod 755 /opt/scripts/setup_avahi.sh
     bash /opt/scripts/setup_avahi.sh
   echo 'Done.'
@@ -286,11 +283,9 @@ fi
 
 # Checking ENV for Z-WAVE
 if [[ "$zwave" = "true" && "$offlinemode" = "true" ]]; then
-  echo 'Z-Wave is activated by ENV but offline mode is activated!'
-  echo 'Skipping Z-Wave setup.'
+  echo 'ZWAVE is \"true\", but OFFLINE_MODE is also \"true\". Skipping Z-Wave setup.'
 elif [[ "$zwave" = "true" ]]; then
-  echo "Z-Wave is activated by ENV."
-  echo "Running setup script..."
+  echo 'ZWAVE is \"true\". Running setup script...'
     chmod 755 /opt/scripts/setup_zwave.sh
     bash /opt/scripts/setup_zwave.sh
   echo 'Done.'    
@@ -299,7 +294,7 @@ fi
 
 # checking ENV for USBDEVICES
 if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
-  echo "Usb-device-support is activated by ENV."
+  echo 'USBDEVICES is set.'
   IFS=';' read -ra devicearray <<< "$usbdevices"
     for i in "${devicearray[@]}"
     do
@@ -313,60 +308,59 @@ fi
 
 # Checking ENV for multihost setup
 if [[ "$multihost" != "" ]]; then
-  echo "Checking multihost setup..."
+  echo "Checking for multihost settings..."
   # Configuring objects db host
   if [[ "$multihost" = "master" && "$objectsdbtype" = "" && "$objectsdbhost" = "" && "$objectsdbport" = "" ]]; then
-    echo "Multihost is set as \"master\" by ENV and no external objects db is set."
-    echo -n "Setting host of objects db to \"0.0.0.0\" to allow external communication... "
+    echo "IOB_MULTIHOST is set to \"master\" and no external objects db is set."
+    echo -n "Setting host of objects db to \"0.0.0.0\" to allow external connections... "
       jq --arg objectsdbhost "0.0.0.0" '.objects.host = $objectsdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
       chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
     echo 'Done.'
   elif [[ "$multihost" = "master" && "$objectsdbhost" = "127.0.0.1" ]]; then
-    echo "Multihost is set as \"master\" by ENV. But objects db host is set to \"127.0.0.1\" by ENV too."
-    echo "This configuration will not allow slaves to connect the objects db! Please change or remove ENV \"IOB_OBJECTSDB_HOST\" and start over!"
+    echo "IOB_MULTIHOST is set to \"master\", but IOB_OBJECTSDB_HOST is set to \"127.0.0.1\"."
+    echo "This configuration will not allow slaves to connect to objects db! Please change or remove \"IOB_OBJECTSDB_HOST\" and start over!"
     echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
     exit 1
   elif [[ "$multihost" = "master" && "$objectsdbtype" != "" && "$objectsdbhost" != "" && "$objectsdbport" != "" ]]; then
-    echo "Multihost is set as \"master\" by ENV and external objects db is set."
+    echo "IOB_MULTIHOST is set to \"master\" and external objects db is set."
   elif ([[ "$multihost" = "slave" && "$objectsdbtype" = "" ]]) || ([[ "$multihost" = "slave" && "$objectsdbhost" = "" ]]) || ([[ "$multihost" = "slave" && "$objectsdbport" = "" ]]); then
-    echo "Multihost is set as \"slave\" by ENV. But no external objects db is set."
-    echo "You have to configure ENVs \"IOB_OBJECTSDB_TYPE\", \"IOB_OBJECTSDB_HOST\" and \"IOB_OBJECTSDB_PORT\" to connect to a maser objects db."
-    echo "Please check your settings and start over."
+    echo "IOB_MULTIHOST is set to \"slave\", but no external objects db is set."
+    echo "You have to configure ENVs \"IOB_OBJECTSDB_TYPE\", \"IOB_OBJECTSDB_HOST\" and \"IOB_OBJECTSDB_PORT\" to connect to a master objects db."
+    echo "Please check your settings and start over!"
     echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
     exit 1
   elif [[ "$multihost" = "slave" && "$objectsdbtype" != "" && "$objectsdbhost" != "" && "$objectsdbport" != "" ]]; then
-    echo "Multihost is set as \"slave\" by ENV and external objects db is set."
+    echo "IOB_MULTIHOST is set to \"slave\" and external objects db is set."
   elif [[ "$multihost" != "" ]]; then
-    echo "Multihost is set but it seems like some configuration is missing."
+    echo "IOB_MULTIHOST is set, but it seems like some configuration is missing."
     echo "Please checke if you have configured the ENVs \"MULTIHOST\", \"IOB_OBJECTSDB_TYPE\", \"IOB_OBJECTSDB_HOST\" and \"IOB_OBJECTSDB_PORT\" correctly and start over."
     echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
     exit 1
   fi
-
    # Configuring states db host
   if [[ "$multihost" = "master" && "$statesdbtype" = "" && "$statesdbhost" = "" && "$statesdbport" = "" ]]; then
-    echo "Multihost is set as \"master\" by ENV and no external states db is set."
-    echo -n "Setting host of states db to \"0.0.0.0\" to allow external communication... "
+    echo "IOB_MULTIHOST is set to \"master\" and no external states db is set."
+    echo -n "Setting host of states db to \"0.0.0.0\" to allow external connections... "
       jq --arg statesdbhost "0.0.0.0" '.states.host = $statesdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
       chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
     echo 'Done.'
   elif [[ "$multihost" = "master" && "$statesdbhost" = "127.0.0.1" ]]; then
-    echo "Multihost is set as \"master\" by ENV. But states db host is set to \"127.0.0.1\" by ENV too."
-    echo "This configuration will not work! Please change or remove ENV \"IOB_STATESDB_HOST\" and start over!"
+    echo "IOB_MULTIHOST is set to \"master\", but states db host is set to \"127.0.0.1\"."
+    echo "This configuration will not allow slaves to connect to objects db! Please change or remove \"IOB_STATESDB_HOST\" and start over!"
     echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
     exit 1
   elif [[ "$multihost" = "master" && "$statesdbtype" != "" && "$statesdbhost" != "" && "$statesdbport" != "" ]]; then
-    echo "Multihost is set as \"master\" by ENV and external states db is set."
+    echo "IOB_MULTIHOST is set to \"master\" and external states db is set."
   elif ([[ "$multihost" = "slave" && "$statesdbtype" = "" ]]) || ([[ "$multihost" = "slave" && "$statesdbhost" = "" ]]) || ([[ "$multihost" = "slave" && "$statesdbport" = "" ]]); then
-    echo "Multihost is set as \"slave\" by ENV. But no external states db is set."
+    echo "IOB_MULTIHOST is set to \"slave\", but no external states db is set."
     echo "You have to configure ENVs \"IOB_STATESDB_TYPE\", \"IOB_STATESDB_HOST\" and \"IOB_STATESDB_PORT\" to connect to a maser states db."
-    echo "Please check your settings and start over."
+    echo "Please check your settings and start over!"
     echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
     exit 1
   elif [[ "$multihost" = "slave" && "$statesdbtype" != "" && "$statesdbhost" != "" && "$statesdbport" != "" ]]; then
-    echo "Multihost is set as \"slave\" by ENV and external states db is set."
+    echo "IOB_MULTIHOST is set to \"slave\" and external states db is set."
   elif [[ "$multihost" != "" ]]; then
-    echo "Multihost is set but it seems like some configuration is missing."
+    echo "IOB_MULTIHOST is set, but it seems like some configuration is missing."
     echo "Please checke if you have configured the ENVs \"MULTIHOST\", \"IOB_STATESDB_TYPE\", \"IOB_STATESDB_HOST\" and \"IOB_STATESTDB_PORT\" correctly and start over."
     echo "For more information see ioBroker Docker image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
     exit 1
@@ -377,7 +371,7 @@ fi
 
 # Checking ENVs for custom setup of objects db
 if [[ "$objectsdbtype" != "" || "$objectsdbhost" != "" || "$objectsdbport" != "" ]]; then
-  echo "Checking custom settings for objects db..."
+  echo "Checking for custom objects db settings ..."
   if [[ "$objectsdbtype" != "$(jq -r '.objects.type' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_OBJECTSDB_TYPE is set and value is different from detected ioBroker installation."
     echo -n "Setting type of objects db to \""$objectsdbtype"\"... "
@@ -411,7 +405,7 @@ fi
 
 # Checking ENVs for custom setup of states db
 if [[ "$statesdbtype" != "" || "$statesdbhost" != "" || "$statesdbport" != "" ]]; then
-  echo "Checking custom settings for states db..."
+  echo "Checking for custom states db settings..."
   if [[ "$statesdbtype" != "$(jq -r '.states.type' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_STATESDB_TYPE is set and value is different from detected ioBroker installation."
     echo -n "Setting type of states db to \""$statesdbtype"\"... "
