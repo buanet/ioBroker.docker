@@ -96,6 +96,19 @@ if [[ -f /opt/.firstrun ]]; then
     echo 'Done.'
     echo ' '
   fi
+  # Installing packages from ENV
+  if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
+    echo 'Installing additional packages is set by ENV but offline mode is activated!'
+    echo 'Skipping Linux packages installation.'
+    echo ' '
+  else
+    echo 'Installing additional packages is set by ENV.'
+    echo "Checking the following packages:" $packages"..."
+    echo $packages > /opt/scripts/.docker_config/.packages
+      bash /opt/scripts/setup_packages.sh -install
+    echo 'Done.'
+    echo ' '
+  fi
   # Register maintenance script
   echo -n 'Registering maintenance script as command... '
   echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
@@ -105,20 +118,6 @@ if [[ -f /opt/.firstrun ]]; then
   echo ' '
 else
   echo 'This is not the first run of this container. Skipping first run preparation.'
-  echo ' '
-fi
-
-# Installing packages from ENV
-if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
-  echo 'Installing additional packages is set by ENV but offline mode is activated!'
-  echo 'Skipping Linux packages installation.'
-  echo ' '
-else
-  echo 'Installing additional packages is set by ENV.'
-  echo "Checking the following packages:" $packages"..."
-  echo $packages > /opt/scripts/.docker_config/.packages
-    bash /opt/scripts/setup_packages.sh -install
-  echo 'Done.'
   echo ' '
 fi
 
@@ -149,8 +148,8 @@ if [[ `find /opt/iobroker -type f | wc -l` -lt 1 ]]; then
     tar -xf /opt/initial_iobroker.tar -C /
   echo 'Done.'
 elif [[ -f /opt/iobroker/iobroker ]]; then
-  echo "Existing installation of ioBroker detected in /opt/iobroker."
-elif [[ $(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l) != "0" && $(tar -ztvf /opt/iobroker/*_backupiobroker.tar.gz "backup/backup.json" 2> /dev/null | wc -l) != "0" ]]; then
+  echo "Existing installation of ioBroker detected in \"/opt/iobroker\"."
+elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -ztvf /opt/iobroker/*_backupiobroker.tar.gz "backup/backup.json" 2> /dev/null | wc -l)" != "0" ]]; then
   if [[ "$multihost" = "slave" ]]; then
     echo "IoBroker backup file detected in /opt/iobroker. But Multihost is set to \"slave\"."
     echo "Restoring a backup is not supported on Multihost slaves. Please check configuration and start over."
@@ -202,14 +201,14 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 # (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
-echo -n "(Re)Setting folder permissions (This might take a while! Please be patient!)... "
+echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
   chown -R $setuid:$setgid /opt/iobroker
   chown -R $setuid:$setgid /opt/scripts
 echo 'Done.'
 echo ' '
 
 # Backing up original iobroker-file and changing sudo to gosu
-echo -n "Fixing \"sudo-bug\" by replacing sudo in iobroker with gosu... "
+echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu... "
   cp -a /opt/iobroker/iobroker /opt/iobroker/iobroker.bak
   chmod 755 /opt/iobroker/iobroker
   sed -i 's/sudo -H -u/gosu/g' /opt/iobroker/iobroker
@@ -221,20 +220,28 @@ if [[ "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?
   echo "Hostname in ioBroker does not match the hostname of this container."
   if [[ "$debug" == "true" ]]; then
     echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+    echo "[DEBUG] Detected hostname in container: " $(hostname)
   fi
-  echo -n "Updating hostname to " $(hostname)"... "
-    bash iobroker host $(iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+  echo -n "Updating hostname to "$(hostname)"... "
+    bash iobroker host $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
   echo 'Done.'
   echo ' '
 elif [[ "$multihost" == "slave" ]]; then
   echo "IOB_MULTIHOST ist set to \"slave\". Hostname check will be skipped."
   echo ' '
-else
+elif [[ "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')" = "$(hostname)" && "$multihost" != "slave" ]]; then
+  echo "Hostname in ioBroker matches the hostname of this container."
   if [[ "$debug" == "true" ]]; then
-    echo "[DEBUG] Hostnames match successful!"
     echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
     echo "[DEBUG] Detected hostname in container: " $(hostname)
-    echo ' '
+  fi
+  echo "No action required."
+  echo ' '
+else
+  if [[ "$debug" == "true" ]]; then
+    echo "[DEBUG] There was a problem checking the hostname."
+    echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+    echo "[DEBUG] Detected hostname in container: " $(hostname)
   fi
 fi
 
