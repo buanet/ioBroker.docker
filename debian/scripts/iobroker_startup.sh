@@ -36,27 +36,31 @@ echo ' '
 echo "$(printf -- '-%.0s' {1..80})"
 echo -n "$(printf -- '-%.0s' {1..25})" && echo -n "     "$dati"      " && echo "$(printf -- '-%.0s' {1..25})"
 echo "$(printf -- '-%.0s' {1..80})"
-echo ' '
-echo "$(printf -- '-%.0s' {1..80})"
+echo '-----                                                                      -----'
+echo "----- ██╗  ██████╗  ██████╗  ██████╗   ██████╗  ██╗  ██╗ ███████╗ ██████╗  -----"
+echo "----- ██║ ██╔═══██╗ ██╔══██╗ ██╔══██╗ ██╔═══██╗ ██║ ██╔╝ ██╔════╝ ██╔══██╗ -----"
+echo "----- ██║ ██║   ██║ ██████╔╝ ██████╔╝ ██║   ██║ █████╔╝  █████╗   ██████╔╝ -----"
+echo "----- ██║ ██║   ██║ ██╔══██╗ ██╔══██╗ ██║   ██║ ██╔═██╗  ██╔══╝   ██╔══██╗ -----"
+echo "----- ██║ ╚██████╔╝ ██████╔╝ ██║  ██║ ╚██████╔╝ ██║  ██╗ ███████╗ ██║  ██║ -----"
+echo "----- ╚═╝  ╚═════╝  ╚═════╝  ╚═╝  ╚═╝  ╚═════╝  ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ -----"
+echo '-----                                                                      -----'
 echo "-----              Welcome to your ioBroker Docker container!              -----"
 echo "-----                    Startupscript is now running!                     -----"
 echo "-----                          Please be patient!                          -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----                                System                                -----"
+echo "-----                          System Information                          -----"
 echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" arch: $(uname -m))" && echo " -----"
 echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" hostname: $(hostname))" && echo " -----"
 echo "-----                                                                      -----"
-echo "-----                             Docker-Image                             -----"
+echo "-----                          Version Information                         -----"
 echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" image: ${VERSION})" && echo " -----"
 echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" build: ${BUILD})" && echo " -----"
-echo "-----                                                                      -----"
-echo "-----                               Versions                               -----"
 echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" node: $(node -v))" && echo " -----"
 echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" npm: $(npm -v))" && echo " -----"
 echo "-----                                                                      -----"
-echo "-----                                 ENV                                  -----"
+echo "-----                        Environment Variables                         -----"
 if [[ "$adminport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
 if [[ "$avahi" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" AVAHI: $avahi)" && echo " -----"; fi
 if [[ "$debug" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" DEBUG: $debug)" && echo " -----"; fi
