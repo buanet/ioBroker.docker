@@ -23,13 +23,8 @@ else
   exit 1
 fi
 
-# Cleanup
-apt-get autoclean -y
-apt-get autoremove
-apt-get clean
-rm -rf /tmp/* /var/tmp/*
-rm -rf /root/.cache/*
-rm -rf /var/lib/apt/lists/*
-rm -f /opt/scripts/.docker_config/.packages
+# Silent Cleanup
+apt-get -qq autoclean -y && apt-get -qq autoremove && apt-get -qq clean
+rm -rf /tmp/* /var/tmp/* && rm -rf /root/.cache/* && rm -rf /var/lib/apt/lists/* && rm -f /opt/scripts/.docker_config/.packages
 
 exit 0

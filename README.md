@@ -60,7 +60,7 @@ Please do not use the issues for support questions. Not every error message is w
 
 ### Beta testing
 
-If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. You can find the changelog for beta versions [here](https://github.com/buanet/ioBroker.docker/blob/dev/CHANGELOG.md). For more details and beta support join us at the "docker-image" chat on the [ioBroker Discord channel](https://discord.gg/Ne3y6fUac3).
+If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. For more details and beta support join us at "beta testing & feedback" > "docker-image" on the [ioBroker Discord channel](https://discord.gg/Ne3y6fUac3).
 
 ### Support the project
 

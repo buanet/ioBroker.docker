@@ -1,5 +1,13 @@
 ## Changelog
 
+### v7.1.0-beta.1 (12.10.2022)
+* add env DEBUG for extended debugging log
+* enhance logging in iobroker-startuo.sh
+* enhance build process
+* add restart option to maintenance script
+* add strict mode for iobroker-startup.sh
+* fix "unary operator expected" error
+
 ### v7.0.1 (05.07.2022)
 * backitup restore patch
 
