@@ -2,7 +2,7 @@ name: Check ioBroker versions
 
 on:
   schedule:
-    - cron:  '42 23 * * *'
+    - cron: '42 23 * * *'
   workflow_dispatch:
 
 jobs:
