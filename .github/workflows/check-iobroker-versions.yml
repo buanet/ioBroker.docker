@@ -44,7 +44,7 @@ jobs:
 
       - name: Trigger build debian latest (buanet)
         if: steps.git-check.outputs.modified == 'true'
-        uses: benc-uk/workflow-dispatch@v1.1
+        uses: benc-uk/workflow-dispatch@v1.2
         with:
           workflow: Build debian latest (buanet)
           repo: buanet/ioBroker.docker
@@ -52,7 +52,7 @@ jobs:
 
       - name: Trigger build debian latest (iobroker)
         if: steps.git-check.outputs.modified == 'true'
-        uses: benc-uk/workflow-dispatch@v1.1
+        uses: benc-uk/workflow-dispatch@v1.2
         with:
           workflow: Build debian latest (iobroker)
           repo: buanet/ioBroker.docker
