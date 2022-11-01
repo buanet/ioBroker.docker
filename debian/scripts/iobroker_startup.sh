@@ -129,7 +129,7 @@ if [[ "$setgid" != "$(cat /etc/group | grep 'iobroker:' | cut -d':' -f3)" || "$s
   echo "SETUID and/ or SETGID are set to individual values."
   echo -n "Changing UID to "$setuid" and GID to "$setgid"... "
     usermod -u $setuid iobroker
-    groupmod -g $setgid iobroker
+    groupmod -og $setgid iobroker
   echo 'Done.'
   echo ' '
 fi

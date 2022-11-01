@@ -1,10 +1,13 @@
 ## Changelog
 
+### v7.1.1 (01.11.2022)
+* fix setting gid of iobroker group [#289](https://github.com/buanet/ioBroker.docker/issues/289)
+
 ### v7.1.0 (31.10.2022)
 * fix [build action node issue](https://forum.iobroker.net/topic/59518/docker-image-7-0-1-auf-node-js-14/14?_=1667244004952) for iobroker/iobroker repo
 * v7.1.0-beta.1 (12.10.2022)
   * add env DEBUG for extended debugging log
-  * enhance logging in iobroker-startuo.sh
+  * enhance logging in iobroker-startup.sh
   * enhance build process
   * add restart option to maintenance script
   * add strict mode for iobroker-startup.sh
