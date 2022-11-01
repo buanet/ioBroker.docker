@@ -19,6 +19,7 @@ objectsdbtype=$IOB_OBJECTSDB_TYPE
 packages=$PACKAGES
 setgid=$SETGID
 setuid=$SETUID
+skipperms=$SKIP_PERMS
 statesdbhost=$IOB_STATESDB_HOST
 statesdbport=$IOB_STATESDB_PORT
 statesdbtype=$IOB_STATESDB_TYPE
@@ -203,12 +204,14 @@ echo "-----             Step 3 of 5: Checking ioBroker installation             
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
-# (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
-echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
-  chown -R $setuid:$setgid /opt/iobroker
-  chown -R $setuid:$setgid /opt/scripts
-echo 'Done.'
-echo ' '
+if [[ "$skipperms" != "true" ]]; then
+  # (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
+  echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
+    chown -R $setuid:$setgid /opt/iobroker
+    chown -R $setuid:$setgid /opt/scripts
+  echo 'Done.'
+  echo ' '
+fi
 
 # Backing up original iobroker-file and changing sudo to gosu
 echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu... "
