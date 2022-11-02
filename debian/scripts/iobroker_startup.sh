@@ -10,6 +10,7 @@ echo 'starting' > /opt/scripts/.docker_config/.healthcheck
 set +u
 adminport=$IOB_ADMINPORT
 avahi=$AVAHI
+backitup=$IOB_BACKITUP_EXTDB
 debug=$DEBUG
 multihost=$IOB_MULTIHOST
 offlinemode=$OFFLINE_MODE
@@ -64,6 +65,7 @@ echo "-----                        Environment Variables                        
 if [[ "$adminport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
 if [[ "$avahi" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" AVAHI: $avahi)" && echo " -----"; fi
 if [[ "$debug" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" DEBUG: $debug)" && echo " -----"; fi
+if [[ "$backitup" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_BACKITUP_EXTDB: $backitup)" && echo " -----"; fi
 if [[ "$multihost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_MULTIHOST: $multihost)" && echo " -----"; fi
 if [[ "$objectsdbhost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
 if [[ "$objectsdbport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
@@ -249,7 +251,7 @@ else
 fi
 
 #####
-# STEP 4 - Setting up prerequisites for some ioBroker-adapters
+# STEP 4 - Setting up special sessting for ioBroker-adapters
 #####
 echo "$(printf -- '-%.0s' {1..80})"
 echo "-----                Step 4 of 5: Applying special settings                -----"
@@ -272,6 +274,14 @@ if [[ "$adminport" != "" ]]; then
     echo 'Done.'
     echo ' '
   fi
+fi
+
+# Checking ENV for Backitup (external database backups)
+if [[ "$backitup" == "true" ]]; then
+  echo -n 'IOB_BACKITUP_EXTDB is \"true\". Unlocking features...'
+  echo 'true' > /opt/scripts/.docker_config/.backitup
+  echo 'Done.'
+  echo ' '
 fi
 
 # Checking ENV for AVAHI

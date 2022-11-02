@@ -48,12 +48,13 @@ RUN chmod 777 /opt/scripts/ \
     && chmod +x /opt/scripts/*.sh \
     && chmod +x /opt/userscripts/*.sh
 
-# Install ioBroker
-RUN curl -sL https://iobroker.net/install.sh | bash - \
-    && mkdir -p /opt/scripts/.docker_config/ \
+# Prepare and install ioBroker
+RUN mkdir -p /opt/scripts/.docker_config/ \
     && echo "starting" > /opt/scripts/.docker_config/.healthcheck \
     && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
     && echo $(hostname) > /opt/.firstrun \
+    # Run installer
+    && curl -sL https://iobroker.net/install.sh | bash - \
     # Deleting UUID from build
     && iobroker unsetup -y \
     # Backup initial ioBroker and userscript folder
