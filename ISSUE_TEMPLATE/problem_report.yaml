@@ -1,0 +1,34 @@
+name: Problem Report
+description: I want to report a problem.
+title: "[Problem]: "
+labels: 
+assignees:
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please describe your problem.
+      placeholder: What happened? What did you expect?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Image version
+      description: Which image version do you use?
+      placeholder: v1.2.3
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Docker logs
+      description: Please provide the full Docker log output from your Docker container startup.
+      render: shell
+    validations:
+      required: true
