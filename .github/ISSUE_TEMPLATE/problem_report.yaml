@@ -1,8 +1,6 @@
 name: Problem Report
 description: I want to report a problem.
 title: "[Problem]: "
-labels: 
-assignees:
 body:
   - type: markdown
     attributes:
