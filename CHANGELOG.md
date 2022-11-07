@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v7.2.0-beta.1 (coming soon)
+* add some more DEBUG messages to log
 * add env IOB_BACKITUP_EXTDB to unlock external db backups in backitup adapter
 * reorder dockerfile steps to fulfill ioBroker Docker check
 

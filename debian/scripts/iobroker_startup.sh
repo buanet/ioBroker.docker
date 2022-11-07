@@ -82,6 +82,19 @@ if [[ "$zwave" != "" ]]; then echo -n "-----                    " && echo -n "$(
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
+# Debug loggin notice
+if [[ "$debug" == "true" ]]; then
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!!!                            DEBUG LOG ACTIVE                            !!!!"
+  echo "!!!!               Environment variable DEBUG is set to true.               !!!!"
+  echo "!!!! This will extend the logging output and may slow down container start. !!!!"
+  echo "!!!!          Please make sure to deactivate if no longer needed.           !!!!"
+  echo "!!!!     For more information see ioBroker Docker image documentation:      !!!!"
+  echo "!!!!           https://docs.buanet.de/iobroker-docker-image/docs/           !!!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo ' '
+fi
+
 #####
 # STEP 1 - Preparing container
 #####
@@ -177,14 +190,14 @@ elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -z
       bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
     echo 'Done.'
     echo ' '
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "!!!!!                             IMPORTANT NOTE                             !!!!!"
-    echo "!!!!!        The startup script restored iobroker from a backup file.        !!!!!"
-    echo "!!!!! Check /opt/iobroker/log/restore.log to see if restore was successful.  !!!!!"
-    echo "!!!!! When ioBroker now starts it will reinstall all Adapters automatically. !!!!!"
-    echo "!!!!!         This might be take a looooong time! Please be patient!         !!!!!"
-    echo "!!!!!  You can view installation process by taking a look at ioBroker log.   !!!!!"
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!                             IMPORTANT NOTE                             !!!!"
+    echo "!!!!        The startup script restored iobroker from a backup file.        !!!!"
+    echo "!!!! Check /opt/iobroker/log/restore.log to see if restore was successful.  !!!!"
+    echo "!!!! When ioBroker now starts it will reinstall all Adapters automatically. !!!!"
+    echo "!!!!         This might be take a looooong time! Please be patient!         !!!!"
+    echo "!!!!  You can view installation process by taking a look at ioBroker log.   !!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   fi
 else
   echo "There is data detected in /opt/iobroker but it looks like it is no instance of ioBroker or a valid backup file!"
@@ -247,7 +260,39 @@ else
     echo "[DEBUG] There was a problem checking the hostname."
     echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
     echo "[DEBUG] Detected hostname in container: " $(hostname)
+    echo ' '
   fi
+fi
+
+# extended debug output
+if [[ "$debug" == "true" ]]; then
+  echo "[DEBUG] Some more ioBroker debug information"
+  echo ' '
+  # get information and send to array
+  IFS=$'\n'
+  instances_array=($(iob list instances))
+  repos_array=($(iob repo list))
+  updates_array=($(iob update))
+  # list iob instances
+  echo "[DEBUG] ##### iobroker list instances #####"
+    for i in ${instances_array[@]}
+    do
+      echo "[DEBUG]" $i
+    done
+  echo ' '
+  echo "[DEBUG] ##### iobroker repo list #####"
+    for i in ${repos_array[@]}
+    do
+      echo "[DEBUG]" $i
+    done
+  echo ' '
+  echo "[DEBUG] ##### iobroker update #####"
+    for i in ${updates_array[@]}
+    do
+      echo "[DEBUG]" $i
+    done
+  echo ' '
+  unset IFS
 fi
 
 #####
@@ -316,6 +361,9 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
         chown root:dialout $i
         chmod g+rw $i
       echo 'Done.'
+        if [[ "$debug" == "true" ]]; then
+          echo "[DEBUG] Permissions set to: " $(ls -al $i)
+        fi
     done
   echo ' '
 fi
