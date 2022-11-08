@@ -219,7 +219,7 @@ echo ' '
 # hostname check
 # get admin instance and hostname
 set +e
-admininstance=$(iob list instances | grep -m 1 'admin' | awk '{print $2}')
+admininstance=$(bash iobroker list instances | grep -m 1 'admin' | awk '{print $2}')
 set -e
 if [[ "$admininstance" != "" ]]; then
   if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" $admininstance; fi 
