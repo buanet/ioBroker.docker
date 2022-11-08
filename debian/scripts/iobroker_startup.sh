@@ -18,6 +18,7 @@ objectsdbhost=$IOB_OBJECTSDB_HOST
 objectsdbport=$IOB_OBJECTSDB_PORT
 objectsdbtype=$IOB_OBJECTSDB_TYPE
 packages=$PACKAGES
+permissioncheck=$PERMISSION_CHECK
 setgid=$SETGID
 setuid=$SETUID
 statesdbhost=$IOB_STATESDB_HOST
@@ -219,11 +220,16 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 # (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
-echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
-  chown -R $setuid:$setgid /opt/iobroker
-  chown -R $setuid:$setgid /opt/scripts
-echo 'Done.'
-echo ' '
+if [[ "$permissioncheck" == "false" ]]; then
+  echo "PERMISSION_CHECK is set to false. Use this at your own risk!"
+  echo ' '
+else
+  echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
+    chown -R $setuid:$setgid /opt/iobroker
+    chown -R $setuid:$setgid /opt/scripts
+  echo 'Done.'
+  echo ' '
+fi
 
 # Backing up original iobroker-file and changing sudo to gosu
 echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu... "
