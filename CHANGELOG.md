@@ -1,5 +1,8 @@
 ## Changelog
 
+### v7.1.2 (08.11.2022)
+* fix hostname check ([#293](https://github.com/buanet/ioBroker.docker/issues/293))
+
 ### v7.1.1 (01.11.2022)
 * fix setting gid of iobroker group ([#289](https://github.com/buanet/ioBroker.docker/issues/289))
 

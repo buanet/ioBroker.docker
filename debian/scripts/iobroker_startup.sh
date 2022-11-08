@@ -160,9 +160,7 @@ elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -z
     exit 1
   else
     echo "IoBroker backup file detected in /opt/iobroker."
-    if [[ "$debug" == "true" ]]; then
-      echo "[DEBUG] Backup file name: " $(ls *_backupiobroker.tar.gz) 
-    fi
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Backup file name: " $(ls *_backupiobroker.tar.gz); fi
     echo -n "Preparing restore... "
       mv /opt/iobroker/*.tar.gz /opt/
       tar -xf /opt/initial_iobroker.tar -C /
@@ -218,34 +216,37 @@ echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu... "
 echo 'Done.'
 echo ' '
 
-# checking hostname in ioBroker to match container hostname
-if [[ "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')" != "$(hostname)" && "$multihost" != "slave" ]]; then
+# hostname check
+# get admin instance and hostname
+set +e
+admininstance=$(iob list instances | grep -m 1 'admin' | awk '{print $2}')
+set -e
+if [[ "$admininstance" != "" ]]; then
+  if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" $admininstance; fi 
+  adminhostname=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="host": ")[^"]*')
+  if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" $adminhostname; fi
+else
+  echo "There was a problem detecting the admin instance and/or hostname of your iobroker."
+  echo "Make sure the ioBroker installation you use has an admin instance or start over with a fresh installation and restore your configuration."
+  echo "For more details see https://docs.buanet.de/iobroker-docker-image/docs/#restore"
+  exit 1
+fi
+# check hostname
+if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" && "$multihost" != "slave" ]]; then
   echo "Hostname in ioBroker does not match the hostname of this container."
-  if [[ "$debug" == "true" ]]; then
-    echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
-    echo "[DEBUG] Detected hostname in container: " $(hostname)
-  fi
   echo -n "Updating hostname to "$(hostname)"... "
-    bash iobroker host $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
+    bash iobroker host $adminhostname
   echo 'Done.'
   echo ' '
 elif [[ "$multihost" == "slave" ]]; then
   echo "IOB_MULTIHOST ist set to \"slave\". Hostname check will be skipped."
   echo ' '
-elif [[ "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')" = "$(hostname)" && "$multihost" != "slave" ]]; then
+elif [[ "$adminhostname" = "$(hostname)" && "$multihost" != "slave" ]]; then
   echo "Hostname in ioBroker matches the hostname of this container."
-  if [[ "$debug" == "true" ]]; then
-    echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
-    echo "[DEBUG] Detected hostname in container: " $(hostname)
-  fi
   echo "No action required."
   echo ' '
 else
-  if [[ "$debug" == "true" ]]; then
-    echo "[DEBUG] There was a problem checking the hostname."
-    echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
-    echo "[DEBUG] Detected hostname in container: " $(hostname)
-  fi
+  echo "There was a problem checking the hostname."
 fi
 
 #####
@@ -262,11 +263,10 @@ echo ' '
 
 # Checking ENV for Adminport
 if [[ "$adminport" != "" ]]; then
-  if [[ "$adminport" != "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*')" ]]; then
+  adminportold=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="port": )[^,]*')
+  if [[ "$adminport" != "$adminportold" ]]; then
     echo "IOB_ADMINPORT is set and does not match port configured in ioBroker."
-    if [[ "$debug" == "true" ]]; then
-      echo "[DEBUG] Detected Admin Port in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*')
-    fi
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected Admin Port in ioBroker: " $adminportold; fi
     echo -n "Setting Adminport to \""$adminport"\"... "
       bash iobroker set admin.0 --port $adminport
     echo 'Done.'
