@@ -264,11 +264,12 @@ echo ' '
 # Checking ENV for Adminport
 if [[ "$adminport" != "" ]]; then
   adminportold=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="port": )[^,]*')
+  admininstanceshort=$(echo $admininstance | grep -m 1 -o 'admin..')
   if [[ "$adminport" != "$adminportold" ]]; then
     echo "IOB_ADMINPORT is set and does not match port configured in ioBroker."
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected Admin Port in ioBroker: " $adminportold; fi
     echo -n "Setting Adminport to \""$adminport"\"... "
-      bash iobroker set admin.0 --port $adminport
+      bash iobroker set $admininstanceshort --port $adminport
     echo 'Done.'
     echo ' '
   fi
