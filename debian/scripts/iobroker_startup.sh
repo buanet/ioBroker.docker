@@ -217,36 +217,38 @@ echo 'Done.'
 echo ' '
 
 # hostname check
-# get admin instance and hostname
-set +e
-admininstance=$(bash iobroker list instances | grep -m 1 -o 'system.adapter.admin..')
-set -e
-if [[ "$admininstance" != "" ]]; then
-  if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" $admininstance; fi 
-  adminhostname=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="host": ")[^"]*')
-  if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" $adminhostname; fi
-else
-  echo "There was a problem detecting the admin instance and/or hostname of your iobroker."
-  echo "Make sure the ioBroker installation you use has an admin instance or start over with a fresh installation and restore your configuration."
-  echo "For more details see https://docs.buanet.de/iobroker-docker-image/docs/#restore"
-  exit 1
-fi
-# check hostname
-if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" && "$multihost" != "slave" ]]; then
-  echo "Hostname in ioBroker does not match the hostname of this container."
-  echo -n "Updating hostname to "$(hostname)"... "
-    bash iobroker host $adminhostname
-  echo 'Done.'
-  echo ' '
-elif [[ "$multihost" == "slave" ]]; then
+if [[ "$multihost" == "slave" ]]; then
   echo "IOB_MULTIHOST ist set to \"slave\". Hostname check will be skipped."
   echo ' '
-elif [[ "$adminhostname" = "$(hostname)" && "$multihost" != "slave" ]]; then
-  echo "Hostname in ioBroker matches the hostname of this container."
-  echo "No action required."
-  echo ' '
 else
-  echo "There was a problem checking the hostname."
+  # get admin instance and hostname
+  set +e
+  admininstance=$(bash iobroker list instances | grep -m 1 -o 'system.adapter.admin..')
+  set -e
+  if [[ "$admininstance" != "" ]]; then
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" $admininstance; fi 
+    adminhostname=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="host": ")[^"]*')
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" $adminhostname; fi
+  else
+    echo "There was a problem detecting the admin instance and/or hostname of your iobroker."
+    echo "Make sure the ioBroker installation you use has an admin instance or start over with a fresh installation and restore your configuration."
+    echo "For more details see https://docs.buanet.de/iobroker-docker-image/docs/#restore"
+    exit 1
+  fi
+  # check hostname
+  if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" ]]; then
+    echo "Hostname in ioBroker does not match the hostname of this container."
+    echo -n "Updating hostname to "$(hostname)"... "
+      bash iobroker host $adminhostname
+    echo 'Done.'
+    echo ' '
+  elif [[ "$adminhostname" = "$(hostname)" ]]; then
+    echo "Hostname in ioBroker matches the hostname of this container."
+    echo "No action required."
+    echo ' '
+  else
+    echo "There was a problem checking the hostname."
+  fi
 fi
 
 #####
@@ -262,7 +264,7 @@ echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.d
 echo ' '
 
 # Checking ENV for Adminport
-if [[ "$adminport" != "" ]]; then
+if [[ "$adminport" != "" && "$multihost" != "slave" ]]; then
   adminportold=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="port": )[^,]*')
   admininstanceshort=$(echo $admininstance | grep -m 1 -o 'admin..')
   if [[ "$adminport" != "$adminportold" ]]; then
