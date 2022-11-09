@@ -28,6 +28,20 @@ set -u
 
 pkill_timeout=10      # timeout for iobroker shutdown in seconds
 
+# Stop on error function
+stop_on_error() {
+  if [[ "$debug" == "true" ]]; then 
+    echo ''
+    echo "[DEBUG] Debug mode prevents the container from exiting on errors."
+    echo "[DEBUG] This enables you to investigate or fix your issue on the command line."
+    echo "[DEBUG] If you want to stop or restart your container you have to do it manually."
+    echo "[DEBUG] IoBroker is not running!"
+      tail -f /dev/null
+  else
+    exit 1
+  fi
+}
+
 # Getting date and time for logging
 dati=`date '+%Y-%m-%d %H:%M:%S'`
 
@@ -230,10 +244,10 @@ else
     adminhostname=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="host": ")[^"]*')
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" $adminhostname; fi
   else
-    echo "There was a problem detecting the admin instance and/or hostname of your iobroker."
+    echo "There was a problem detecting the admin instance of your iobroker."
     echo "Make sure the ioBroker installation you use has an admin instance or start over with a fresh installation and restore your configuration."
     echo "For more details see https://docs.buanet.de/iobroker-docker-image/docs/#restore"
-    exit 1
+    stop_on_error()
   fi
   # check hostname
   if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" ]]; then
@@ -248,6 +262,7 @@ else
     echo ' '
   else
     echo "There was a problem checking the hostname."
+    stop_on_error()
   fi
 fi
 
@@ -270,7 +285,7 @@ if [[ "$adminport" != "" && "$multihost" != "slave" ]]; then
   if [[ "$adminport" != "$adminportold" ]]; then
     echo "IOB_ADMINPORT is set and does not match port configured in ioBroker."
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected Admin Port in ioBroker: " $adminportold; fi
-    echo -n "Setting Adminport to \""$adminport"\"... "
+    echo "Setting Adminport to \""$adminport"\"... "
       bash iobroker set $admininstanceshort --port $adminport
     echo 'Done.'
     echo ' '
