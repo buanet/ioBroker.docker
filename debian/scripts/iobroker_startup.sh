@@ -247,7 +247,7 @@ else
     echo "There was a problem detecting the admin instance of your iobroker."
     echo "Make sure the ioBroker installation you use has an admin instance or start over with a fresh installation and restore your configuration."
     echo "For more details see https://docs.buanet.de/iobroker-docker-image/docs/#restore"
-    stop_on_error()
+    stop_on_error
   fi
   # check hostname
   if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" ]]; then
@@ -262,7 +262,7 @@ else
     echo ' '
   else
     echo "There was a problem checking the hostname."
-    stop_on_error()
+    stop_on_error
   fi
 fi
 
