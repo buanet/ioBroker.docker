@@ -237,7 +237,7 @@ if [[ "$multihost" == "slave" ]]; then
 else
   # get admin instance and hostname
   set +e
-  admininstance=$(bash iobroker list instances | grep -m 1 -o 'system.adapter.admin..')
+  admininstance=$(bash iobroker list instances | grep 'enabled' | grep -m 1 -o 'system.adapter.admin..')
   set -e
   if [[ "$admininstance" != "" ]]; then
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" $admininstance; fi 
