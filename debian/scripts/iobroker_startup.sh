@@ -31,7 +31,7 @@ pkill_timeout=10      # timeout for iobroker shutdown in seconds
 # Stop on error function
 stop_on_error() {
   if [[ "$debug" == "true" ]]; then 
-    echo ''
+    echo ' '
     echo "[DEBUG] Debug mode prevents the container from exiting on errors."
     echo "[DEBUG] This enables you to investigate or fix your issue on the command line."
     echo "[DEBUG] If you want to stop or restart your container you have to do it manually."
