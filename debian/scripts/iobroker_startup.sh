@@ -118,7 +118,7 @@ if [[ -f /opt/.firstrun ]]; then
   if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
     echo 'PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation.'
     echo ' '
-  else
+  elif [[ "$packages" != "" ]]; then
     echo 'PACKAGES is set. Installing additional Linux packages.'
     echo "Checking the following packages:" $packages"..."
     echo $packages > /opt/scripts/.docker_config/.packages
