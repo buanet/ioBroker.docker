@@ -30,6 +30,20 @@ set -u
 
 pkill_timeout=10      # timeout for iobroker shutdown in seconds
 
+# Stop on error function
+stop_on_error() {
+  if [[ "$debug" == "true" ]]; then 
+    echo ' '
+    echo "[DEBUG] Debug mode prevents the container from exiting on errors."
+    echo "[DEBUG] This enables you to investigate or fix your issue on the command line."
+    echo "[DEBUG] If you want to stop or restart your container you have to do it manually."
+    echo "[DEBUG] IoBroker is not running!"
+      tail -f /dev/null
+  else
+    exit 1
+  fi
+}
+
 # Getting date and time for logging
 dati=`date '+%Y-%m-%d %H:%M:%S'`
 
@@ -120,7 +134,7 @@ if [[ -f /opt/.firstrun ]]; then
   if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
     echo 'PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation.'
     echo ' '
-  else
+  elif [[ "$packages" != "" ]]; then
     echo 'PACKAGES is set. Installing additional Linux packages.'
     echo "Checking the following packages:" $packages"..."
     echo $packages > /opt/scripts/.docker_config/.packages
@@ -176,9 +190,7 @@ elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -z
     exit 1
   else
     echo "IoBroker backup file detected in /opt/iobroker."
-    if [[ "$debug" == "true" ]]; then
-      echo "[DEBUG] Backup file name: " $(ls *_backupiobroker.tar.gz) 
-    fi
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Backup file name: " $(ls *_backupiobroker.tar.gz); fi
     echo -n "Preparing restore... "
       mv /opt/iobroker/*.tar.gz /opt/
       tar -xf /opt/initial_iobroker.tar -C /
@@ -239,34 +251,39 @@ echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu... "
 echo 'Done.'
 echo ' '
 
-# checking hostname in ioBroker to match container hostname
-if [[ "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')" != "$(hostname)" && "$multihost" != "slave" ]]; then
-  echo "Hostname in ioBroker does not match the hostname of this container."
-  if [[ "$debug" == "true" ]]; then
-    echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
-    echo "[DEBUG] Detected hostname in container: " $(hostname)
-  fi
-  echo -n "Updating hostname to "$(hostname)"... "
-    bash iobroker host $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
-  echo 'Done.'
-  echo ' '
-elif [[ "$multihost" == "slave" ]]; then
+# hostname check
+if [[ "$multihost" == "slave" ]]; then
   echo "IOB_MULTIHOST ist set to \"slave\". Hostname check will be skipped."
   echo ' '
-elif [[ "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')" = "$(hostname)" && "$multihost" != "slave" ]]; then
-  echo "Hostname in ioBroker matches the hostname of this container."
-  if [[ "$debug" == "true" ]]; then
-    echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
-    echo "[DEBUG] Detected hostname in container: " $(hostname)
-  fi
-  echo "No action required."
-  echo ' '
 else
-  if [[ "$debug" == "true" ]]; then
-    echo "[DEBUG] There was a problem checking the hostname."
-    echo "[DEBUG] Detected hostname in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="host": ")[^"]*')
-    echo "[DEBUG] Detected hostname in container: " $(hostname)
+  # get admin instance and hostname
+  set +e
+  admininstance=$(bash iobroker list instances | grep 'enabled' | grep -m 1 -o 'system.adapter.admin..')
+  set -e
+  if [[ "$admininstance" != "" ]]; then
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" $admininstance; fi 
+    adminhostname=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="host": ")[^"]*')
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" $adminhostname; fi
+  else
+    echo "There was a problem detecting the admin instance of your iobroker."
+    echo "Make sure the ioBroker installation you use has an admin instance or start over with a fresh installation and restore your configuration."
+    echo "For more details see https://docs.buanet.de/iobroker-docker-image/docs/#restore"
+    stop_on_error
+  fi
+  # check hostname
+  if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" ]]; then
+    echo "Hostname in ioBroker does not match the hostname of this container."
+    echo -n "Updating hostname to "$(hostname)"... "
+      bash iobroker host $adminhostname
+    echo 'Done.'
     echo ' '
+  elif [[ "$adminhostname" = "$(hostname)" ]]; then
+    echo "Hostname in ioBroker matches the hostname of this container."
+    echo "No action required."
+    echo ' '
+  else
+    echo "There was a problem checking the hostname."
+    stop_on_error
   fi
 fi
 
@@ -314,14 +331,14 @@ echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.d
 echo ' '
 
 # Checking ENV for Adminport
-if [[ "$adminport" != "" ]]; then
-  if [[ "$adminport" != "$(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*')" ]]; then
+if [[ "$adminport" != "" && "$multihost" != "slave" ]]; then
+  adminportold=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="port": )[^,]*')
+  admininstanceshort=$(echo $admininstance | grep -m 1 -o 'admin..')
+  if [[ "$adminport" != "$adminportold" ]]; then
     echo "IOB_ADMINPORT is set and does not match port configured in ioBroker."
-    if [[ "$debug" == "true" ]]; then
-      echo "[DEBUG] Detected Admin Port in ioBroker: " $(bash iobroker object get system.adapter.admin.0 --pretty | grep -oP '(?<="port": )[^,]*')
-    fi
-    echo -n "Setting Adminport to \""$adminport"\"... "
-      bash iobroker set admin.0 --port $adminport
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected Admin Port in ioBroker: " $adminportold; fi
+    echo "Setting Adminport to \""$adminport"\"... "
+      bash iobroker set $admininstanceshort --port $adminport
     echo 'Done.'
     echo ' '
   fi
