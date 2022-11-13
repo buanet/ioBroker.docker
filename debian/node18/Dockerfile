@@ -13,7 +13,7 @@ LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install prerequisites (including node) and generating locales
-RUN apt update && apt install -y \
+RUN apt-get update && apt-get install -y \
     apt-utils \
     cifs-utils \
     curl \
@@ -32,7 +32,7 @@ RUN apt update && apt install -y \
     wget \
     # Install node
     && curl -sL https://deb.nodesource.com/setup_18.x | bash \
-    && apt update && apt install -y nodejs \
+    && apt-get update && apt-get install -y nodejs \
     # Install node-gyp
     && npm install -g node-gyp \
     # Generating locales
@@ -68,9 +68,9 @@ RUN mkdir -p /opt/scripts/.docker_config/ \
     && chown root:iobroker /usr/sbin/gosu \
     && chmod +s /usr/sbin/gosu \
     # Clean up installation cache
-    && apt autoclean -y \
-    && apt autoremove \
-    && apt clean \
+    && apt-get autoclean -y \
+    && apt-get autoremove \
+    && apt-get clean \
     && rm -rf /tmp/* /var/tmp/* \
     && rm -rf /root/.cache/* /root/.npm/* \
     && rm -rf /var/lib/apt/lists/*
