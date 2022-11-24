@@ -40,6 +40,8 @@ stop_on_error() {
     echo "[DEBUG] IoBroker is not running!"
       tail -f /dev/null
   else
+    echo ' '
+    echo "This Script will exit now."
     exit 1
   fi
 }
@@ -52,14 +54,14 @@ echo ' '
 echo "$(printf -- '-%.0s' {1..80})"
 echo -n "$(printf -- '-%.0s' {1..25})" && echo -n "     "$dati"      " && echo "$(printf -- '-%.0s' {1..25})"
 echo "$(printf -- '-%.0s' {1..80})"
-echo '-----                                                                      -----'
+echo "-----                                                                      -----"
 echo "----- ██╗  ██████╗  ██████╗  ██████╗   ██████╗  ██╗  ██╗ ███████╗ ██████╗  -----"
 echo "----- ██║ ██╔═══██╗ ██╔══██╗ ██╔══██╗ ██╔═══██╗ ██║ ██╔╝ ██╔════╝ ██╔══██╗ -----"
 echo "----- ██║ ██║   ██║ ██████╔╝ ██████╔╝ ██║   ██║ █████╔╝  █████╗   ██████╔╝ -----"
 echo "----- ██║ ██║   ██║ ██╔══██╗ ██╔══██╗ ██║   ██║ ██╔═██╗  ██╔══╝   ██╔══██╗ -----"
 echo "----- ██║ ╚██████╔╝ ██████╔╝ ██║  ██║ ╚██████╔╝ ██║  ██╗ ███████╗ ██║  ██║ -----"
 echo "----- ╚═╝  ╚═════╝  ╚═════╝  ╚═╝  ╚═╝  ╚═════╝  ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ -----"
-echo '-----                                                                      -----'
+echo "-----                                                                      -----"
 echo "-----              Welcome to your ioBroker Docker container!              -----"
 echo "-----                    Startupscript is now running!                     -----"
 echo "-----                          Please be patient!                          -----"
@@ -123,20 +125,20 @@ echo ' '
 if [[ -f /opt/.firstrun ]]; then
   # Updating Linux packages
   if [[ "$offlinemode" = "true" ]]; then
-    echo 'OFFLINE_MODE is \"true\". Skipping Linux package updates on first run.'
+    echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
     echo ' '
   else
-    echo 'Updating Linux packages on first run...'
+    echo "Updating Linux packages on first run..."
       bash /opt/scripts/setup_packages.sh -update
     echo 'Done.'
     echo ' '
   fi
   # Installing packages from ENV
   if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
-    echo 'PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation.'
+    echo "PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation."
     echo ' '
   elif [[ "$packages" != "" ]]; then
-    echo 'PACKAGES is set. Installing additional Linux packages.'
+    echo "PACKAGES is set. Installing additional Linux packages."
     echo "Checking the following packages:" $packages"..."
     echo $packages > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
@@ -151,7 +153,7 @@ if [[ -f /opt/.firstrun ]]; then
   echo 'Done.'
   echo ' '
 else
-  echo 'This is not the first run of this container. Skipping first run preparation.'
+  echo "This is not the first run of this container. Skipping first run preparation."
   echo ' '
 fi
 
@@ -347,7 +349,7 @@ fi
 
 # Checking ENV for Backitup (external database backups)
 if [[ "$backitup" == "true" ]]; then
-  echo -n 'IOB_BACKITUP_EXTDB is \"true\". Unlocking features...'
+  echo -n "IOB_BACKITUP_EXTDB is \"true\". Unlocking features..."
   echo 'true' > /opt/scripts/.docker_config/.backitup
   echo 'Done.'
   echo ' '
@@ -355,9 +357,9 @@ fi
 
 # Checking ENV for AVAHI
 if [[ "$avahi" = "true" && "$offlinemode" = "true" ]]; then
-  echo 'AVAHI is \"true\", but OFFLINE_MODE is also \"true\". Skipping Avahi daemon setup.'
+  echo "AVAHI is \"true\", but OFFLINE_MODE is also \"true\". Skipping Avahi daemon setup."
 elif [[ "$avahi" = "true" ]]; then
-  echo 'AVAHI is \"true\". Running setup script...'
+  echo "AVAHI is \"true\". Running setup script..."
     chmod 755 /opt/scripts/setup_avahi.sh
     bash /opt/scripts/setup_avahi.sh
   echo 'Done.'
@@ -366,9 +368,9 @@ fi
 
 # Checking ENV for Z-WAVE
 if [[ "$zwave" = "true" && "$offlinemode" = "true" ]]; then
-  echo 'ZWAVE is \"true\", but OFFLINE_MODE is also \"true\". Skipping Z-Wave setup.'
+  echo "ZWAVE is \"true\", but OFFLINE_MODE is also \"true\". Skipping Z-Wave setup."
 elif [[ "$zwave" = "true" ]]; then
-  echo 'ZWAVE is \"true\". Running setup script...'
+  echo "ZWAVE is \"true\". Running setup script..."
     chmod 755 /opt/scripts/setup_zwave.sh
     bash /opt/scripts/setup_zwave.sh
   echo 'Done.'    
@@ -377,17 +379,23 @@ fi
 
 # checking ENV for USBDEVICES
 if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
-  echo 'USBDEVICES is set.'
+  echo "USBDEVICES is set."
   IFS=';' read -ra devicearray <<< "$usbdevices"
     for i in "${devicearray[@]}"
     do
-      echo -n "Setting permissions for "$i"... "
+      if [[ -f $i ]]; then
+        echo -n "Setting permissions for "$i"... "
         chown root:dialout $i
         chmod g+rw $i
-      echo 'Done.'
-        if [[ "$debug" == "true" ]]; then
-          echo "[DEBUG] Permissions set to: " $(ls -al $i)
-        fi
+        echo 'Done.'
+        if [[ "$debug" == "true" ]]; then echo "[DEBUG] Permissions set to: " $(ls -al $i); fi
+      else
+        echo "Looks like the device \""$i"\" does not exist."
+        echo "Please check your container config and start over."
+        echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
+        if [[ "$debug" == "true" ]]; then echo "[DEBUG] Device info: " $(ls -al $i); fi
+        stop_on_error
+      fi
     done
   echo ' '
 fi
@@ -485,7 +493,7 @@ if [[ "$objectsdbtype" != "" || "$objectsdbhost" != "" || "$objectsdbport" != ""
   else
     echo "IOB_OBJECTSDB_PORT is set and value meets detected ioBroker installation."
   fi
-  echo "Done."
+  echo 'Done.'
   echo ' '
 fi
 
@@ -519,7 +527,7 @@ if [[ "$statesdbtype" != "" || "$statesdbhost" != "" || "$statesdbport" != "" ]]
   else
     echo "IOB_STATESDB_PORT is set and value meets detected ioBroker installation."
   fi
-  echo "Done."
+  echo 'Done.'
   echo ' '
 fi
 
@@ -537,14 +545,14 @@ elif [[ -f /opt/userscripts/userscript_firststart.sh || -f /opt/userscripts/user
     echo "Running userscript_firststart.sh..."
       chmod 755 /opt/userscripts/userscript_firststart.sh
       bash /opt/userscripts/userscript_firststart.sh
-    echo "Done."
+    echo 'Done.'
     echo ' '
   fi
   if [[ -f /opt/userscripts/userscript_everystart.sh ]]; then
     echo "Userscript for every start detected. Running userscript_everystart.sh..."
       chmod 755 /opt/userscripts/userscript_everystart.sh
       bash /opt/userscripts/userscript_everystart.sh
-    echo "Done."
+    echo 'Done.'
     echo ' '
   fi
 fi

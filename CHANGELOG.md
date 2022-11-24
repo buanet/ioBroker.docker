@@ -1,6 +1,8 @@
 ## Changelog
 
 ### v7.2.0-beta.1 (coming soon)
+* add error handling for usb devices
+* add aliases to maintenance script
 * add env PERMISSION_CHECK ([#251](https://github.com/buanet/ioBroker.docker/issues/251))
 * add some more DEBUG messages to log
 * add env IOB_BACKITUP_EXTDB to unlock external db backups in backitup adapter
