@@ -227,7 +227,7 @@ for arg in "$@"; do
     help|-h|--help)
       run=(display_help)
       ;;
-    status)
+    status|stat|s)
       run=(maintenance_status)
       ;;
     on)
@@ -236,10 +236,10 @@ for arg in "$@"; do
     off)
       run=(disable_maintenance)
       ;;
-    upgrade)
+    upgrade|upgr|u)
       run=(upgrade_jscontroller)
       ;;
-    restart)
+    restart|rest|r)
       run=(restart_container)
       ;;
     -y|--yes)

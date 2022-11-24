@@ -290,7 +290,7 @@ fi
 
 # extended debug output
 if [[ "$debug" == "true" ]]; then
-  echo "[DEBUG] Some more ioBroker debug information"
+  echo "[DEBUG] Collecting some more ioBroker debug information..."
   echo ' '
   # get information and send to array
   IFS=$'\n'
