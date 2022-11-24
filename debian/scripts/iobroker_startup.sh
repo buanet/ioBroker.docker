@@ -128,7 +128,7 @@ if [[ -f /opt/.firstrun ]]; then
     echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
     echo ' '
   else
-    echo "Updating Linux packages on first run..."
+    echo "Updating Linux packages on first run... "
       bash /opt/scripts/setup_packages.sh -update
     echo 'Done.'
     echo ' '
@@ -139,7 +139,7 @@ if [[ -f /opt/.firstrun ]]; then
     echo ' '
   elif [[ "$packages" != "" ]]; then
     echo "PACKAGES is set. Installing additional Linux packages."
-    echo "Checking the following packages:" $packages"..."
+    echo "Checking the following packages:" $packages"... "
     echo $packages > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
     echo 'Done.'
@@ -291,8 +291,8 @@ else
 fi
 
 # extended debug output
-if [[ "$debug" == "true" ]]; then
-  echo "[DEBUG] Collecting some more ioBroker debug information..."
+if [[ "$debug" == "true" && "$multihost" != "slave" ]]; then
+  echo "[DEBUG] Collecting some more ioBroker debug information... "
   echo ' '
   # get information and send to array
   IFS=$'\n'
@@ -349,7 +349,7 @@ fi
 
 # Checking ENV for Backitup (external database backups)
 if [[ "$backitup" == "true" ]]; then
-  echo -n "IOB_BACKITUP_EXTDB is \"true\". Unlocking features..."
+  echo -n "IOB_BACKITUP_EXTDB is \"true\". Unlocking features... "
   echo 'true' > /opt/scripts/.docker_config/.backitup
   echo 'Done.'
   echo ' '
@@ -359,7 +359,7 @@ fi
 if [[ "$avahi" = "true" && "$offlinemode" = "true" ]]; then
   echo "AVAHI is \"true\", but OFFLINE_MODE is also \"true\". Skipping Avahi daemon setup."
 elif [[ "$avahi" = "true" ]]; then
-  echo "AVAHI is \"true\". Running setup script..."
+  echo "AVAHI is \"true\". Running setup script... "
     chmod 755 /opt/scripts/setup_avahi.sh
     bash /opt/scripts/setup_avahi.sh
   echo 'Done.'
@@ -370,7 +370,7 @@ fi
 if [[ "$zwave" = "true" && "$offlinemode" = "true" ]]; then
   echo "ZWAVE is \"true\", but OFFLINE_MODE is also \"true\". Skipping Z-Wave setup."
 elif [[ "$zwave" = "true" ]]; then
-  echo "ZWAVE is \"true\". Running setup script..."
+  echo "ZWAVE is \"true\". Running setup script... "
     chmod 755 /opt/scripts/setup_zwave.sh
     bash /opt/scripts/setup_zwave.sh
   echo 'Done.'    
@@ -393,7 +393,6 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
         echo "Looks like the device \""$i"\" does not exist."
         echo "Please check your container config and start over."
         echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
-        if [[ "$debug" == "true" ]]; then echo "[DEBUG] Device info: " $(ls -al $i); fi
         stop_on_error
       fi
     done
@@ -402,7 +401,7 @@ fi
 
 # Checking ENV for multihost setup
 if [[ "$multihost" != "" ]]; then
-  echo "Checking for multihost settings..."
+  echo "Checking for multihost settings... "
   # Configuring objects db host
   if [[ "$multihost" = "master" && "$objectsdbtype" = "" && "$objectsdbhost" = "" && "$objectsdbport" = "" ]]; then
     echo "IOB_MULTIHOST is set to \"master\" and no external objects db is set."
@@ -465,7 +464,7 @@ fi
 
 # Checking ENVs for custom setup of objects db
 if [[ "$objectsdbtype" != "" || "$objectsdbhost" != "" || "$objectsdbport" != "" ]]; then
-  echo "Checking for custom objects db settings ..."
+  echo "Checking for custom objects db settings ... "
   if [[ "$objectsdbtype" != "$(jq -r '.objects.type' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_OBJECTSDB_TYPE is set and value is different from detected ioBroker installation."
     echo -n "Setting type of objects db to \""$objectsdbtype"\"... "
@@ -499,7 +498,7 @@ fi
 
 # Checking ENVs for custom setup of states db
 if [[ "$statesdbtype" != "" || "$statesdbhost" != "" || "$statesdbport" != "" ]]; then
-  echo "Checking for custom states db settings..."
+  echo "Checking for custom states db settings... "
   if [[ "$statesdbtype" != "$(jq -r '.states.type' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_STATESDB_TYPE is set and value is different from detected ioBroker installation."
     echo -n "Setting type of states db to \""$statesdbtype"\"... "
@@ -542,14 +541,14 @@ if [[ `find /opt/userscripts -type f | wc -l` -lt 1 ]]; then
 elif [[ -f /opt/userscripts/userscript_firststart.sh || -f /opt/userscripts/userscript_everystart.sh ]]; then
   if [[ -f /opt/userscripts/userscript_firststart.sh && -f /opt/.firstrun ]]; then
     echo "Userscript for first start detected and this is the first start of a new container."
-    echo "Running userscript_firststart.sh..."
+    echo "Running userscript_firststart.sh... "
       chmod 755 /opt/userscripts/userscript_firststart.sh
       bash /opt/userscripts/userscript_firststart.sh
     echo 'Done.'
     echo ' '
   fi
   if [[ -f /opt/userscripts/userscript_everystart.sh ]]; then
-    echo "Userscript for every start detected. Running userscript_everystart.sh..."
+    echo "Userscript for every start detected. Running userscript_everystart.sh... "
       chmod 755 /opt/userscripts/userscript_everystart.sh
       bash /opt/userscripts/userscript_everystart.sh
     echo 'Done.'
@@ -569,7 +568,7 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo "-----                    Step 5 of 5: ioBroker startup                     -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
-echo "Starting ioBroker..."
+echo "Starting ioBroker... "
 echo ' '
 echo "##### #### ### ## # iobroker.js-controller log output # ## ### #### #####"
 
@@ -580,7 +579,7 @@ echo "running" > /opt/scripts/.docker_config/.healthcheck
 shut_down() {
   echo ' '
   echo "Recived termination signal (SIGTERM)."
-  echo "Shutting down ioBroker..."
+  echo "Shutting down ioBroker... "
 
   local status timeout
 
@@ -598,7 +597,7 @@ shut_down() {
   # pgrep exits with status 1 when there are no matches
   while pgrep -u iobroker > /dev/null; (( $? != 1 )); do
     if (($(date +%s) > timeout)); then
-      echo -e '\nTimeout reached. Killing remaining processes...'
+      echo -e '\nTimeout reached. Killing remaining processes... '
       pkill --signal SIGKILL -u iobroker
       echo 'Done. Have a nice day!'
       exit
