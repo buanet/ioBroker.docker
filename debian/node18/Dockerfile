@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y \
     tzdata \
     udev \
     wget \
+    linux-tools-virtual hwdata \
     # Install node
     && curl -sL https://deb.nodesource.com/setup_18.x | bash \
     && apt-get update && apt-get install -y nodejs \
@@ -39,6 +40,9 @@ RUN apt-get update && apt-get install -y \
     && sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
     && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
     && locale-gen
+    # Install USB/IP client tools
+    && update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip | tail -n1` 20
+    && update-alternatives
 
 # Create directorys and copy scripts
 COPY scripts /opt/scripts
