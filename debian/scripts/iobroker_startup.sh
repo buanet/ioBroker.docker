@@ -383,12 +383,12 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
   IFS=';' read -ra devicearray <<< "$usbdevices"
     for i in "${devicearray[@]}"
     do
-      if [[ -f $i ]]; then
+      if [[ -e $i ]]; then
         echo -n "Setting permissions for "$i"... "
         chown root:dialout $i
         chmod g+rw $i
         echo 'Done.'
-        if [[ "$debug" == "true" ]]; then echo "[DEBUG] Permissions set to: " $(ls -al $i); fi
+        if [[ "$debug" == "true" ]]; then echo "[DEBUG] Permissions set: " $(ls -al $i); fi
       else
         echo "Looks like the device \""$i"\" does not exist."
         echo "Did you mount it correctly by using the \"--device\" option?"
