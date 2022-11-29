@@ -391,7 +391,7 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
         if [[ "$debug" == "true" ]]; then echo "[DEBUG] Permissions set to: " $(ls -al $i); fi
       else
         echo "Looks like the device \""$i"\" does not exist."
-        echo "Did you mount it correctly by using the \"--device\" flag?"
+        echo "Did you mount it correctly by using the \"--device\" option?"
         echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/#mounting-usb-devices)."
         stop_on_error
       fi
