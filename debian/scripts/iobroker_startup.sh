@@ -10,6 +10,7 @@ echo 'starting' > /opt/scripts/.docker_config/.healthcheck
 set +u
 adminport=$IOB_ADMINPORT
 avahi=$AVAHI
+backitup=$IOB_BACKITUP_EXTDB
 debug=$DEBUG
 multihost=$IOB_MULTIHOST
 offlinemode=$OFFLINE_MODE
@@ -17,6 +18,7 @@ objectsdbhost=$IOB_OBJECTSDB_HOST
 objectsdbport=$IOB_OBJECTSDB_PORT
 objectsdbtype=$IOB_OBJECTSDB_TYPE
 packages=$PACKAGES
+permissioncheck=$PERMISSION_CHECK
 setgid=$SETGID
 setuid=$SETUID
 statesdbhost=$IOB_STATESDB_HOST
@@ -38,6 +40,8 @@ stop_on_error() {
     echo "[DEBUG] IoBroker is not running!"
       tail -f /dev/null
   else
+    echo ' '
+    echo "This Script will exit now."
     exit 1
   fi
 }
@@ -50,14 +54,14 @@ echo ' '
 echo "$(printf -- '-%.0s' {1..80})"
 echo -n "$(printf -- '-%.0s' {1..25})" && echo -n "     "$dati"      " && echo "$(printf -- '-%.0s' {1..25})"
 echo "$(printf -- '-%.0s' {1..80})"
-echo '-----                                                                      -----'
+echo "-----                                                                      -----"
 echo "----- ██╗  ██████╗  ██████╗  ██████╗   ██████╗  ██╗  ██╗ ███████╗ ██████╗  -----"
 echo "----- ██║ ██╔═══██╗ ██╔══██╗ ██╔══██╗ ██╔═══██╗ ██║ ██╔╝ ██╔════╝ ██╔══██╗ -----"
 echo "----- ██║ ██║   ██║ ██████╔╝ ██████╔╝ ██║   ██║ █████╔╝  █████╗   ██████╔╝ -----"
 echo "----- ██║ ██║   ██║ ██╔══██╗ ██╔══██╗ ██║   ██║ ██╔═██╗  ██╔══╝   ██╔══██╗ -----"
 echo "----- ██║ ╚██████╔╝ ██████╔╝ ██║  ██║ ╚██████╔╝ ██║  ██╗ ███████╗ ██║  ██║ -----"
 echo "----- ╚═╝  ╚═════╝  ╚═════╝  ╚═╝  ╚═╝  ╚═════╝  ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ -----"
-echo '-----                                                                      -----'
+echo "-----                                                                      -----"
 echo "-----              Welcome to your ioBroker Docker container!              -----"
 echo "-----                    Startupscript is now running!                     -----"
 echo "-----                          Please be patient!                          -----"
@@ -78,6 +82,7 @@ echo "-----                        Environment Variables                        
 if [[ "$adminport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
 if [[ "$avahi" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" AVAHI: $avahi)" && echo " -----"; fi
 if [[ "$debug" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" DEBUG: $debug)" && echo " -----"; fi
+if [[ "$backitup" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_BACKITUP_EXTDB: $backitup)" && echo " -----"; fi
 if [[ "$multihost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_MULTIHOST: $multihost)" && echo " -----"; fi
 if [[ "$objectsdbhost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
 if [[ "$objectsdbport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
@@ -87,12 +92,26 @@ if [[ "$statesdbport" != "" ]]; then echo -n "-----                    " && echo
 if [[ "$statesdbtype" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
 if [[ "$offlinemode" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" OFFLINE_MODE: $offlinemode)" && echo " -----"; fi
 if [[ "$packages" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES: "$packages")" && echo " -----"; fi
+if [[ "$permissioncheck" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PERMISSION_CHECK: $permissioncheck)" && echo " -----"; fi
 if [[ "$setgid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: $setgid)" && echo " -----"; fi
 if [[ "$setuid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: $setuid)" && echo " -----"; fi
 if [[ "$usbdevices" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" USBDEVICES: $usbdevices)" && echo " -----"; fi
 if [[ "$zwave" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" ZWAVE: $zwave)" && echo " -----"; fi
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
+
+# Debug loggin notice
+if [[ "$debug" == "true" ]]; then
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!!!                            DEBUG LOG ACTIVE                            !!!!"
+  echo "!!!!               Environment variable DEBUG is set to true.               !!!!"
+  echo "!!!! This will extend the logging output and may slow down container start. !!!!"
+  echo "!!!!          Please make sure to deactivate if no longer needed.           !!!!"
+  echo "!!!!     For more information see ioBroker Docker image documentation:      !!!!"
+  echo "!!!!           https://docs.buanet.de/iobroker-docker-image/docs/           !!!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo ' '
+fi
 
 #####
 # STEP 1 - Preparing container
@@ -106,21 +125,21 @@ echo ' '
 if [[ -f /opt/.firstrun ]]; then
   # Updating Linux packages
   if [[ "$offlinemode" = "true" ]]; then
-    echo 'OFFLINE_MODE is \"true\". Skipping Linux package updates on first run.'
+    echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
     echo ' '
   else
-    echo 'Updating Linux packages on first run...'
+    echo "Updating Linux packages on first run... "
       bash /opt/scripts/setup_packages.sh -update
     echo 'Done.'
     echo ' '
   fi
   # Installing packages from ENV
   if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
-    echo 'PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation.'
+    echo "PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation."
     echo ' '
   elif [[ "$packages" != "" ]]; then
-    echo 'PACKAGES is set. Installing additional Linux packages.'
-    echo "Checking the following packages:" $packages"..."
+    echo "PACKAGES is set. Installing additional Linux packages."
+    echo "Checking the following packages:" $packages"... "
     echo $packages > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
     echo 'Done.'
@@ -134,7 +153,7 @@ if [[ -f /opt/.firstrun ]]; then
   echo 'Done.'
   echo ' '
 else
-  echo 'This is not the first run of this container. Skipping first run preparation.'
+  echo "This is not the first run of this container. Skipping first run preparation."
   echo ' '
 fi
 
@@ -187,14 +206,14 @@ elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -z
       bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
     echo 'Done.'
     echo ' '
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "!!!!!                             IMPORTANT NOTE                             !!!!!"
-    echo "!!!!!        The startup script restored iobroker from a backup file.        !!!!!"
-    echo "!!!!! Check /opt/iobroker/log/restore.log to see if restore was successful.  !!!!!"
-    echo "!!!!! When ioBroker now starts it will reinstall all Adapters automatically. !!!!!"
-    echo "!!!!!         This might be take a looooong time! Please be patient!         !!!!!"
-    echo "!!!!!  You can view installation process by taking a look at ioBroker log.   !!!!!"
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!                             IMPORTANT NOTE                             !!!!"
+    echo "!!!!        The startup script restored iobroker from a backup file.        !!!!"
+    echo "!!!! Check /opt/iobroker/log/restore.log to see if restore was successful.  !!!!"
+    echo "!!!! When ioBroker now starts it will reinstall all Adapters automatically. !!!!"
+    echo "!!!!         This might be take a looooong time! Please be patient!         !!!!"
+    echo "!!!!  You can view installation process by taking a look at ioBroker log.   !!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   fi
 else
   echo "There is data detected in /opt/iobroker but it looks like it is no instance of ioBroker or a valid backup file!"
@@ -216,11 +235,16 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 # (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
-echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
-  chown -R $setuid:$setgid /opt/iobroker
-  chown -R $setuid:$setgid /opt/scripts
-echo 'Done.'
-echo ' '
+if [[ "$permissioncheck" == "false" ]]; then
+  echo "PERMISSION_CHECK is set to false. Use this at your own risk!"
+  echo ' '
+else
+  echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
+    chown -R $setuid:$setgid /opt/iobroker
+    chown -R $setuid:$setgid /opt/scripts
+  echo 'Done.'
+  echo ' '
+fi
 
 # Backing up original iobroker-file and changing sudo to gosu
 echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu... "
@@ -266,8 +290,39 @@ else
   fi
 fi
 
+# extended debug output
+if [[ "$debug" == "true" && "$multihost" != "slave" ]]; then
+  echo "[DEBUG] Collecting some more ioBroker debug information... "
+  echo ' '
+  # get information and send to array
+  IFS=$'\n'
+  instances_array=($(iob list instances))
+  repos_array=($(iob repo list))
+  updates_array=($(iob update))
+  # list iob instances
+  echo "[DEBUG] ##### iobroker list instances #####"
+    for i in ${instances_array[@]}
+    do
+      echo "[DEBUG]" $i
+    done
+  echo ' '
+  echo "[DEBUG] ##### iobroker repo list #####"
+    for i in ${repos_array[@]}
+    do
+      echo "[DEBUG]" $i
+    done
+  echo ' '
+  echo "[DEBUG] ##### iobroker update #####"
+    for i in ${updates_array[@]}
+    do
+      echo "[DEBUG]" $i
+    done
+  echo ' '
+  unset IFS
+fi
+
 #####
-# STEP 4 - Setting up prerequisites for some ioBroker-adapters
+# STEP 4 - Setting up special sessting for ioBroker-adapters
 #####
 echo "$(printf -- '-%.0s' {1..80})"
 echo "-----                Step 4 of 5: Applying special settings                -----"
@@ -292,11 +347,19 @@ if [[ "$adminport" != "" && "$multihost" != "slave" ]]; then
   fi
 fi
 
+# Checking ENV for Backitup (external database backups)
+if [[ "$backitup" == "true" ]]; then
+  echo -n "IOB_BACKITUP_EXTDB is \"true\". Unlocking features... "
+  echo 'true' > /opt/scripts/.docker_config/.backitup
+  echo 'Done.'
+  echo ' '
+fi
+
 # Checking ENV for AVAHI
 if [[ "$avahi" = "true" && "$offlinemode" = "true" ]]; then
-  echo 'AVAHI is \"true\", but OFFLINE_MODE is also \"true\". Skipping Avahi daemon setup.'
+  echo "AVAHI is \"true\", but OFFLINE_MODE is also \"true\". Skipping Avahi daemon setup."
 elif [[ "$avahi" = "true" ]]; then
-  echo 'AVAHI is \"true\". Running setup script...'
+  echo "AVAHI is \"true\". Running setup script... "
     chmod 755 /opt/scripts/setup_avahi.sh
     bash /opt/scripts/setup_avahi.sh
   echo 'Done.'
@@ -305,9 +368,9 @@ fi
 
 # Checking ENV for Z-WAVE
 if [[ "$zwave" = "true" && "$offlinemode" = "true" ]]; then
-  echo 'ZWAVE is \"true\", but OFFLINE_MODE is also \"true\". Skipping Z-Wave setup.'
+  echo "ZWAVE is \"true\", but OFFLINE_MODE is also \"true\". Skipping Z-Wave setup."
 elif [[ "$zwave" = "true" ]]; then
-  echo 'ZWAVE is \"true\". Running setup script...'
+  echo "ZWAVE is \"true\". Running setup script... "
     chmod 755 /opt/scripts/setup_zwave.sh
     bash /opt/scripts/setup_zwave.sh
   echo 'Done.'    
@@ -316,21 +379,29 @@ fi
 
 # checking ENV for USBDEVICES
 if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
-  echo 'USBDEVICES is set.'
+  echo "USBDEVICES is set."
   IFS=';' read -ra devicearray <<< "$usbdevices"
     for i in "${devicearray[@]}"
     do
-      echo -n "Setting permissions for "$i"... "
+      if [[ -e $i ]]; then
+        echo -n "Setting permissions for "$i"... "
         chown root:dialout $i
         chmod g+rw $i
-      echo 'Done.'
+        echo 'Done.'
+        if [[ "$debug" == "true" ]]; then echo "[DEBUG] Permissions set: " $(ls -al $i); fi
+      else
+        echo "Looks like the device \""$i"\" does not exist."
+        echo "Did you mount it correctly by using the \"--device\" option?"
+        echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/#mounting-usb-devices)."
+        stop_on_error
+      fi
     done
   echo ' '
 fi
 
 # Checking ENV for multihost setup
 if [[ "$multihost" != "" ]]; then
-  echo "Checking for multihost settings..."
+  echo "Checking for multihost settings... "
   # Configuring objects db host
   if [[ "$multihost" = "master" && "$objectsdbtype" = "" && "$objectsdbhost" = "" && "$objectsdbport" = "" ]]; then
     echo "IOB_MULTIHOST is set to \"master\" and no external objects db is set."
@@ -393,7 +464,7 @@ fi
 
 # Checking ENVs for custom setup of objects db
 if [[ "$objectsdbtype" != "" || "$objectsdbhost" != "" || "$objectsdbport" != "" ]]; then
-  echo "Checking for custom objects db settings ..."
+  echo "Checking for custom objects db settings ... "
   if [[ "$objectsdbtype" != "$(jq -r '.objects.type' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_OBJECTSDB_TYPE is set and value is different from detected ioBroker installation."
     echo -n "Setting type of objects db to \""$objectsdbtype"\"... "
@@ -421,13 +492,13 @@ if [[ "$objectsdbtype" != "" || "$objectsdbhost" != "" || "$objectsdbport" != ""
   else
     echo "IOB_OBJECTSDB_PORT is set and value meets detected ioBroker installation."
   fi
-  echo "Done."
+  echo 'Done.'
   echo ' '
 fi
 
 # Checking ENVs for custom setup of states db
 if [[ "$statesdbtype" != "" || "$statesdbhost" != "" || "$statesdbport" != "" ]]; then
-  echo "Checking for custom states db settings..."
+  echo "Checking for custom states db settings... "
   if [[ "$statesdbtype" != "$(jq -r '.states.type' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_STATESDB_TYPE is set and value is different from detected ioBroker installation."
     echo -n "Setting type of states db to \""$statesdbtype"\"... "
@@ -455,7 +526,7 @@ if [[ "$statesdbtype" != "" || "$statesdbhost" != "" || "$statesdbport" != "" ]]
   else
     echo "IOB_STATESDB_PORT is set and value meets detected ioBroker installation."
   fi
-  echo "Done."
+  echo 'Done.'
   echo ' '
 fi
 
@@ -470,17 +541,17 @@ if [[ `find /opt/userscripts -type f | wc -l` -lt 1 ]]; then
 elif [[ -f /opt/userscripts/userscript_firststart.sh || -f /opt/userscripts/userscript_everystart.sh ]]; then
   if [[ -f /opt/userscripts/userscript_firststart.sh && -f /opt/.firstrun ]]; then
     echo "Userscript for first start detected and this is the first start of a new container."
-    echo "Running userscript_firststart.sh..."
+    echo "Running userscript_firststart.sh... "
       chmod 755 /opt/userscripts/userscript_firststart.sh
       bash /opt/userscripts/userscript_firststart.sh
-    echo "Done."
+    echo 'Done.'
     echo ' '
   fi
   if [[ -f /opt/userscripts/userscript_everystart.sh ]]; then
-    echo "Userscript for every start detected. Running userscript_everystart.sh..."
+    echo "Userscript for every start detected. Running userscript_everystart.sh... "
       chmod 755 /opt/userscripts/userscript_everystart.sh
       bash /opt/userscripts/userscript_everystart.sh
-    echo "Done."
+    echo 'Done.'
     echo ' '
   fi
 fi
@@ -497,7 +568,7 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo "-----                    Step 5 of 5: ioBroker startup                     -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
-echo "Starting ioBroker..."
+echo "Starting ioBroker... "
 echo ' '
 echo "##### #### ### ## # iobroker.js-controller log output # ## ### #### #####"
 
@@ -508,7 +579,7 @@ echo "running" > /opt/scripts/.docker_config/.healthcheck
 shut_down() {
   echo ' '
   echo "Recived termination signal (SIGTERM)."
-  echo "Shutting down ioBroker..."
+  echo "Shutting down ioBroker... "
 
   local status timeout
 
@@ -526,7 +597,7 @@ shut_down() {
   # pgrep exits with status 1 when there are no matches
   while pgrep -u iobroker > /dev/null; (( $? != 1 )); do
     if (($(date +%s) > timeout)); then
-      echo -e '\nTimeout reached. Killing remaining processes...'
+      echo -e '\nTimeout reached. Killing remaining processes... '
       pkill --signal SIGKILL -u iobroker
       echo 'Done. Have a nice day!'
       exit

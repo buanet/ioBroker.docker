@@ -158,33 +158,6 @@ upgrade_jscontroller() {
   pkill -u root
 }
 
-# restart container
-restart_container() {
-  echo 'You are now going to call a restart of your container.'
-  echo 'Restarting will work depending on the configured restart policy.'
-
-  if [[ "$autoconfirm" != yes ]]; then
-    local reply
-
-    read -rp 'Do you want to continue [yes/no]? ' reply
-    if [[ "$reply" == y || "$reply" == Y || "$reply" == yes ]]; then
-      : # continue
-    else
-      return 1
-    fi
-  else
-    echo 'This command was already confirmed by the -y or --yes option.'
-  fi
-
-  echo -n 'Stopping ioBroker...'
-  stop_iob
-
-  echo 'Container will be stopped or restarted in 5 seconds...'
-  sleep 5
-  echo 'stopping' > "$healthcheck"
-  pkill -u root
-}
-
 # stop iobroker and wait until all processes stopped or pkill_timeout is reached
 stop_iob() {
   local status timeout
@@ -217,6 +190,33 @@ stop_iob() {
   echo -e '\nDone.'
 }
 
+# restart container
+restart_container() {
+  echo 'You are now going to call a restart of your container.'
+  echo 'Restarting will work depending on the configured restart policy.'
+
+  if [[ "$autoconfirm" != yes ]]; then
+    local reply
+
+    read -rp 'Do you want to continue [yes/no]? ' reply
+    if [[ "$reply" == y || "$reply" == Y || "$reply" == yes ]]; then
+      : # continue
+    else
+      return 1
+    fi
+  else
+    echo 'This command was already confirmed by the -y or --yes option.'
+  fi
+
+  echo -n 'Stopping ioBroker...'
+  stop_iob
+
+  echo 'Container will be stopped or restarted in 5 seconds...'
+  sleep 5
+  echo 'stopping' > "$healthcheck"
+  pkill -u root
+}
+
 # parsing commands and options
 
 # default command to run unless another was given
@@ -227,7 +227,7 @@ for arg in "$@"; do
     help|-h|--help)
       run=(display_help)
       ;;
-    status)
+    status|stat|s)
       run=(maintenance_status)
       ;;
     on)
@@ -236,10 +236,10 @@ for arg in "$@"; do
     off)
       run=(disable_maintenance)
       ;;
-    upgrade)
+    upgrade|upgr|u)
       run=(upgrade_jscontroller)
       ;;
-    restart)
+    restart|rest|r)
       run=(restart_container)
       ;;
     -y|--yes)
