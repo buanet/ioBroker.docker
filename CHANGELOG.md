@@ -1,6 +1,7 @@
 ## Changelog
 
-### v7.2.0-beta.1 (coming soon)
+### v7.2.0-beta.1 (30.11.2022)
+* fix restart option in maintenance script
 * add error handling for usb devices
 * add aliases to maintenance script
 * add env PERMISSION_CHECK ([#251](https://github.com/buanet/ioBroker.docker/issues/251))
