@@ -90,9 +90,9 @@ You could use environment variables to auto configure your ioBroker container on
 
 ### Configure ioBroker application:
 
-* `IOB_ADMINPORT`(optional, default: 8081) Set ioBroker adminport on startup
-* `IOB_BACKITUP_EXTDB`(optional) Set "true" for backing up external databases in ioBroker backitup adapter (Make sure your have read the [docs](https://docs.buanet.de/iobroker-docker-image/docs/#backup))
-* `IOB_MULTIHOST`(optional) Set ioBroker "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)
+* `IOB_ADMINPORT` (optional, default: 8081) Set ioBroker adminport on startup
+* `IOB_BACKITUP_EXTDB` (optional) Set "true" for backing up external databases in ioBroker backitup adapter (Make sure your have read the [docs](https://docs.buanet.de/iobroker-docker-image/docs/#backup))
+* `IOB_MULTIHOST` (optional) Set ioBroker "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)
 * `IOB_OBJECTSDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker objects db
 * `IOB_OBJECTSDB_PORT` (optional, default: 9001) Set port for ioBroker objects db
 * `IOB_OBJECTSDB_TYPE` (optional, default: jsonl) Set type of ioBroker objects db, could be "jsonl", "file" (deprecated) or "redis" ([not officially supported](https://github.com/ioBroker/ioBroker#databases)).
