@@ -1,0 +1,34 @@
+name: Update Docker Hub Readme
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docs\README_docker_hub_buanet.md
+      - docs\README_docker_hub_iobroker.md
+      - .github/workflows/update-docker-readme.yml
+  workflow_dispatch:
+
+jobs:
+  update-docker-readme:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Update Docker Hub Readme (buanet)
+      uses: peter-evans/dockerhub-description@v3
+      with:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PASS }}
+        repository: buanet/iobroker
+        short-description: Official Docker image for ioBroker based on Debian Bullseye slim 
+        readme-filepath: ./docs/README_docker_hub_buanet.md
+
+    - name: Update Docker Hub Readme (iobroker)
+      uses: peter-evans/dockerhub-description@v3
+      with:
+        username: ${{ secrets.DOCKER_USER_IOB }}
+        password: ${{ secrets.DOCKER_PASS_IOB }}
+        repository: iobroker/iobroker
+        short-description: Official Docker image for ioBroker based on Debian Bullseye slim
+        readme-filepath: ./docs/README_docker_hub_iobroker.md
