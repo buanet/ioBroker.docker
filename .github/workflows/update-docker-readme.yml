@@ -4,8 +4,8 @@ on:
     branches:
       - main
     paths:
-      - docs\README_docker_hub_buanet.md
-      - docs\README_docker_hub_iobroker.md
+      - ./docs/README_docker_hub_buanet.md
+      - ./docs/README_docker_hub_iobroker.md
       - .github/workflows/update-docker-readme.yml
   workflow_dispatch:
 
