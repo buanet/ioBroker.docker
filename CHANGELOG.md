@@ -1,13 +1,15 @@
 ## Changelog
 
-### v7.2.0-beta.1 (30.11.2022)
-* fix restart option in maintenance script
-* add error handling for usb devices
-* add aliases to maintenance script
-* add env PERMISSION_CHECK ([#251](https://github.com/buanet/ioBroker.docker/issues/251))
-* add some more DEBUG messages to log
-* add env IOB_BACKITUP_EXTDB to unlock external db backups in backitup adapter
-* reorder dockerfile steps to fulfill ioBroker Docker check
+### v7.2.0 (12.12.2022)
+* update docs
+* v7.2.0-beta.1 (30.11.2022)
+  * fix restart option in maintenance script
+  * add error handling for usb devices
+  * add aliases to maintenance script
+  * add env PERMISSION_CHECK ([#251](https://github.com/buanet/ioBroker.docker/issues/251))
+  * add some more DEBUG messages to log
+  * add env IOB_BACKITUP_EXTDB to unlock external db backups in backitup adapter
+  * reorder dockerfile steps to fulfill ioBroker Docker check
 
 ### v7.1.2 (08.11.2022)
 * fix hostname check ([#293](https://github.com/buanet/ioBroker.docker/issues/293))

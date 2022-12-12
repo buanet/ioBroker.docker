@@ -30,7 +30,8 @@ New major image versions (e.g. v4, v5, v6) always come with a new major version 
 It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[X]` tag instead.
 
 ### Node 16 versions
-* [`v7.1.2`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`latest-v7`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile)
+* [`v7.2.0`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`latest-v7`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile)
+* [`v7.1.2`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile)
 * [`v7.1.1`](https://github.com/buanet/ioBroker.docker/blob/v7.1.1/debian/node16/Dockerfile), [`v7.1.1-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.1.1/debian/node16/Dockerfile), [`v7.1.1-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.1.1/debian/node16/Dockerfile), [`v7.1.1-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.1.1/debian/node16/Dockerfile)
 * [`v7.1.0`](https://github.com/buanet/ioBroker.docker/blob/v7.1.0/debian/node16/Dockerfile), [`v7.1.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.1.0/debian/node16/Dockerfile), [`v7.1.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.1.0/debian/node16/Dockerfile), [`v7.1.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.1.0/debian/node16/Dockerfile)
 * [`v7.0.1`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile), [`v7.0.1-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile), [`v7.0.1-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile), [`v7.0.1-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile)
@@ -93,32 +94,34 @@ You could use environment variables to auto configure your ioBroker container on
 
 ### Configure ioBroker application:
 
-* `IOB_ADMINPORT`(optional, default: 8081) Sets ioBroker adminport on startup
-* `IOB_MULTIHOST`(optional) Sets ioBroker "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)
-* `IOB_OBJECTSDB_HOST` (optional, default: 127.0.0.1) Sets host for ioBroker objects db
-* `IOB_OBJECTSDB_PORT` (optional, default: 9001) Sets port for ioBroker objects db
-* `IOB_OBJECTSDB_TYPE` (optional, default: jsonl) Sets type of ioBroker objects db, could be "jsonl", "file" (deprecated) or "redis" ([not officially supported](https://github.com/ioBroker/ioBroker#databases)).
-* `IOB_STATESDB_HOST` (optional, default: 127.0.0.1) Sets host for ioBroker states db
-* `IOB_STATESDB_PORT` (optional, default: 9000) Sets port for ioBroker states db
-* `IOB_STATESDB_TYPE` (optional, default: jsonl) Sets type of ioBroker states db, could be "jsonl", "file" (deprecated) or "redis"
+* `IOB_ADMINPORT`(optional, default: 8081) Set ioBroker adminport on startup
+* `IOB_BACKITUP_EXTDB`(optional) Set "true" for backing up external databases in ioBroker backitup adapter (Make sure your have read the [docs](https://docs.buanet.de/iobroker-docker-image/docs/#backup))
+* `IOB_MULTIHOST`(optional) Set ioBroker "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)
+* `IOB_OBJECTSDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker objects db
+* `IOB_OBJECTSDB_PORT` (optional, default: 9001) Set port for ioBroker objects db
+* `IOB_OBJECTSDB_TYPE` (optional, default: jsonl) Set type of ioBroker objects db, could be "jsonl", "file" (deprecated) or "redis" ([not officially supported](https://github.com/ioBroker/ioBroker#databases)).
+* `IOB_STATESDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker states db
+* `IOB_STATESDB_PORT` (optional, default: 9000) Set port for ioBroker states db
+* `IOB_STATESDB_TYPE` (optional, default: jsonl) Set type of ioBroker states db, could be "jsonl", "file" (deprecated) or "redis"
 
 ### Activate special features: 
 
-* `AVAHI` (optional, default: false) Installs and activates avahi-daemon for supporting yahka-adapter, can be "true" or "false"
-* `ZWAVE` (optional, default: false) Installs openzwave to support zwave-adapter, can be "true" or "false"
+* `AVAHI` (optional) Set "true" to install and activate avahi-daemon for supporting yahka-adapter
+* `ZWAVE` (optional) Set "true" to install openzwave to support zwave-adapter
 
 ### Configure environment:
 
-* `DEBUG` (optional, default: false) Set true to get extended logging messages on container startup
-* `LANG` (optional, default: de_DE.UTF&#x2011;8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
+* `DEBUG` (optional) Set "true" to get extended logging messages on container startup
+* `LANG` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
 * `LANGUAGE` (optional, default: de_DE:de) The following locales are pre-generated: de_DE:de, en_US:en
 * `LC_ALL` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
-* `OFFLINE_MODE` (optional & experimental, default: false) Set true if you container has no or limited internet connection
-* `PACKAGES` (optional) Installs additional linux packages to your container, packages should be separated by whitespace like this: "package1 package2 package3".
+* `OFFLINE_MODE` (optional) Set "true" if your container has no or limited internet connection
+* `PACKAGES` (optional) Install additional linux packages to your container, packages should be separated by whitespace like this: "package1 package2 package3".
+* `PERMISSION_CHECK` (optional, default: true) Set "false" to skip checking and correcting all relevant permissions on container startup (Use at own risk!!!)
 * `SETGID` (default: 1000) In some cases it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host
 * `SETUID` (default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host
-* `TZ` (optional, default: Europe/Berlin) Specifies the time zone
-* `USBDEVICES` (optional) Sets relevant permissions on mounted devices like "/dev/ttyACM0". For more than one device separate with ";".
+* `TZ` (optional, default: Europe/Berlin) Specifies the time zone, could be all valid Linux timezones
+* `USBDEVICES` (optional) Set relevant permissions on mounted devices like "/dev/ttyACM0" (inside the container), for more than one device separate with ";"
 
 ## Notes about Docker networks
 
