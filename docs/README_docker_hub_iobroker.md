@@ -1,11 +1,11 @@
-###### [iobroker/iobroker](https://hub.docker.com/r/iobroker/iobroker) is an alias for [buanet/iobroker](https://hub.docker.com/r/buanet/iobroker) 
+##### The image provided as [iobroker/iobroker](https://hub.docker.com/r/iobroker/iobroker) is a duplicate of [buanet/iobroker](https://hub.docker.com/r/buanet/iobroker) 
  
 <img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
-[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/r/buanet/iobroker)
-[![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/r/buanet/iobroker)
-[![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/r/buanet/iobroker)<br>
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/buanet/ioBroker.docker/Build%20debian%20based%20image%20\(latest\))](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-main.yml)
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/iobroker/iobroker/latest?style=flat)](https://hub.docker.com/r/iobroker/iobroker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/iobroker/iobroker?style=flat)](https://hub.docker.com/r/iobroker/iobroker)
+[![Docker Stars](https://img.shields.io/docker/stars/iobroker/iobroker?style=flat)](https://hub.docker.com/r/iobroker/iobroker)<br>
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/buanet/ioBroker.docker/build-debian-image-latest.yml?branch=main)](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-latest.yml)
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
 [![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
 [![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
