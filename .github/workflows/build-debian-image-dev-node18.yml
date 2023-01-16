@@ -59,7 +59,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build Docker image (node18-amd64)
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v3.3.0
         with:
           context: ./debian
           file: ./debian/node18/Dockerfile
@@ -70,7 +70,7 @@ jobs:
             ghcr.io/buanet/iobroker:dev-node18-amd64
 
       - name: Build Docker image (node18-arm32v7)
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v3.3.0
         with:
           context: ./debian
           file: ./debian/node18/Dockerfile
@@ -81,7 +81,7 @@ jobs:
             ghcr.io/buanet/iobroker:dev-node18-arm32v7
 
       - name: Build Docker image (node18-arm64v8)
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v3.3.0
         with:
           context: ./debian
           file: ./debian/node18/Dockerfile
