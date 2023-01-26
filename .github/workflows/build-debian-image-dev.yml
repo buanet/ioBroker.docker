@@ -12,7 +12,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: 'buanet/ioBroker.docker'
-          # ref: 'main'
 
       - name: Get and write version and date
         id: version
@@ -32,14 +31,6 @@ jobs:
           # amd64
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./debian/node16/Dockerfile > ./debian/node16/Dockerfile.tmp 
           mv -f ./debian/node16/Dockerfile.tmp ./debian/node16/Dockerfile
-
-#      - name: Set up manifest tool
-#        run: |
-#          git clone https://github.com/estesp/manifest-tool
-#          cd manifest-tool && make binary          
-#          # wget https://github.com/estesp/manifest-tool/releases/download/v1.0.3/manifest-tool-linux-amd64 -O manifest-tool
-#          chmod +x manifest-tool
-#          cd ..
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2.1.0
@@ -69,48 +60,8 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           tags: |
-            buanet/iobroker:dev
+            buanet/iobroker:dev,
             ghcr.io/buanet/iobroker:dev
-
-#      - name: Build Docker image (amd64)
-#        uses: docker/build-push-action@v3.3.0
-#        with:
-#          context: ./debian
-#          file: ./debian/node16/Dockerfile
-#          push: true
-#          platforms: linux/amd64
-#          tags: |
-#            buanet/iobroker:dev-amd64,
-#            ghcr.io/buanet/iobroker:dev-amd64
-
-#      - name: Build Docker image (arm32v7)
-#        uses: docker/build-push-action@v3.3.0
-#        with:
-#          context: ./debian
-#          file: ./debian/node16/Dockerfile
-#          push: true
-#          platforms: linux/arm/v7
-#          tags: |
-#            buanet/iobroker:dev-arm32v7,
-#            ghcr.io/buanet/iobroker:dev-arm32v7
-
-#      - name: Build Docker image (arm64v8)
-#        uses: docker/build-push-action@v3.3.0
-#        with:
-#          context: ./debian
-#          file: ./debian/node16/Dockerfile
-#          push: true
-#          platforms: linux/arm64/v8
-#          tags: |
-#            buanet/iobroker:dev-arm64v8,
-#            ghcr.io/buanet/iobroker:dev-arm64v8
-
-#      - name: Create and push manifests
-#        run: |
-#          sed -e "s/\${VERSION}/dev/g" -e "s/\${DOCKERTAG}/dev/g" ./manifest.yml > manifest_dev.yaml
-#          ./manifest-tool/manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_dev.yaml
-#          sed -e "s/\${VERSION}/dev/g" -e "s/\${DOCKERTAG}/dev/g" ./manifest_ghcr.yml > manifest_ghcr_dev.yaml
-#          ./manifest-tool/manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_dev.yaml
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v6
