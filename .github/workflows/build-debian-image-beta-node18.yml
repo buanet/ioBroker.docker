@@ -10,7 +10,7 @@ jobs:
   build-beta-node18-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Getting published prerelease tag
+      - name: Fetching latest prerelease tag
         run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     
       - name: Checkout repo
@@ -19,7 +19,7 @@ jobs:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
 
-      - name: Get and write version and date
+      - name: Fetching version tag and date
         id: version
         run: |
           VERSION="$(cat .VERSION)"
@@ -37,11 +37,6 @@ jobs:
           # amd64
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node18/Dockerfile > ./debian/node18/Dockerfile.tmp 
           mv -f ./debian/node18/Dockerfile.tmp ./debian/node18/Dockerfile
-
-      - name: Set up manifest tool
-        run: |
-          wget https://github.com/estesp/manifest-tool/releases/download/v1.0.3/manifest-tool-linux-amd64 -O manifest-tool
-          chmod +x manifest-tool
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2.1.0
@@ -63,49 +58,18 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Build Docker image (node18-amd64)
+      - name: Build Docker image (node18)
         uses: docker/build-push-action@v3.3.0
         with:
           context: ./debian
           file: ./debian/node18/Dockerfile
           push: true
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           tags: |
-            buanet/iobroker:${{ env.version }}-node18-amd64,
-            ghcr.io/buanet/iobroker:${{ env.version }}-node18-amd64
-
-      - name: Build Docker image (node18-arm32v7)
-        uses: docker/build-push-action@v3.3.0
-        with:
-          context: ./debian
-          file: ./debian/node18/Dockerfile
-          push: true
-          platforms: linux/arm/v7
-          tags: |
-            buanet/iobroker:${{ env.version }}-node18-arm32v7,
-            ghcr.io/buanet/iobroker:${{ env.version }}-node18-arm32v7
-
-      - name: Build Docker image (node18-arm64v8)
-        uses: docker/build-push-action@v3.3.0
-        with:
-          context: ./debian
-          file: ./debian/node18/Dockerfile
-          push: true
-          platforms: linux/arm64/v8
-          tags: |
-            buanet/iobroker:${{ env.version }}-node18-arm64v8,
-            ghcr.io/buanet/iobroker:${{ env.version }}-node18-arm64v8
-
-      - name: Create and push manifests
-        run: |
-          sed -e "s/\${VERSION}/${{ env.version }}-node18/g" -e "s/\${DOCKERTAG}/beta-node18/g" ./manifest.yml > manifest_beta-node18.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_beta-node18.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}-node18/g" -e "s/\${DOCKERTAG}/beta-node18/g" ./manifest_ghcr.yml > manifest_ghcr_beta-node18.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_beta-node18.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}-node18/g" -e "s/\${DOCKERTAG}/${{ env.version }}-node18/g" ./manifest.yml > manifest_version-node18.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }} push from-spec manifest_version-node18.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}-node18/g" -e "s/\${DOCKERTAG}/${{ env.version }}-node18/g" ./manifest_ghcr.yml > manifest_ghcr_version-node18.yaml
-          ./manifest-tool --username ${{ secrets.PACKAGES_USER }} --password ${{ secrets.PACKAGES_PASS }} push from-spec manifest_ghcr_version-node18.yaml
+            buanet/iobroker:beta-node18,
+            buanet/iobroker:${{ env.version }}-node18,
+            ghcr.io/buanet/iobroker:beta-node18,
+            ghcr.io/buanet/iobroker:${{ env.version }}-node18
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v6

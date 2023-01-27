@@ -8,12 +8,12 @@ jobs:
   build-dev-node18-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo (dev)
+      - name: Checkout repo
         uses: actions/checkout@v3
         with:
           repository: 'buanet/ioBroker.docker'
 
-      - name: Get and write version and date
+      - name: Fetching version tag and date
         id: version
         run: |
           VERSION="$(cat .VERSION)"

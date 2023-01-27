@@ -3,8 +3,7 @@ name: Build debian latest (iobroker)
 
 on:
   release:
-    types:
-      - released
+    types: [released]
   workflow_dispatch:
 
 jobs:
@@ -23,7 +22,7 @@ jobs:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
 
-      - name: Fetching and adding version tag and date
+      - name: Fetching version tag and date
         id: version
         run: |
           VERSION="$(cat .VERSION)"
@@ -42,11 +41,6 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node16/Dockerfile > ./debian/node16/Dockerfile.tmp 
           mv -f ./debian/node16/Dockerfile.tmp ./debian/node16/Dockerfile
 
-      - name: Set up manifest tool
-        run: |
-          wget https://github.com/estesp/manifest-tool/releases/download/v1.0.3/manifest-tool-linux-amd64 -O manifest-tool
-          chmod +x manifest-tool
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2.1.0
 
@@ -60,41 +54,15 @@ jobs:
           username: ${{ secrets.DOCKER_USER_IOB }}
           password: ${{ secrets.DOCKER_PASS_IOB }}
 
-      - name: Build Docker image (amd64)
+      - name: Build Docker image
         uses: docker/build-push-action@v3.3.0
         with:
           context: ./debian
           file: ./debian/node16/Dockerfile
           push: true
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           tags: |
-            iobroker/iobroker:${{ env.version }}-amd64,
+            iobroker/iobroker:latest,
+            iobroker/iobroker:latest-${{ env.majorversion }},
+            iobroker/iobroker:${{ env.version }}
 
-      - name: Build Docker image (arm32v7)
-        uses: docker/build-push-action@v3.3.0
-        with:
-          context: ./debian
-          file: ./debian/node16/Dockerfile
-          push: true
-          platforms: linux/arm/v7
-          tags: |
-            iobroker/iobroker:${{ env.version }}-arm32v7,
-
-      - name: Build Docker image (arm64v8)
-        uses: docker/build-push-action@v3.3.0
-        with:
-          context: ./debian
-          file: ./debian/node16/Dockerfile
-          push: true
-          platforms: linux/arm64/v8
-          tags: |
-            iobroker/iobroker:${{ env.version }}-arm64v8,
-
-      - name: Create and push manifests (iobroker)
-        run: |
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/latest/g" ./manifest_iob.yml > manifest_latest_iob.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER_IOB }} --password ${{ secrets.DOCKER_PASS_IOB }} push from-spec manifest_latest_iob.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.majorversion }}/g" ./manifest_iob.yml > manifest_majorversion_iob.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER_IOB }} --password ${{ secrets.DOCKER_PASS_IOB }} push from-spec manifest_majorversion_iob.yaml
-          sed -e "s/\${VERSION}/${{ env.version }}/g" -e "s/\${DOCKERTAG}/${{ env.version }}/g" ./manifest_iob.yml > manifest_version_iob.yaml
-          ./manifest-tool --username ${{ secrets.DOCKER_USER_IOB }} --password ${{ secrets.DOCKER_PASS_IOB }} push from-spec manifest_version_iob.yaml
