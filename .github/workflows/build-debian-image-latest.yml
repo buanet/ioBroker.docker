@@ -70,10 +70,10 @@ jobs:
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           tags: |
             buanet/iobroker:latest,
-            buanet/iobroker:latest-${{ env.majorversion }},
+            buanet/iobroker:${{ env.majorversion }},
             buanet/iobroker:${{ env.version }},
             ghcr.io/buanet/iobroker:latest,
-            ghcr.io/buanet/iobroker:latest-${{ env.majorversion }},
+            ghcr.io/buanet/iobroker:${{ env.majorversion }},
             ghcr.io/buanet/iobroker:${{ env.version }}
 
       - name: Delete untagged images from GitHub packages
