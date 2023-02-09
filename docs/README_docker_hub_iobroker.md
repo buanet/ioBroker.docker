@@ -13,7 +13,7 @@
 
 # Important note
 
-New major image versions (e.g. v4, v5, v6) always come with a new major version of node! This might lead to problems when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the new [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
+New major image versions (e.g. v4, v5, v6) always include a new major version of node! This might lead to issues when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the new [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
 
 # Quick reference
 
@@ -37,7 +37,6 @@ It is highly recommended not to use the `latest` tag for production, especially 
 ### Node 14 versions
 * [`v6.1.0`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`latest-v6`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile)
 * [`v6.0.0`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile)
-
 
 # What is ioBroker?
 
