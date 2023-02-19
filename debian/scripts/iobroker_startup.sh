@@ -17,6 +17,8 @@ offlinemode=$OFFLINE_MODE
 objectsdbhost=$IOB_OBJECTSDB_HOST
 objectsdbport=$IOB_OBJECTSDB_PORT
 objectsdbtype=$IOB_OBJECTSDB_TYPE
+objectsdbname=$IOB_OBJECTSDB_NAME # new for sentinel support
+objectsdbpass=$IOB_OBJECTSDB_PASS # new for auth support
 packages=$PACKAGES
 permissioncheck=$PERMISSION_CHECK
 setgid=$SETGID
@@ -24,6 +26,8 @@ setuid=$SETUID
 statesdbhost=$IOB_STATESDB_HOST
 statesdbport=$IOB_STATESDB_PORT
 statesdbtype=$IOB_STATESDB_TYPE
+statesdbname=$IOB_STATESDB_NAME # new for sentinel support
+statesdbpass=$IOB_STATESDB_PASS # new for auth support
 usbdevices=$USBDEVICES
 zwave=$ZWAVE
 set -u
@@ -42,7 +46,7 @@ stop_on_error() {
   else
     echo ' '
     echo "This Script will exit now."
-    exit 1
+      exit 1
   fi
 }
 
@@ -84,12 +88,16 @@ if [[ "$avahi" != "" ]]; then echo -n "-----                    " && echo -n "$(
 if [[ "$debug" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" DEBUG: $debug)" && echo " -----"; fi
 if [[ "$backitup" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_BACKITUP_EXTDB: $backitup)" && echo " -----"; fi
 if [[ "$multihost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_MULTIHOST: $multihost)" && echo " -----"; fi
+if [[ "$objectsdbtype" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
 if [[ "$objectsdbhost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
 if [[ "$objectsdbport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
-if [[ "$objectsdbtype" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
+if [[ "$objectsdbname" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_NAME: $objectsdbname)" && echo " -----"; fi
+if [[ "$objectsdbpass" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PASS: $objectsdbpass)" && echo " -----"; fi
+if [[ "$statesdbtype" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
 if [[ "$statesdbhost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_HOST: $statesdbhost)" && echo " -----"; fi
 if [[ "$statesdbport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PORT: $statesdbport)" && echo " -----"; fi
-if [[ "$statesdbtype" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
+if [[ "$statesdbname" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_NAME: $statesdbname)" && echo " -----"; fi
+if [[ "$statesdbpass" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PASS: $statesdbpass)" && echo " -----"; fi
 if [[ "$offlinemode" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" OFFLINE_MODE: $offlinemode)" && echo " -----"; fi
 if [[ "$packages" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES: "$packages")" && echo " -----"; fi
 if [[ "$permissioncheck" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PERMISSION_CHECK: $permissioncheck)" && echo " -----"; fi
@@ -100,7 +108,7 @@ if [[ "$zwave" != "" ]]; then echo -n "-----                    " && echo -n "$(
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
-# Debug loggin notice
+# Debug logging notice
 if [[ "$debug" == "true" ]]; then
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo "!!!!                            DEBUG LOG ACTIVE                            !!!!"
@@ -117,12 +125,12 @@ fi
 # STEP 1 - Preparing container
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----                  Step 1 of 5: Preparing container                   -----"
+echo "-----                   Step 1 of 5: Preparing container                   -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
 # Actions running on first start only
-if [[ -f /opt/.firstrun ]]; then
+if [[ -f /opt/.first_run ]]; then
   # Updating Linux packages
   if [[ "$offlinemode" = "true" ]]; then
     echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
@@ -159,7 +167,7 @@ fi
 
 # Setting UID and/ or GID
 if [[ "$setgid" != "$(cat /etc/group | grep 'iobroker:' | cut -d':' -f3)" || "$setuid" != "$(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3)" ]]; then
-  echo "SETUID and/ or SETGID are set to individual values."
+  echo "SETUID and/ or SETGID are set to custom values."
   echo -n "Changing UID to "$setuid" and GID to "$setgid"... "
     usermod -u $setuid iobroker
     groupmod -og $setgid iobroker
@@ -186,43 +194,29 @@ if [[ `find /opt/iobroker -type f | wc -l` -lt 1 ]]; then
 elif [[ -f /opt/iobroker/iobroker ]]; then
   echo "Existing installation of ioBroker detected in \"/opt/iobroker\"."
 elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -ztvf /opt/iobroker/*_backupiobroker.tar.gz "backup/backup.json" 2> /dev/null | wc -l)" != "0" ]]; then
-  if [[ "$multihost" = "slave" ]]; then
-    echo "IoBroker backup file detected in /opt/iobroker. But Multihost is set to \"slave\"."
-    echo "Restoring a backup is not supported on Multihost slaves. Please check configuration and start over."
-    echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
-    exit 1
-  else
-    echo "IoBroker backup file detected in /opt/iobroker."
-    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Backup file name: " $(ls *_backupiobroker.tar.gz); fi
-    echo -n "Preparing restore... "
-      mv /opt/iobroker/*.tar.gz /opt/
-      tar -xf /opt/initial_iobroker.tar -C /
-      mkdir /opt/iobroker/backups
-      mv /opt/*.tar.gz /opt/iobroker/backups/
-      # fixing permission errors during restore
-      chown -R $setuid:$setgid /opt/iobroker
-    echo 'Done.'
-    echo -n "Restoring ioBroker... "
-      bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
-    echo 'Done.'
-    echo ' '
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "!!!!                             IMPORTANT NOTE                             !!!!"
-    echo "!!!!        The startup script restored iobroker from a backup file.        !!!!"
-    echo "!!!! Check /opt/iobroker/log/restore.log to see if restore was successful.  !!!!"
-    echo "!!!! When ioBroker now starts it will reinstall all Adapters automatically. !!!!"
-    echo "!!!!         This might be take a looooong time! Please be patient!         !!!!"
-    echo "!!!!  You can view installation process by taking a look at ioBroker log.   !!!!"
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-  fi
+  echo "IoBroker backup file detected in /opt/iobroker."
+  if [[ "$debug" == "true" ]]; then echo "[DEBUG] Backup file name: " $(ls *_backupiobroker.tar.gz); fi
+  echo "Since Docker Image v8, automatic initial restore is no longer supported!"
+  echo "IoBroker will start with a fresh installation, while your backup file will be copied into the backup directory."
+  echo "You will be able to restore your backup file manually by using the backitup adapter or the containers maintenance script."
+  echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
+  echo ' '
+  echo -n "Copying backup file and restoring initial ioBroker installation... "
+    mv /opt/iobroker/*.tar.gz /opt/
+    tar -xf /opt/initial_iobroker.tar -C /
+    mkdir /opt/iobroker/backups
+    mv /opt/*.tar.gz /opt/iobroker/backups/
+    # fixing permission errors during restore
+    chown -R $setuid:$setgid /opt/iobroker
+  echo 'Done.'
 else
-  echo "There is data detected in /opt/iobroker but it looks like it is no instance of ioBroker or a valid backup file!"
-  echo "Please check/ recreate mounted folder or volume and start over."
+  echo "There is data detected in /opt/iobroker but it looks like it is no instance of ioBroker!"
   if [[ "$debug" == "true" ]]; then
     echo "[DEBUG] Detected files:"
     ls -al
   fi
-  exit 1
+  echo "Please check/ recreate mounted folder or volume and try again."
+  stop_on_error
 fi
 echo ' '
 
@@ -237,14 +231,13 @@ echo ' '
 # (Re)Setting permissions to "/opt/iobroker" and "/opt/scripts"
 if [[ "$permissioncheck" == "false" ]]; then
   echo "PERMISSION_CHECK is set to false. Use this at your own risk!"
-  echo ' '
 else
   echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
     chown -R $setuid:$setgid /opt/iobroker
     chown -R $setuid:$setgid /opt/scripts
   echo 'Done.'
-  echo ' '
 fi
+echo ' '
 
 # Backing up original iobroker-file and changing sudo to gosu
 echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu... "
@@ -254,9 +247,108 @@ echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu... "
 echo 'Done.'
 echo ' '
 
+# Checking multihost and db setup
+if [[ "$multihost" == "master" || "$multihost" == "slave" ]]; then
+  # multihost enabled
+  if [[ "$multihost" == "master" ]]; then
+    set +e
+    bash /opt/scripts/setup_iob_db.sh -master
+    return=$?
+    set -e
+    if [[ "$return" -ne 0 ]]; then stop_on_error; fi
+  elif [[ "$multihost" == "slave" ]]; then
+    set +e
+    bash /opt/scripts/setup_iob_db.sh -slave
+    return=$?
+    set -e
+    if [[ "$return" -ne 0 ]]; then stop_on_error; fi
+  fi
+elif [[ "$multihost" == "" || "$multihost" == "false" ]]; then
+  # no multihost, only debug output
+  if [[ "$debug" == "true" ]]; then
+    echo "[DEBUG] Checking multihost settings... "
+    echo "[DEBUG] No multihost settings detected."
+    echo "[DEBUG] Done."
+    echo ' '
+  fi
+  # checking custom objects db settings
+  if [[ "$objectsdbtype" != "" || "$objectsdbhost" != "" || "$objectsdbport" != "" ]]; then
+    set +e
+    bash /opt/scripts/setup_iob_db.sh -objectsdb
+    return=$?
+    set -e
+    if [[ "$return" -ne 0 ]]; then stop_on_error; fi
+  else
+    #no custom objects db settings, only debug output
+    if [[ "$debug" == "true" ]]; then
+      echo "[DEBUG] Checking custom objects db settings... "
+      echo "[DEBUG] No custom objects db settings detected."
+      echo "[DEBUG] Done."
+      echo ' '
+    fi 
+  fi
+  # checking custom states db settings
+  if [[ "$statesdbtype" != "" || "$statesdbhost" != "" || "$statesdbport" != "" ]]; then
+    set +e
+    bash /opt/scripts/setup_iob_db.sh -statesdb
+    return=$?
+    set -e
+    if [[ "$return" -ne 0 ]]; then stop_on_error; fi
+  else
+    #no custom states db settings, only debug output
+    if [[ "$debug" == "true" ]]; then
+      echo "[DEBUG] Checking custom states db settings... "
+      echo "[DEBUG] No custom states db settings detected."
+      echo "[DEBUG] Done."
+      echo ' '
+    fi 
+  fi
+else
+  echo "IOB_MULTIHOST is set, but the value is not valid. Please check your configuration."
+  if [[ "$debug" == "true" ]]; then echo "[DEBUG] IOB_MULTIHOST = "$multihost; fi
+  echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/#environment-variables-env)."
+  stop_on_error
+fi
+
+# if restored a fresh install, runing "iob setup first" for database init, otherwise check database connection
+if [[ -f /opt/iobroker/.fresh_install ]]; then 
+  echo -n "Initializing a fresh installation of ioBroker... "
+  set +e
+  bash iob setup first > /opt/iobroker/log/iob_setup_first.log 2>&1
+  return=$?
+  set -e
+  rm -f /opt/iobroker/.fresh_install
+  if [[ "$return" -ne 0 ]]; then
+    echo "Failed."
+    echo "For more details see \"/opt/iobroker/log/iob_setup_first.log\"."
+    echo "Please check your configuration and try again."
+    stop_on_error
+  fi
+  echo 'Done.'
+  echo ' '
+else
+  echo -n "Checking Database connection... "
+  set +e
+  if iob uuid &> /dev/null; then
+    echo 'Done.'
+    echo ' '
+  else
+    errormsg=$(iob uuid 2>&1 | sed 's/^/[DEBUG] /')
+    echo "Failed."
+    if [[ "$debug" == "true" ]]; then
+      echo "[DEBUG] Error message: "
+      echo "$errormsg"
+    fi
+    echo "Please check your configuration and try again."
+    echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs)."
+    stop_on_error
+  fi
+  set -e
+fi
+
 # hostname check
 if [[ "$multihost" == "slave" ]]; then
-  echo "IOB_MULTIHOST ist set to \"slave\". Hostname check will be skipped."
+  echo "IOB_MULTIHOST is set to \"slave\". Hostname check will be skipped."
   echo ' '
 else
   # get admin instance and hostname
@@ -269,7 +361,7 @@ else
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" $adminhostname; fi
   else
     echo "There was a problem detecting the admin instance of your iobroker."
-    echo "Make sure the ioBroker installation you use has an admin instance or start over with a fresh installation and restore your configuration."
+    echo "Make sure the ioBroker installation you use has an admin instance or try again with a fresh installation and restore your configuration."
     echo "For more details see https://docs.buanet.de/iobroker-docker-image/docs/#restore"
     stop_on_error
   fi
@@ -399,137 +491,6 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
   echo ' '
 fi
 
-# Checking ENV for multihost setup
-if [[ "$multihost" != "" ]]; then
-  echo "Checking for multihost settings... "
-  # Configuring objects db host
-  if [[ "$multihost" = "master" && "$objectsdbtype" = "" && "$objectsdbhost" = "" && "$objectsdbport" = "" ]]; then
-    echo "IOB_MULTIHOST is set to \"master\" and no external objects db is set."
-    echo -n "Setting host of objects db to \"0.0.0.0\" to allow external connections... "
-      jq --arg objectsdbhost "0.0.0.0" '.objects.host = $objectsdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
-      chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
-    echo 'Done.'
-  elif [[ "$multihost" = "master" && "$objectsdbhost" = "127.0.0.1" ]]; then
-    echo "IOB_MULTIHOST is set to \"master\", but IOB_OBJECTSDB_HOST is set to \"127.0.0.1\"."
-    echo "This configuration will not allow slaves to connect to objects db! Please change or remove \"IOB_OBJECTSDB_HOST\" and start over!"
-    echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
-    exit 1
-  elif [[ "$multihost" = "master" && "$objectsdbtype" != "" && "$objectsdbhost" != "" && "$objectsdbport" != "" ]]; then
-    echo "IOB_MULTIHOST is set to \"master\" and external objects db is set."
-  elif ([[ "$multihost" = "slave" && "$objectsdbtype" = "" ]]) || ([[ "$multihost" = "slave" && "$objectsdbhost" = "" ]]) || ([[ "$multihost" = "slave" && "$objectsdbport" = "" ]]); then
-    echo "IOB_MULTIHOST is set to \"slave\", but no external objects db is set."
-    echo "You have to configure ENVs \"IOB_OBJECTSDB_TYPE\", \"IOB_OBJECTSDB_HOST\" and \"IOB_OBJECTSDB_PORT\" to connect to a master objects db."
-    echo "Please check your settings and start over!"
-    echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
-    exit 1
-  elif [[ "$multihost" = "slave" && "$objectsdbtype" != "" && "$objectsdbhost" != "" && "$objectsdbport" != "" ]]; then
-    echo "IOB_MULTIHOST is set to \"slave\" and external objects db is set."
-  elif [[ "$multihost" != "" ]]; then
-    echo "IOB_MULTIHOST is set, but it seems like some configuration is missing."
-    echo "Please checke if you have configured the ENVs \"MULTIHOST\", \"IOB_OBJECTSDB_TYPE\", \"IOB_OBJECTSDB_HOST\" and \"IOB_OBJECTSDB_PORT\" correctly and start over."
-    echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
-    exit 1
-  fi
-   # Configuring states db host
-  if [[ "$multihost" = "master" && "$statesdbtype" = "" && "$statesdbhost" = "" && "$statesdbport" = "" ]]; then
-    echo "IOB_MULTIHOST is set to \"master\" and no external states db is set."
-    echo -n "Setting host of states db to \"0.0.0.0\" to allow external connections... "
-      jq --arg statesdbhost "0.0.0.0" '.states.host = $statesdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
-      chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
-    echo 'Done.'
-  elif [[ "$multihost" = "master" && "$statesdbhost" = "127.0.0.1" ]]; then
-    echo "IOB_MULTIHOST is set to \"master\", but states db host is set to \"127.0.0.1\"."
-    echo "This configuration will not allow slaves to connect to objects db! Please change or remove \"IOB_STATESDB_HOST\" and start over!"
-    echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
-    exit 1
-  elif [[ "$multihost" = "master" && "$statesdbtype" != "" && "$statesdbhost" != "" && "$statesdbport" != "" ]]; then
-    echo "IOB_MULTIHOST is set to \"master\" and external states db is set."
-  elif ([[ "$multihost" = "slave" && "$statesdbtype" = "" ]]) || ([[ "$multihost" = "slave" && "$statesdbhost" = "" ]]) || ([[ "$multihost" = "slave" && "$statesdbport" = "" ]]); then
-    echo "IOB_MULTIHOST is set to \"slave\", but no external states db is set."
-    echo "You have to configure ENVs \"IOB_STATESDB_TYPE\", \"IOB_STATESDB_HOST\" and \"IOB_STATESDB_PORT\" to connect to a maser states db."
-    echo "Please check your settings and start over!"
-    echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
-    exit 1
-  elif [[ "$multihost" = "slave" && "$statesdbtype" != "" && "$statesdbhost" != "" && "$statesdbport" != "" ]]; then
-    echo "IOB_MULTIHOST is set to \"slave\" and external states db is set."
-  elif [[ "$multihost" != "" ]]; then
-    echo "IOB_MULTIHOST is set, but it seems like some configuration is missing."
-    echo "Please checke if you have configured the ENVs \"MULTIHOST\", \"IOB_STATESDB_TYPE\", \"IOB_STATESDB_HOST\" and \"IOB_STATESTDB_PORT\" correctly and start over."
-    echo "For more information see ioBroker Docker image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
-    exit 1
-  fi
-  echo 'Done.'
-  echo ' '
-fi
-
-# Checking ENVs for custom setup of objects db
-if [[ "$objectsdbtype" != "" || "$objectsdbhost" != "" || "$objectsdbport" != "" ]]; then
-  echo "Checking for custom objects db settings ... "
-  if [[ "$objectsdbtype" != "$(jq -r '.objects.type' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
-    echo "IOB_OBJECTSDB_TYPE is set and value is different from detected ioBroker installation."
-    echo -n "Setting type of objects db to \""$objectsdbtype"\"... "
-      jq --arg objectsdbtype "$objectsdbtype" '.objects.type = $objectsdbtype' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
-      chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
-    echo 'Done.'
-  else
-    echo "IOB_OBJECTSDB_TYPE is set and value meets detected ioBroker installation."
-  fi
-  if [[ "$objectsdbhost" != "$(jq -r '.objects.host' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
-    echo "IOB_OBJECTSDB_HOST is set and value is different from detected ioBroker installation."
-    echo -n "Setting host of objects db to \""$objectsdbhost"\"... "
-      jq --arg objectsdbhost "$objectsdbhost" '.objects.host = $objectsdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
-      chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
-    echo 'Done.'
-  else
-    echo "IOB_OBJECTSDB_HOST is set and value meets detected ioBroker installation."
-  fi
-  if [[ "$objectsdbport" != "$(jq -r '.objects.port' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
-    echo "IOB_OBJECTSDB_PORT is set and value is different from detected ioBroker installation."
-    echo -n "Setting port of objects db to \""$objectsdbport"\"... "
-      jq --arg objectsdbport $objectsdbport '.objects.port = $objectsdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
-      chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
-    echo 'Done.'
-  else
-    echo "IOB_OBJECTSDB_PORT is set and value meets detected ioBroker installation."
-  fi
-  echo 'Done.'
-  echo ' '
-fi
-
-# Checking ENVs for custom setup of states db
-if [[ "$statesdbtype" != "" || "$statesdbhost" != "" || "$statesdbport" != "" ]]; then
-  echo "Checking for custom states db settings... "
-  if [[ "$statesdbtype" != "$(jq -r '.states.type' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
-    echo "IOB_STATESDB_TYPE is set and value is different from detected ioBroker installation."
-    echo -n "Setting type of states db to \""$statesdbtype"\"... "
-      jq --arg statesdbtype "$statesdbtype" '.states.type = $statesdbtype' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
-      chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
-    echo 'Done.'
-  else
-    echo "IOB_STATESDB_TYPE is set and value meets detected ioBroker installation."
-  fi
-  if [[ "$statesdbhost" != "$(jq -r '.states.host' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
-    echo "IOB_STATESDB_HOST is set and value is different from detected ioBroker installation."
-    echo -n "Setting host of states db to \""$statesdbhost"\"... "
-      jq --arg statesdbhost "$statesdbhost" '.states.host = $statesdbhost' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
-      chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
-    echo 'Done.'
-  else
-    echo "IOB_STATESDB_HOST is set and value meets detected ioBroker installation."
-  fi
-  if [[ "$statesdbport" != "$(jq -r '.states.port' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
-    echo "IOB_STATESDB_PORT is set and value is different from detected ioBroker installation."
-    echo -n "Setting port of states db to \""$statesdbport"\"... "
-      jq --arg statesdbport $statesdbport '.states.port = $statesdbport' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp && mv /opt/iobroker/iobroker-data/iobroker.json.tmp /opt/iobroker/iobroker-data/iobroker.json
-      chown -R $setuid:$setgid /opt/iobroker/iobroker-data/iobroker.json && chmod 674 /opt/iobroker/iobroker-data/iobroker.json
-    echo 'Done.'
-  else
-    echo "IOB_STATESDB_PORT is set and value meets detected ioBroker installation."
-  fi
-  echo 'Done.'
-  echo ' '
-fi
-
 # Checking for Userscripts in /opt/userscripts
 if [[ `find /opt/userscripts -type f | wc -l` -lt 1 ]]; then
   echo -n "There is no data detected in /opt/userscripts. Restoring exapmple userscripts... "
@@ -537,29 +498,26 @@ if [[ `find /opt/userscripts -type f | wc -l` -lt 1 ]]; then
     chmod 755 /opt/userscripts/userscript_firststart_example.sh
     chmod 755 /opt/userscripts/userscript_everystart_example.sh
   echo 'Done.'
-  echo ' '
 elif [[ -f /opt/userscripts/userscript_firststart.sh || -f /opt/userscripts/userscript_everystart.sh ]]; then
-  if [[ -f /opt/userscripts/userscript_firststart.sh && -f /opt/.firstrun ]]; then
+  if [[ -f /opt/userscripts/userscript_firststart.sh && -f /opt/.first_run ]]; then
     echo "Userscript for first start detected and this is the first start of a new container."
     echo "Running userscript_firststart.sh... "
       chmod 755 /opt/userscripts/userscript_firststart.sh
       bash /opt/userscripts/userscript_firststart.sh
     echo 'Done.'
-    echo ' '
   fi
   if [[ -f /opt/userscripts/userscript_everystart.sh ]]; then
     echo "Userscript for every start detected. Running userscript_everystart.sh... "
       chmod 755 /opt/userscripts/userscript_everystart.sh
       bash /opt/userscripts/userscript_everystart.sh
     echo 'Done.'
-    echo ' '
   fi
 fi
+echo ' '
 
-# Removing first run marker when exists
-if [[ -f /opt/.firstrun ]]; then
-  rm -f /opt/.firstrun
-fi
+# Removing first run an fresh install markers when exists
+if [[ -f /opt/.first_run ]]; then rm -f /opt/.first_run; fi
+if [[ -f /opt/iobroker/.fresh_install ]]; then rm -f /opt/iobroker/.fresh_install; fi
 
 #####
 # STEP 5 - Starting ioBroker

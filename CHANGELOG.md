@@ -1,4 +1,14 @@
 ## Changelog
+### v8.0.0-beta.1 (coming soon)
+* upgrade node version to recommended node18  
+* rewrite of multihost setup handling
+* rewrite of custom objects and states db setup handling
+* extend logging and error handling
+* add volume instruction to dockerfile
+* add support for password protected custom objects and states db ([#306](https://github.com/buanet/ioBroker.docker/issues/306))
+* add restore command to maintenance script
+* add database connection check at startup 
+* remove initial restore feature
 
 ### v7.2.0 (12.12.2022)
 * update docs
