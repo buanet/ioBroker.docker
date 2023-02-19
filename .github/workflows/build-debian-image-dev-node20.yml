@@ -1,11 +1,11 @@
 # Github action to build Docker image from dev branch (tag: dev)
-name: Build debian dev-node18
+name: Build debian dev-node20
 
 on:
   workflow_dispatch:
 
 jobs:
-  build-dev-node18-image:
+  build-dev-node20-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -29,8 +29,8 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
           mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # amd64
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./debian/node18/Dockerfile > ./debian/node18/Dockerfile.tmp 
-          mv -f ./debian/node18/Dockerfile.tmp ./debian/node18/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" ./debian/node20/Dockerfile > ./debian/node20/Dockerfile.tmp 
+          mv -f ./debian/node20/Dockerfile.tmp ./debian/node20/Dockerfile
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2.1.0
@@ -52,16 +52,16 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Build Docker image (node18)
+      - name: Build Docker image (node20)
         uses: docker/build-push-action@v4.0.0
         with:
           context: ./debian
-          file: ./debian/node18/Dockerfile
+          file: ./debian/node20/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           tags: |
-            buanet/iobroker:dev-node18,
-            ghcr.io/buanet/iobroker:dev-node18
+            buanet/iobroker:dev-node20,
+            ghcr.io/buanet/iobroker:dev-node20
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v6

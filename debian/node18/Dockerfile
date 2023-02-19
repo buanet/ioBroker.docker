@@ -52,11 +52,12 @@ RUN chmod 777 /opt/scripts/ \
 RUN mkdir -p /opt/scripts/.docker_config/ \
     && echo "starting" > /opt/scripts/.docker_config/.healthcheck \
     && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
-    && echo $(hostname) > /opt/.firstrun \
+    && echo "ture" > /opt/.first_run \
     # Run installer
     && curl -sL https://iobroker.net/install.sh | bash - \
     # Deleting UUID from build
     && iobroker unsetup -y \
+    && echo "ture" > /opt/iobroker/.fresh_install \
     # Backup initial ioBroker and userscript folder
     && tar -cf /opt/initial_iobroker.tar /opt/iobroker \
     && tar -cf /opt/initial_userscripts.tar /opt/userscripts \
@@ -93,6 +94,9 @@ WORKDIR /opt/iobroker/
 # Healthcheck
 HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
     CMD ["/bin/bash", "-c", "/opt/scripts/healthcheck.sh"]
+
+# Volumes for persistent data
+VOLUME ["/opt/iobroker"]
 
 # Run startup-script
 ENTRYPOINT ["/bin/bash", "-c", "/opt/scripts/iobroker_startup.sh"]

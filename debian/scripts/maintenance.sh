@@ -23,6 +23,7 @@ display_help() {
   echo '       off        > switches mantenance mode OFF and stops or restarts the container'
   echo '       upgrade    > puts the container to maintenance mode and upgrades ioBroker'
   echo '       restart    > stops iobroker and stops or restarts the container'
+  echo '       restore    > stops iobroker and restores the last backup'
   echo '       help       > shows this help'
   echo ''
   echo 'OPTIONS'
@@ -217,6 +218,48 @@ restart_container() {
   pkill -u root
 }
 
+# restore iobroker
+restore_iobroker() {
+  echo 'You are now going to perform a restore of your iobroker.'
+
+  if [[ "$autoconfirm" != yes ]]; then
+    local reply
+
+    read -rp 'Do you want to continue [yes/no]? ' reply
+    if [[ "$reply" == y || "$reply" == Y || "$reply" == yes ]]; then
+      : # continue
+    else
+      return 1
+    fi
+  else
+    echo 'This command was already confirmed by the -y or --yes option.'
+  fi
+
+  echo -n 'Stopping ioBroker...'
+  stop_iob
+
+  # fixing permission errors during restore
+  #chown -R $setuid:$setgid /opt/iobroker/backup
+
+  echo -n "Restoring ioBroker... "
+  bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
+  echo 'Done.'
+  echo ' '
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!!!                             IMPORTANT NOTE                             !!!!"
+  echo "!!!!      The maintenance script restored iobroker from a backup file.      !!!!"
+  echo "!!!! Check /opt/iobroker/log/restore.log to see if restore was successful.  !!!!"
+  echo "!!!!   When ioBroker starts it will reinstall all Adapters automatically.   !!!!"
+  echo "!!!!         This might be take a looooong time! Please be patient!         !!!!"
+  echo "!!!!  You can view installation process by taking a look at ioBroker log.   !!!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  sleep 10
+  echo 'Container will be stopped or restarted in 5 seconds...'
+  sleep 5
+  echo 'stopping' > "$healthcheck"
+  pkill -u root
+}
+
 # parsing commands and options
 
 # default command to run unless another was given
@@ -241,6 +284,9 @@ for arg in "$@"; do
       ;;
     restart|rest|r)
       run=(restart_container)
+      ;;
+    restore)
+      run=(restore_iobroker)
       ;;
     -y|--yes)
       autoconfirm=yes
