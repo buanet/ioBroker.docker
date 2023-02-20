@@ -51,12 +51,12 @@ stop_on_error() {
 }
 
 # Getting date and time for logging
-dati=`date '+%Y-%m-%d %H:%M:%S'`
+dati=$(date '+%Y-%m-%d %H:%M:%S')
 
 # Logging header
 echo ' '
 echo "$(printf -- '-%.0s' {1..80})"
-echo -n "$(printf -- '-%.0s' {1..25})" && echo -n "     "$dati"      " && echo "$(printf -- '-%.0s' {1..25})"
+echo -n "$(printf -- '-%.0s' {1..25})" && echo -n "     ""$dati""      " && echo "$(printf -- '-%.0s' {1..25})"
 echo "$(printf -- '-%.0s' {1..80})"
 echo "-----                                                                      -----"
 echo "----- ██╗  ██████╗  ██████╗  ██████╗   ██████╗  ██╗  ██╗ ███████╗ ██████╗  -----"
@@ -73,38 +73,38 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 echo "$(printf -- '-%.0s' {1..80})"
 echo "-----                          System Information                          -----"
-echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" arch: $(uname -m))" && echo " -----"
-echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" hostname: $(hostname))" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" arch: "$(uname -m)")" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" hostname: "$(hostname)")" && echo " -----"
 echo "-----                                                                      -----"
 echo "-----                          Version Information                         -----"
-echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" image: ${VERSION})" && echo " -----"
-echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" build: ${BUILD})" && echo " -----"
-echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" node: $(node -v))" && echo " -----"
-echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" npm: $(npm -v))" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" image: "${VERSION}")" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" build: "${BUILD}")" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" node: "$(node -v)")" && echo " -----"
+echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" npm: "$(npm -v)")" && echo " -----"
 echo "-----                                                                      -----"
 echo "-----                        Environment Variables                         -----"
-if [[ "$adminport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: $adminport)" && echo " -----"; fi
-if [[ "$avahi" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" AVAHI: $avahi)" && echo " -----"; fi
-if [[ "$debug" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" DEBUG: $debug)" && echo " -----"; fi
-if [[ "$backitup" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_BACKITUP_EXTDB: $backitup)" && echo " -----"; fi
-if [[ "$multihost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_MULTIHOST: $multihost)" && echo " -----"; fi
-if [[ "$objectsdbtype" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_TYPE: $objectsdbtype)" && echo " -----"; fi
-if [[ "$objectsdbhost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_HOST: $objectsdbhost)" && echo " -----"; fi
-if [[ "$objectsdbport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PORT: $objectsdbport)" && echo " -----"; fi
-if [[ "$objectsdbname" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_NAME: $objectsdbname)" && echo " -----"; fi
-if [[ "$objectsdbpass" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PASS: $objectsdbpass)" && echo " -----"; fi
-if [[ "$statesdbtype" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_TYPE: $statesdbtype)" && echo " -----"; fi
-if [[ "$statesdbhost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_HOST: $statesdbhost)" && echo " -----"; fi
-if [[ "$statesdbport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PORT: $statesdbport)" && echo " -----"; fi
-if [[ "$statesdbname" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_NAME: $statesdbname)" && echo " -----"; fi
-if [[ "$statesdbpass" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PASS: $statesdbpass)" && echo " -----"; fi
-if [[ "$offlinemode" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" OFFLINE_MODE: $offlinemode)" && echo " -----"; fi
+if [[ "$adminport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: "$adminport")" && echo " -----"; fi
+if [[ "$avahi" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" AVAHI: "$avahi")" && echo " -----"; fi
+if [[ "$debug" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" DEBUG: "$debug")" && echo " -----"; fi
+if [[ "$backitup" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_BACKITUP_EXTDB: "$backitup")" && echo " -----"; fi
+if [[ "$multihost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_MULTIHOST: "$multihost")" && echo " -----"; fi
+if [[ "$objectsdbtype" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_TYPE: "$objectsdbtype")" && echo " -----"; fi
+if [[ "$objectsdbhost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_HOST: "$objectsdbhost")" && echo " -----"; fi
+if [[ "$objectsdbport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PORT: "$objectsdbport")" && echo " -----"; fi
+if [[ "$objectsdbname" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_NAME: "$objectsdbname")" && echo " -----"; fi
+if [[ "$objectsdbpass" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_OBJECTSDB_PASS: "***")" && echo " -----"; fi
+if [[ "$statesdbtype" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_TYPE: "$statesdbtype")" && echo " -----"; fi
+if [[ "$statesdbhost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_HOST: "$statesdbhost")" && echo " -----"; fi
+if [[ "$statesdbport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PORT: "$statesdbport")" && echo " -----"; fi
+if [[ "$statesdbname" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_NAME: "$statesdbname")" && echo " -----"; fi
+if [[ "$statesdbpass" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PASS: "***")" && echo " -----"; fi
+if [[ "$offlinemode" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" OFFLINE_MODE: "$offlinemode")" && echo " -----"; fi
 if [[ "$packages" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES: "$packages")" && echo " -----"; fi
-if [[ "$permissioncheck" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PERMISSION_CHECK: $permissioncheck)" && echo " -----"; fi
-if [[ "$setgid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: $setgid)" && echo " -----"; fi
-if [[ "$setuid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: $setuid)" && echo " -----"; fi
-if [[ "$usbdevices" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" USBDEVICES: $usbdevices)" && echo " -----"; fi
-if [[ "$zwave" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" ZWAVE: $zwave)" && echo " -----"; fi
+if [[ "$permissioncheck" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PERMISSION_CHECK: "$permissioncheck")" && echo " -----"; fi
+if [[ "$setgid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: "$setgid")" && echo " -----"; fi
+if [[ "$setuid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: "$setuid")" && echo " -----"; fi
+if [[ "$usbdevices" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" USBDEVICES: "$usbdevices")" && echo " -----"; fi
+if [[ "$zwave" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" ZWAVE: "$zwave")" && echo " -----"; fi
 echo "$(printf -- '-%.0s' {1..80})"
 echo ' '
 
@@ -147,8 +147,8 @@ if [[ -f /opt/.first_run ]]; then
     echo ' '
   elif [[ "$packages" != "" ]]; then
     echo "PACKAGES is set. Installing additional Linux packages."
-    echo "Checking the following packages:" $packages"... "
-    echo $packages > /opt/scripts/.docker_config/.packages
+    echo "Checking the following packages:" "$packages""... "
+    echo "$packages" > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
     echo 'Done.'
     echo ' '
@@ -168,9 +168,9 @@ fi
 # Setting UID and/ or GID
 if [[ "$setgid" != "$(cat /etc/group | grep 'iobroker:' | cut -d':' -f3)" || "$setuid" != "$(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3)" ]]; then
   echo "SETUID and/ or SETGID are set to custom values."
-  echo -n "Changing UID to "$setuid" and GID to "$setgid"... "
-    usermod -u $setuid iobroker
-    groupmod -og $setgid iobroker
+  echo -n "Changing UID to \"""$setuid""\" and GID to \"""$setgid""\"... "
+    usermod -u "$setuid" iobroker
+    groupmod -og "$setgid" iobroker
   echo 'Done.'
   echo ' '
 fi
@@ -195,7 +195,7 @@ elif [[ -f /opt/iobroker/iobroker ]]; then
   echo "Existing installation of ioBroker detected in \"/opt/iobroker\"."
 elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -ztvf /opt/iobroker/*_backupiobroker.tar.gz "backup/backup.json" 2> /dev/null | wc -l)" != "0" ]]; then
   echo "IoBroker backup file detected in /opt/iobroker."
-  if [[ "$debug" == "true" ]]; then echo "[DEBUG] Backup file name: " $(ls *_backupiobroker.tar.gz); fi
+  if [[ "$debug" == "true" ]]; then echo "[DEBUG] Backup file name: " "$(ls *_backupiobroker.tar.gz)"; fi
   echo "Since Docker Image v8, automatic initial restore is no longer supported!"
   echo "IoBroker will start with a fresh installation, while your backup file will be copied into the backup directory."
   echo "You will be able to restore your backup file manually by using the backitup adapter or the containers maintenance script."
@@ -207,7 +207,7 @@ elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -z
     mkdir /opt/iobroker/backups
     mv /opt/*.tar.gz /opt/iobroker/backups/
     # fixing permission errors during restore
-    chown -R $setuid:$setgid /opt/iobroker
+    chown -R "$setuid":"$setgid" /opt/iobroker
   echo 'Done.'
 else
   echo "There is data detected in /opt/iobroker but it looks like it is no instance of ioBroker!"
@@ -233,8 +233,8 @@ if [[ "$permissioncheck" == "false" ]]; then
   echo "PERMISSION_CHECK is set to false. Use this at your own risk!"
 else
   echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
-    chown -R $setuid:$setgid /opt/iobroker
-    chown -R $setuid:$setgid /opt/scripts
+    chown -R "$setuid":"$setgid" /opt/iobroker
+    chown -R "$setuid":"$setgid" /opt/scripts
   echo 'Done.'
 fi
 echo ' '
@@ -305,7 +305,7 @@ elif [[ "$multihost" == "" || "$multihost" == "false" ]]; then
   fi
 else
   echo "IOB_MULTIHOST is set, but the value is not valid. Please check your configuration."
-  if [[ "$debug" == "true" ]]; then echo "[DEBUG] IOB_MULTIHOST = "$multihost; fi
+  if [[ "$debug" == "true" ]]; then echo "[DEBUG] IOB_MULTIHOST = ""$multihost"; fi
   echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/#environment-variables-env)."
   stop_on_error
 fi
@@ -356,9 +356,9 @@ else
   admininstance=$(bash iobroker list instances | grep 'enabled' | grep -m 1 -o 'system.adapter.admin..')
   set -e
   if [[ "$admininstance" != "" ]]; then
-    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" $admininstance; fi 
-    adminhostname=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="host": ")[^"]*')
-    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" $adminhostname; fi
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" "$admininstance"; fi 
+    adminhostname=$(bash iobroker object get "$admininstance" --pretty | grep -oP '(?<="host": ")[^"]*')
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" "$adminhostname"; fi
   else
     echo "There was a problem detecting the admin instance of your iobroker."
     echo "Make sure the ioBroker installation you use has an admin instance or try again with a fresh installation and restore your configuration."
@@ -368,8 +368,8 @@ else
   # check hostname
   if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" ]]; then
     echo "Hostname in ioBroker does not match the hostname of this container."
-    echo -n "Updating hostname to "$(hostname)"... "
-      bash iobroker host $adminhostname
+    echo -n "Updating hostname to \"""$(hostname)""\"... "
+      bash iobroker host "$adminhostname"
     echo 'Done.'
     echo ' '
   elif [[ "$adminhostname" = "$(hostname)" ]]; then
@@ -388,26 +388,26 @@ if [[ "$debug" == "true" && "$multihost" != "slave" ]]; then
   echo ' '
   # get information and send to array
   IFS=$'\n'
-  instances_array=($(iob list instances))
-  repos_array=($(iob repo list))
-  updates_array=($(iob update))
+  instances_array=("$(iob list instances)")
+  repos_array=("$(iob repo list)")
+  updates_array=("$(iob update)")
   # list iob instances
   echo "[DEBUG] ##### iobroker list instances #####"
-    for i in ${instances_array[@]}
+    for i in "${instances_array[@]}"
     do
-      echo "[DEBUG]" $i
+      echo "$i"
     done
   echo ' '
   echo "[DEBUG] ##### iobroker repo list #####"
-    for i in ${repos_array[@]}
+    for i in "${repos_array[@]}"
     do
-      echo "[DEBUG]" $i
+      echo "$i"
     done
   echo ' '
   echo "[DEBUG] ##### iobroker update #####"
-    for i in ${updates_array[@]}
+    for i in "${updates_array[@]}"
     do
-      echo "[DEBUG]" $i
+      echo "$i"
     done
   echo ' '
   unset IFS
@@ -427,13 +427,13 @@ echo ' '
 
 # Checking ENV for Adminport
 if [[ "$adminport" != "" && "$multihost" != "slave" ]]; then
-  adminportold=$(bash iobroker object get $admininstance --pretty | grep -oP '(?<="port": )[^,]*')
-  admininstanceshort=$(echo $admininstance | grep -m 1 -o 'admin..')
+  adminportold=$(bash iobroker object get "$admininstance" --pretty | grep -oP '(?<="port": )[^,]*')
+  admininstanceshort=$(echo "$admininstance" | grep -m 1 -o 'admin..')
   if [[ "$adminport" != "$adminportold" ]]; then
     echo "IOB_ADMINPORT is set and does not match port configured in ioBroker."
-    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected Admin Port in ioBroker: " $adminportold; fi
-    echo "Setting Adminport to \""$adminport"\"... "
-      bash iobroker set $admininstanceshort --port $adminport
+    if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected Admin Port in ioBroker: " "$adminportold"; fi
+    echo "Setting Adminport to \"""$adminport""\"... "
+      bash iobroker set "$admininstanceshort" --port "$adminport"
     echo 'Done.'
     echo ' '
   fi
@@ -475,14 +475,14 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
   IFS=';' read -ra devicearray <<< "$usbdevices"
     for i in "${devicearray[@]}"
     do
-      if [[ -e $i ]]; then
-        echo -n "Setting permissions for "$i"... "
-        chown root:dialout $i
-        chmod g+rw $i
+      if [[ -e "$i" ]]; then
+        echo -n "Setting permissions for \"""$i""\"... "
+        chown root:dialout "$i"
+        chmod g+rw "$i"
         echo 'Done.'
-        if [[ "$debug" == "true" ]]; then echo "[DEBUG] Permissions set: " $(ls -al $i); fi
+        if [[ "$debug" == "true" ]]; then echo "[DEBUG] Permissions set: " "$(ls -al "$i")"; fi
       else
-        echo "Looks like the device \""$i"\" does not exist."
+        echo "Looks like the device \"""$i""\" does not exist."
         echo "Did you mount it correctly by using the \"--device\" option?"
         echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/#mounting-usb-devices)."
         stop_on_error
@@ -492,7 +492,7 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
 fi
 
 # Checking for Userscripts in /opt/userscripts
-if [[ `find /opt/userscripts -type f | wc -l` -lt 1 ]]; then
+if [[ $(find /opt/userscripts -type f | wc -l) -lt 1 ]]; then
   echo -n "There is no data detected in /opt/userscripts. Restoring exapmple userscripts... "
     tar -xf /opt/initial_userscripts.tar -C /
     chmod 755 /opt/userscripts/userscript_firststart_example.sh
@@ -541,7 +541,7 @@ shut_down() {
 
   local status timeout
 
-  timeout="$(date --date="now + $pkill_timeout sec" +%s)"
+  timeout="$(date --date="now + ""$pkill_timeout"" sec" +%s)"
   pkill -u iobroker -f iobroker.js-controller
   status=$?
   if (( status >= 2 )); then      # syntax error or fatal error

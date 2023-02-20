@@ -1,20 +1,20 @@
 #!/bin/bash
 
-if [ $1 == "-install" ]
+if [ "$1" == "-install" ]
 then
   apt-get -qq update
   packages=$(cat /opt/scripts/.docker_config/.packages)
   for i in $packages; do
-    if [ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ];
+    if [ "$(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed")" -eq 0 ];
       then
         echo "$i is not installed. Installing..."
-        sudo apt-get -qq -y install $i
+        sudo apt-get -qq -y install "$i"
         echo "Done."
       else
         echo "$i is already installed."
       fi
   done
-elif [ $1 == "-update" ]
+elif [ "$1" == "-update" ]
 then
   apt-get -qq update
   apt-get -qq -y upgrade

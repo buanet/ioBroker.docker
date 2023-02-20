@@ -33,7 +33,7 @@ set_objectsdb_type() {
 }
 set_objectsdb_host() {
   if [[ $objectsdbhost == *","* ]]; then
-    if [[ "$(jq -c -n --arg value $objectsdbhost '$value|split(",")')" != "$(jq -r '.objects.host' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
+    if [[ "$(jq -c -n --arg value "$objectsdbhost" '$value|split(",")')" != "$(jq -r '.objects.host' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
       echo "IOB_OBJECTSDB_HOST is available but value is different from detected ioBroker installation."
       echo -n "Setting host of objects db to \"""$objectsdbhost""\"... "
         jq --arg value "$objectsdbhost" '.objects.host = ($value|split(","))' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
@@ -77,7 +77,7 @@ set_objectsdb_host() {
 }
 set_objectsdb_port() {
   if [[ $objectsdbport == *","* ]]; then 
-    if [[ "$(jq -c -n --arg value $objectsdbport '$value|split(",")')" != "$(jq -r '.objects.port' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
+    if [[ "$(jq -c -n --arg value "$objectsdbport" '$value|split(",")')" != "$(jq -r '.objects.port' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
       echo "IOB_OBJECTSDB_PORT is available but value is different from detected ioBroker installation."
       echo -n "Setting port of objects db to \"""$objectsdbport""\"... "
         jq --arg value "$objectsdbport" '.objects.port = ($value|split(","))' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
@@ -122,7 +122,7 @@ set_statesdb_type() {
 }
 set_statesdb_host() {
   if [[ $statesdbhost == *","* ]]; then
-    if [[ "$(jq -c -n --arg parm $statesdbhost '$parm|split(",")')" != "$(jq -r '.states.host' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
+    if [[ "$(jq -c -n --arg parm "$statesdbhost" '$parm|split(",")')" != "$(jq -r '.states.host' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
       echo "IOB_STATESDB_HOST is available but value is different from detected ioBroker installation."
       echo -n "Setting host of states db to \"""$statesdbhost""\"... "
         jq --arg value "$statesdbhost" '.states.host = ($value|split(","))' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
@@ -166,7 +166,7 @@ set_statesdb_host() {
 }
 set_statesdb_port() {
   if [[ $statesdbport == *","* ]]; then 
-    if [[ "$(jq -c -n --arg value $statesdbport '$value|split(",")')" != "$(jq -r '.states.port' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
+    if [[ "$(jq -c -n --arg value "$statesdbport" '$value|split(",")')" != "$(jq -r '.states.port' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
       echo "IOB_STATESDB_PORT is available but value is different from detected ioBroker installation."
       echo -n "Setting port of states db to \"""$statesdbport""\"... "
         jq --arg value "$statesdbport" '.states.port = ($value|split(","))' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
