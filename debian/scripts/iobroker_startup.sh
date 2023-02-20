@@ -135,19 +135,7 @@ if [[ -f /opt/.first_run ]]; then
   if [[ "$offlinemode" = "true" ]]; then
     echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
   else
-    echo -n "Updating Linux packages on first run... "
-    set +e
-    bash /opt/scripts/setup_packages.sh -update > /opt/scripts/setup_packages.log 2>&1
-    return=$?
-    set -e
-    if [[ "$return" -ne 0 ]]; then
-      echo "Failed."
-      echo "For more details see \"/opt/scripts/setup_packages.log\"."
-      echo "Make sure the container has internet access to get the latest package updates."
-      echo "This has no impact to the setup process. The script will continue."
-    else
-      echo 'Done.'
-    fi
+    bash /opt/scripts/setup_packages.sh -update
   fi
   echo ' '
   # Installing packages from ENV
