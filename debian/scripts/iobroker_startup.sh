@@ -134,24 +134,29 @@ if [[ -f /opt/.first_run ]]; then
   # Updating Linux packages
   if [[ "$offlinemode" = "true" ]]; then
     echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
-    echo ' '
   else
-    echo "Updating Linux packages on first run... "
-      bash /opt/scripts/setup_packages.sh -update
-    echo 'Done.'
-    echo ' '
+    echo -n "Updating Linux packages on first run... "
+    set +e
+    bash /opt/scripts/setup_packages.sh -update > /opt/scripts/setup_packages.log 2>&1
+    return=$?
+    set -e
+    if [[ "$return" -ne 0 ]]; then
+      echo "Failed."
+      echo "For more details see \"/opt/scripts/setup_packages.log\"."
+      echo "Make sure the container has internet access to get the latest package updates."
+      echo "This has no impact to the setup process. The script will continue."
+    else
+      echo 'Done.'
+    fi
   fi
+  echo ' '
   # Installing packages from ENV
   if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
     echo "PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation."
-    echo ' '
   elif [[ "$packages" != "" ]]; then
-    echo "PACKAGES is set. Installing additional Linux packages."
-    echo "Checking the following packages:" "$packages""... "
+    echo "PACKAGES is set. Installing the following additional Linux packages: ""$packages"
     echo "$packages" > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
-    echo 'Done.'
-    echo ' '
   fi
   # Register maintenance script
   echo -n 'Registering maintenance script as command... '
@@ -159,11 +164,10 @@ if [[ -f /opt/.first_run ]]; then
   echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
   echo "alias m=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
   echo 'Done.'
-  echo ' '
 else
   echo "This is not the first run of this container. Skipping first run preparation."
-  echo ' '
 fi
+echo ' '
 
 # Setting UID and/ or GID
 if [[ "$setgid" != "$(cat /etc/group | grep 'iobroker:' | cut -d':' -f3)" || "$setuid" != "$(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3)" ]]; then

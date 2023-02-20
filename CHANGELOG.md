@@ -3,7 +3,8 @@
 * upgrade node version to recommended node18  
 * rewrite of multihost setup handling
 * rewrite of custom objects and states db setup handling
-* extend logging and error handling
+* enhance initial packages install/ update
+* enhance logging and error handling
 * add volume instruction to dockerfile
 * add support for password protected custom objects and states db ([#306](https://github.com/buanet/ioBroker.docker/issues/306))
 * add restore command to maintenance script
