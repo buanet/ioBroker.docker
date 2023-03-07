@@ -52,12 +52,12 @@ RUN chmod 777 /opt/scripts/ \
 RUN mkdir -p /opt/scripts/.docker_config/ \
     && echo "starting" > /opt/scripts/.docker_config/.healthcheck \
     && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
-    && echo "ture" > /opt/.first_run \
+    && echo "true" > /opt/.first_run \
     # Run installer
     && curl -sL https://iobroker.net/install.sh | bash - \
     # Deleting UUID from build
     && iobroker unsetup -y \
-    && echo "ture" > /opt/iobroker/.fresh_install \
+    && echo "true" > /opt/iobroker/.fresh_install \
     # Backup initial ioBroker and userscript folder
     && tar -cf /opt/initial_iobroker.tar /opt/iobroker \
     && tar -cf /opt/initial_userscripts.tar /opt/userscripts \
