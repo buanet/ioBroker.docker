@@ -1,16 +1,19 @@
 ## Changelog
-### v8.0.0-beta.1 (20.02.2023)
-* upgrade node version to recommended node18  
-* rewrite of multihost setup handling
-* rewrite of custom objects and states db setup handling
-* enhance initial packages install/ update
-* enhance logging and error handling
-* add volume instruction to dockerfile
-* add support for password protected custom objects and states db ([#306](https://github.com/buanet/ioBroker.docker/issues/306))
-* add support for redis sentinel ([#311](https://github.com/buanet/ioBroker.docker/issues/311))
-* add restore command to maintenance script
-* add database connection check at startup 
-* remove initial restore feature
+
+### v8.0.0 (coming soon)
+* enhance dockerfile, reduce image size ([#323](https://github.com/buanet/ioBroker.docker/issues/323))
+* v8.0.0-beta.1 (20.02.2023)
+  * upgrade node version to recommended node18  
+  * rewrite of multihost setup handling
+  * rewrite of custom objects and states db setup handling
+  * enhance initial packages install/ update
+  * enhance logging and error handling
+  * add volume instruction to dockerfile
+  * add support for password protected custom objects and states db ([#306](https://github.com/buanet/ioBroker.docker/issues/306))
+  * add support for redis sentinel ([#311](https://github.com/buanet/ioBroker.docker/issues/311))
+  * add restore command to maintenance script
+  * add database connection check at startup 
+  * remove initial restore feature
 
 ### v7.2.0 (12.12.2022)
 * update docs

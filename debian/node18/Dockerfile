@@ -12,6 +12,10 @@ LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# Copy scripts
+COPY scripts /opt/scripts
+COPY userscripts /opt/userscripts
+
 # Install prerequisites (including node) and generating locales
 RUN apt-get update && apt-get install -y \
     apt-utils \
@@ -38,18 +42,14 @@ RUN apt-get update && apt-get install -y \
     # Generating locales
     && sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
     && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
-    && locale-gen
-
-# Create directorys and copy scripts
-COPY scripts /opt/scripts
-COPY userscripts /opt/userscripts
-RUN chmod 777 /opt/scripts/ \
+    && locale-gen \
+    # Change permissions for scripts
+    && chmod 777 /opt/scripts/ \
     && chmod 777 /opt/userscripts/ \
     && chmod +x /opt/scripts/*.sh \
-    && chmod +x /opt/userscripts/*.sh
-
-# Prepare and install ioBroker
-RUN mkdir -p /opt/scripts/.docker_config/ \
+    && chmod +x /opt/userscripts/*.sh \
+    # Prepare
+    && mkdir -p /opt/scripts/.docker_config/ \
     && echo "starting" > /opt/scripts/.docker_config/.healthcheck \
     && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
     && echo "true" > /opt/.first_run \
