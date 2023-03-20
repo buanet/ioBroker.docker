@@ -1,23 +1,29 @@
 <img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
-[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/r/buanet/iobroker)
-[![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/r/buanet/iobroker)
-[![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/r/buanet/iobroker)<br>
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/buanet/ioBroker.docker/build-debian-image-latest.yml?branch=main)](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-latest.yml)
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
-[![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)<br>
+[![Pre-Release)](https://img.shields.io/github/v/tag/buanet/ioBroker.docker?include_prereleases&label=pre-release)](https://github.com/buanet/ioBroker.docker/releases)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/buanet/ioBroker.docker/build-debian-image-latest.yml?branch=main)](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-latest.yml)
+[![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)
+[![Github Pull Requests](https://img.shields.io/github/issues-pr/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/pulls)
+[![GitHub Discussions](https://img.shields.io/github/discussions/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/discussions)<br>
+[![Arch](https://img.shields.io/badge/arch-amd64%20%7C%20arm32v7%20%7C%20arm64v8-blue)](https://hub.docker.com/repository/docker/buanet/iobroker)
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
+[![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
 [![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
+[![GitHub forks](https://img.shields.io/github/forks/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/network)
+[![GitHub stars](https://img.shields.io/github/stars/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/stargazers)
 [![License](https://img.shields.io/github/license/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue?style=flat)](https://paypal.me/buanet)
 
 # Important note
 
-New major image versions (e.g. v4, v5, v6) always include a new major version of node! This might lead to issues when you update your ioBroker container by simply recreating it from the new major version image! To avoid having trouble with recompiling adapters, it is recommended to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the new [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
+New major image versions (e.g. v6, v7, v8) always include a new major version of node! Although js-controller should handle this kind of upgrade fine, in some cases this still results in problems with some adapters. To avoid having trouble with this major version upgrades, it is always a good move to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
 
 # Quick reference
 
 * Maintained by: [buanet](https://github.com/buanet) and [ioBroker](https://github.com/ioBroker)
-* Where to get support: [ioBroker Forum](https://forum.iobroker.net/), [ioBroker Discord Channel](https://discord.gg/HwUCwsH)
+* Where to get support: [ioBroker forum](https://forum.iobroker.net/), [Discord channel](https://discord.gg/HwUCwsH), [Telegram channel](https://t.me/+Xfjuou6-LztkOTBi), [Facebook group](https://www.facebook.com/groups/440499112958264) 
 * Where to report issues: [Github Repository Issues](https://github.com/buanet/ioBroker.docker/issues)
 * Supported architectures: amd64, arm32v7, arm64v8
 * Changelog: [Github Repository Changelog](https://github.com/buanet/ioBroker.docker/blob/main/CHANGELOG.md)
@@ -26,16 +32,15 @@ New major image versions (e.g. v4, v5, v6) always include a new major version of
 
 # Supported tags
 
-It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[X]` tag instead.
+It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[major_version]` tag instead.
+
+### Node 18 versions
+* [`v8.0.0`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`v8.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`v8.0.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`v8.0.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`latest-v8`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile)
 
 ### Node 16 versions
-* [`v7.2.0`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`latest-v7`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile)
+* [`v7.2.0`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`latest-v7`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile)
 * [`v7.1.2`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile)
 * [`v7.0.1`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile), [`v7.0.1-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile), [`v7.0.1-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile), [`v7.0.1-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile)
-
-### Node 14 versions
-* [`v6.1.0`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`v6.1.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile), [`latest-v6`](https://github.com/buanet/ioBroker.docker/blob/v6.1.0/debian/node14/Dockerfile)
-* [`v6.0.0`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile), [`v6.0.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v6.0.0/debian/node14/Dockerfile)
 
 # What is ioBroker?
 
@@ -91,33 +96,37 @@ You could use environment variables to auto configure your ioBroker container on
 ### Configure ioBroker application:
 
 * `IOB_ADMINPORT` (optional, default: 8081) Set ioBroker adminport on startup
-* `IOB_BACKITUP_EXTDB` (optional) Set "true" for backing up external databases in ioBroker backitup adapter (Make sure your have read the [docs](https://docs.buanet.de/iobroker-docker-image/docs/#backup))
-* `IOB_MULTIHOST` (optional) Set ioBroker "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)
-* `IOB_OBJECTSDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker objects db
-* `IOB_OBJECTSDB_PORT` (optional, default: 9001) Set port for ioBroker objects db
-* `IOB_OBJECTSDB_TYPE` (optional, default: jsonl) Set type of ioBroker objects db, could be "jsonl", "file" (deprecated) or "redis" ([not officially supported](https://github.com/ioBroker/ioBroker#databases)).
-* `IOB_STATESDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker states db
-* `IOB_STATESDB_PORT` (optional, default: 9000) Set port for ioBroker states db
+* `IOB_BACKITUP_EXTDB` (optional) Set `true` for backing up external databases in ioBroker backitup adapter (Make sure your have read the [docs](https://docs.buanet.de/iobroker-docker-image/docs/#backup))
+* `IOB_MULTIHOST` (optional) Set "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)
+* `IOB_OBJECTSDB_TYPE` (optional, default: jsonl) Set type of ioBroker objects db, could be "jsonl", "file" (deprecated) or "redis"
+* `IOB_OBJECTSDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker objects db, supports comma separated list for Redis Sentinel Cluster
+* `IOB_OBJECTSDB_PORT` (optional, default: 9001) Set port for ioBroker objects db, supports comma separated list for Redis Sentinel Cluster
+* `IOB_OBJECTSDB_PASS` (optional) Set authentication for Redis db connection
+* `IOB_OBJECTSDB_NAME` (optional, default: mymaster) Set name for Redis Sentinel CLuster db
 * `IOB_STATESDB_TYPE` (optional, default: jsonl) Set type of ioBroker states db, could be "jsonl", "file" (deprecated) or "redis"
+* `IOB_STATESDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker states db, supports comma separated list for Redis Sentinel Cluster
+* `IOB_STATESDB_PORT` (optional, default: 9000) Set port for ioBroker states db, supports comma separated list for Redis Sentinel Cluster
+* `IOB_STATESDB_PASS` (optional, default: 9000) Set authentication for Redis db connection
+* `IOB_STATESDB_NAME` (optional, default: mymaster) Set name for Redis Sentinel cluster db
 
 ### Activate special features: 
 
-* `AVAHI` (optional) Set "true" to install and activate avahi-daemon for supporting yahka-adapter
-* `ZWAVE` (optional) Set "true" to install openzwave to support zwave-adapter
+* `AVAHI` (optional) Set `true` to install and activate avahi-daemon for supporting yahka adapter
+* `ZWAVE` (optional) Set `true` to install openzwave to support zwave adapter
 
 ### Configure environment:
 
-* `DEBUG` (optional) Set "true" to get extended logging messages on container startup
+* `DEBUG` (optional) Set `true` to get extended logging messages on container startup
 * `LANG` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
 * `LANGUAGE` (optional, default: de_DE:de) The following locales are pre-generated: de_DE:de, en_US:en
 * `LC_ALL` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
-* `OFFLINE_MODE` (optional) Set "true" if your container has no or limited internet connection
-* `PACKAGES` (optional) Install additional linux packages to your container, packages should be separated by whitespace like this: "package1 package2 package3".
+* `OFFLINE_MODE` (optional) Set `true` if your container has no or limited internet connection
+* `PACKAGES` (optional) Install additional linux packages to your container, packages should be separated by whitespace like this: `package1 package2 package3`.
 * `PERMISSION_CHECK` (optional, default: true) Set "false" to skip checking and correcting all relevant permissions on container startup (Use at own risk!!!)
 * `SETGID` (default: 1000) In some cases it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host
 * `SETUID` (default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host
 * `TZ` (optional, default: Europe/Berlin) Specifies the time zone, could be all valid Linux timezones
-* `USBDEVICES` (optional) Set relevant permissions on mounted devices like "/dev/ttyACM0" (inside the container), for more than one device separate with ";"
+* `USBDEVICES` (optional) Set relevant permissions on mounted devices like `/dev/ttyACM0` (inside the container), for more than one device separate with ";"
 
 ## Notes about Docker networks
 

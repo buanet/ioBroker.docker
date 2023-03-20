@@ -1,6 +1,8 @@
 ## Changelog
 
-### v8.0.0 (coming soon)
+### v8.0.0 (20.03.2023)
+* update readme and docs
+* remove manifests
 * enhance dockerfile, reduce image size ([#323](https://github.com/buanet/ioBroker.docker/issues/323))
 * v8.0.0-beta.1 (20.02.2023)
   * upgrade node version to recommended node18  

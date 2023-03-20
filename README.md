@@ -3,18 +3,19 @@
  <img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
-[![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/buanet/ioBroker.docker?include_prereleases&label=pre-release)](https://github.com/buanet/ioBroker.docker/releases)
+[![Pre-Release)](https://img.shields.io/github/v/tag/buanet/ioBroker.docker?include_prereleases&label=pre-release)](https://github.com/buanet/ioBroker.docker/releases)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/buanet/ioBroker.docker/build-debian-image-latest.yml?branch=main)](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-latest.yml)
 [![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)
+[![Github Pull Requests](https://img.shields.io/github/issues-pr/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/pulls)
 [![GitHub Discussions](https://img.shields.io/github/discussions/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/discussions)<br>
 [![Arch](https://img.shields.io/badge/arch-amd64%20%7C%20arm32v7%20%7C%20arm64v8-blue)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/buanet/iobroker/latest?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Pulls](https://img.shields.io/docker/pulls/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)
 [![Docker Stars](https://img.shields.io/docker/stars/buanet/iobroker?style=flat)](https://hub.docker.com/repository/docker/buanet/iobroker)<br>
-[![License](https://img.shields.io/github/license/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Source](https://img.shields.io/badge/source-github-blue?style=flat)](https://github.com/buanet/ioBroker.docker)
 [![GitHub forks](https://img.shields.io/github/forks/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/network)
 [![GitHub stars](https://img.shields.io/github/stars/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/stargazers)
+[![License](https://img.shields.io/github/license/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue?style=flat)](https://paypal.me/buanet)
 
 The code provided in this repo is used to automatically generate the official Docker Image for ioBroker.
@@ -35,7 +36,7 @@ You can find some basic information about the image amd how to run it on the [Do
 
 ### Is there a more detailed documentation?
 
-You can find a detailed documentation of the image on the new [docs page](https://docs.buanet.de/iobroker-docker-image/docs/). 
+You can find a detailed documentation of the image at [docs.buanet.de](https://docs.buanet.de/iobroker-docker-image/docs/). 
 
 ### Where can I pull the image?
 
@@ -50,6 +51,7 @@ If you have any questions or need help please visit the ioBroker community:
 * [ioBroker forum](https://forum.iobroker.net/)
 * [Discord channel](https://discord.gg/Ne3y6fUac3)
 * [Facebook group](https://www.facebook.com/groups/440499112958264/)
+* [Telegram channel](https://t.me/+Xfjuou6-LztkOTBi)
 
 ### How to report an issue or request a feature?
 
@@ -66,7 +68,7 @@ If you want to get the newest features and changes feel free to use/ test the be
 
 The easiest way to support this project is to leave me some likes/ stars on Github and Docker hub!<br>
 If you want to give something back to the community, feel free to take a look into the [open issues](https://github.com/buanet/ioBroker.docker/issues) or the [ioBroker forum thread](http://forum.iobroker.net/viewtopic.php?f=17&t=5089) and help me answering questions, fixing bugs or adding new features!<br>
-If that doesn't work for you and you want to buy me a beer instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/pp_logo.png" height="15" width="15"></a><br>
+If that doesn't work for you and you want to buy me a pizza instead, you can do this here: <a href="https://www.paypal.me/buanet" target="_blank"><img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/pp_logo.png" height="15" width="15"></a><br>
 Thank you!
 
 ## :memo: Changelog
