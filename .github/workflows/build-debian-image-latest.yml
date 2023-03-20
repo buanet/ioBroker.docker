@@ -38,8 +38,8 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
           mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # amd64
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node16/Dockerfile > ./debian/node16/Dockerfile.tmp 
-          mv -f ./debian/node16/Dockerfile.tmp ./debian/node16/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" ./debian/node18/Dockerfile > ./debian/node18/Dockerfile.tmp 
+          mv -f ./debian/node18/Dockerfile.tmp ./debian/node18/Dockerfile
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2.1.0
@@ -65,7 +65,7 @@ jobs:
         uses: docker/build-push-action@v4.0.0
         with:
           context: ./debian
-          file: ./debian/node16/Dockerfile
+          file: ./debian/node18/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           tags: |
