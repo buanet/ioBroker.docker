@@ -52,6 +52,16 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
+      - name: Extract metadata (tags, labels)
+        id: metadata
+        uses: docker/metadata-action@v4.3.0
+        with:
+          images: |
+            buanet/iobroker
+            ghcr.io/buanet/iobroker
+          tags: |
+            type=raw,value=dev
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
         with:
@@ -59,10 +69,13 @@ jobs:
           file: ./debian/node18/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
-          tags: |
-            buanet/iobroker:dev,
-            ghcr.io/buanet/iobroker:dev
-          provenance: false
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          # tags: |
+          #  buanet/iobroker:dev,
+          #  ghcr.io/buanet/iobroker:dev
+          #provenance: false
+          #outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Officical Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
       - name: Delete untagged images from GitHub Container Registry
         uses: actions/github-script@v6.4.1
