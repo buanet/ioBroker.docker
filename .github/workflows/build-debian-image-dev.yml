@@ -53,7 +53,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build Docker image
-        uses: docker/build-push-action@v4.0.0
+        uses: docker/build-push-action@v3
         with:
           context: ./debian
           file: ./debian/node18/Dockerfile
@@ -62,6 +62,7 @@ jobs:
           tags: |
             buanet/iobroker:dev,
             ghcr.io/buanet/iobroker:dev
+          provenance: false
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v6
