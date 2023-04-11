@@ -242,7 +242,16 @@ restore_iobroker() {
   #chown -R $setuid:$setgid /opt/iobroker/backup
 
   echo -n "Restoring ioBroker... "
+  set +e
   bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
+  return=$?
+  set -e
+  if [[ "$return" -ne 0 ]]; then
+    echo "Failed."
+    echo "For more details see \"/opt/iobroker/log/restore.log\"."
+    echo "Please check backup file location and permissions and try again." 
+    return 1
+  fi
   echo 'Done.'
   echo ' '
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"

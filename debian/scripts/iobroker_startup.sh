@@ -352,10 +352,20 @@ else
     adminhostname=$(bash iobroker object get "$admininstance" --pretty | grep -oP '(?<="host": ")[^"]*')
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" "$adminhostname"; fi
   else
-    echo "There was a problem detecting the admin instance of your iobroker."
-    echo "Make sure the ioBroker installation you use has an admin instance or try again with a fresh installation and restore your configuration."
-    echo "For more details see https://docs.buanet.de/iobroker-docker-image/docs/#restore"
-    stop_on_error
+    set +e
+    admininstance=$(bash iobroker list instances | grep 'disabled' | grep -m 1 -o 'system.adapter.admin..')
+    set -e
+    if [[ "$admininstance" != "" ]]; then
+      if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is disabled."; fi 
+      if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" "$admininstance"; fi 
+      adminhostname=$(bash iobroker object get "$admininstance" --pretty | grep -oP '(?<="host": ")[^"]*')
+      if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" "$adminhostname"; fi
+    else
+      echo "There was a problem detecting the admin instance of your iobroker."
+      echo "Make sure the ioBroker installation you use has an admin instance or try again with a fresh installation and restore your configuration."
+      echo "For more details see https://docs.buanet.de/iobroker-docker-image/docs/#restore"
+      stop_on_error
+    fi
   fi
   # check hostname
   if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" ]]; then
