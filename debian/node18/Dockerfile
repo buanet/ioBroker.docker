@@ -1,7 +1,7 @@
 FROM debian:bullseye-slim
 
 LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
-      org.opencontainers.image.description="Officical Docker image for ioBroker smarthome software (https://www.iobroker.net)" \
+      org.opencontainers.image.description="Official Docker image for ioBroker smarthome software (https://www.iobroker.net)" \
       org.opencontainers.image.documentation="https://github.com/buanet/ioBroker.docker#readme" \
       org.opencontainers.image.authors="André Germann <info@buanet.de>" \
       org.opencontainers.image.url="https://github.com/buanet/ioBroker.docker" \
