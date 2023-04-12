@@ -52,60 +52,45 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
+      - name: Extract metadata (tags, labels)
+        id: metadata
+        uses: docker/metadata-action@v4.3.0
+        with:
+          images: |
+            buanet/iobroker
+            ghcr.io/buanet/iobroker
+          tags: |
+            type=raw,value=dev
+          labels: |
+            org.opencontainers.image.title=Official ioBroker Docker Image
+            org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
+            org.opencontainers.image.documentation=https://github.com/buanet/ioBroker.docker#readme
+            org.opencontainers.image.authors=André Germann <info@buanet.de>
+            org.opencontainers.image.url=https://github.com/buanet/ioBroker.docker
+            org.opencontainers.image.source=https://github.com/buanet/ioBroker.docker
+            org.opencontainers.image.base.name=docker.io/library/debian:bullseye-slim
+            org.opencontainers.image.version=${{ env.VERSION }}
+            org.opencontainers.image.created=${{ env.DATI }}
+
       - name: Build and push Docker image
-        env:
-          DOCKER_BUILDKIT: 1
-        run: |
-          # Build the Docker image for all platforms
-          docker buildx build --push --platform linux/amd64,linux/arm64,linux/arm/v7 -t ghcr.io/buanet/iobroker:dev -f ./debian/node18/Dockerfile ./debian
-          
-          # Build manifest for dev-amd64
-          echo $(docker manifest inspect ghcr.io/buanet/iobroker:dev) | jq -r '.manifests[] | select(.platform.architecture == "amd64") | .digest'
-          docker manifest create ghcr.io/buanet/iobroker:dev-amd64 \
-            ghcr.io/buanet/iobroker@$(echo $(docker manifest inspect ghcr.io/buanet/iobroker:dev) | jq -r '.manifests[] | select(.platform.architecture == "amd64") | .digest')
-
-          # Push the Docker manifest to the registry
-          docker manifest push ghcr.io/buanet/iobroker:dev-amd64
-
-#      - name: Extract metadata (tags, labels)
-#        id: metadata
-#        uses: docker/metadata-action@v4.3.0
-#        with:
-#          images: |
-#            buanet/iobroker
-#            ghcr.io/buanet/iobroker
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: ./debian
+          file: ./debian/node18/Dockerfile
+          push: true
+          platforms: |
+            linux/amd64
+            linux/arm/v7
+            linux/arm64/v8
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
 #          tags: |
-#            type=raw,value=dev
-#          labels: |
-#            org.opencontainers.image.title=Official ioBroker Docker Image
-#            org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
-#            org.opencontainers.image.documentation=https://github.com/buanet/ioBroker.docker#readme
-#            org.opencontainers.image.authors=André Germann <info@buanet.de>
-#            org.opencontainers.image.url=https://github.com/buanet/ioBroker.docker
-#            org.opencontainers.image.source=https://github.com/buanet/ioBroker.docker
-#            org.opencontainers.image.base.name=docker.io/library/debian:bullseye-slim
-#            org.opencontainers.image.version=${{ env.VERSION }}
-#            org.opencontainers.image.created=${{ env.DATI }}
-
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v4.0.0
-#        with:
-#          context: ./debian
-#          file: ./debian/node18/Dockerfile
-#          push: true
-#          platforms: |
-#            linux/amd64
-#            linux/arm/v7
-#            linux/arm64/v8
-#          tags: ${{ steps.metadata.outputs.tags }}
-#          labels: ${{ steps.metadata.outputs.labels }}
-##          tags: |
-##            buanet/iobroker:dev,
-##            ghcr.io/buanet/iobroker:dev
-#          provenance: false
-#          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
+#            buanet/iobroker:dev,
+#            ghcr.io/buanet/iobroker:dev
+          provenance: false
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Delete untagged images from GitHub Container Registry
         uses: actions/github-script@v6.4.1
@@ -125,4 +110,4 @@ jobs:
         env:
           OWNER: buanet
           PACKAGE_NAME: iobroker
-          PER_PAGE: 100      
+          PER_PAGE: 100
