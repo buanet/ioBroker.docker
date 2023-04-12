@@ -52,25 +52,25 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Extract metadata (tags, labels)
-        id: metadata
-        uses: docker/metadata-action@v4.3.0
-        with:
-          images: |
-            buanet/iobroker
-            ghcr.io/buanet/iobroker
-          tags: |
-            type=raw,value=dev
-          labels: |
-            org.opencontainers.image.title=Official ioBroker Docker Image
-            org.opencontainers.image.description=Officical Docker image for ioBroker smarthome software (https://www.iobroker.net)
-            org.opencontainers.image.documentation=https://github.com/buanet/ioBroker.docker#readme
-            org.opencontainers.image.authors=André Germann <info@buanet.de>
-            org.opencontainers.image.url=https://github.com/buanet/ioBroker.docker
-            org.opencontainers.image.source=https://github.com/buanet/ioBroker.docker
-            org.opencontainers.image.base.name=docker.io/library/debian:bullseye-slim
-            org.opencontainers.image.version=${{ env.VERSION }}
-            org.opencontainers.image.created=${{ env.DATI }}
+#      - name: Extract metadata (tags, labels)
+#        id: metadata
+#        uses: docker/metadata-action@v4.3.0
+#        with:
+#          images: |
+#            buanet/iobroker
+#            ghcr.io/buanet/iobroker
+#          tags: |
+#            type=raw,value=dev
+#          labels: |
+#            org.opencontainers.image.title=Official ioBroker Docker Image
+#            org.opencontainers.image.description=Officical Docker image for ioBroker smarthome software (https://www.iobroker.net)
+#            org.opencontainers.image.documentation=https://github.com/buanet/ioBroker.docker#readme
+#            org.opencontainers.image.authors=André Germann <info@buanet.de>
+#            org.opencontainers.image.url=https://github.com/buanet/ioBroker.docker
+#            org.opencontainers.image.source=https://github.com/buanet/ioBroker.docker
+#            org.opencontainers.image.base.name=docker.io/library/debian:bullseye-slim
+#            org.opencontainers.image.version=${{ env.VERSION }}
+#            org.opencontainers.image.created=${{ env.DATI }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
@@ -79,11 +79,17 @@ jobs:
           file: ./debian/node18/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
-          tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
-          # tags: |
-          #  buanet/iobroker:dev,
-          #  ghcr.io/buanet/iobroker:dev
+          # tags: ${{ steps.metadata.outputs.tags }}
+          # labels: ${{ steps.metadata.outputs.labels }}
+          tags: |
+            buanet/iobroker:dev,
+            buanet/iobroker:dev-amd64,
+            buanet/iobroker:dev-armv7,
+            buanet/iobroker:dev-arm64v8,
+            ghcr.io/buanet/iobroker:dev,
+            ghcr.io/buanet/iobroker:dev-amd64,
+            ghcr.io/buanet/iobroker:dev-armv7,
+            ghcr.io/buanet/iobroker:dev-arm64v8
           provenance: false
           outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Officical Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
