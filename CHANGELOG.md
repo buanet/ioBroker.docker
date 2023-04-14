@@ -1,6 +1,6 @@
 ## Changelog
 
-### v8.1.0-beta.1 (coming soon)
+### v8.1.0-beta.1 (14.04.2023)
 * enhance github actions
 * enhance log output of maintenance script on restore ([#333](https://github.com/buanet/ioBroker.docker/issues/333))
 * allow iobroker admin to be disabled at startup ([#332](https://github.com/buanet/ioBroker.docker/issues/332))
