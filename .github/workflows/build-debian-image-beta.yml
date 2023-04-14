@@ -64,12 +64,20 @@ jobs:
           context: ./debian
           file: ./debian/node18/Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
+          platforms: |
+            linux/amd64
+            linux/arm/v7
+            linux/arm64/v8
           tags: |
             buanet/iobroker:beta,
             buanet/iobroker:${{ env.version }},
             ghcr.io/buanet/iobroker:beta,
             ghcr.io/buanet/iobroker:${{ env.version }}
+          provenance: false
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v6

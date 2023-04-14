@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v8.1.0-beta.1 (coming soon)
+* enhance github actions
 * enhance log output of maintenance script on restore ([#333](https://github.com/buanet/ioBroker.docker/issues/333))
 * allow iobroker admin to be disabled at startup ([#332](https://github.com/buanet/ioBroker.docker/issues/332))
 * allow deletion of objects and states db password with value "none" ([#306](https://github.com/buanet/ioBroker.docker/issues/306))
