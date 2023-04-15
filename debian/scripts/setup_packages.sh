@@ -14,7 +14,7 @@ export DEBIAN_FRONTEND=noninteractive
 check_package_preq() {
   # check for influx packages
   if [[ "$i" == "influxdb" || "$i" == "influxdb2-cli" ]]; then
-    # add influxdata repo
+    # add influxdata repo keys
     wget -qO- https://repos.influxdata.com/influxdata-archive_compat.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg > /dev/null
     echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https://repos.influxdata.com/debian stable main' | sudo tee /etc/apt/sources.list.d/influxdata.list
   fi
