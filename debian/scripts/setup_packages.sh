@@ -43,21 +43,14 @@ if [[ "$1" == "-install" ]]; then
     if [[ "$(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed")" -eq 0 ]]; then
       echo -n "$i is not installed. Installing... "
       check_package_preq >> /opt/scripts/setup_packages.log 2>&1
+      apt-get -q -y install "$i" >> /opt/scripts/setup_packages.log 2>&1
       return=$?
       if [[ "$return" -ne 0 ]]; then
         echo "Failed."
         echo "For more details see \"/opt/scripts/setup_packages.log\"."
         echo ' '
       else
-        DEBIAN_FRONTEND=noninteractive apt-get -q -y install "$i" >> /opt/scripts/setup_packages.log 2>&1
-        return1=$?
-        if [[ "$return1" -ne 0 ]]; then
-          echo "Failed."
-          echo "For more details see \"/opt/scripts/setup_packages.log\"."
-          echo ' '
-        else
         echo "Done."
-        fi
       fi
     else
       echo "$i is already installed."

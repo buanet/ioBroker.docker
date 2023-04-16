@@ -146,6 +146,7 @@ if [[ -f /opt/.first_run ]]; then
 #    echo "$packages" > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
   fi
+  echo ' '
   # Register maintenance script
   echo -n 'Registering maintenance script as command... '
   echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
