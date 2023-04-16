@@ -39,13 +39,11 @@ if [[ "$1" == "-install" ]]; then
   echo ' '
   apt-get -q update >> /opt/scripts/setup_packages.log 2>&1
   check_package_validity
-  for i in $packages; do
-    if [[ "$(dpkg-query -W -f='${Status}' "$i" 2>/dev/null | grep -c "ok installed")" -eq 0 ]]; then
+  for i in "$packages"; do
+    if ! dpkg -s "$i" >/dev/null 2>&1; then
       echo -n "$i is not installed. Installing... "
       check_package_preq >> /opt/scripts/setup_packages.log 2>&1
-      apt-get -q -y install "$i" >> /opt/scripts/setup_packages.log 2>&1
-      return=$?
-      if [[ "$return" -ne 0 ]]; then
+      if ! apt-get -q -y install "$i" >> /opt/scripts/setup_packages.log 2>&1; then
         echo "Failed."
         echo "For more details see \"/opt/scripts/setup_packages.log\"."
         echo ' '
@@ -59,10 +57,10 @@ if [[ "$1" == "-install" ]]; then
 elif [[ "$1" == "-update" ]]; then
   echo -n "Updating Linux packages on first run... "
   apt-get -q update >> /opt/scripts/setup_packages.log 2>&1
-  return=$?
-  apt-get -q -y upgrade >> /opt/scripts/setup_packages.log 2>&1
   return1=$?
-  if [[ "$return" -ne 0 || "$return1" -ne 0 ]]; then
+  apt-get -q -y upgrade >> /opt/scripts/setup_packages.log 2>&1
+  return2=$?
+  if [[ "$return1" -ne 0 || "$return2" -ne 0 ]]; then
     echo "Failed."
     echo "For more details see \"/opt/scripts/setup_packages.log\"."
     echo "Make sure the container has internet access to get the latest package updates."
