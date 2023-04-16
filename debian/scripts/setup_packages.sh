@@ -17,22 +17,26 @@ check_package_preq() {
     # add influxdata repo keys
     wget -qO- https://repos.influxdata.com/influxdata-archive_compat.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg > /dev/null
     echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https://repos.influxdata.com/debian stable main' | sudo tee /etc/apt/sources.list.d/influxdata.list
+    apt-get -q update >> /opt/scripts/setup_packages.log 2>&1
   fi
 }
 check_package_validity() {
+  # check string for double spaces
+  while echo "$packages" | grep -q '  '; do
+    packages=$(echo "$packages" | sed 's/  / /g')
+  done
   # remove packages when "influxdb" AND "influxdb2-cli"
   if echo "$packages" | grep -qw "influxdb" && echo "$packages" | grep -qw "influxdb2-cli"; then
     echo "PACKAGES includes influxdb AND influxdb2-cli."
     echo "As installing both packages together is not possible, they will be skipped."
     packages=$(echo "$packages" | sed 's/influxdb2-cli//g;s/influxdb//g')
+    # check string for double spaces again
+    while echo "$packages" | grep -q '  '; do
+      packages=$(echo "$packages" | sed 's/  / /g')
+    done
     if [[ $debug == "true" ]]; then echo "[DEBUG] New list of packages: ""$packages"; fi
     echo ' '
   fi
-  # check string for double spaces
-  while echo "$packages" | grep -q '  '; do
-    # remove double spaces
-    packages=$(echo "$packages" | sed 's/  / /g')
-  done
 }
 
 if [[ "$1" == "-install" ]]; then
@@ -46,7 +50,6 @@ if [[ "$1" == "-install" ]]; then
       if ! apt-get -q -y install "$i" >> /opt/scripts/setup_packages.log 2>&1; then
         echo "Failed."
         echo "For more details see \"/opt/scripts/setup_packages.log\"."
-        echo ' '
       else
         echo "Done."
       fi
