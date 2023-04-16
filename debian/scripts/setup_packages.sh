@@ -24,8 +24,8 @@ check_package_validity() {
   if echo "$packages" | grep -qw "influxdb" && echo "$packages" | grep -qw "influxdb2-cli"; then
     echo "PACKAGES includes influxdb AND influxdb2-cli."
     echo "As installing both packages together is not possible, they will be skipped."
-    packages=$(echo "$packages" | sed 's/influxdb//g;s/influxdb2-cli//g')
-    if [[ $debug == "true" ]]; then echo "[DEBUG] New list of packages: = ""$packages"; fi
+    packages=$(echo "$packages" | sed 's/influxdb2-cli//g;s/influxdb//g')
+    if [[ $debug == "true" ]]; then echo "[DEBUG] New list of packages: ""$packages"; fi
     echo ' '
   fi
   # check string for double spaces
@@ -50,8 +50,8 @@ if [[ "$1" == "-install" ]]; then
         echo ' '
       else
         DEBIAN_FRONTEND=noninteractive apt-get -q -y install "$i" >> /opt/scripts/setup_packages.log 2>&1
-        return=$?
-        if [[ "$return" -ne 0 ]]; then
+        return1=$?
+        if [[ "$return1" -ne 0 ]]; then
           echo "Failed."
           echo "For more details see \"/opt/scripts/setup_packages.log\"."
           echo ' '
