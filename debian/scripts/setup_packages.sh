@@ -39,7 +39,7 @@ if [[ "$1" == "-install" ]]; then
   echo ' '
   apt-get -q update >> /opt/scripts/setup_packages.log 2>&1
   check_package_validity
-  for i in "$packages"; do
+  for i in $packages; do
     if ! dpkg -s "$i" >/dev/null 2>&1; then
       echo -n "$i is not installed. Installing... "
       check_package_preq >> /opt/scripts/setup_packages.log 2>&1
