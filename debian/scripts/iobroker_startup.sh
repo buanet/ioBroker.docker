@@ -302,8 +302,8 @@ else
   stop_on_error
 fi
 
-# if restored a fresh install, runing "iob setup first" for database init, otherwise check database connection
-if [[ -f /opt/iobroker/.fresh_install ]]; then 
+# if restored a fresh install, running "iob setup first" for database init (but not on slaves!), otherwise check database connection
+if [[ -f /opt/iobroker/.fresh_install && "$multihost" != "slave" ]]; then
   echo -n "Initializing a fresh installation of ioBroker... "
   set +e
   bash iob setup first > /opt/iobroker/log/iob_setup_first.log 2>&1
