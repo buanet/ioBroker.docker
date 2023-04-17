@@ -99,7 +99,13 @@ set_objectsdb_port() {
   fi
 }
 set_objectsdb_pass() {
-  if [[ "$objectsdbpass" != "$(jq -r '.objects.options.auth_pass' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
+  if [[ "$objectsdbpass" == "none" ]]; then
+    echo "IOB_OBJECTSDB_PASS is available but value is set to \"none\"."
+    echo -n "Removing password of objects db... "
+      jq '.objects.options.auth_pass = null' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
+      write_iobroker_json
+    echo 'Done.'
+  elif [[ "$objectsdbpass" != "$(jq -r '.objects.options.auth_pass' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_OBJECTSDB_PASS is available but value is different from detected ioBroker installation."
     echo -n "Setting password of objects db... "
       jq --arg value "$objectsdbpass" '.objects.options.auth_pass = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
@@ -188,7 +194,13 @@ set_statesdb_port() {
   fi
 }
 set_statesdb_pass() {
-  if [[ "$statesdbpass" != "$(jq -r '.states.options.auth_pass' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
+  if [[ "$statesdbpass" == "none" ]]; then
+    echo "IOB_STATESDB_PASS is available but value is set to \"none\"."
+    echo -n "Removing password of states db... "
+      jq '.states.options.auth_pass = null' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
+      write_iobroker_json
+    echo 'Done.'
+  elif [[ "$statesdbpass" != "$(jq -r '.states.options.auth_pass' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_STATESDB_PASS is available but value is different from detected ioBroker installation."
     echo -n "Setting password of states db... "
       jq --arg value "$statesdbpass" '.states.options.auth_pass = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
