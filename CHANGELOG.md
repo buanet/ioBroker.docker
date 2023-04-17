@@ -1,5 +1,8 @@
 ## Changelog
 
+### v8.0.1 (17.04.2023)
+* fix calling of "iob setup first" on slaves ([#335](https://github.com/buanet/ioBroker.docker/issues/335)) 
+
 ### v8.0.0 (20.03.2023)
 * update readme and docs
 * remove manifests
