@@ -1,4 +1,4 @@
-##### Note: The image provided as [iobroker/iobroker](https://hub.docker.com/r/iobroker/iobroker) is a duplicate of [buanet/iobroker](https://hub.docker.com/r/buanet/iobroker) 
+##### Note: The image provided as [iobroker/iobroker](https://hub.docker.com/r/iobroker/iobroker) is a mirror of [buanet/iobroker](https://hub.docker.com/r/buanet/iobroker) 
  
 <img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
@@ -37,10 +37,11 @@ New major image versions (e.g. v6, v7, v8) always include a new major version of
 It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[major_version]` tag instead.
 
 ### Node 18 versions
-* [`v8.0.0`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`v8.0.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`v8.0.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`v8.0.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`latest-v8`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile)
+* [`v8.0.1`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`latest-v8`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile)
+* [`v8.0.0`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile)
 
 ### Node 16 versions
-* [`v7.2.0`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`v7.2.0-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`latest-v7`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile)
+* [`v7.2.0`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile), [`latest-v7`](https://github.com/buanet/ioBroker.docker/blob/v7.2.0/debian/node16/Dockerfile)
 * [`v7.1.2`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile), [`v7.1.2-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.1.2/debian/node16/Dockerfile)
 * [`v7.0.1`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile), [`v7.0.1-amd64`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile), [`v7.0.1-arm32v7`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile), [`v7.0.1-arm64v8`](https://github.com/buanet/ioBroker.docker/blob/v7.0.1/debian/node16/Dockerfile)
 
