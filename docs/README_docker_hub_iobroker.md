@@ -1,4 +1,4 @@
-##### Note: The image provided as [iobroker/iobroker](https://hub.docker.com/r/iobroker/iobroker) is a duplicate of [buanet/iobroker](https://hub.docker.com/r/buanet/iobroker) 
+##### Note: The image provided as [iobroker/iobroker](https://hub.docker.com/r/iobroker/iobroker) is a mirror of [buanet/iobroker](https://hub.docker.com/r/buanet/iobroker) 
  
 <img src="https://github.com/buanet/ioBroker.docker/raw/main/docs/img/iobroker_logo.png" width="600" title="ioBroker Logo">
 
