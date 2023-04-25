@@ -75,9 +75,6 @@ jobs:
             ghcr.io/buanet/iobroker:${{ env.version }}
           provenance: false
           outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v6
