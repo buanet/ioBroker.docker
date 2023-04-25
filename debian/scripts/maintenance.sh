@@ -38,6 +38,11 @@ maintenance_enabled() {
   [[ -f "$healthcheck" && "$(cat "$healthcheck")" == maintenance ]]
 }
 
+# check status starting
+check_starting() {
+  [[ -f "$healthcheck" && "$(cat "$healthcheck")" == starting ]]
+}
+
 # display maintenance status
 maintenance_status() {
   if maintenance_enabled; then
@@ -221,6 +226,8 @@ restart_container() {
 # restore iobroker
 restore_iobroker() {
   echo 'You are now going to perform a restore of your iobroker.'
+  echo 'During the restore process, the container will automatically switch into maintenance mode and stop ioBroker.'
+  echo 'Depending on the restart policy, your container will be stopped or restarted automatically after the restore.'
 
   if [[ "$autoconfirm" != yes ]]; then
     local reply
@@ -235,11 +242,17 @@ restore_iobroker() {
     echo 'This command was already confirmed by the -y or --yes option.'
   fi
 
-  echo -n 'Stopping ioBroker...'
-  stop_iob
+  if check_starting > /dev/null; then
+    echo "Startup script is still running."
+    echo "Please check container log and wait until ioBroker is sucessfully started."
+    echo "Then try again."
+    return 1
+  fi
 
-  # fixing permission errors during restore
-  #chown -R $setuid:$setgid /opt/iobroker/backup
+  if ! maintenance_enabled > /dev/null; then
+    autoconfirm=yes
+    enable_maintenance
+  fi
 
   echo -n "Restoring ioBroker... "
   set +e
@@ -263,8 +276,8 @@ restore_iobroker() {
   echo "!!!!  You can view installation process by taking a look at ioBroker log.   !!!!"
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   sleep 10
-  echo 'Container will be stopped or restarted in 5 seconds...'
-  sleep 5
+  echo 'Container will be stopped or restarted in 10 seconds...'
+  sleep 10
   echo 'stopping' > "$healthcheck"
   pkill -u root
 }

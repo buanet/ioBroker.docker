@@ -1,6 +1,8 @@
 ## Changelog
 
 ### v8.1.0-beta.2 (coming soon)
+* prohibit restore when startup script is still running
+* extend time before restart after restore is done
 * v8.1.0-beta.1 (14.04.2023)
   * enhance github actions
   * enhance log output of maintenance script on restore ([#333](https://github.com/buanet/ioBroker.docker/issues/333))
