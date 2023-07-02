@@ -33,7 +33,7 @@ jobs:
           mv -f ./debian/node20/Dockerfile.tmp ./debian/node20/Dockerfile
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2.1.0
+        uses: docker/setup-qemu-action@v2.2.0
 
       - name: Set up Docker Buildx
         id: buildx
