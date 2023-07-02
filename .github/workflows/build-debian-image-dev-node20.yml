@@ -52,8 +52,8 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
-      - name: Build and push Docker image (node20)
-        uses: docker/build-push-action@v4.0.0
+      - name: Build Docker image (node20)
+        uses: docker/build-push-action@v4.1.1
         with:
           context: ./debian
           file: ./debian/node20/Dockerfile
