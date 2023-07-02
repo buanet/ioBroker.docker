@@ -39,37 +39,42 @@ jobs:
           mv -f ./debian/node20/Dockerfile.tmp ./debian/node20/Dockerfile
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2.1.0
+        uses: docker/setup-qemu-action@v2.2.0
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2.5.0
+        uses: docker/setup-buildx-action@v2.8.0
 
       - name: Login to DockerHub
-        uses: docker/login-action@v2.1.0
+        uses: docker/login-action@v2.2.0
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2.1.0
+        uses: docker/login-action@v2.2.0
         with:
           registry: ghcr.io
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build Docker image (node20)
-        uses: docker/build-push-action@v4.0.0
+        uses: docker/build-push-action@v4.1.1
         with:
           context: ./debian
           file: ./debian/node20/Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
+          platforms: |
+            linux/amd64
+            linux/arm/v7
+            linux/arm64/v8
           tags: |
             buanet/iobroker:beta-node20,
             buanet/iobroker:${{ env.version }}-node20,
             ghcr.io/buanet/iobroker:beta-node20,
             ghcr.io/buanet/iobroker:${{ env.version }}-node20
+          provenance: false
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
       - name: Delete untagged images from GitHub packages
         uses: actions/github-script@v6

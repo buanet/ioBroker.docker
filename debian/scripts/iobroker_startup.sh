@@ -143,9 +143,10 @@ if [[ -f /opt/.first_run ]]; then
     echo "PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation."
   elif [[ "$packages" != "" ]]; then
     echo "PACKAGES is set. Installing the following additional Linux packages: ""$packages"
-    echo "$packages" > /opt/scripts/.docker_config/.packages
+#    echo "$packages" > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
   fi
+  echo ' '
   # Register maintenance script
   echo -n 'Registering maintenance script as command... '
   echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc

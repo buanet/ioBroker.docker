@@ -1,5 +1,15 @@
 ## Changelog
 
+### v8.1.0-beta.2 (coming soon)
+* prohibit restore when startup script is still running
+* extend time before restart after restore is done
+* influx data repo will be added automatically when PACKAGES contains influxdb or influxdb2-cli package
+* v8.1.0-beta.1 (14.04.2023)
+  * enhance github actions
+  * enhance log output of maintenance script on restore ([#333](https://github.com/buanet/ioBroker.docker/issues/333))
+  * allow iobroker admin to be disabled at startup ([#332](https://github.com/buanet/ioBroker.docker/issues/332))
+  * allow deletion of objects and states db password with value "none" ([#306](https://github.com/buanet/ioBroker.docker/issues/306))
+
 ### v8.0.1 (17.04.2023)
 * fix calling of "iob setup first" on slaves ([#335](https://github.com/buanet/ioBroker.docker/issues/335)) 
 
