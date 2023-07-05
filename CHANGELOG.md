@@ -1,9 +1,13 @@
 ## Changelog
 
-### v8.1.0-beta.2 (coming soon)
-* prohibit restore when startup script is still running
-* extend time before restart after restore is done
-* influx data repo will be added automatically when PACKAGES contains influxdb or influxdb2-cli package
+### v8.1.0-beta.3 (05.07.2023)
+* fix issue with js-controller ui upgrade
+* fix small issues in maintenance script
+* update action workflows
+* v8.1.0-beta.2 (26.04.2023)
+  * prohibit restore when startup script is still running
+  * extend time before restart after restore is done
+  * influx data repo will be added automatically when PACKAGES contains influxdb or influxdb2-cli package
 * v8.1.0-beta.1 (14.04.2023)
   * enhance github actions
   * enhance log output of maintenance script on restore ([#333](https://github.com/buanet/ioBroker.docker/issues/333))
