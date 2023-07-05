@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v8.1.0-beta.3 (05.07.2023)
+* fix permission issue for restart container as iobroker user
 * fix issue with js-controller ui upgrade
 * fix small issues in maintenance script
 * update action workflows

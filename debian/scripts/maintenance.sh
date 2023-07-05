@@ -104,7 +104,7 @@ disable_maintenance() {
 
   echo 'Deactivating maintenance mode and forcing container to stop or restart...'
   echo 'stopping' > "$healthcheck"
-  pkill -u root
+  gosu root pkill -u root
   echo 'Done.'
 }
 
@@ -141,7 +141,7 @@ upgrade_jscontroller() {
   echo 'Container will be stopped or restarted in 5 seconds...'
   sleep 5
   echo 'stopping' > "$healthcheck"
-  pkill -u root
+  gosu root pkill -u root
 }
 
 # stop iobroker and wait until all processes stopped or pkill_timeout is reached
@@ -208,7 +208,7 @@ restart_container() {
   echo 'Container will be stopped or restarted in 5 seconds...'
   sleep 5
   echo 'stopping' > "$healthcheck"
-  pkill -u root
+  gosu root pkill -u root
 }
 
 # restore iobroker
@@ -265,7 +265,7 @@ restore_iobroker() {
   echo 'Container will be stopped or restarted in 10 seconds...'
   sleep 10
   echo 'stopping' > "$healthcheck"
-  pkill -u root
+  gosu root pkill -u root
 }
 
 # parsing commands and options
