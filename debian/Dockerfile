@@ -1,5 +1,7 @@
-FROM debian:bullseye-slim
+# Set container base image
+FROM ${BASEIMAGE}
 
+# Set container labels
 LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.description="Official Docker image for ioBroker smarthome software (https://www.iobroker.net)" \
       org.opencontainers.image.documentation="https://github.com/buanet/ioBroker.docker#readme" \
@@ -10,14 +12,17 @@ LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.created="${DATI}"
 
+# Set container environments
 ENV DEBIAN_FRONTEND noninteractive
 
-# Copy scripts
+# Create directorys and copy scripts
 COPY scripts /opt/scripts
 COPY userscripts /opt/userscripts
 
-# Install prerequisites (including node) and generating locales
-RUN apt-get update && apt-get install -y \
+# Installation process
+RUN apt-get update && apt-get upgrade -y --no-install-recommends \
+    # ioBroker prerequisites
+    && apt-get install -y --no-install-recommends \
     apt-utils \
     cifs-utils \
     curl \
@@ -34,11 +39,13 @@ RUN apt-get update && apt-get install -y \
     tzdata \
     udev \
     wget \
-    # Install node
-    && curl -sL https://deb.nodesource.com/setup_20.x | bash \
+    # Install node.js
+    && curl -sL https://deb.nodesource.com/setup_${NODE}.x | bash - \
     && apt-get update && apt-get install -y nodejs \
-    # Install node-gyp
-    && npm install -g node-gyp \
+    # Install latest npm version
+    && npm install -g npm \
+    # Install node-gyp - Node.js native addon build tool
+    && npm install --production -g node-gyp \
     # Generating locales
     && sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
     && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
@@ -69,12 +76,9 @@ RUN apt-get update && apt-get install -y \
     && chown root:iobroker /usr/sbin/gosu \
     && chmod +s /usr/sbin/gosu \
     # Clean up installation cache
-    && apt-get autoclean -y \
-    && apt-get autoremove \
-    && apt-get clean \
-    && rm -rf /tmp/* /var/tmp/* \
-    && rm -rf /root/.cache/* /root/.npm/* \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && apt-get autoclean -y && apt-get autoremove && apt-get clean \
+    && rm -rf /tmp/* /var/tmp/* /root/.cache/* /root/.npm/* /var/lib/apt/lists/*
 
 # Setting up default ENVs
 ENV DEBIAN_FRONTEND="teletype" \
