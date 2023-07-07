@@ -1,4 +1,4 @@
-name: Check ioBroker versions
+name: Check Baseimage and ioBroker versions
 
 on:
   schedule:
@@ -14,6 +14,21 @@ jobs:
         with:
           repository: 'buanet/ioBroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}
+
+      - name: Get and write version
+        id: version
+        run: |
+          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
+          VERSION="$(cat .github/settings/.stable-version)"
+          echo "myimage=iobroker/iobroker:$LATESTRELEASE" >> $GITHUB_ENV
+          echo "baseimage=library/debian:bullseye-slim" >> $GITHUB_ENV
+
+      - name: Docker Baseimage Checker
+        id: baseimage
+        uses: mkumatag/container-image-updater-action@v1.0.5
+        with:
+          base-image: '${{ env.baseimage }}'
+          image: '${{ env.myimage }}'
 
       - name: Fetch ioBroker versions
         run: |
@@ -43,7 +58,7 @@ jobs:
           git push
 
       - name: Trigger build debian latest (buanet)
-        if: steps.git-check.outputs.modified == 'true'
+        if: steps.baseimage.outputs.needs-update == 'true' || steps.git-check.outputs.modified == 'true'
         uses: benc-uk/workflow-dispatch@v1.2
         with:
           workflow: Build debian latest (buanet)
@@ -51,7 +66,7 @@ jobs:
           token: ${{ secrets.ACTIONS_PAT }}
 
       - name: Trigger build debian latest (iobroker)
-        if: steps.git-check.outputs.modified == 'true'
+        if: steps.baseimage.outputs.needs-update == 'true' || steps.git-check.outputs.modified == 'true'
         uses: benc-uk/workflow-dispatch@v1.2
         with:
           workflow: Build debian latest (iobroker)
