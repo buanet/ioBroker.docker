@@ -10,27 +10,27 @@ pkill_timeout=10      # timeout for stopping iobroker in seconds
 
 # display help text
 display_help() {
-  echo 'This script helps you manage your ioBroker container!'
-  echo ''
+  echo "This script helps you manage your ioBroker container!"
+  echo " "
   echo "Usage: maintenance [ COMMAND ] [ OPTION ]"
   echo "       maint [ COMMAND ] [ OPTION ]"
   echo "       m [ COMMAND ] [ OPTION ]"
-  echo ''
-  echo 'COMMANDS'
-  echo '------------------'
-  echo '       status     > reports the current state of maintenance mode'
-  echo '       on         > switches mantenance mode ON'
-  echo '       off        > switches mantenance mode OFF and stops or restarts the container'
-  echo '       upgrade    > puts the container to maintenance mode and upgrades ioBroker'
-  echo '       restart    > stops iobroker and stops or restarts the container'
-  echo '       restore    > stops iobroker and restores the last backup'
-  echo '       help       > shows this help'
-  echo ''
-  echo 'OPTIONS'
-  echo '------------------'
-  echo '       -y|--yes   > confirms the used command without asking'
-  echo '       -h|--help  > shows this help'
-  echo ''
+  echo " "
+  echo "COMMANDS"
+  echo "------------------"
+  echo "       status     > reports the current state of maintenance mode"
+  echo "       on         > switches mantenance mode ON"
+  echo "       off        > switches mantenance mode OFF and stops or restarts the container"
+  echo "       upgrade    > puts the container to maintenance mode and upgrades ioBroker"
+  echo "       restart    > stops iobroker and stops or restarts the container"
+  echo "       restore    > stops iobroker and restores the last backup"
+  echo "       help       > shows this help"
+  echo " "
+  echo "OPTIONS"
+  echo "------------------"
+  echo "       -y|--yes   > confirms the used command without asking"
+  echo "       -h|--help  > shows this help"
+  echo " "
 }
 
 # check maintenance enabled
@@ -46,35 +46,35 @@ check_starting() {
 # display maintenance status
 maintenance_status() {
   if maintenance_enabled; then
-    echo 'Maintenance mode is turned ON.'
+    echo "Maintenance mode is turned ON."
   else
-    echo 'Maintenance mode is turned OFF.'
+    echo "Maintenance mode is turned OFF."
   fi
 }
 
 # enable maintenance mode
 enable_maintenance() {
   if maintenance_enabled; then
-    echo 'Maintenance mode is already turned ON.'
+    echo "Maintenance mode is already turned ON."
     return
   fi
 
   if [[ "$killbyname" == yes ]]; then
     # undocumented option, only for use with backitup restore scripts
     # stops iobroker by terminating js-controller process by name (the old way)
-    echo 'This command will activate maintenance mode and stop js-controller.'
-    echo 'Activating maintenance mode...'
-    echo 'maintenance' > "$healthcheck"
+    echo "This command will activate maintenance mode and stop js-controller."
+    echo "Activating maintenance mode..."
+    echo "maintenance" > "$healthcheck"
     sleep 1
-    echo 'Done.'
+    echo "Done."
     echo -n 'Stopping ioBroker...'
     pkill -u iobroker -f iobroker.js-controller
     sleep 5
-    echo 'Done.'
+    echo "Done."
     return
   fi
 
-  echo 'You are now going to stop ioBroker and activate maintenance mode for this container.'
+  echo "You are now going to stop ioBroker and activate maintenance mode for this container."
 
   if [[ "$autoconfirm" != yes ]]; then
     local reply
@@ -86,13 +86,13 @@ enable_maintenance() {
       return 1
     fi
   else
-    echo 'This command was already confirmed by the -y or --yes option.'
+    echo "This command was already confirmed by the -y or --yes option."
   fi
 
-  echo 'Activating maintenance mode...'
-  echo 'maintenance' > "$healthcheck"
+  echo "Activating maintenance mode..."
+  echo "maintenance" > "$healthcheck"
   sleep 1
-  echo 'Done.'
+  echo "Done."
   echo -n 'Stopping ioBroker...'
   stop_iob
 }
@@ -100,12 +100,12 @@ enable_maintenance() {
 # disable maintenance mode
 disable_maintenance() {
   if ! maintenance_enabled; then
-    echo 'Maintenance mode is already turned OFF.'
+    echo "Maintenance mode is already turned OFF."
     return
   fi
 
-  echo 'You are now going to deactivate maintenance mode for this container.'
-  echo 'Depending on the restart policy, your container will be stopped or restarted immediately.'
+  echo "You are now going to deactivate maintenance mode for this container."
+  echo "Depending on the restart policy, your container will be stopped or restarted immediately."
 
   if [[ "$autoconfirm" != yes ]]; then
     local reply
@@ -117,21 +117,21 @@ disable_maintenance() {
       return 1
     fi
   else
-    echo 'This command was already confirmed by the -y or --yes option.'
+    echo "This command was already confirmed by the -y or --yes option."
   fi
 
-  echo 'Deactivating maintenance mode and forcing container to stop or restart...'
-  echo 'stopping' > "$healthcheck"
+  echo "Deactivating maintenance mode and forcing container to stop or restart..."
+  echo "stopping" > "$healthcheck"
   pkill -u root
-  echo 'Done.'
+  echo "Done."
 }
 
 # upgrade js-controller
 upgrade_jscontroller() {
-  echo 'You are now going to upgrade your js-controller.'
-  echo 'As this will change data in /opt/iobroker, make sure you have a backup!'
-  echo 'During the upgrade process, the container will automatically switch into maintenance mode and stop ioBroker.'
-  echo 'Depending on the restart policy, your container will be stopped or restarted automatically after the upgrade.'
+  echo "You are now going to upgrade your js-controller."
+  echo "As this will change data in /opt/iobroker, make sure you have a backup!"
+  echo "During the upgrade process, the container will automatically switch into maintenance mode and stop ioBroker."
+  echo "Depending on the restart policy, your container will be stopped or restarted automatically after the upgrade."
 
   if [[ "$autoconfirm" != yes ]]; then
     local reply
@@ -143,7 +143,7 @@ upgrade_jscontroller() {
       return 1
     fi
   else
-    echo 'This command was already confirmed by the -y or --yes option.'
+    echo "This command was already confirmed by the -y or --yes option."
   fi
 
   if ! maintenance_enabled > /dev/null; then
@@ -151,16 +151,16 @@ upgrade_jscontroller() {
     enable_maintenance
   fi
 
-  echo 'Upgrading js-controller...'
+  echo "Upgrading js-controller..."
   iobroker update
   sleep 1
   iobroker upgrade self
   sleep 1
-  echo 'Done.'
+  echo "Done."
 
-  echo 'Container will be stopped or restarted in 5 seconds...'
+  echo "Container will be stopped or restarted in 5 seconds..."
   sleep 5
-  echo 'stopping' > "$healthcheck"
+  echo "stopping" > "$healthcheck"
   pkill -u root
 }
 
@@ -182,24 +182,24 @@ stop_iob() {
   # pgrep exits with status 1 when there are no matches
   while pgrep -u iobroker > /dev/null; (( $? != 1 )); do
     if (($(date +%s) > timeout)); then
-      echo -e '\nTimeout reached. Killing remaining processes...'
+      echo -e "\nTimeout reached. Killing remaining processes..."
       pgrep --list-full -u iobroker
       pkill --signal SIGKILL -u iobroker
-      echo 'Done.'
+      echo "Done."
       return
     fi
 
-    echo -n '.'
+    echo -n "."
     sleep 1
   done
 
-  echo -e '\nDone.'
+  echo -e "\nDone."
 }
 
 # restart container
 restart_container() {
-  echo 'You are now going to call a restart of your container.'
-  echo 'Restarting will work depending on the configured restart policy.'
+  echo "You are now going to call a restart of your container."
+  echo "Restarting will work depending on the configured restart policy."
 
   if [[ "$autoconfirm" != yes ]]; then
     local reply
@@ -211,23 +211,23 @@ restart_container() {
       return 1
     fi
   else
-    echo 'This command was already confirmed by the -y or --yes option.'
+    echo "This command was already confirmed by the -y or --yes option."
   fi
 
-  echo -n 'Stopping ioBroker...'
+  echo -n "Stopping ioBroker..."
   stop_iob
 
-  echo 'Container will be stopped or restarted in 5 seconds...'
+  echo "Container will be stopped or restarted in 5 seconds..."
   sleep 5
-  echo 'stopping' > "$healthcheck"
+  echo "stopping" > "$healthcheck"
   pkill -u root
 }
 
 # restore iobroker
 restore_iobroker() {
-  echo 'You are now going to perform a restore of your iobroker.'
-  echo 'During the restore process, the container will automatically switch into maintenance mode and stop ioBroker.'
-  echo 'Depending on the restart policy, your container will be stopped or restarted automatically after the restore.'
+  echo "You are now going to perform a restore of your iobroker."
+  echo "During the restore process, the container will automatically switch into maintenance mode and stop ioBroker."
+  echo "Depending on the restart policy, your container will be stopped or restarted automatically after the restore."
 
   if [[ "$autoconfirm" != yes ]]; then
     local reply
@@ -239,7 +239,7 @@ restore_iobroker() {
       return 1
     fi
   else
-    echo 'This command was already confirmed by the -y or --yes option.'
+    echo "This command was already confirmed by the -y or --yes option."
   fi
 
   if check_starting > /dev/null; then
@@ -265,8 +265,8 @@ restore_iobroker() {
     echo "Please check backup file location and permissions and try again." 
     return 1
   fi
-  echo 'Done.'
-  echo ' '
+  echo "Done."
+  echo " "
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo "!!!!                             IMPORTANT NOTE                             !!!!"
   echo "!!!!      The maintenance script restored iobroker from a backup file.      !!!!"
@@ -276,9 +276,9 @@ restore_iobroker() {
   echo "!!!!  You can view installation process by taking a look at ioBroker log.   !!!!"
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   sleep 10
-  echo 'Container will be stopped or restarted in 10 seconds...'
+  echo "Container will be stopped or restarted in 10 seconds..."
   sleep 10
-  echo 'stopping' > "$healthcheck"
+  echo "stopping" > "$healthcheck"
   pkill -u root
 }
 
@@ -321,7 +321,7 @@ for arg in "$@"; do
       ;;
     *)
       >&2 echo "Unknown parameter: $arg"
-      >&2 echo 'Please try again or see help (help|-h|--help).'
+      >&2 echo "Please try again or see help (help|-h|--help)."
       exit 1
       ;;
   esac

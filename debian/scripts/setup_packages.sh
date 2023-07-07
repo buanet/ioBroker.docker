@@ -16,7 +16,7 @@ check_package_preq() {
   if [[ "$i" == "influxdb" || "$i" == "influxdb2-cli" ]]; then
     # add influxdata repo keys
     wget -qO- https://repos.influxdata.com/influxdata-archive_compat.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg > /dev/null
-    echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https://repos.influxdata.com/debian stable main' | sudo tee /etc/apt/sources.list.d/influxdata.list
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https://repos.influxdata.com/debian stable main" | sudo tee /etc/apt/sources.list.d/influxdata.list
     apt-get -q update >> /opt/scripts/setup_packages.log 2>&1
   fi
 }
@@ -35,12 +35,12 @@ check_package_validity() {
       packages=$(echo "$packages" | sed 's/  / /g')
     done
     if [[ $debug == "true" ]]; then echo "[DEBUG] New list of packages: ""$packages"; fi
-    echo ' '
+    echo " "
   fi
 }
 
 if [[ "$1" == "-install" ]]; then
-  echo ' '
+  echo " "
   apt-get -q update >> /opt/scripts/setup_packages.log 2>&1
   check_package_validity
   for i in $packages; do
@@ -69,7 +69,7 @@ elif [[ "$1" == "-update" ]]; then
     echo "Make sure the container has internet access to get the latest package updates."
     echo "This has no impact to the setup process. The script will continue."
   else
-    echo 'Done.'
+    echo "Done."
   fi
 else
   echo "No paramerter found!"
@@ -78,6 +78,7 @@ fi
 
 # Silent Cleanup
 apt-get -qq autoclean -y && apt-get -qq autoremove && apt-get -qq clean
-rm -rf /tmp/* /var/tmp/* && rm -rf /root/.cache/* && rm -rf /var/lib/apt/lists/* && rm -f /opt/scripts/.docker_config/.packages
+rm -rf /tmp/* /var/tmp/* /root/.cache/* /var/lib/apt/lists/*
+rm -f /opt/scripts/.packages /opt/scripts/.docker_config/.packages
 
 exit 0
