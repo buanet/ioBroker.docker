@@ -1,10 +1,12 @@
 ## Changelog
 
-### v8.1.0-beta.3 (05.07.2023)
-* fix permission issue for restart container as iobroker user
-* fix issue with js-controller ui upgrade
-* fix small issues in maintenance script
-* update action workflows
+### v8.1.0-beta.4 (coming soon)
+* fix running maintenance script as iobroker
+* v8.1.0-beta.3 (05.07.2023)
+  * fix permission issue for restart container as iobroker user
+  * fix issue with js-controller ui upgrade
+  * fix small issues in maintenance script
+  * update action workflows
 * v8.1.0-beta.2 (26.04.2023)
   * prohibit restore when startup script is still running
   * extend time before restart after restore is done

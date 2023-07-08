@@ -149,9 +149,9 @@ if [[ -f /opt/.first_run ]]; then
   echo ' '
   # Register maintenance script
   echo -n 'Registering maintenance script as command... '
-  echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
-  echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
-  echo "alias m=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
+  echo "alias maintenance='/opt/scripts/maintenance.sh'" >> /etc/bash.bashrc
+  echo "alias maint='/opt/scripts/maintenance.sh'" >> /etc/bash.bashrc
+  echo "alias m='/opt/scripts/maintenance.sh'" >> /etc/bash.bashrc
   echo 'Done.'
 else
   echo "This is not the first run of this container. Skipping first run preparation."

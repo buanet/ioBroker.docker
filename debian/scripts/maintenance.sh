@@ -152,22 +152,20 @@ stop_iob() {
   pkill -u iobroker -f 'iobroker.js-controller[^/]*$'
   status=$?
   if (( status >= 2 )); then      # syntax error or fatal error
-    echo 'fatal error' #for logging 
     return 1
   fi
 
   if (( status == 1 )); then      # no processes matched
-    echo 'no process matched' #for logging
     return
   fi
 
   if [[ "$killbyname" != yes ]]; then
     # pgrep exits with status 1 when there are no matches
-    while pgrep -u iobroker > /dev/null; (( $? != 1 )); do
+    while pgrep -u iobroker -f 'io.' > /dev/null; (( $? != 1 )); do
       if (($(date +%s) > timeout)); then
         echo -e '\nTimeout reached. Killing remaining processes...'
         pgrep --list-full -u iobroker
-        pkill --signal SIGKILL -u iobroker
+        pkill --signal SIGKILL -u iobroker -f 'io.'
         echo 'Done.'
         return
       fi
