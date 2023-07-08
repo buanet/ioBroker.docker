@@ -63,7 +63,7 @@ enable_maintenance() {
     # undocumented option, only for use with backitup restore scripts
     # stops iobroker by terminating js-controller process by name (the old way)
     echo "This command will activate maintenance mode and stop js-controller."
-    echo "Activating maintenance mode..."
+    echo -n "Activating maintenance mode... "
     echo "maintenance" > "$healthcheck"
     sleep 1
     echo "Done."

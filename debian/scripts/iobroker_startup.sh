@@ -143,12 +143,11 @@ if [[ -f /opt/.first_run ]]; then
     echo "PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation."
   elif [[ "$packages" != "" ]]; then
     echo "PACKAGES is set. Installing the following additional Linux packages: ""$packages"
-    #echo "$packages" > /opt/scripts/.docker_config/.packages
       bash /opt/scripts/setup_packages.sh -install
   fi
   echo " "
   # Register maintenance script
-  echo -n "Registering maintenance script as command..."
+  echo -n "Registering maintenance script as command... "
   echo "alias maintenance=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
   echo "alias maint=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
   echo "alias m=\'/opt/scripts/maintenance.sh\'" >> /root/.bashrc
@@ -181,7 +180,7 @@ echo " "
 
 if [[ `find /opt/iobroker -type f | wc -l` -lt 1 ]]; then
   echo "There is no data detected in /opt/iobroker."
-  echo -n "Restoring initial ioBroker installation..."
+  echo -n "Restoring initial ioBroker installation... "
     tar -xf /opt/initial_iobroker.tar -C /
   echo "Done."
 elif [[ -f /opt/iobroker/iobroker ]]; then
@@ -193,7 +192,7 @@ elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -z
   echo "IoBroker will start with a fresh installation, while your backup file will be copied into the backup directory."
   echo "You will be able to restore your backup file manually by using the backitup adapter or the containers maintenance script."
   echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
-  echo ' '
+  echo " "
   echo -n "Copying backup file and restoring initial ioBroker installation... "
     mv /opt/iobroker/*.tar.gz /opt/
     tar -xf /opt/initial_iobroker.tar -C /
@@ -228,12 +227,12 @@ else
   echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
     chown -R "$setuid":"$setgid" /opt/iobroker
     chown -R "$setuid":"$setgid" /opt/scripts
-echo "Done."
+  echo "Done."
 fi
 echo " "
 
 # Backing up original iobroker-file and changing sudo to gosu
-echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu..."
+echo -n "Fixing \"sudo-bug\" by replacing sudo with gosu... "
   cp -a /opt/iobroker/iobroker /opt/iobroker/iobroker.bak
   chmod 755 /opt/iobroker/iobroker
   sed -i 's/sudo -H -u/gosu/g' /opt/iobroker/iobroker
@@ -371,7 +370,7 @@ else
   # check hostname
   if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" ]]; then
     echo "Hostname in ioBroker does not match the hostname of this container."
-    echo -n "Updating hostname to \"""$(hostname)""\"..."
+    echo -n "Updating hostname to \"""$(hostname)""\"... "
       bash iobroker host "$adminhostname"
     echo "Done."
     echo " "
@@ -435,7 +434,7 @@ if [[ "$adminport" != "" && "$multihost" != "slave" ]]; then
   if [[ "$adminport" != "$adminportold" ]]; then
     echo "IOB_ADMINPORT is set and does not match port configured in ioBroker."
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected Admin Port in ioBroker: " "$adminportold"; fi
-    echo "Setting Adminport to \"""$adminport""\"..."
+    echo "Setting Adminport to \"""$adminport""\"... "
       bash iobroker set "$admininstanceshort" --port "$adminport"
     echo "Done."
     echo " "
@@ -454,7 +453,7 @@ fi
 if [[ "$avahi" = "true" && "$offlinemode" = "true" ]]; then
   echo "AVAHI is \"true\", but OFFLINE_MODE is also \"true\". Skipping Avahi daemon setup."
 elif [[ "$avahi" = "true" ]]; then
-  echo "AVAHI is \"true\". Running setup script..."
+  echo "AVAHI is \"true\". Running setup script... "
     chmod 755 /opt/scripts/setup_avahi.sh
     bash /opt/scripts/setup_avahi.sh
   echo "Done."
@@ -465,7 +464,7 @@ fi
 if [[ "$zwave" = "true" && "$offlinemode" = "true" ]]; then
   echo "ZWAVE is \"true\", but OFFLINE_MODE is also \"true\". Skipping Z-Wave setup."
 elif [[ "$zwave" = "true" ]]; then
-  echo "ZWAVE is \"true\". Running setup script..."
+  echo "ZWAVE is \"true\". Running setup script... "
     chmod 755 /opt/scripts/setup_zwave.sh
     bash /opt/scripts/setup_zwave.sh
   echo "Done."    
@@ -504,13 +503,13 @@ if [[ $(find /opt/userscripts -type f | wc -l) -lt 1 ]]; then
 elif [[ -f /opt/userscripts/userscript_firststart.sh || -f /opt/userscripts/userscript_everystart.sh ]]; then
   if [[ -f /opt/userscripts/userscript_firststart.sh && -f /opt/.first_run ]]; then
     echo "Userscript for first start detected and this is the first start of a new container."
-    echo "Running userscript_firststart.sh..."
+    echo "Running userscript_firststart.sh... "
       chmod 755 /opt/userscripts/userscript_firststart.sh
       bash /opt/userscripts/userscript_firststart.sh
     echo "Done."
   fi
   if [[ -f /opt/userscripts/userscript_everystart.sh ]]; then
-    echo "Userscript for every start detected. Running userscript_everystart.sh..."
+    echo "Userscript for every start detected. Running userscript_everystart.sh... "
       chmod 755 /opt/userscripts/userscript_everystart.sh
       bash /opt/userscripts/userscript_everystart.sh
     echo "Done."
@@ -529,7 +528,7 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo "-----                    Step 5 of 5: ioBroker startup                     -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
-echo "Starting ioBroker..."
+echo "Starting ioBroker... "
 echo " "
 echo "##### #### ### ## # iobroker.js-controller log output # ## ### #### #####"
 
@@ -540,7 +539,7 @@ echo "running" > /opt/scripts/.docker_config/.healthcheck
 shut_down() {
   echo " "
   echo "Recived termination signal (SIGTERM)."
-  echo "Shutting down ioBroker..."
+  echo "Shutting down ioBroker... "
 
   local status timeout
 
@@ -558,13 +557,13 @@ shut_down() {
   # pgrep exits with status 1 when there are no matches
   while pgrep -u iobroker > /dev/null; (( $? != 1 )); do
     if (($(date +%s) > timeout)); then
-      echo -e '\nTimeout reached. Killing remaining processes...'
+      echo -e "\nTimeout reached. Killing remaining processes... "
       pkill --signal SIGKILL -u iobroker
       echo "Done. Have a nice day!"
       exit
     fi
 
-    echo -n '.'
+    echo -n "."
     sleep 1
   done
 
