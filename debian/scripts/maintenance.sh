@@ -59,41 +59,25 @@ enable_maintenance() {
     return
   fi
 
-  if [[ "$killbyname" == yes ]]; then
-    # undocumented option, only for use with backitup restore scripts
-    # stops iobroker by terminating js-controller process by name (the old way)
-    echo "This command will activate maintenance mode and stop js-controller."
-    echo -n "Activating maintenance mode... "
-    echo "maintenance" > "$healthcheck"
-    sleep 1
-    echo "Done."
-    echo -n 'Stopping ioBroker...'
-    pkill -u iobroker -f iobroker.js-controller
-    sleep 5
-    echo "Done."
-    return
-  fi
-
   echo "You are now going to stop ioBroker and activate maintenance mode for this container."
 
-  if [[ "$autoconfirm" != yes ]]; then
-    local reply
+  if [[ "$killbyname" != yes ]]; then
+    if [[ "$autoconfirm" != yes ]]; then
+      local reply
 
-    read -rp 'Do you want to continue [yes/no]? ' reply
-    if [[ "$reply" == y || "$reply" == Y || "$reply" == yes ]]; then
+      read -rp 'Do you want to continue [yes/no]? ' reply
+      if [[ "$reply" == y || "$reply" == Y || "$reply" == yes ]]; then
       : # continue
-    else
-      return 1
+      else
+        return 1
+      fi
     fi
-  else
-    echo "This command was already confirmed by the -y or --yes option."
   fi
 
   echo "Activating maintenance mode..."
   echo "maintenance" > "$healthcheck"
   sleep 1
-  echo "Done."
-  echo -n 'Stopping ioBroker...'
+  echo -n "Stopping ioBroker..."
   stop_iob
 }
 
@@ -116,13 +100,11 @@ disable_maintenance() {
     else
       return 1
     fi
-  else
-    echo "This command was already confirmed by the -y or --yes option."
   fi
 
   echo "Deactivating maintenance mode and forcing container to stop or restart..."
   echo "stopping" > "$healthcheck"
-  pkill -u root
+  gosu root pkill -u root
   echo "Done."
 }
 
@@ -142,8 +124,6 @@ upgrade_jscontroller() {
     else
       return 1
     fi
-  else
-    echo "This command was already confirmed by the -y or --yes option."
   fi
 
   if ! maintenance_enabled > /dev/null; then
@@ -161,7 +141,7 @@ upgrade_jscontroller() {
   echo "Container will be stopped or restarted in 5 seconds..."
   sleep 5
   echo "stopping" > "$healthcheck"
-  pkill -u root
+  gosu root pkill -u root
 }
 
 # stop iobroker and wait until all processes stopped or pkill_timeout is reached
@@ -169,7 +149,7 @@ stop_iob() {
   local status timeout
 
   timeout="$(date --date="now + $pkill_timeout sec" +%s)"
-  pkill -u iobroker -f iobroker.js-controller
+  pkill -u iobroker -f 'iobroker.js-controller[^/]*$'
   status=$?
   if (( status >= 2 )); then      # syntax error or fatal error
     return 1
@@ -179,19 +159,25 @@ stop_iob() {
     return
   fi
 
-  # pgrep exits with status 1 when there are no matches
-  while pgrep -u iobroker > /dev/null; (( $? != 1 )); do
-    if (($(date +%s) > timeout)); then
-      echo -e "\nTimeout reached. Killing remaining processes..."
-      pgrep --list-full -u iobroker
-      pkill --signal SIGKILL -u iobroker
-      echo "Done."
-      return
-    fi
-
-    echo -n "."
-    sleep 1
-  done
+  if [[ "$killbyname" != yes ]]; then
+    # pgrep exits with status 1 when there are no matches
+    while pgrep -u iobroker -f 'io.' > /dev/null; (( $? != 1 )); do
+      if (($(date +%s) > timeout)); then
+        echo -e "\nTimeout reached. Killing remaining processes..."
+        pgrep --list-full -u iobroker
+        pkill --signal SIGKILL -u iobroker -f 'io.'
+        echo "Done."
+        return
+      fi
+      echo -n "."
+      sleep 1
+    done
+  else
+    for ((i=0; i<3; i++)); do
+      sleep 1
+      echo -n "."
+    done
+  fi
 
   echo -e "\nDone."
 }
@@ -210,17 +196,17 @@ restart_container() {
     else
       return 1
     fi
-  else
-    echo "This command was already confirmed by the -y or --yes option."
   fi
 
-  echo -n "Stopping ioBroker..."
-  stop_iob
+  if ! maintenance_enabled > /dev/null; then
+    echo -n "Stopping ioBroker..."
+    stop_iob
+  fi
 
   echo "Container will be stopped or restarted in 5 seconds..."
   sleep 5
   echo "stopping" > "$healthcheck"
-  pkill -u root
+  gosu root pkill -u root
 }
 
 # restore iobroker
@@ -238,8 +224,6 @@ restore_iobroker() {
     else
       return 1
     fi
-  else
-    echo "This command was already confirmed by the -y or --yes option."
   fi
 
   if check_starting > /dev/null; then
@@ -279,7 +263,7 @@ restore_iobroker() {
   echo "Container will be stopped or restarted in 10 seconds..."
   sleep 10
   echo "stopping" > "$healthcheck"
-  pkill -u root
+  gosu root pkill -u root
 }
 
 # parsing commands and options
