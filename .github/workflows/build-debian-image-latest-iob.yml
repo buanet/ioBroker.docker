@@ -54,6 +54,19 @@ jobs:
           username: ${{ secrets.DOCKER_USER_IOB }}
           password: ${{ secrets.DOCKER_PASS_IOB }}
 
+      - name: Build for Testing
+        uses: docker/build-push-action@v4
+        with:
+          context: ./debian
+          file: ./debian/Dockerfile
+          load: true
+          tags: |
+            iobroker/iobroker:latest
+  
+      - name: Test Docker Container
+        run: |
+          docker run --rm iobroker/iobroker:latest
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.1.1
         with:

@@ -61,6 +61,19 @@ jobs:
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
 
+      - name: Build for Testing
+        uses: docker/build-push-action@v4
+        with:
+          context: ./debian
+          file: ./debian/Dockerfile
+          load: true
+          tags: |
+            buanet/iobroker:latest
+
+      - name: Test Docker Container
+        run: |
+          docker run --rm buanet/iobroker:latest
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.1.1
         with:
