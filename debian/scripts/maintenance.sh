@@ -153,9 +153,7 @@ stop_iob() {
   status=$?
   if (( status >= 2 )); then      # syntax error or fatal error
     return 1
-  fi
-
-  if (( status == 1 )); then      # no processes matched
+  elif (( status == 1 )); then      # no processes matched
     return
   fi
 
@@ -166,11 +164,11 @@ stop_iob() {
         echo -e "\nTimeout reached. Killing remaining processes..."
         pgrep --list-full -u iobroker
         pkill --signal SIGKILL -u iobroker -f 'io.'
-        echo "Done."
+        echo "\nDone."
         return
       fi
-      echo -n "."
       sleep 1
+      echo -n "."
     done
   else
     for ((i=0; i<3; i++)); do
@@ -179,7 +177,7 @@ stop_iob() {
     done
   fi
 
-  echo -e "\nDone."
+  echo -e "Done."
 }
 
 # restart container

@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v8.1.0-beta.4 (coming soon)
+* fix container restart in maintenance script 
 * fix running maintenance script as iobroker
 * v8.1.0-beta.3 (05.07.2023)
   * fix permission issue for restart container as iobroker user
