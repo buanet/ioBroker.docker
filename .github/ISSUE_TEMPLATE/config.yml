@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Did you read the docs?
+    url: https://docs.buanet.de/iobroker-docker-image/docs/
+    about: Please make sure you read the docs before submitting any issues. 
   - name: Questions?
     url: https://github.com/buanet/ioBroker.docker/discussions
-    about: Not sure about your issue? Ask your questions here! 
+    about: Ask your questions here! 
   - name: ioBroker Community Forum
     url: https://forum.iobroker.net/
     about: Need support? Check out our ioBroker Community Forum. 
