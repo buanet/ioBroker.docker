@@ -1,11 +1,11 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
-  - name: ioBroker Docker image discussions
+  - name: Discussions
     url: https://github.com/buanet/ioBroker.docker/discussions
-    about: You can ask your questions here. 
+    about: Ask your questions here. 
   - name: ioBroker Community Forum
     url: https://forum.iobroker.net/
+    about: Need support? Check out our ioBroker Forum. 
   - name: ioBroker Discord channel
     url: https://discord.gg/Ne3y6fUac3
-  - name: ioBroker Facebook group
-    url: https://www.facebook.com/groups/440499112958264/
+    about: Need support? Check out our ioBroker Discord channel.
