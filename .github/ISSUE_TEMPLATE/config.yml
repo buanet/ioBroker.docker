@@ -2,7 +2,7 @@ blank_issues_enabled: true
 contact_links:
   - name: ioBroker Docker image discussions
     url: https://github.com/buanet/ioBroker.docker/discussions
-#    about: You can ask your questions here. 
+    about: You can ask your questions here. 
   - name: ioBroker Community Forum
     url: https://forum.iobroker.net/
   - name: ioBroker Discord channel
