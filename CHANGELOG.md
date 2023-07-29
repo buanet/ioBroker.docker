@@ -1,8 +1,9 @@
 ## Changelog
 
-### v8.1.0-beta.4 (coming soon)
+### v8.1.0-beta.4 (29.07.2023)
 * fix container restart in maintenance script 
 * fix running maintenance script as iobroker
+* enhance quoting ([#357 by @dontobi](https://github.com/buanet/ioBroker.docker/pull/357))
 * v8.1.0-beta.3 (05.07.2023)
   * fix permission issue for restart container as iobroker user
   * fix issue with js-controller ui upgrade
