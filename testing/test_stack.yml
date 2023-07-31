@@ -1,0 +1,15 @@
+version: "3"
+services:
+  ##### IOBROKER #####
+  iobrokertest:
+    container_name: iobrokertest
+    image: buanet/iobroker:testing
+    hostname: iobrokertest
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - PACKAGES=nano
+      - DEBUG=true
+    volumes:
+      - /home/andre/tmp/docker/iobrokertest_data:/opt/iobroker
