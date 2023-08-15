@@ -12,10 +12,10 @@ jobs:
   update-docker-readme:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v3.5.3
 
     - name: Update Docker Hub Readme (buanet)
-      uses: peter-evans/dockerhub-description@v3
+      uses: peter-evans/dockerhub-description@v3.4.2
       with:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASS }}
@@ -24,7 +24,7 @@ jobs:
         readme-filepath: ./docs/README_docker_hub_buanet.md
 
     - name: Update Docker Hub Readme (iobroker)
-      uses: peter-evans/dockerhub-description@v3
+      uses: peter-evans/dockerhub-description@v3.4.2
       with:
         username: ${{ secrets.DOCKER_USER_IOB }}
         password: ${{ secrets.DOCKER_PASS_IOB }}

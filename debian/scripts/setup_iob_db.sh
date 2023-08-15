@@ -26,7 +26,7 @@ set_objectsdb_type() {
     echo -n "Setting type of objects db to \"""$objectsdbtype""\"... "
       jq --arg value "$objectsdbtype" '.objects.type = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
       write_iobroker_json
-    echo 'Done.'
+    echo "Done."
   else
     echo "IOB_OBJECTSDB_TYPE is available and value meets detected ioBroker installation."
   fi
@@ -38,7 +38,7 @@ set_objectsdb_host() {
       echo -n "Setting host of objects db to \"""$objectsdbhost""\"... "
         jq --arg value "$objectsdbhost" '.objects.host = ($value|split(","))' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "IOB_OBJECTSDB_HOST is available and value meets detected ioBroker installation."
     fi
@@ -48,7 +48,7 @@ set_objectsdb_host() {
         echo -n "Setting name of objects db to \"""$objectsdbname""\"... "
           jq --arg value "$objectsdbname" '.objects.sentinelName = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
           write_iobroker_json
-        echo 'Done.'
+        echo "Done."
       else
         echo "IOB_OBJECTSDB_NAME is available and value meets detected ioBroker installation."
       fi
@@ -58,7 +58,7 @@ set_objectsdb_host() {
         echo -n "Setting name of objects db to \"mymaster\"... "
           jq --arg value "mymaster" '.objects.sentinelName = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
           write_iobroker_json
-        echo 'Done.'
+        echo "Done."
       else
         echo "IOB_OBJECTSDB_NAME is not available but default value \"mymaster\" meets detected ioBroker installation.."
       fi
@@ -69,7 +69,7 @@ set_objectsdb_host() {
       echo -n "Setting host of objects db to \"""$objectsdbhost""\"... "
         jq --arg value "$objectsdbhost" '.objects.host = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "IOB_OBJECTSDB_HOST is available and value meets detected ioBroker installation."
     fi
@@ -82,7 +82,7 @@ set_objectsdb_port() {
       echo -n "Setting port of objects db to \"""$objectsdbport""\"... "
         jq --arg value "$objectsdbport" '.objects.port = ($value|split(","))' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "IOB_OBJECTSDB_PORT is available and value meets detected ioBroker installation."
     fi
@@ -92,7 +92,7 @@ set_objectsdb_port() {
       echo -n "Setting port of objects db to \"""$objectsdbport""\"... "
         jq --arg value "$objectsdbport" '.objects.port = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "IOB_OBJECTSDB_PORT is available and value meets detected ioBroker installation."
     fi
@@ -104,13 +104,13 @@ set_objectsdb_pass() {
     echo -n "Removing password of objects db... "
       jq '.objects.options.auth_pass = null' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
       write_iobroker_json
-    echo 'Done.'
+    echo "Done."
   elif [[ "$objectsdbpass" != "$(jq -r '.objects.options.auth_pass' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_OBJECTSDB_PASS is available but value is different from detected ioBroker installation."
     echo -n "Setting password of objects db... "
       jq --arg value "$objectsdbpass" '.objects.options.auth_pass = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
       write_iobroker_json
-    echo 'Done.'
+    echo "Done."
   else
   echo "IOB_OBJECTSDB_PASS is available and value meets detected ioBroker installation."
   fi
@@ -121,7 +121,7 @@ set_statesdb_type() {
     echo -n "Setting type of states db to \"""$statesdbtype""\"... "
       jq --arg value "$statesdbtype" '.states.type = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
       write_iobroker_json
-    echo 'Done.'
+    echo "Done."
   else
     echo "IOB_STATESDB_TYPE is available and value meets detected ioBroker installation."
   fi
@@ -133,7 +133,7 @@ set_statesdb_host() {
       echo -n "Setting host of states db to \"""$statesdbhost""\"... "
         jq --arg value "$statesdbhost" '.states.host = ($value|split(","))' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "IOB_STATESDB_HOST is available and value meets detected ioBroker installation."
     fi
@@ -143,7 +143,7 @@ set_statesdb_host() {
         echo -n "Setting name of states db to \"""$statesdbname""\"... "
           jq --arg value "$statesdbname" '.states.sentinelName = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
           write_iobroker_json
-        echo 'Done.'
+        echo "Done."
       else
         echo "IOB_STATESDB_NAME is available and value meets detected ioBroker installation."
       fi
@@ -153,7 +153,7 @@ set_statesdb_host() {
         echo -n "Setting name of states db to \"mymaster\"... "
           jq --arg value "mymaster" '.states.sentinelName = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
           write_iobroker_json
-        echo 'Done.'
+        echo "Done."
       else
         echo "IOB_STATESDB_NAME is not available but default value \"mymaster\" meets detected ioBroker installation.."
       fi
@@ -164,7 +164,7 @@ set_statesdb_host() {
       echo -n "Setting host of states db to \"""$statesdbhost""\"... "
         jq --arg value "$statesdbhost" '.states.host = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "IOB_STATESDB_HOST is available and value meets detected ioBroker installation."
     fi
@@ -177,7 +177,7 @@ set_statesdb_port() {
       echo -n "Setting port of states db to \"""$statesdbport""\"... "
         jq --arg value "$statesdbport" '.states.port = ($value|split(","))' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "IOB_STATESDB_PORT is available and value meets detected ioBroker installation."
     fi
@@ -187,7 +187,7 @@ set_statesdb_port() {
       echo -n "Setting port of states db to \"""$statesdbport""\"... "
         jq --arg value "$statesdbport" '.states.port = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "IOB_STATESDB_PORT is available and value meets detected ioBroker installation."
     fi
@@ -199,19 +199,19 @@ set_statesdb_pass() {
     echo -n "Removing password of states db... "
       jq '.states.options.auth_pass = null' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
       write_iobroker_json
-    echo 'Done.'
+    echo "Done."
   elif [[ "$statesdbpass" != "$(jq -r '.states.options.auth_pass' /opt/iobroker/iobroker-data/iobroker.json)" ]]; then
     echo "IOB_STATESDB_PASS is available but value is different from detected ioBroker installation."
     echo -n "Setting password of states db... "
       jq --arg value "$statesdbpass" '.states.options.auth_pass = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp
       write_iobroker_json
-    echo 'Done.'
+    echo "Done."
   else
     echo "IOB_STATESDB_PASS is available and value meets detected ioBroker installation."
   fi
 }
 config_error_output() {
-  echo ' '
+  echo " "
   echo "Something went wrong. Looks like at least one parameter defining the custom db connection was not set properly or is missing."
   echo "Please check your configuration and try again."
   echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
@@ -220,8 +220,8 @@ config_error_output() {
 # parameter check
 if [[ "$1" == "-master" ]]; then # setup master
   echo "IOB_MULTIHOST is available and set to \"master\"."
-  echo 'Done.'
-  echo ' '
+  echo "Done."
+  echo " "
   # multihost objects db
   if [[ "$objectsdbtype" != "" && "$objectsdbhost" != "" && "$objectsdbport" != "" ]]; then
     echo "Configuring custom objects db..."
@@ -229,15 +229,15 @@ if [[ "$1" == "-master" ]]; then # setup master
     set_objectsdb_host
     set_objectsdb_port
     if [[ "$objectsdbpass" != "" ]]; then set_objectsdb_pass; fi
-    echo 'Done.'
-    echo ' '
+    echo "Done."
+    echo " "
   elif [[ "$objectsdbtype" == "" && "$objectsdbhost" == "" && "$objectsdbport" == "" ]]; then
     echo "No custom objects db is set."
     if [[ "$(jq -r '.objects.host' /opt/iobroker/iobroker-data/iobroker.json)" != "0.0.0.0" ]]; then
       echo -n "Configuring default objects db to accept external connections... "
         jq --arg value "0.0.0.0" '.objects.host = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp 
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "Default objects db is accepting external connections."
     fi
@@ -257,15 +257,15 @@ if [[ "$1" == "-master" ]]; then # setup master
     set_statesdb_host
     set_statesdb_port
     if [[ "$statesdbpass" != "" ]]; then set_statesdb_pass; fi
-    echo 'Done.'
-    echo ' '
+    echo "Done."
+    echo " "
   elif [[ "$statesdbtype" == "" && "$statesdbhost" == "" && "$statesdbport" == "" ]]; then
     echo "No custom states db is set."
     if [[ "$(jq -r '.states.host' /opt/iobroker/iobroker-data/iobroker.json)" != "0.0.0.0" ]]; then
       echo -n "Configuring default states db to accept external connections... "
         jq --arg value "0.0.0.0" '.states.host = $value' /opt/iobroker/iobroker-data/iobroker.json > /opt/iobroker/iobroker-data/iobroker.json.tmp 
         write_iobroker_json
-      echo 'Done.'
+      echo "Done."
     else
       echo "Default states db is accepting external connections."
     fi
@@ -280,8 +280,8 @@ if [[ "$1" == "-master" ]]; then # setup master
   fi
 elif [[ "$1" == "-slave" ]]; then # setup slave
   echo "IOB_MULTIHOST is available and set to \"slave\"."
-  echo 'Done.'
-  echo ' '
+  echo "Done."
+  echo " "
   # multihost slave objects db connection
   if [[ "$objectsdbtype" != "" && "$objectsdbhost" != "" && "$objectsdbport" != "" ]]; then
     echo "Configuring objects db connection..."
@@ -289,8 +289,8 @@ elif [[ "$1" == "-slave" ]]; then # setup slave
     set_objectsdb_host
     set_objectsdb_port
     if [[ "$objectsdbpass" != "" ]]; then set_objectsdb_pass; fi
-    echo 'Done.'
-    echo ' '
+    echo "Done."
+    echo " "
   else
     if [[ "$debug" == "true" ]]; then
       echo "[DEBUG] IOB_OBJECTSDB_TYPE = ""$objectsdbtype"
@@ -307,8 +307,8 @@ elif [[ "$1" == "-slave" ]]; then # setup slave
     set_statesdb_host
     set_statesdb_port
     if [[ "$statesdbpass" != "" ]]; then set_statesdb_pass; fi
-    echo 'Done.'
-    echo ' '
+    echo "Done."
+    echo " "
   else
     if [[ "$debug" == "true" ]]; then
       echo "[DEBUG] IOB_STATESDB_TYPE = ""$statesdbtype"
@@ -325,8 +325,8 @@ elif [[ "$1" == "-objectsdb" ]]; then # setup objects db standalone
     set_objectsdb_host
     set_objectsdb_port
     if [[ "$objectsdbpass" != "" ]]; then set_objectsdb_pass; fi
-    echo 'Done.'
-    echo ' '
+    echo "Done."
+    echo " "
   else
     if [[ "$debug" == "true" ]]; then
     echo "[DEBUG] IOB_OBJECTSDB_TYPE = ""$objectsdbtype"
@@ -343,8 +343,8 @@ elif [[ "$1" == "-statesdb" ]]; then # setup states db standalone
     set_statesdb_host
     set_statesdb_port
     if [[ "$statesdbpass" != "" ]]; then set_statesdb_pass; fi
-    echo 'Done.'
-    echo ' '
+    echo "Done."
+    echo " "
   else
     if [[ "$debug" == "true" ]]; then
     echo "[DEBUG] IOB_STATESDB_TYPE = ""$statesdbtype"
