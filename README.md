@@ -51,7 +51,6 @@ If you have any questions or need help please visit the ioBroker community:
 * [ioBroker forum](https://forum.iobroker.net/)
 * [Discord channel](https://discord.gg/Ne3y6fUac3)
 * [Facebook group](https://www.facebook.com/groups/440499112958264/)
-* [Telegram channel](https://t.me/+Xfjuou6-LztkOTBi)
 
 ### How to report an issue or request a feature?
 
