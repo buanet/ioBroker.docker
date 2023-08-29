@@ -221,7 +221,7 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
 # Backing up original iobroker executable to fix sudo bug with gosu
-if [[ ! -f /opt/iobroker/iobroker.bak ]]; then
+if [[ -n $(cmp /opt/scripts/iobroker.sh /opt/iobroker/iobroker) ]]; then
   echo -n "Replacing ioBroker executable to fix sudo bug... "
   cp -a /opt/iobroker/iobroker /opt/iobroker/iobroker.bak
   cp -f /opt/scripts/iobroker.sh /opt/iobroker/iobroker
