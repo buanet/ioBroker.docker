@@ -1,5 +1,11 @@
 ## Changelog
 
+### v9.0.0-beta.1 (coming soon)
+* updating base image to debian 12 (bookworm)
+* improve security by avoiding running commands as root
+* integrate calling maintenance script into iobroker command
+* move container config files location
+
 ### v8.1.0-beta.4 (29.07.2023)
 * fix container restart in maintenance script 
 * fix running maintenance script as iobroker

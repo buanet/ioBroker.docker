@@ -7,17 +7,18 @@ LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.url="https://github.com/buanet/ioBroker.docker" \
       org.opencontainers.image.source="https://github.com/buanet/ioBroker.docker" \
       org.opencontainers.image.base.name="debian:bookworm-slim" \
-      org.opencontainers.image.version="v9.0.0-testing" \
-      org.opencontainers.image.created="00-00-00"
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.created="${DATI}"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Copy scripts
+# Copy files
 COPY scripts /opt/scripts
 COPY userscripts /opt/userscripts
 
-# Install prerequisites (including node) and generating locales
+# Set up ioBroker
 RUN apt-get update && apt-get upgrade -y \
+    # Install prerequisites
     && apt-get install -y \
     apt-utils \
     cifs-utils \
@@ -30,13 +31,12 @@ RUN apt-get update && apt-get upgrade -y \
     procps \
     python3 \
     python3-dev \
-    #sudo \
     tar \
     tzdata \
     udev \
     wget \
     # Install node
-    && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && curl -sL https://deb.nodesource.com/setup_${NODE}.x | bash - \
     && apt-get update && apt-get install -y nodejs \
     # Install node-gyp
     && npm install --production -g node-gyp \
@@ -52,7 +52,7 @@ RUN apt-get update && apt-get upgrade -y \
     # Prepare old .docker_config (needed until changed in iobroker)
     && mkdir /opt/scripts/.docker_config \
     && echo "v9.0.0-testing" > /opt/scripts/.docker_config/.thisisdocker \
-    # Run installer
+    # Run iobroker installer
     && curl -sL https://iobroker.net/install.sh | bash - \
     # Deleting UUID from build
     && iobroker unsetup -y \
@@ -78,7 +78,7 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get clean \
     && rm -rf /tmp/* /var/tmp/* /root/.cache/* /root/.npm/* /var/lib/apt/lists/*
 
-# Setting up default ENVs
+# Default environment variables
 ENV DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
@@ -87,7 +87,7 @@ ENV DEBIAN_FRONTEND="teletype" \
     SETUID=1000 \
     TZ="Europe/Berlin"
 
-# Expose default admin ui port
+# Default admin ui port
 EXPOSE 8081
 
 # Change work dir
@@ -97,7 +97,7 @@ WORKDIR /opt/iobroker/
 HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
     CMD ["/bin/bash", "-c", "/opt/scripts/healthcheck.sh"]
 
-# Volumes for persistent data
+# Volume for persistent data
 VOLUME ["/opt/iobroker"]
 
 # Run startup-script
