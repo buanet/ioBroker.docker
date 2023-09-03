@@ -28,6 +28,7 @@ RUN apt-get update && apt-get upgrade -y \
     gosu \
     iputils-ping \
     jq \
+    libatomic1 \
     locales \
     nfs-common \
     procps \
