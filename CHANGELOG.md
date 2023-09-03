@@ -1,7 +1,8 @@
 ## Changelog
 
 ### v9.0.0-beta.1 (coming soon)
-* updating base image to debian 12 (bookworm)
+* update nodejs setup process
+* update base image to debian 12 (bookworm)
 * improve security by avoiding running commands as root
 * integrate calling maintenance script into iobroker command
 * move container config files location

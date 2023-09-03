@@ -21,8 +21,10 @@ RUN apt-get update && apt-get upgrade -y \
     # Install prerequisites
     && apt-get install -y \
     apt-utils \
+    ca-certificates \
     cifs-utils \
     curl \
+    gnupg \
     gosu \
     iputils-ping \
     jq \
@@ -36,7 +38,9 @@ RUN apt-get update && apt-get upgrade -y \
     udev \
     wget \
     # Install node
-    && curl -sL https://deb.nodesource.com/setup_${NODE}.x | bash - \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
     && apt-get update && apt-get install -y nodejs \
     # Install node-gyp
     && npm install --production -g node-gyp \
