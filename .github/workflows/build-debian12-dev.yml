@@ -3,6 +3,11 @@ name: Build Debian 12 Image (dev)
 
 on:
   workflow_dispatch:
+    inputs:
+      node_version:
+        description: 'Node Version'
+        required: true
+        default: '${{ env.RECOMMENDED_NODE_VERSION }}'
 
 jobs:
   build-dev-image:
