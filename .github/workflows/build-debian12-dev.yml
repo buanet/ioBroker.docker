@@ -7,7 +7,7 @@ on:
       node_version:
         description: 'Node Version'
         required: true
-        default: ${{ env.RECOMMENDED_NODE_VERSION }}
+        default: ${{ vars.RECOMMENDED_NODE_VERSION }}
 
 jobs:
   build-dev-image:
