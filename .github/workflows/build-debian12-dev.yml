@@ -9,10 +9,13 @@ on:
         description: 'Which Node version should be used?'
         options:
           - 'Recommended Node version (default)'
-          - 'Experimental Node version' 
+          - 'Experimental Node version'
+          - 'Both Node versions'
 
 jobs:
-  build-dev-image:
+  build-with-recommended-node:
+    if: inputs.chose_node_version == 'Recommended Node version (default)' || inputs.chose_node_version == 'Both Node versions' 
+    name: Build image with recommended Node version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -22,13 +25,11 @@ jobs:
 
       - name: Set job variables
         run: |
-          NODE="18"
           VERSION="$(cat .VERSION)"
           MAJORVERSION="$(cat .VERSION | cut -c 1-2 | sed -r 's#^(.{0})#\1latest-#')"
           DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: $NODE"
-          echo "node=$NODE" >> $GITHUB_ENV
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
@@ -39,7 +40,7 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/$NODE/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -75,10 +76,18 @@ jobs:
           tags: |
             buanet/iobroker:dev,
             ghcr.io/buanet/iobroker:dev
+            buanet/iobroker:dev-node${{ vars.RECOMMENDED_NODE_VERSION }},
+            ghcr.io/buanet/iobroker:dev-node${{ vars.RECOMMENDED_NODE_VERSION }}
           provenance: false
           outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
-      - name: Delete untagged images from GitHub Container Registry
+  delete-untagged-images:
+    if: ${{ always() }}
+    needs: build-with-recommended-node
+    name: Delete untagged images from GitHub Container Registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete images
         uses: actions/github-script@v6.4.1
         with:
           github-token: ${{ secrets.PACKAGES_PASS }}
