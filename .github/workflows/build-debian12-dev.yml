@@ -6,17 +6,8 @@ on:
     inputs:
       recoomended:
         type: boolean
-        description: 'Use recommended Node version?'
+        description: 'Use recommended Node version for ioBroker?'
         default: true
-      recommended_choice:
-        type: choice
-        description: 'Use recommended Node version?'
-        options:
-          - yes
-          - no
-
-env:
-  TAG: ${{ inputs.node_version || env.RECOMMENDED_NODE_VERSION }}
 
 jobs:
   build-dev-image:
