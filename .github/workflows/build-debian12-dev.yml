@@ -4,10 +4,16 @@ name: Build Debian 12 Image (dev)
 on:
   workflow_dispatch:
     inputs:
-      node_version:
+      recoomended:
+        type: boolean
+        description: 'Use recommended Node version?'
+      recommended_choice:
+        type: choice
         description: 'Node Version'
         required: true
-        default: ''
+        options:
+          - true
+          - false
 
 env:
   TAG: ${{ inputs.node_version || env.RECOMMENDED_NODE_VERSION }}
