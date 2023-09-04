@@ -1,11 +1,13 @@
 ## Changelog
 
 ### v9.0.0-beta.1 (coming soon)
+* ignore errors in "silent cleanup" on first start ([#369](https://github.com/buanet/ioBroker.docker/issues/369))
 * cleanup/ restructure repo
 * update nodejs setup process
 * update base image to debian 12 (bookworm)
-* improve security by avoiding running commands as root
-* integrate calling maintenance script into iobroker command
+* improve security by avoiding root (exept startup script itself)
+* restrict iobroker commanline commands (start/ stop)
+* integrate maintenance script into iobroker command
 * move container config files location
 
 ### v8.1.0-beta.4 (29.07.2023)

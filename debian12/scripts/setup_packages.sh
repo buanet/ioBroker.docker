@@ -78,6 +78,6 @@ fi
 
 # Silent Cleanup
 apt-get -qq autoclean -y && apt-get -qq autoremove && apt-get -qq clean
-rm -rf /tmp/* /var/tmp/* /root/.cache/* /var/lib/apt/lists/*
+rm -rf /tmp/* /var/tmp/* /root/.cache/* /var/lib/apt/lists/* || true
 
 exit 0
