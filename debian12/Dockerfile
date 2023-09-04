@@ -52,11 +52,11 @@ RUN apt-get update && apt-get upgrade -y \
     # Prepare .docker_config
     && mkdir /opt/.docker_config \
     && echo "starting" > /opt/.docker_config/.healthcheck \
-    && echo "v9.0.0-testing" > /opt/.docker_config/.thisisdocker \
+    && echo "${VERSION}" > /opt/.docker_config/.thisisdocker \
     && echo "true" > /opt/.docker_config/.first_run \
     # Prepare old .docker_config (needed until changed in iobroker)
     && mkdir /opt/scripts/.docker_config \
-    && echo "v9.0.0-testing" > /opt/scripts/.docker_config/.thisisdocker \
+    && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
     # Run iobroker installer
     && curl -sL https://iobroker.net/install.sh | bash - \
     # Deleting UUID from build
