@@ -81,9 +81,75 @@ jobs:
           provenance: false
           outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
+  build-with-experimental-node:
+    if: inputs.chose_node_version == 'Experimental Node version' || inputs.chose_node_version == 'Both Node versions' 
+    name: Build image with experimental Node version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3.6.0
+        with:
+          repository: 'buanet/ioBroker.docker'
+
+      - name: Set job variables
+        run: |
+          VERSION="$(cat .VERSION)"
+          MAJORVERSION="$(cat .VERSION | cut -c 1-2 | sed -r 's#^(.{0})#\1latest-#')"
+          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          # Log output and export as Github environment variable
+          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION }}"
+          echo "[LOG] Image Version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "[LOG] Major Image Version: $MAJORVERSION"
+          echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber/Timestamp: $DATI"
+          echo "dati=$DATI" >> $GITHUB_ENV
+          # Set values in iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
+          # Set values in Dockerfile
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2.2.0
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2.10.0
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2.2.0
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2.2.0
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.PACKAGES_USER }}
+          password: ${{ secrets.PACKAGES_PASS }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4.1.1
+        with:
+          context: ./debian12
+          file: ./debian12/Dockerfile
+          push: true
+          platforms: |
+            linux/amd64
+            linux/arm/v7
+            linux/arm64/v8
+          tags: |
+            buanet/iobroker:dev-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
+            ghcr.io/buanet/iobroker:dev-node${{ vars.EXPERIMENTAL_NODE_VERSION }}
+          provenance: false
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
+
   delete-untagged-images:
     if: ${{ always() }}
-    needs: build-with-recommended-node
+    needs: [build-with-recommended-node, build-with-experimental-node]
     name: Delete untagged images from GitHub Container Registry
     runs-on: ubuntu-latest
     steps:
