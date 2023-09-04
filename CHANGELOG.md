@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v9.0.0-beta.1 (coming soon)
+* cleanup/ restructure repo
 * update nodejs setup process
 * update base image to debian 12 (bookworm)
 * improve security by avoiding running commands as root
