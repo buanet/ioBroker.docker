@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v9.0.0-beta.1 (coming soon)
+* simplify ci/ reduce gh actions
 * ignore errors in "silent cleanup" on first start ([#369](https://github.com/buanet/ioBroker.docker/issues/369))
 * cleanup/ restructure repo
 * update nodejs setup process
