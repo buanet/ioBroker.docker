@@ -7,13 +7,13 @@ on:
       recoomended:
         type: boolean
         description: 'Use recommended Node version?'
+        default: true
       recommended_choice:
         type: choice
-        description: 'Node Version'
-        required: true
+        description: 'Use recommended Node version?'
         options:
-          - true
-          - false
+          - yes
+          - no
 
 env:
   TAG: ${{ inputs.node_version || env.RECOMMENDED_NODE_VERSION }}
