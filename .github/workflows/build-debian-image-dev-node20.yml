@@ -53,7 +53,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build Docker image (node20)
-        uses: docker/build-push-action@v4.1.1
+        uses: docker/build-push-action@v4.2.0
         with:
           context: ./debian
           file: ./debian/node20/Dockerfile
