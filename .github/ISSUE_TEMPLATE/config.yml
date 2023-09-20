@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Did you read the docs? / Hast du die Doku gelesen?
     url: https://docs.buanet.de/iobroker-docker-image/docs/
-    about: Please make sure you read the docs before submitting any issues. / Bitte stelle sicher, dass du die Dokumentation gelesen hast bebor du einen Fehler meldest.
+    about: Please make sure you read the docs before submitting any issues. / Bitte stelle sicher, dass du die Dokumentation gelesen hast bevor du einen Fehler meldest.
   - name: Questions? / Fragen?
     url: https://github.com/buanet/ioBroker.docker/discussions
     about: Ask your questions here! / Stell deine Fragen hier!
