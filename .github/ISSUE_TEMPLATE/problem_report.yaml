@@ -1,32 +1,32 @@
-name: Problem Report
-description: Report a problem here.
+name: Problem Report / Fehlermeldung
+description: Report a problem here. / Melde Fehler hier. 
 title: "[Problem]: "
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
+        Thanks for taking the time to fill out this bug report! / Vielen Dank, dass du dir die Zeit nimmst den Fehlerreport auszufüllen! 
   - type: textarea
     id: description
     attributes:
-      label: Description
-      description: Please describe your problem.
-      placeholder: What happened? What did you expect?
+      label: Description / Beschreibung
+      description: Please describe your problem. / Bitte beschreibe dein Problem.
+      placeholder: What happened? What did you expect? / Was ist passiert? Was hast du erwartet? 
     validations:
       required: true
   - type: input
     id: version
     attributes:
       label: Image version
-      description: Which image version do you use?
+      description: Which image version do you use? / Welche Version des Images verwendest du? 
       placeholder: v1.2.3
     validations:
       required: true
   - type: textarea
     id: logs
     attributes:
-      label: Docker logs
-      description: Please provide the full Docker log output from your Docker container startup.
+      label: Docker logs / Docker Protokoll
+      description: Please provide the full Docker log output from your Docker container startup. / Bitte stelle das komplette Docker Protokoll vom Start des Containers zur Verfügung.  
       render: shell
     validations:
       required: true
