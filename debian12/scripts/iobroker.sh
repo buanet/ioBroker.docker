@@ -41,6 +41,9 @@ iob_diag () {
 
 if [ "$1" = "fix" ]; then # call iobroker fixer
   iob_fix
+elif [ "$1" = "node fix" ]; then # call iobroker node fixer
+  echo "The execution of this command is blocked as your ioBroker is running inside a Docker container!"
+  echo "To fix any issues with nodejs, please pull the latest version of the Docker image and recreate your container."
 elif [ "$1" = "diag" ]; then # call iobroker diag script
   iob_diag
 elif [ "$1" = "start" ] || [ "$1" = "stop" ] || [ "$1" = "restart" ]; then # block execution of iobroker start | stop | restart
