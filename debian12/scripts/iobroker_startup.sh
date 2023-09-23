@@ -29,7 +29,6 @@ statesdbtype=$IOB_STATESDB_TYPE
 statesdbname=$IOB_STATESDB_NAME # new for sentinel support
 statesdbpass=$IOB_STATESDB_PASS # new for auth support
 usbdevices=$USBDEVICES
-zwave=$ZWAVE
 set -u
 
 pkill_timeout=10      # timeout for iobroker shutdown in seconds
@@ -104,7 +103,6 @@ if [[ "$permissioncheck" != "" ]]; then echo -n "-----                    " && e
 if [[ "$setgid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: "$setgid")" && echo " -----"; fi
 if [[ "$setuid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: "$setuid")" && echo " -----"; fi
 if [[ "$usbdevices" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" USBDEVICES: "$usbdevices")" && echo " -----"; fi
-if [[ "$zwave" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" ZWAVE: "$zwave")" && echo " -----"; fi
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
@@ -460,17 +458,6 @@ elif [[ "$avahi" = "true" ]]; then
     chmod 755 /opt/scripts/setup_avahi.sh
     bash /opt/scripts/setup_avahi.sh
   echo "Done."
-  echo " "
-fi
-
-# Checking ENV for Z-WAVE
-if [[ "$zwave" = "true" && "$offlinemode" = "true" ]]; then
-  echo "ZWAVE is \"true\", but OFFLINE_MODE is also \"true\". Skipping Z-Wave setup."
-elif [[ "$zwave" = "true" ]]; then
-  echo "ZWAVE is \"true\". Running setup script... "
-    chmod 755 /opt/scripts/setup_zwave.sh
-    bash /opt/scripts/setup_zwave.sh
-  echo "Done."    
   echo " "
 fi
 
