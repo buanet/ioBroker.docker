@@ -1,5 +1,17 @@
 ## Changelog
 
+### v9.0.0-beta.1 (24.09.2023)
+* remove special settings script and env for zwave ([#377](https://github.com/buanet/ioBroker.docker/issues/377))
+* simplify ci/ reduce gh actions
+* ignore errors in "silent cleanup" on first start ([#369](https://github.com/buanet/ioBroker.docker/issues/369))
+* cleanup/ restructure repo
+* update nodejs setup process
+* update base image to debian 12 (bookworm)
+* improve security by avoiding root (exept startup script itself)
+* restrict iobroker commanline commands (start/ stop/ node fix)
+* integrate maintenance script into iobroker command
+* move container config files location
+
 ### v8.1.0 (15.08.2023)
 * repo cleanup
 * v8.1.0-beta.4 (29.07.2023)
