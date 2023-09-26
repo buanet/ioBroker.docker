@@ -49,7 +49,7 @@ You can pull the Docker image from:
 
 If you have any questions or need help please visit the ioBroker community:
 * [ioBroker forum](https://forum.iobroker.net/)
-* [Discord channel](https://discord.gg/Ne3y6fUac3)
+* [Discord channel](https://discord.gg/5jGWNKnpZ8)
 * [Facebook group](https://www.facebook.com/groups/440499112958264/)
 
 ### How to report an issue or request a feature?
@@ -61,7 +61,7 @@ Please do not use the issues for support questions. Not every error message is w
 
 ### Beta testing
 
-If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. For more details and beta support join us at "beta testing & feedback" > "docker-image" on the [ioBroker Discord channel](https://discord.gg/Ne3y6fUac3).
+If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. For more details and beta support join us at "beta testing & feedback" > "docker-image" on the [ioBroker Discord channel](https://discord.gg/5jGWNKnpZ8).
 
 ### Support the project
 

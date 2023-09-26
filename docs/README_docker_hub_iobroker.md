@@ -25,7 +25,7 @@ New major image versions (e.g. v6, v7, v8) always include a new major version of
 # Quick reference
 
 * Maintained by: [buanet](https://github.com/buanet) and [ioBroker](https://github.com/ioBroker)
-* Where to get support: [ioBroker forum](https://forum.iobroker.net/), [Discord channel](https://discord.gg/HwUCwsH), [Facebook group](https://www.facebook.com/groups/440499112958264) 
+* Where to get support: [ioBroker forum](https://forum.iobroker.net/), [Discord channel](https://discord.gg/5jGWNKnpZ8), [Facebook group](https://www.facebook.com/groups/440499112958264) 
 * Where to report issues: [Github Repository Issues](https://github.com/buanet/ioBroker.docker/issues)
 * Supported architectures: amd64, arm32v7, arm64v8
 * Changelog: [Github Repository Changelog](https://github.com/buanet/ioBroker.docker/blob/main/CHANGELOG.md)
