@@ -49,7 +49,7 @@ It is highly recommended not to use the `latest` tag for production, especially 
 # What is ioBroker?
 
 IoBroker is a open source IoT platform written in JavaScript that easily connects smarthome components from different manufactures. With the help of plugins (called: "adapters") ioBroker is able to communicate with a big variety of IoT hardware and services using different protocols and APIs.<br>
-All data is stored in a central database that all adapters can access. With this it is very easy to build up logical connections, automation scripts and beautiful visualisations.<br>
+All data is stored in a central database that all adapters can access. With this it is very easy to build up logical connections, automation scripts and beautiful visualizations.<br>
 For further details please check out [iobroker.net](https://www.iobroker.net).
 
 # How to use this image?
@@ -125,7 +125,7 @@ You could use environment variables to auto configure your ioBroker container on
 * `LANGUAGE` (optional, default: de_DE:de) The following locales are pre-generated: de_DE:de, en_US:en
 * `LC_ALL` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
 * `OFFLINE_MODE` (optional) Set `true` if your container has no or limited internet connection
-* `PACKAGES` (optional) Install additional linux packages to your container, packages should be separated by whitespace like this: `package1 package2 package3`.
+* `PACKAGES` (optional) Install additional Linux packages to your container, packages should be separated by whitespace like this: `package1 package2 package3`.
 * `PERMISSION_CHECK` (optional, default: true) Set "false" to skip checking and correcting all relevant permissions on container startup (Use at own risk!!!)
 * `SETGID` (default: 1000) In some cases it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host
 * `SETUID` (default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host
