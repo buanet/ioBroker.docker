@@ -1,6 +1,6 @@
 ## Changelog
 
-### v9.0.0-beta.2 (coming soon)
+### v9.0.0-beta.2 (28.09.2023)
 * fix issue with unlocking features in backitup ([#381](https://github.com/buanet/ioBroker.docker/issues/381))
 * fix issue with fresh initializing iobroker
 * v9.0.0-beta.1 (24.09.2023)
