@@ -71,7 +71,6 @@ RUN apt-get update && apt-get upgrade -y \
     && usermod -u 1000 iobroker \
     && groupmod -g 1000 iobroker \
     && chown root:iobroker /usr/sbin/gosu \
-    #&& chmod +s /usr/sbin/gosu \
     # Set permissions and ownership
     && chown -R iobroker:iobroker /opt/scripts /opt/userscripts \
     && chmod 755 /opt/scripts/*.sh \

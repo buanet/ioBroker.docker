@@ -306,6 +306,7 @@ fi
 # if restored a fresh install, running "iob setup first" for database init (but not on slaves!), otherwise check database connection
 if [[ -f /opt/iobroker/.fresh_install && "$multihost" != "slave" ]]; then
   echo -n "Initializing a fresh installation of ioBroker... "
+  if [[ ! -d "/opt/iobroker/log" ]]; then gosu iobroker mkdir "/opt/iobroker/log"; fi
   set +e
   bash iob setup first > /opt/iobroker/log/iob_setup_first.log 2>&1
   return=$?
@@ -446,6 +447,7 @@ fi
 if [[ "$backitup" == "true" ]]; then
   echo -n "IOB_BACKITUP_EXTDB is \"true\". Unlocking features..."
   echo "true" > /opt/.docker_config/.backitup
+  echo "true" > /opt/scripts/.docker_config/.backitup # old path, needed until changed in backitup
   echo "Done."
   echo " "
 fi
