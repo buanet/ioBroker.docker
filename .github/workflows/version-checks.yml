@@ -20,7 +20,7 @@ jobs:
         run: |
           LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
           echo "iobroker=iobroker/iobroker:$LATESTRELEASE" >> $GITHUB_ENV
-          echo "baseimage=library/debian:bullseye-slim" >> $GITHUB_ENV
+          echo "baseimage=library/debian:bookworm-slim" >> $GITHUB_ENV
 
       - name: Docker Baseimage Checker
         id: baseimage
@@ -59,18 +59,10 @@ jobs:
           git commit -am "new ioBroker versions"
           git push
 
-      - name: Trigger build debian latest (buanet)
+      - name: Trigger Build Debian 12 Image (latest)
         if: steps.baseimage.outputs.needs-update == 'true' || steps.git-check.outputs.modified == 'true'
         uses: benc-uk/workflow-dispatch@v1.2
         with:
-          workflow: Build debian latest (buanet)
-          repo: buanet/ioBroker.docker
-          token: ${{ secrets.ACTIONS_PAT }}
-
-      - name: Trigger build debian latest (iobroker)
-        if: steps.baseimage.outputs.needs-update == 'true' || steps.git-check.outputs.modified == 'true'
-        uses: benc-uk/workflow-dispatch@v1.2
-        with:
-          workflow: Build debian latest (iobroker)
+          workflow: Build Debian 12 Image (latest)
           repo: buanet/ioBroker.docker
           token: ${{ secrets.ACTIONS_PAT }}
