@@ -10,7 +10,7 @@ pkill_timeout=10      # timeout for stopping iobroker in seconds
 
 # check for user root
 if [ "$(id -u)" -eq 0 ]; then
-  echo "WARNING! This script should be executed as iobroker user! Please change user and try again."
+  echo "WARNING! This script should be executed as user "iobroker"! Please switch user and try again."
   exit 1
 fi
 
