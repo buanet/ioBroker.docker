@@ -1,27 +1,27 @@
-# Github action to build Debian12 image (Tag: dev)
-name: Build Debian 12 Image (dev)
+# Github action to build Debian12 image (Tag: latest)
+name: Build Debian 12 Image (latest)
 
 on:
+  release:
+    types: [released]
   workflow_dispatch:
-    inputs:
-      chose_node_version:
-        type: choice
-        description: 'Which Node version should be used?'
-        options:
-          - 'Recommended Node version (default)'
-          - 'Experimental Node version'
-          - 'Both Node versions'
 
 jobs:
-  build-with-recommended-node:
-    if: inputs.chose_node_version == 'Recommended Node version (default)' || inputs.chose_node_version == 'Both Node versions'
-    name: Build with recommended Node version
+  build-latest-for-buanet:
+    name: Build latest image for buanet
     runs-on: ubuntu-latest
     steps:
+      - name: Fetch latest release tag
+        run: |
+          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
+          echo "Latest release tag : $LATESTRELEASE"
+          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
+
       - name: Checkout repo
         uses: actions/checkout@v4.1.0
         with:
           repository: 'buanet/ioBroker.docker'
+          ref: ${{ env.RELEASE_TAG }}
 
       - name: Set job variables
         run: |
@@ -50,7 +50,7 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v3.0.0
 
-      - name: Login to DockerHub
+      - name: Login to DockerHub (buanet)
         uses: docker/login-action@v3.0.0
         with:
           username: ${{ secrets.DOCKER_USER }}
@@ -71,23 +71,33 @@ jobs:
           push: true
           platforms: |
             linux/amd64
-            linux/arm64
             linux/arm/v7
+            linux/arm64/v8
           tags: |
-            buanet/iobroker:dev,
-            ghcr.io/buanet/iobroker:dev
-            buanet/iobroker:dev-node${{ vars.RECOMMENDED_NODE_VERSION }},
-            ghcr.io/buanet/iobroker:dev-node${{ vars.RECOMMENDED_NODE_VERSION }}
+            buanet/iobroker:latest,
+            buanet/iobroker:${{ env.majorversion }},
+            buanet/iobroker:${{ env.version }},
+            ghcr.io/buanet/iobroker:latest,
+            ghcr.io/buanet/iobroker:${{ env.majorversion }},
+            ghcr.io/buanet/iobroker:${{ env.version }}
+          provenance: false
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
-  build-with-experimental-node:
-    if: inputs.chose_node_version == 'Experimental Node version' || inputs.chose_node_version == 'Both Node versions'
-    name: Build with experimental Node version
+  build-latest-for-iobroker:
+    name: Build latest image for iobroker
     runs-on: ubuntu-latest
     steps:
+      - name: Fetch latest release tag
+        run: |
+          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
+          echo "Latest release tag : $LATESTRELEASE"
+          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
+
       - name: Checkout repo
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.0
         with:
           repository: 'buanet/ioBroker.docker'
+          ref: ${{ env.RELEASE_TAG }}
 
       - name: Set job variables
         run: |
@@ -95,7 +105,7 @@ jobs:
           MAJORVERSION="$(cat .VERSION | cut -c 1-2 | sed -r 's#^(.{0})#\1latest-#')"
           DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION }}"
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
@@ -106,7 +116,7 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -116,36 +126,32 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v3.0.0
 
-      - name: Login to DockerHub
+      - name: Login to DockerHub (buanet)
         uses: docker/login-action@v3.0.0
         with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASS }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3.0.0
-        with:
-          registry: ghcr.io
-          username: ${{ secrets.PACKAGES_USER }}
-          password: ${{ secrets.PACKAGES_PASS }}
+          username: ${{ secrets.DOCKER_USER_IOB }}
+          password: ${{ secrets.DOCKER_PASS_IOB }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5.0.0
         with:
           context: ./debian12
           file: ./debian12/Dockerfile
-          push: false
+          push: false ##### For first test of new workflow
           platforms: |
             linux/amd64
-            linux/arm64
-#            linux/arm/v7
+            linux/arm/v7
+            linux/arm64/v8
           tags: |
-            buanet/iobroker:dev-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
-            ghcr.io/buanet/iobroker:dev-node${{ vars.EXPERIMENTAL_NODE_VERSION }}
+            iobroker/iobroker:latest,
+            iobroker/iobroker:${{ env.majorversion }},
+            iobroker/iobroker:${{ env.version }},
+          provenance: false
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
   delete-untagged-images:
     if: ${{ always() }}
-    needs: [build-with-recommended-node, build-with-experimental-node]
+    needs: [build-latest-for-buanet, build-latest-for-iobroker]
     name: Delete untagged images from GitHub Container Registry
     runs-on: ubuntu-latest
     steps:

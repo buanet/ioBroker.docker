@@ -78,7 +78,7 @@ Moved to [CHANGELOG.md](CHANGELOG.md).
 
 MIT License
 
-Copyright (c) 2017-2022 André Germann
+Copyright (c) 2017-2023 André Germann
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

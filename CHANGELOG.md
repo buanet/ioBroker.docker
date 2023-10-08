@@ -1,5 +1,22 @@
 ## Changelog
 
+### v9.0.0 (09.10.2023)
+* update official docs
+* v9.0.0-beta.2 (28.09.2023)
+  * fix issue with unlocking features in backitup ([#381](https://github.com/buanet/ioBroker.docker/issues/381))
+  * fix issue with fresh initializing iobroker
+* v9.0.0-beta.1 (24.09.2023)
+  * remove special settings script and env for zwave ([#377](https://github.com/buanet/ioBroker.docker/issues/377))
+  * simplify ci/ reduce gh actions
+  * ignore errors in "silent cleanup" on first start ([#369](https://github.com/buanet/ioBroker.docker/issues/369))
+  * cleanup/ restructure repo
+  * update nodejs setup process
+  * update base image to debian 12 (bookworm)
+  * improve security by avoiding root (except startup script itself)
+  * restrict iobroker command line commands (start/ stop/ node fix)
+  * integrate maintenance script into iobroker command
+  * move container config files location
+
 ### v8.1.0 (15.08.2023)
 * repo cleanup
 * v8.1.0-beta.4 (29.07.2023)
@@ -109,7 +126,7 @@
 * v5.2.0-beta4 (2021-09-10)
   * adding iobroker user rights for "gosu"
   * adding more labels in OCI standard format
-  * fixing workdir bug
+  * fixing work dir bug
   * adding backitup compatibility 
 * v5.2.0-beta3 (2021-09-04)
   * reducing layers in dockerfile
@@ -135,10 +152,10 @@
 
 ### v5.1.0 (2020-11-05)
 * v5.0.2-beta (2020-07-28)
-  * added docker tag for majorversion latest
-  * extend readme.md docu
+  * added docker tag for major version latest
+  * extend readme.md docs
   * added maintenance script
-  * added container healthcheck
+  * added container health check
   * fixed configuration procedure and logging for objects and states db setup
 * v5.0.1-beta (2020-07-01)
   * fixing backup detection in startup script
@@ -165,7 +182,7 @@
   * switching base image to buster
   * optimizing installation of packages defined by ENV "PACKAGES"
 * v4.1.3-beta (2020-02-08)
-  * renamed ENV for adminport (new "IOB_ADMINPORT)")
+  * renamed ENV for admin port (new "IOB_ADMINPORT)")
   * added new ENVs for "iobroker setup custom" (replacing "REDIS")
   * enhancements in startup script logging
 * v4.1.2-beta (2020-02-02)
@@ -185,7 +202,7 @@
 * v4.0.1-beta (2019-11-25)
   * added env for iobroker admin port
   * added env for usb-devices (setting permissions)
-  * updateing prerequisites for iobroker installation
+  * updating prerequisites for iobroker installation
   * some small code fixes
 
 ### v4.0.0 (2019-10-25)
@@ -280,7 +297,7 @@
 * added git package
 
 ### v0.1.0 (2017-03-08)
-* moved avahi-start.sh to seperate directory
+* moved avahi-start.sh to separate directory
 * fixed timezone issue (sets now timezone to Europe/Berlin)
 
 ### v0.0.2 (2017-03-06)

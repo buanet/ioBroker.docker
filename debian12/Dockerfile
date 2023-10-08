@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.description="Official Docker image for ioBroker smarthome software (https://www.iobroker.net)" \
@@ -6,54 +6,58 @@ LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.authors="André Germann <info@buanet.de>" \
       org.opencontainers.image.url="https://github.com/buanet/ioBroker.docker" \
       org.opencontainers.image.source="https://github.com/buanet/ioBroker.docker" \
-      org.opencontainers.image.base.name="docker.io/library/debian:bullseye-slim" \
+      org.opencontainers.image.base.name="debian:bookworm-slim" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.created="${DATI}"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Copy scripts
+# Copy files
 COPY scripts /opt/scripts
 COPY userscripts /opt/userscripts
 
-# Install prerequisites (including node) and generating locales
-RUN apt-get update && apt-get install -y \
+# Set up ioBroker
+RUN apt-get update && apt-get upgrade -y \
+    # Install prerequisites
+    && apt-get install -y \
     apt-utils \
+    ca-certificates \
     cifs-utils \
     curl \
+    gnupg \
     gosu \
     iputils-ping \
     jq \
+    libatomic1 \
     locales \
     nfs-common \
     procps \
     python3 \
     python3-dev \
-    sudo \
     tar \
     tzdata \
     udev \
     wget \
     # Install node
-    && curl -sL https://deb.nodesource.com/setup_20.x | bash \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
     && apt-get update && apt-get install -y nodejs \
     # Install node-gyp
-    && npm install -g node-gyp \
+    && npm install --production -g node-gyp \
     # Generating locales
     && sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
     && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
     && locale-gen \
-    # Change permissions for scripts
-    && chmod 777 /opt/scripts/ \
-    && chmod 777 /opt/userscripts/ \
-    && chmod +x /opt/scripts/*.sh \
-    && chmod +x /opt/userscripts/*.sh \
-    # Prepare
-    && mkdir -p /opt/scripts/.docker_config/ \
-    && echo "starting" > /opt/scripts/.docker_config/.healthcheck \
+    # Prepare .docker_config
+    && mkdir /opt/.docker_config \
+    && echo "starting" > /opt/.docker_config/.healthcheck \
+    && echo "${VERSION}" > /opt/.docker_config/.thisisdocker \
+    && echo "true" > /opt/.docker_config/.first_run \
+    # Prepare old .docker_config (needed until changed in iobroker)
+    && mkdir /opt/scripts/.docker_config \
     && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
-    && echo "true" > /opt/.first_run \
-    # Run installer
+    # Run iobroker installer
     && curl -sL https://iobroker.net/install.sh | bash - \
     # Deleting UUID from build
     && iobroker unsetup -y \
@@ -61,22 +65,24 @@ RUN apt-get update && apt-get install -y \
     # Backup initial ioBroker and userscript folder
     && tar -cf /opt/initial_iobroker.tar /opt/iobroker \
     && tar -cf /opt/initial_userscripts.tar /opt/userscripts \
-    # Setting up iobroker-user (shell, home dir and rights)
+    # Setting up iobroker-user
     && chsh -s /bin/bash iobroker \
     && usermod --home /opt/iobroker iobroker \
     && usermod -u 1000 iobroker \
     && groupmod -g 1000 iobroker \
     && chown root:iobroker /usr/sbin/gosu \
-    && chmod +s /usr/sbin/gosu \
+    # Set permissions and ownership
+    && chown -R iobroker:iobroker /opt/scripts /opt/userscripts \
+    && chmod 755 /opt/scripts/*.sh \
+    && chmod 755 /opt/userscripts/*.sh \
     # Clean up installation cache
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoclean -y \
     && apt-get autoremove \
     && apt-get clean \
-    && rm -rf /tmp/* /var/tmp/* \
-    && rm -rf /root/.cache/* /root/.npm/* \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /tmp/* /var/tmp/* /root/.cache/* /root/.npm/* /var/lib/apt/lists/*
 
-# Setting up default ENVs
+# Default environment variables
 ENV DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
@@ -85,7 +91,7 @@ ENV DEBIAN_FRONTEND="teletype" \
     SETUID=1000 \
     TZ="Europe/Berlin"
 
-# Expose default admin ui port
+# Default admin ui port
 EXPOSE 8081
 
 # Change work dir
@@ -95,7 +101,7 @@ WORKDIR /opt/iobroker/
 HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
     CMD ["/bin/bash", "-c", "/opt/scripts/healthcheck.sh"]
 
-# Volumes for persistent data
+# Volume for persistent data
 VOLUME ["/opt/iobroker"]
 
 # Run startup-script
