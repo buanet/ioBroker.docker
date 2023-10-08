@@ -1,17 +1,17 @@
-name: Feature Request
-description: I want to request a new feature.
+name: Feature Request / Verbesserungsvorschlag
+description: Request a new feature here. / Schlage eine Verbesserung vor.
 title: "[Feature Request]: "
 labels: "enhancement"
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to give us your feedback!
+        Thanks for taking the time to give us your feedback! / Vielen Dank, dass du die Zeit nimmst uns Feedback zu geben!  
   - type: textarea
     id: description
     attributes:
-      label: Description
-      description: Please describe your request.
-      placeholder: Waht are your ideas?
+      label: Description / Beschreibung
+      description: Please describe your request. / Bitte beschreibe deine Anforderung.
+      placeholder: What are your ideas? / Was sind deine Ideen?
     validations:
       required: true

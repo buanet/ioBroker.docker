@@ -1,11 +1,14 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
-  - name: ioBroker Docker image discussions
+  - name: Did you read the docs? / Hast du die Doku gelesen?
+    url: https://docs.buanet.de/iobroker-docker-image/docs/
+    about: Please make sure you read the docs before submitting any issues. / Bitte stelle sicher, dass du die Dokumentation gelesen hast bevor du einen Fehler meldest.
+  - name: Questions? / Fragen?
     url: https://github.com/buanet/ioBroker.docker/discussions
-#    about: You can ask your questions here. 
+    about: Ask your questions here! / Stell deine Fragen hier!
   - name: ioBroker Community Forum
     url: https://forum.iobroker.net/
-  - name: ioBroker Discord channel
-    url: https://discord.gg/Ne3y6fUac3
-  - name: ioBroker Facebook group
-    url: https://www.facebook.com/groups/440499112958264/
+    about: Need support? Check out our ioBroker Community Forum. / Du benötigst Unterstützung? Wirf einen Blick in unser ioBroker Community Forum.
+  - name: ioBroker Discord Channel
+    url: https://discord.gg/5jGWNKnpZ8
+    about: Need support? Check out our ioBroker Discord channel. / Du benötigst Unterstützung? Wirf einen Blick in unseren ioBroker Discord Channel.
