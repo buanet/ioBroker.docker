@@ -1,8 +1,10 @@
 ## Changelog
 
-### v9.0.0-beta.2 (28.09.2023)
-* fix issue with unlocking features in backitup ([#381](https://github.com/buanet/ioBroker.docker/issues/381))
-* fix issue with fresh initializing iobroker
+### v9.0.0 (09.10.2023)
+* update official docs
+* v9.0.0-beta.2 (28.09.2023)
+  * fix issue with unlocking features in backitup ([#381](https://github.com/buanet/ioBroker.docker/issues/381))
+  * fix issue with fresh initializing iobroker
 * v9.0.0-beta.1 (24.09.2023)
   * remove special settings script and env for zwave ([#377](https://github.com/buanet/ioBroker.docker/issues/377))
   * simplify ci/ reduce gh actions

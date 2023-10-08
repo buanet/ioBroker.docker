@@ -25,7 +25,7 @@ New major image versions (e.g. v6, v7, v8) always include a new major version of
 # Quick reference
 
 * Maintained by: [buanet](https://github.com/buanet) and [ioBroker](https://github.com/ioBroker)
-* Where to get support: [ioBroker forum](https://forum.iobroker.net/), [Discord channel](https://discord.gg/HwUCwsH), [Telegram channel](https://t.me/+Xfjuou6-LztkOTBi), [Facebook group](https://www.facebook.com/groups/440499112958264) 
+* Where to get support: [ioBroker forum](https://forum.iobroker.net/), [Discord channel](https://discord.gg/5jGWNKnpZ8), [Facebook group](https://www.facebook.com/groups/440499112958264)
 * Where to report issues: [Github Repository Issues](https://github.com/buanet/ioBroker.docker/issues)
 * Supported architectures: amd64, arm32v7, arm64v8
 * Changelog: [Github Repository Changelog](https://github.com/buanet/ioBroker.docker/blob/main/CHANGELOG.md)
@@ -37,6 +37,7 @@ New major image versions (e.g. v6, v7, v8) always include a new major version of
 It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[major_version]` tag instead.
 
 ### Node 18 versions
+* [`v9.0.0`](https://github.com/buanet/ioBroker.docker/blob/v9.0.0/debian12/Dockerfile), [`latest-v9`](https://github.com/buanet/ioBroker.docker/blob/v9.0.0/debian12/Dockerfile), 
 * [`v8.1.0`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), [`latest-v8`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile)
 * [`v8.0.1`](https://github.com/buanet/ioBroker.docker/blob/v8.0.1/debian/node18/Dockerfile)
 * [`v8.0.0`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile)
@@ -116,7 +117,6 @@ You could use environment variables to auto configure your ioBroker container on
 ### Activate special features: 
 
 * `AVAHI` (optional) Set `true` to install and activate avahi-daemon for supporting yahka adapter
-* `ZWAVE` (optional) Set `true` to install openzwave to support zwave adapter
 
 ### Configure environment:
 
