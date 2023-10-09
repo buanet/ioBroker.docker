@@ -47,21 +47,21 @@ You can pull the Docker image from:
 
 ### Where can I get help?
 
-If you have any questions or need help please visit the ioBroker community:
+If you have any questions or need help take a look at the [Discussions](https://github.com/buanet/ioBroker.docker/discussions) or join the ioBroker community:
 * [ioBroker forum](https://forum.iobroker.net/)
 * [Discord channel](https://discord.gg/5jGWNKnpZ8)
 * [Facebook group](https://www.facebook.com/groups/440499112958264/)
 
 ### How to report an issue or request a feature?
 
-If you think you found an issue let us know by opening a [GitHub issue](https://github.com/buanet/ioBroker.docker/issues). Make sure you have googled it before. 
-Please do not use the issues for support questions. Not every error message is worth a new report. Use [discussions](https://github.com/buanet/ioBroker.docker/discussions) if you are not sure.
+If you think you found an issue let us know by opening a [GitHub Issue](https://github.com/buanet/ioBroker.docker/issues). 
+Please do not use the issues for support questions. Not every error message is worth a new report. Use [Discussions](https://github.com/buanet/ioBroker.docker/discussions) if you are not sure.
 
 ## :eyes: Miscellaneous
 
 ### Beta testing
 
-If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. For more details and beta support join us at "beta testing & feedback" > "docker-image" on the [ioBroker Discord channel](https://discord.gg/5jGWNKnpZ8).
+If you want to get the newest features and changes feel free to use/ test the beta version of the Docker image. For more details and beta support join us at "beta testing & feedback" > "docker-image" at the [ioBroker Discord channel](https://discord.gg/5jGWNKnpZ8).
 
 ### Support the project
 
