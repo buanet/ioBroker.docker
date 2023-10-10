@@ -5,9 +5,11 @@ then
   echo "[setup_avahi.sh] Avahi is already installed. Nothing to do here."
 else
   echo -n "[setup_avahi.sh] Avahi-daemon is NOT installed. Going to install it now... "
-    apt-get update > /opt/scripts/avahi_startup.log 2>&1
-    apt-get install -y --no-install-recommends libavahi-compat-libdnssd-dev avahi-daemon >> /opt/scripts/avahi_startup.log 2>&1
-    rm -rf /var/lib/apt/lists/* >> /opt/scripts/avahi_startup.log 2>&1
+    apt-get -q update > /opt/scripts/avahi_startup.log 2>&1
+    apt-get -q -y --no-install-recommends install libavahi-compat-libdnssd-dev avahi-daemon >> /opt/scripts/avahi_startup.log 2>&1
+    # Silent Cleanup
+    apt-get -qq autoclean -y && apt-get -qq autoremove && apt-get -qq clean
+    rm -rf /tmp/* /var/tmp/* /root/.cache/* /var/lib/apt/lists/* || true
   echo "Done."
   echo -n "[setup_avahi.sh] Configuring avahi-daemon... "
     sed -i '/^rlimit-nproc/s/^\(.*\)/#\1/g' /etc/avahi/avahi-daemon.conf
