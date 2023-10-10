@@ -316,7 +316,7 @@ if [[ -f /opt/iobroker/.fresh_install && "$multihost" != "slave" ]]; then
   echo -n "Initializing a fresh installation of ioBroker... "
   if [[ ! -d "/opt/iobroker/log" ]]; then gosu iobroker mkdir "/opt/iobroker/log"; fi
   set +e
-  bash iob setup first > /opt/iobroker/log/iob_setup_first.log 2>&1
+  gosu iobroker iob setup first > /opt/iobroker/log/iob_setup_first.log 2>&1
   return=$?
   set -e
   rm -f /opt/iobroker/.fresh_install
@@ -331,11 +331,11 @@ if [[ -f /opt/iobroker/.fresh_install && "$multihost" != "slave" ]]; then
 else
   echo -n "Checking Database connection... "
   set +e
-  if iob uuid &> /dev/null; then
+  if gosu iobroker iob uuid &> /dev/null; then
     echo "Done."
     echo " "
   else
-    errormsg=$(iob uuid 2>&1 | sed 's/^/[DEBUG] /')
+    errormsg=$(gosu iobroker iob uuid 2>&1 | sed 's/^/[DEBUG] /')
     echo "Failed."
     if [[ "$debug" == "true" ]]; then
       echo "[DEBUG] Error message: "
@@ -355,20 +355,20 @@ if [[ "$multihost" == "slave" ]]; then
 else
   # get admin instance and hostname
   set +e
-  admininstance=$(bash iobroker list instances | grep 'enabled' | grep -m 1 -o 'system.adapter.admin..')
+  admininstance=$(gosu iobroker iob list instances | grep 'enabled' | grep -m 1 -o 'system.adapter.admin..')
   set -e
   if [[ "$admininstance" != "" ]]; then
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" "$admininstance"; fi 
-    adminhostname=$(bash iobroker object get "$admininstance" --pretty | grep -oP '(?<="host": ")[^"]*')
+    adminhostname=$(gosu iobroker iob object get "$admininstance" --pretty | grep -oP '(?<="host": ")[^"]*')
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" "$adminhostname"; fi
   else
     set +e
-    admininstance=$(bash iobroker list instances | grep 'disabled' | grep -m 1 -o 'system.adapter.admin..')
+    admininstance=$(gosu iobroker iob list instances | grep 'disabled' | grep -m 1 -o 'system.adapter.admin..')
     set -e
     if [[ "$admininstance" != "" ]]; then
       if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is disabled."; fi 
       if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin instance is:" "$admininstance"; fi 
-      adminhostname=$(bash iobroker object get "$admininstance" --pretty | grep -oP '(?<="host": ")[^"]*')
+      adminhostname=$(gosu iobroker iob object get "$admininstance" --pretty | grep -oP '(?<="host": ")[^"]*')
       if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected admin hostname is:" "$adminhostname"; fi
     else
       echo "There was a problem detecting the admin instance of your iobroker."
@@ -381,7 +381,7 @@ else
   if [[ "$adminhostname" != "" && "$adminhostname" != "$(hostname)" ]]; then
     echo "Hostname in ioBroker does not match the hostname of this container."
     echo -n "Updating hostname to \"""$(hostname)""\"... "
-      bash iobroker host "$adminhostname"
+      gosu iobroker iob host "$adminhostname"
     echo "Done."
     echo " "
   elif [[ "$adminhostname" = "$(hostname)" ]]; then
@@ -439,13 +439,13 @@ echo " "
 
 # Checking ENV for Adminport
 if [[ "$adminport" != "" && "$multihost" != "slave" ]]; then
-  adminportold=$(bash iobroker object get "$admininstance" --pretty | grep -oP '(?<="port": )[^,]*')
+  adminportold=$(gosu iobroker iob object get "$admininstance" --pretty | grep -oP '(?<="port": )[^,]*')
   admininstanceshort=$(echo "$admininstance" | grep -m 1 -o 'admin..')
   if [[ "$adminport" != "$adminportold" ]]; then
     echo "IOB_ADMINPORT is set and does not match port configured in ioBroker."
     if [[ "$debug" == "true" ]]; then echo "[DEBUG] Detected Admin Port in ioBroker: " "$adminportold"; fi
     echo "Setting Adminport to \"""$adminport""\"... "
-      bash iobroker set "$admininstanceshort" --port "$adminport"
+      gosu iobroker iob set "$admininstanceshort" --port "$adminport"
     echo "Done."
     echo " "
   fi
