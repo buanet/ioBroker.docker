@@ -3,6 +3,7 @@
 ### v9.0.1 (10.10.2023)
 * fix issue with avahi setup ([#384](https://github.com/buanet/ioBroker.docker/issues/384); [#385 by @z1r0](https://github.com/buanet/ioBroker.docker/pull/385))
 * add silent cleanup to setup_avahi.sh
+* add error handling for package updates/ install
 
 ### v9.0.0 (09.10.2023)
 * update official docs
