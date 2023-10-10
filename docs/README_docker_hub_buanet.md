@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
 [![Pre-Release)](https://img.shields.io/github/v/tag/buanet/ioBroker.docker?include_prereleases&label=pre-release)](https://github.com/buanet/ioBroker.docker/releases)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/buanet/ioBroker.docker/build-debian-image-latest.yml?branch=main)](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-image-latest.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/buanet/ioBroker.docker/build-debian12-latest.yml?branch=main)](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian12-latest.yml)
 [![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)
 [![Github Pull Requests](https://img.shields.io/github/issues-pr/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/pulls)
 [![GitHub Discussions](https://img.shields.io/github/discussions/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/discussions)<br>
@@ -18,7 +18,7 @@
 
 # Important note
 
-New major image versions (e.g. v6, v7, v8) always include a new major version of node! Although js-controller should handle this kind of upgrade fine, in some cases this still results in problems with some adapters. To avoid having trouble with this major version upgrades, it is always a good move to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
+New major image versions (e.g. v6, v7, v8) usually include a new major version of node! Although js-controller should handle this kind of upgrade fine, in some cases this still results in problems with some adapters. To avoid having trouble with this major version upgrades, it is always a good move to upgrade your container manually with backup and restore procedure. For more details please see the maintenance part of the [ioBroker Docker image docs](https://docs.buanet.de/iobroker-docker-image/docs/#maintenance).
 
 # Quick reference
 
@@ -35,8 +35,8 @@ New major image versions (e.g. v6, v7, v8) always include a new major version of
 It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[major_version]` tag instead.
 
 ### Node 18 versions
-* [`v9.0.0`](https://github.com/buanet/ioBroker.docker/blob/v9.0.0/debian12/Dockerfile), [`latest-v9`](https://github.com/buanet/ioBroker.docker/blob/v9.0.0/debian12/Dockerfile), 
-* [`v8.1.0`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), [`latest-v8`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile)
+* [`v9.0.0`](https://github.com/buanet/ioBroker.docker/blob/v9.0.0/debian12/Dockerfile), [`latest-v9`](https://github.com/buanet/ioBroker.docker/blob/v9.0.0/debian12/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v9.0.0/debian12/Dockerfile)
+* [`v8.1.0`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), [`latest-v8`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), 
 * [`v8.0.1`](https://github.com/buanet/ioBroker.docker/blob/v8.0.1/debian/node18/Dockerfile)
 * [`v8.0.0`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile)
 
@@ -142,5 +142,5 @@ For more information about networking with Docker please refer to the [official 
 
 # Support the Project
 
-If you like what you see please leave us stars and likes on our repos and join our growing community.
+If you like what you see please leave us stars and likes on our repos and join our growing community.<br>
 See you soon. :)
