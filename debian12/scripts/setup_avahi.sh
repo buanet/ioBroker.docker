@@ -32,7 +32,7 @@ echo -n "[setup_avahi.sh] Starting dbus... "
 echo "Done."
 
 echo -n "[setup_avahi.sh] Starting avahi-daemon... "
-  avahi-daemon -D
+  avahi-daemon >> /opt/scripts/avahi_startup.log 2>&1 &
 echo "Done."
 
 exit 0
