@@ -133,7 +133,11 @@ if [[ -f /opt/.docker_config/.first_run ]]; then
   if [[ "$offlinemode" = "true" ]]; then
     echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
   else
-    bash /opt/scripts/setup_packages.sh -update
+    if bash /opt/scripts/setup_packages.sh -update; then
+      echo " "
+    else
+      echo "Error: Updating failed."
+    fi
   fi
   echo " "
   # Installing packages from ENV
@@ -141,7 +145,11 @@ if [[ -f /opt/.docker_config/.first_run ]]; then
     echo "PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation."
   elif [[ "$packages" != "" ]]; then
     echo "PACKAGES is set. Installing the following additional Linux packages: ""$packages"
-      bash /opt/scripts/setup_packages.sh -install
+      if bash /opt/scripts/setup_packages.sh -install; then
+        echo " "
+      else
+        echo "Error: Installation failed."
+      fi
   fi
   echo " "
   # Register maintenance script
