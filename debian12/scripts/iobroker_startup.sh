@@ -133,11 +133,7 @@ if [[ -f /opt/.docker_config/.first_run ]]; then
   if [[ "$offlinemode" = "true" ]]; then
     echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
   else
-    if bash /opt/scripts/setup_packages.sh -update; then
-      echo " "
-    else
-      echo "Error: Updating failed."
-    fi
+    if ! bash /opt/scripts/setup_packages.sh -update; then echo "Failed."; fi
   fi
   echo " "
   # Installing packages from ENV
@@ -145,11 +141,7 @@ if [[ -f /opt/.docker_config/.first_run ]]; then
     echo "PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation."
   elif [[ "$packages" != "" ]]; then
     echo "PACKAGES is set. Installing the following additional Linux packages: ""$packages"
-      if bash /opt/scripts/setup_packages.sh -install; then
-        echo " "
-      else
-        echo "Error: Installation failed."
-      fi
+      if ! bash /opt/scripts/setup_packages.sh -install; then echo "Failed."; fi
   fi
   echo " "
   # Register maintenance script
@@ -505,17 +497,23 @@ elif [[ -f /opt/userscripts/userscript_firststart.sh || -f /opt/userscripts/user
     echo "Userscript for first start detected and this is the first start of a new container."
     echo "Running userscript_firststart.sh... "
       chmod 755 /opt/userscripts/userscript_firststart.sh
-      bash /opt/userscripts/userscript_firststart.sh
-    echo "Done."
+      if ! bash /opt/userscripts/userscript_firststart.sh; then
+        echo "Failed."
+      else
+        echo "Done."
+      fi
   fi
   if [[ -f /opt/userscripts/userscript_everystart.sh ]]; then
     echo "Userscript for every start detected. Running userscript_everystart.sh... "
       chmod 755 /opt/userscripts/userscript_everystart.sh
-      bash /opt/userscripts/userscript_everystart.sh
-    echo "Done."
+      if ! bash /opt/userscripts/userscript_everystart.sh; then
+        echo "Failed."
+      else
+        echo "Done."
+      fi
   fi
+  echo " "
 fi
-echo " "
 
 # Removing first run an fresh install markers when exists
 if [[ -f /opt/.docker_config/.first_run ]]; then rm -f /opt/.docker_config/.first_run; fi
