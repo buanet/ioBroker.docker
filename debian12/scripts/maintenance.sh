@@ -165,12 +165,12 @@ stop_iob() {
 
   if [[ "$killbyname" != yes ]]; then
     # pgrep exits with status 1 when there are no matches
-    while pgrep -u iobroker -f 'io.' > /dev/null; (( $? != 1 )); do
+    while pgrep -u iobroker -f 'io\..' > /dev/null; (( $? != 1 )); do
       if (($(date +%s) > timeout)); then
         echo -e "\nTimeout reached. Killing remaining processes..."
-        pgrep --list-full -u iobroker
-        pkill --signal SIGKILL -u iobroker -f 'io.'
-        echo "\nDone."
+        pgrep --list-full -u iobroker -f 'io\..'
+        pkill --signal SIGKILL -u iobroker -f 'io\..'
+        echo "Done."
         return
       fi
       sleep 1
@@ -184,6 +184,7 @@ stop_iob() {
   fi
 
   echo -e "Done."
+  echo " "
 }
 
 # restart container
@@ -218,40 +219,68 @@ restore_iobroker() {
   echo "You are now going to perform a restore of your iobroker."
   echo "During the restore process, the container will automatically switch into maintenance mode and stop ioBroker."
   echo "Depending on the restart policy, your container will be stopped or restarted automatically after the restore."
-
+  
+  # check autoconfirm
   if [[ "$autoconfirm" != yes ]]; then
     local reply
 
     read -rp 'Do you want to continue [yes/no]? ' reply
-    if [[ "$reply" == y || "$reply" == Y || "$reply" == yes ]]; then
-      : # continue
-    else
-      return 1
+    if [[ "$reply" != y && "$reply" != Y && "$reply" != yes ]]; then
+        return 1
     fi
   fi
+  echo " "
 
+  # check startup script running
   if check_starting > /dev/null; then
     echo "Startup script is still running."
     echo "Please check container log and wait until ioBroker is sucessfully started."
-    echo "Then try again."
     return 1
   fi
 
+  # check mainenance mode
   if ! maintenance_enabled > /dev/null; then
     autoconfirm=yes
     enable_maintenance
   fi
 
-  echo -n "Restoring ioBroker... "
+  # list backup files
+  backup_dir="/opt/iobroker/backups"
+  backup_files=($(find $backup_dir -type f))
+  backup_count=${#backup_files[@]}
+
+  if [[ $backup_count -eq 0 ]]; then
+      echo "Ther are no backup files in $backup_dir."
+      echo "Please check and try again."
+      return 1
+  elif [[ $backup_count -eq 1 ]]; then
+      selected_backup=$(basename "${backup_files[0]}")
+      echo "There is one backup file in $backup_dir."
+  else
+      # more than one backup file found, ask user to select
+      echo "There is more than one backup file in $backup_dir."
+      echo "Please select file for restore:"
+      for ((i=0; i<$backup_count; i++)); do
+        echo "$i: $(basename "${backup_files[$i]}")"
+      done
+      echo
+
+      read -rp "Enter the number of the backup to restore (0-$((backup_count - 1))): " selected_number
+      selected_backup=$(basename "${backup_files[$selected_number]}")
+  fi
+
+  # restoe backup
+  echo -n "Restoring ioBroker from $selected_backup... "
   set +e
-  bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
-  return=$?
+  bash iobroker restore "$selected_backup" > /opt/iobroker/log/restore.log 2>&1
+  return_value=$?
   set -e
-  if [[ "$return" -ne 0 ]]; then
-    echo "Failed."
-    echo "For more details see \"/opt/iobroker/log/restore.log\"."
-    echo "Please check backup file location and permissions and try again." 
-    return 1
+
+  if [[ "$return_value" -ne 0 ]]; then
+      echo "Failed."
+      echo "For more details see \"/opt/iobroker/log/restore.log\"."
+      echo "Please check backup file location and permissions and try again."
+      return 1
   fi
   echo "Done."
   echo " "
@@ -265,8 +294,8 @@ restore_iobroker() {
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   sleep 10
   echo "Container will be stopped or restarted in 10 seconds..."
-  sleep 10
   echo "stopping" > "$healthcheck"
+  sleep 10
   pkill -u iobroker
 }
 

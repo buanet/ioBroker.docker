@@ -1,6 +1,8 @@
 ## Changelog
 
 ### v9.1.0-beta.1 (coming soon)
+* fix restore/ adding backup file selection ([#394](https://github.com/buanet/ioBroker.docker/issues/394))
+* fix calling iob start|stop with parameters
 * enhance logging in iobroker_startup.sh
 * add error handling for user scripts
 
