@@ -1,6 +1,7 @@
 ## Changelog
 
-### v9.1.0-beta.1 (coming soon)
+### v9.1.0-beta.1 (03.11.2023)
+* improve maintenance command by symlinking ([#390](https://github.com/buanet/ioBroker.docker/issues/390))
 * fix restore/ adding backup file selection ([#394](https://github.com/buanet/ioBroker.docker/issues/394))
 * fix calling iob start|stop with parameters
 * enhance logging in iobroker_startup.sh

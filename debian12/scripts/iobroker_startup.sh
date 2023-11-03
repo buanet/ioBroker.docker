@@ -146,9 +146,9 @@ if [[ -f /opt/.docker_config/.first_run ]]; then
   echo " "
   # Register maintenance script
   echo -n "Registering maintenance script as command... "
-  echo "alias maintenance='/opt/scripts/maintenance.sh'" >> /etc/bash.bashrc
-  echo "alias maint='/opt/scripts/maintenance.sh'" >> /etc/bash.bashrc
-  echo "alias m='/opt/scripts/maintenance.sh'" >> /etc/bash.bashrc
+  ln -s /opt/scripts/maintenance.sh /bin/maintenance
+  ln -s /opt/scripts/maintenance.sh /bin/maint
+  ln -s /opt/scripts/maintenance.sh /bin/m
   echo "Done."
 else
   echo "This is not the first run of this container. Skipping first run preparation."
