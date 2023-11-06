@@ -100,6 +100,7 @@ if [[ "$statesdbname" != "" ]]; then echo -n "-----                    " && echo
 if [[ "$statesdbpass" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PASS: "***")" && echo " -----"; fi
 if [[ "$offlinemode" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" OFFLINE_MODE: "$offlinemode")" && echo " -----"; fi
 if [[ "$packages" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES: "$packages")" && echo " -----"; fi
+if [[ "$packagesupdate" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES_UPDATE: "$packagesupdate")" && echo " -----"; fi
 if [[ "$permissioncheck" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PERMISSION_CHECK: "$permissioncheck")" && echo " -----"; fi
 if [[ "$setgid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: "$setgid")" && echo " -----"; fi
 if [[ "$setuid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: "$setuid")" && echo " -----"; fi
