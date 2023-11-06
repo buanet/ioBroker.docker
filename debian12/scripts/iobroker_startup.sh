@@ -17,17 +17,18 @@ offlinemode=$OFFLINE_MODE
 objectsdbhost=$IOB_OBJECTSDB_HOST
 objectsdbport=$IOB_OBJECTSDB_PORT
 objectsdbtype=$IOB_OBJECTSDB_TYPE
-objectsdbname=$IOB_OBJECTSDB_NAME # new for sentinel support
-objectsdbpass=$IOB_OBJECTSDB_PASS # new for auth support
+objectsdbname=$IOB_OBJECTSDB_NAME
+objectsdbpass=$IOB_OBJECTSDB_PASS
 packages=$PACKAGES
+packagesupdate=$PACKAGES_UPDATE
 permissioncheck=$PERMISSION_CHECK
 setgid=$SETGID
 setuid=$SETUID
 statesdbhost=$IOB_STATESDB_HOST
 statesdbport=$IOB_STATESDB_PORT
 statesdbtype=$IOB_STATESDB_TYPE
-statesdbname=$IOB_STATESDB_NAME # new for sentinel support
-statesdbpass=$IOB_STATESDB_PASS # new for auth support
+statesdbname=$IOB_STATESDB_NAME
+statesdbpass=$IOB_STATESDB_PASS
 usbdevices=$USBDEVICES
 set -u
 
@@ -132,10 +133,12 @@ if [[ -f /opt/.docker_config/.first_run ]]; then
   # Updating Linux packages
   if [[ "$offlinemode" = "true" ]]; then
     echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
-  else
+    echo " "
+  elif [[ "$packagesupdate" = "true" ]]; then
     if ! bash /opt/scripts/setup_packages.sh -update; then echo "Failed."; fi
+    echo " "
   fi
-  echo " "
+
   # Installing packages from ENV
   if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
     echo "PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation."
@@ -144,19 +147,13 @@ if [[ -f /opt/.docker_config/.first_run ]]; then
     if ! bash /opt/scripts/setup_packages.sh -install; then echo "Failed."; fi
   fi
   echo " "
-  # Register maintenance script
-  echo -n "Registering maintenance script as command... "
-  ln -s /opt/scripts/maintenance.sh /bin/maintenance
-  ln -s /opt/scripts/maintenance.sh /bin/maint
-  ln -s /opt/scripts/maintenance.sh /bin/m
-  echo "Done."
 else
   echo "This is not the first run of this container. Skipping first run preparation."
 fi
 echo " "
 
 # Setting UID and/ or GID
-if [[ "$setgid" != "$(cat /etc/group | grep 'iobroker:' | cut -d':' -f3)" || "$setuid" != "$(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3)" ]]; then
+if [[ "$setgid" != "$(id -u iobroker)" || "$setuid" != "$(id -u iobroker)" ]]; then
   echo "SETUID and/ or SETGID are set to custom values."
   echo -n "Changing UID to \"""$setuid""\" and GID to \"""$setgid""\"... "
     usermod -u "$setuid" iobroker

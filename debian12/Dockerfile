@@ -75,6 +75,10 @@ RUN apt-get update && apt-get upgrade -y \
     && chown -R iobroker:iobroker /opt/scripts /opt/userscripts \
     && chmod 755 /opt/scripts/*.sh \
     && chmod 755 /opt/userscripts/*.sh \
+    # register maintenance command
+    && ln -s /opt/scripts/maintenance.sh /bin/maintenance \
+    && ln -s /opt/scripts/maintenance.sh /bin/maint \
+    && ln -s /opt/scripts/maintenance.sh /bin/m \
     # Clean up installation cache
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoclean -y \
