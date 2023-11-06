@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v9.1.0-beta.2 (coming soon)
+* enhance logging/ fix typos
 * add env PACKAGES_UPDATE and remove automatic package updates on first container start
 * improve setuid/setgid handling during startup ([#397](https://github.com/buanet/ioBroker.docker/issues/397))
 * move maintenance script registration to dockerfile ([#390](https://github.com/buanet/ioBroker.docker/issues/390))

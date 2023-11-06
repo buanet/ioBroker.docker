@@ -58,7 +58,7 @@ if [[ "$1" == "-install" ]]; then
     fi
   done
 elif [[ "$1" == "-update" ]]; then
-  echo -n "Updating Linux packages on first run... "
+  echo -n "PACKAGES_UPDATE is set. Updating Linux packages on first run... "
   apt-get -q update >> /opt/scripts/setup_packages.log 2>&1
   return1=$?
   apt-get -q -y upgrade >> /opt/scripts/setup_packages.log 2>&1
