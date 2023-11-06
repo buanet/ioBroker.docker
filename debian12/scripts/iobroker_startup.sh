@@ -154,7 +154,7 @@ fi
 echo " "
 
 # Setting UID and/ or GID
-if [[ "$setgid" != "$(id -u iobroker)" || "$setuid" != "$(id -u iobroker)" ]]; then
+if [[ "$setgid" != "$(id -u iobroker)" || "$setuid" != "$(id -g iobroker)" ]]; then
   echo "SETUID and/ or SETGID are set to custom values."
   echo -n "Changing UID to \"""$setuid""\" and GID to \"""$setgid""\"... "
     usermod -u "$setuid" iobroker
