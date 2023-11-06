@@ -125,7 +125,7 @@ fi
 # STEP 1 - Preparing container
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----                   Step 1 of 5: Preparing container                   -----"
+echo "-----                   Step 1 of 5: Preparing Container                   -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
@@ -170,7 +170,7 @@ cd /opt/iobroker
 # STEP 2 - Detecting ioBroker-Installation
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----             Step 2 of 5: Detecting ioBroker installation             -----"
+echo "-----             Step 2 of 5: Detecting ioBroker Installation             -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
@@ -184,10 +184,10 @@ elif [[ -f /opt/iobroker/iobroker ]]; then
 elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -ztvf /opt/iobroker/*_backupiobroker.tar.gz "backup/backup.json" 2> /dev/null | wc -l)" != "0" ]]; then
   echo "IoBroker backup file detected in /opt/iobroker."
   if [[ "$debug" == "true" ]]; then echo "[DEBUG] Backup file name: " "$(ls *_backupiobroker.tar.gz)"; fi
-  echo "Since Docker Image v8, automatic initial restore is no longer supported!"
+  echo "Since Docker image v8, automatic initial restore is no longer supported!"
   echo "IoBroker will start with a fresh installation, while your backup file will be copied into the backup directory."
   echo "You will be able to restore your backup file manually by using the backitup adapter or the containers maintenance script."
-  echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
+  echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
   echo " "
   echo -n "Copying backup file and restoring initial ioBroker installation... "
     mv /opt/iobroker/*.tar.gz /opt/
@@ -212,7 +212,7 @@ echo " "
 # STEP 3 - Checking ioBroker-Installation
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----             Step 3 of 5: Checking ioBroker installation              -----"
+echo "-----             Step 3 of 5: Checking ioBroker Installation              -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
@@ -297,7 +297,7 @@ elif [[ "$multihost" == "" || "$multihost" == "false" ]]; then
 else
   echo "IOB_MULTIHOST is set, but the value is not valid. Please check your configuration."
   if [[ "$debug" == "true" ]]; then echo "[DEBUG] IOB_MULTIHOST = ""$multihost"; fi
-  echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/#environment-variables-env)."
+  echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/#environment-variables-env)."
   stop_on_error
 fi
 
@@ -319,7 +319,7 @@ if [[ -f /opt/iobroker/.fresh_install && "$multihost" != "slave" ]]; then
   echo "Done."
   echo " "
 else
-  echo -n "Checking Database connection... "
+  echo -n "Checking database connection... "
   set +e
   if gosu iobroker iob uuid &> /dev/null; then
     echo "Done."
@@ -332,7 +332,7 @@ else
       echo "$errormsg"
     fi
     echo "Please check your configuration and try again."
-    echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs)."
+    echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs)."
     stop_on_error
   fi
   set -e
@@ -419,12 +419,12 @@ fi
 # STEP 4 - Setting up special sessting for ioBroker-adapters
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----                Step 4 of 5: Applying special settings                -----"
+echo "-----                Step 4 of 5: Applying Special Settings                -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
 echo "Some adapters have special requirements/ settings which can be activated by the use of environment variables."
-echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
+echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
 echo " "
 
 # Checking ENV for Adminport
@@ -476,7 +476,7 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
       else
         echo "Looks like the device \"""$i""\" does not exist."
         echo "Did you mount it correctly by using the \"--device\" option?"
-        echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/#mounting-usb-devices)."
+        echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/#mounting-usb-devices)."
         stop_on_error
       fi
     done
@@ -522,7 +522,7 @@ if [[ -f /opt/iobroker/.fresh_install ]]; then rm -f /opt/iobroker/.fresh_instal
 # STEP 5 - Starting ioBroker
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----                    Step 5 of 5: ioBroker startup                     -----"
+echo "-----                    Step 5 of 5: ioBroker Startup                     -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 echo "Starting ioBroker... "
