@@ -216,7 +216,7 @@ echo "-----             Step 3 of 5: Checking ioBroker installation             
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
-# Backing up original iobroker executable to fix sudo bug with gosu
+# Backing up and replace original iobroker executable to fix sudo bug with gosu
 if [[ -n $(cmp /opt/scripts/iobroker.sh /opt/iobroker/iobroker) ]]; then
   echo -n "Replacing ioBroker executable to fix sudo bug... "
   cp -a /opt/iobroker/iobroker /opt/iobroker/iobroker.bak
