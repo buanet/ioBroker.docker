@@ -272,7 +272,7 @@ restore_iobroker() {
   # restoe backup
   echo -n "Restoring ioBroker from $selected_backup... "
   set +e
-  bash iobroker restore "$selected_backup" > /opt/iobroker/log/restore.log 2>&1
+  bash iobroker restore "$selected_backup" --force > /opt/iobroker/log/restore.log 2>&1
   return_value=$?
   set -e
 

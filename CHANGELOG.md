@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v9.1.0-beta.2 (coming soon)
+* add --force to restore in maintenance script
 * improve shebang in scripts for downgrade and portability
 * enhance logging/ fix typos
 * add env PACKAGES_UPDATE and remove automatic package updates on first container start
