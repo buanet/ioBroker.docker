@@ -1,12 +1,13 @@
 ## Changelog
 
-### v9.1.0-beta.2 (coming soon)
+### v9.1.0-beta.3 (coming soon)
 * add --force to restore in maintenance script
 * improve shebang in scripts for downgrade and portability
-* enhance logging/ fix typos
-* add env PACKAGES_UPDATE and remove automatic package updates on first container start
-* improve setuid/setgid handling during startup ([#397](https://github.com/buanet/ioBroker.docker/issues/397))
-* move maintenance script registration to dockerfile ([#390](https://github.com/buanet/ioBroker.docker/issues/390))
+* v9.1.0-beta.2 (06.11.2023)
+  * enhance logging/ fix typos
+  * add env PACKAGES_UPDATE and remove automatic package updates on first container start
+  * improve setuid/setgid handling during startup ([#397](https://github.com/buanet/ioBroker.docker/issues/397))
+  * move maintenance script registration to dockerfile ([#390](https://github.com/buanet/ioBroker.docker/issues/390))
 * v9.1.0-beta.1 (03.11.2023)
   * improve maintenance command by symlinking ([#390](https://github.com/buanet/ioBroker.docker/issues/390))
   * fix restore/ adding backup file selection ([#394](https://github.com/buanet/ioBroker.docker/issues/394))
