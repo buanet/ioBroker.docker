@@ -1,6 +1,6 @@
 ## Changelog
 
-### v9.1.0-beta.3 (coming soon)
+### v9.1.0-beta.3 (23.11.2023)
 * add --force to restore in maintenance script
 * improve shebang in scripts for downgrade and portability
 * v9.1.0-beta.2 (06.11.2023)
