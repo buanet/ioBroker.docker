@@ -36,7 +36,7 @@ pkill_timeout=10      # timeout for iobroker shutdown in seconds
 
 # Stop on error function
 stop_on_error() {
-  if [[ "$debug" == "true" ]]; then 
+  if [[ "$debug" == "true" || "$debug" == "42" ]]; then 
     echo " "
     echo "[DEBUG] Debug mode prevents the container from exiting on errors."
     echo "[DEBUG] This enables you to investigate or fix your issue on the command line."
@@ -109,7 +109,18 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
 # Debug logging notice
-if [[ "$debug" == "true" ]]; then
+if [[ "$debug" == "42" ]]; then
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!!!                              DON'T PANIC!                              !!!!"
+  echo "!!!!     Just grab your towel. Environment variable DEBUG is set to 42.     !!!!"
+  echo "!!!! What looks like the answer to everything is just a undocumented value. !!!!"
+  echo "!!!! Startup script will do nothing, except keeping your container running. !!!!"
+  echo "!!!!     This might be useful for investigating errors during startup.      !!!!"
+  echo "!!!!  If you did this by mistake, just remove environment variable DEBUG.   !!!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo " "
+  stop_on_error
+elif [[ "$debug" == "true" ]]; then
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo "!!!!                            DEBUG LOG ACTIVE                            !!!!"
   echo "!!!!               Environment variable DEBUG is set to true.               !!!!"
@@ -120,6 +131,7 @@ if [[ "$debug" == "true" ]]; then
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo " "
 fi
+
 
 #####
 # STEP 1 - Preparing container
