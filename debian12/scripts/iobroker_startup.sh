@@ -118,7 +118,6 @@ if [[ "$debug" == "42" ]]; then
   echo "!!!!     This might be useful for investigating errors during startup.      !!!!"
   echo "!!!!  If you did this by mistake, just remove environment variable DEBUG.   !!!!"
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-  echo " "
   stop_on_error
 elif [[ "$debug" == "true" ]]; then
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
