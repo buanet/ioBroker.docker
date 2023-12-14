@@ -223,7 +223,6 @@ restore_iobroker() {
   # check autoconfirm
   if [[ "$autoconfirm" != yes ]]; then
     local reply
-
     read -rp 'Do you want to continue [yes/no]? ' reply
     if [[ "$reply" != y && "$reply" != Y && "$reply" != yes ]]; then
         return 1
@@ -255,10 +254,11 @@ restore_iobroker() {
       return 1
   elif [[ $backup_count -eq 1 ]]; then
       selected_backup=$(basename "${backup_files[0]}")
-      echo "There is one backup file in $backup_dir."
+      echo "Selected backup file is \"$selected_backup\"."
   else
       # more than one backup file found, ask user to select
-      echo "There is more than one backup file in $backup_dir."
+      echo "There are more than one backup file in \"$backup_dir\"."
+      echo ' ' 
       echo "Please select file for restore:"
       for ((i=0; i<$backup_count; i++)); do
         echo "$i: $(basename "${backup_files[$i]}")"
@@ -267,10 +267,69 @@ restore_iobroker() {
 
       read -rp "Enter the number of the backup to restore (0-$((backup_count - 1))): " selected_number
       selected_backup=$(basename "${backup_files[$selected_number]}")
+      echo ' '
+      echo "Selected backup file is \"$selected_backup\"."
+      echo ' '
   fi
 
-  # restoe backup
-  echo -n "Restoring ioBroker from $selected_backup... "
+  # extract backup.json from backup
+  tar -xvzf $backup_dir/$selected_backup -C $backup_dir --strip-components=1 "backup/backup.json" > /dev/null 2>&1
+  # write js-controller versions from backup.json into array
+  jq_output=$(jq --arg TITLE "JS controller" -r '.objects[] | select(.value.common.title == $TITLE)' $backup_dir/backup.json)
+  # remove backup.json
+  rm $backup_dir/backup.json
+
+  result=()
+  while read -r line; do
+    entry=$(echo "$line" | jq -r '.value.common.installedVersion')
+    result+=("$entry")
+  done <<< "$(echo "$jq_output" | jq -c '.')"
+
+  # check for empty array
+  if [[ "${#result[@]}" -eq 0 ]]; then
+    echo "There was a problem detecting the js-controller version in the seclected backup file."
+    return 1
+  else
+    # check if all found js-controller versions are equal (for multihost systems!)
+    first_version=${result[0]}
+    all_versions_equal=true
+    for i in "${result[@]}"; do
+      version=$i
+      if [[ "$version" != "$first_version" ]]; then
+        all_versions_equal=false
+        break
+      fi
+    done
+
+    if [[ "$all_versions_equal" != true ]]; then
+      echo "Detected different js-controller versions in the selected backup file."
+      return 1
+    fi
+  fi
+   
+  # compare installed js-controller version with version from backup file
+  echo -n "Checking js-controller versions... "
+  installed_version=$(iob version js-controller)
+  echo "Done."
+  echo ' '
+  echo "Installed js-controller version:  $installed_version"
+  echo "Backup js-controller version:     $first_version"
+  echo ' '
+
+  if [[ "$first_version" != "$installed_version" ]]; then
+    echo "The installed js-controller version is different from the version in the selected backup file."
+    echo "If you continue, the script will use the \"--force\" option to restore your backup."
+    echo "Although this is normally safe with small version differences, you should know,"
+    echo "that the recommended way is to first install the same js-controller version before restoring the backup file."
+    local reply
+    read -rp 'Do you want to continue [yes/no]? ' reply
+    if [[ "$reply" != y && "$reply" != Y && "$reply" != yes ]]; then
+        return 1
+    fi
+  fi
+
+  echo -n "Restoring ioBroker from \"$selected_backup\"... "
+
   set +e
   bash iobroker restore "$selected_backup" --force > /opt/iobroker/log/restore.log 2>&1
   return_value=$?
