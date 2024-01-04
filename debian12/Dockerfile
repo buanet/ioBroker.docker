@@ -34,6 +34,8 @@ RUN apt-get update && apt-get upgrade -y \
     procps \
     python3 \
     python3-dev \
+    # temporär!
+    sudo \
     tar \
     tzdata \
     udev \
