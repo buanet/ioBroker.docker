@@ -1,6 +1,8 @@
 #!/bin/bash
-
 # Script checks health of running container
+
+# bash strict mode
+set -e
 
 if [ "$(cat /opt/scripts/.docker_config/.healthcheck)" == "starting" ]
 then
