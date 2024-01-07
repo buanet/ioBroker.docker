@@ -33,6 +33,10 @@ set -u
 
 pkill_timeout=10      # timeout for iobroker shutdown in seconds
 
+function shutdown_with_error () {
+  exit 0
+}
+
 # Stop on error function
 stop_on_error() {
   if [[ "$debug" == "true" ]]; then 
@@ -41,11 +45,12 @@ stop_on_error() {
     echo "[DEBUG] This enables you to investigate or fix your issue on the command line."
     echo "[DEBUG] If you want to stop or restart your container you have to do it manually."
     echo "[DEBUG] IoBroker is not running!"
-      tail -f /dev/null
+    tail -f /dev/null
+    trap shutdown_with_error HUP INT QUIT ABRT KILL ALRM TERM TSTP
   else
     echo " "
     echo "This Script will exit now."
-      exit 1
+    exit 1
   fi
 }
 
