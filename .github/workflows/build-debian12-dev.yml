@@ -108,9 +108,9 @@ jobs:
           # Set values in Dockerfile
           sed -e "s/\${VERSION}/$VERSION-dev/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
-          # Remove separate npm install as fix for Node 20 
-          sed "/&& apt-get update && apt-get install -q -y --no-install-recommends npm/d" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+          # Remove separate npm install as fix for Node 20 (fixed in dockerfile??)
+          # sed "/&& apt-get update && apt-get install -q -y --no-install-recommends npm/d" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          # mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.0.0
