@@ -1,8 +1,14 @@
 ## Changelog
 
-### v9.1.0-beta.3 (23.11.2023)
-* add --force to restore in maintenance script
-* improve shebang in scripts for downgrade and portability
+### v9.1.0-beta.4 (08.01.2023)
+* add trap for debugging mode ([#421](https://github.com/buanet/ioBroker.docker/issues/421))
+* fix ownership of userscripts ([#423 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/423))
+* add strict mode to healthcheck.sh ([#424 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/424))
+* fixes for ci process and dockerfile
+* remove deprecated files from repo
+* v9.1.0-beta.3 (23.11.2023)
+  * add --force to restore in maintenance script
+  * improve shebang in scripts for downgrade and portability
 * v9.1.0-beta.2 (06.11.2023)
   * enhance logging/ fix typos
   * add env PACKAGES_UPDATE and remove automatic package updates on first container start

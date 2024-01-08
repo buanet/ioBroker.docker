@@ -34,6 +34,13 @@ set -u
 
 pkill_timeout=10      # timeout for iobroker shutdown in seconds
 
+# Exit with error function 
+exit_with_error() {
+  echo " "
+  echo "This Script will exit now."
+  exit 1
+}
+
 # Stop on error function
 stop_on_error() {
   if [[ "$debug" == "true" || "$debug" == "42" ]]; then 
@@ -42,11 +49,10 @@ stop_on_error() {
     echo "[DEBUG] This enables you to investigate or fix your issue on the command line."
     echo "[DEBUG] If you want to stop or restart your container you have to do it manually."
     echo "[DEBUG] IoBroker is not running!"
-      tail -f /dev/null
+    trap 'exit_with_error' SIGTERM SIGKILL
+    tail -f /dev/null & wait
   else
-    echo " "
-    echo "This Script will exit now."
-      exit 1
+    exit_with_error
   fi
 }
 
@@ -244,6 +250,7 @@ else
   echo -n "(Re)setting permissions (This might take a while! Please be patient!)... "
     chown -R "$setuid":"$setgid" /opt/iobroker
     chown -R "$setuid":"$setgid" /opt/scripts
+    chown -R "$setuid":"$setgid" /opt/userscripts
     chown -R "$setuid":"$setgid" /opt/.docker_config
   echo "Done."
 fi
