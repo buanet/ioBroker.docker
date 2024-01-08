@@ -46,7 +46,7 @@ RUN apt-get update && apt-get upgrade -y \
     && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
     && apt-get update && apt-get install -q -y --no-install-recommends nodejs \
     # Check for and install npm if not installed (no longer comes with nodejs? Bug?)
-    && npm --version || apt-get update && apt-get install -q -y --no-install-recommends npm \
+    && npm --version || apt-get install -q -y --no-install-recommends npm \
     # Install node-gyp
     && npm install --production -g node-gyp \
     # Generating locales
