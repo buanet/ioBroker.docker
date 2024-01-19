@@ -19,7 +19,7 @@ COPY userscripts /opt/userscripts
 # Set up ioBroker
 RUN apt-get update && apt-get upgrade -y \
     # Install prerequisites
-    && apt-get install -y \
+    && apt-get install -q -y --no-install-recommends \
     apt-utils \
     ca-certificates \
     cifs-utils \
@@ -38,11 +38,15 @@ RUN apt-get update && apt-get upgrade -y \
     tzdata \
     udev \
     wget \
+    # teporär
+    && apt-get install -q -y --no-install-recommends sudo \
     # Install node
     && mkdir -p /etc/apt/keyrings \
     && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
     && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
-    && apt-get update && apt-get install -y nodejs \
+    && apt-get update && apt-get install -q -y --no-install-recommends nodejs \
+    # Check for and install npm if not installed (no longer comes with nodejs? Bug?)
+    && npm --version || apt-get install -q -y --no-install-recommends npm \
     # Install node-gyp
     && npm install --production -g node-gyp \
     # Generating locales
@@ -75,6 +79,10 @@ RUN apt-get update && apt-get upgrade -y \
     && chown -R iobroker:iobroker /opt/scripts /opt/userscripts \
     && chmod 755 /opt/scripts/*.sh \
     && chmod 755 /opt/userscripts/*.sh \
+    # register maintenance command
+    && ln -s /opt/scripts/maintenance.sh /bin/maintenance \
+    && ln -s /opt/scripts/maintenance.sh /bin/maint \
+    && ln -s /opt/scripts/maintenance.sh /bin/m \
     # Clean up installation cache
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoclean -y \

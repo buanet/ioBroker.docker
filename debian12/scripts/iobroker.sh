@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # run iob fix
 iob_fix () {
@@ -39,27 +39,48 @@ iob_diag () {
   fi
 }
 
-if [ "$1" = "fix" ]; then # call iobroker fixer
-  iob_fix
-elif [ "$1" = "node fix" ]; then # call iobroker node fixer
-  echo "The execution of this command is blocked as your ioBroker is running inside a Docker container!"
-  echo "To fix any issues with nodejs, please pull the latest version of the Docker image and recreate your container."
-elif [ "$1" = "diag" ]; then # call iobroker diag script
-  iob_diag
-elif [ "$1" = "start" ] || [ "$1" = "stop" ] || [ "$1" = "restart" ]; then # block execution of iobroker start | stop | restart
-  echo "The execution of this command is blocked as your ioBroker is running inside a Docker container!"
-  echo "For more details see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/) or use the maintenance script 'maintenance --help'."
-elif [ "$1" = "m" ] || [ "$1" = "maint" ] || [ "$1" = "maintenance" ]; then # call iobroker maintenance script
+# run iobroker maintenance script
+iob_maint() {
   shift
-  if [ "$(id -u)" -eq 0 ]; then # check for execution as root
+  if [ "$(id -u)" -eq 0 ]; then
     gosu iobroker bash /opt/scripts/maintenance.sh "$@"
   else
     bash /opt/scripts/maintenance.sh "$@"
   fi
-else # passing all other parameters to iobroker.js
-  if [ "$(id -u)" -eq 0 ]; then # check for execution as root
+}
+
+# pass parameters and run iobroker.js
+iob_run() {
+  if [ "$(id -u)" -eq 0 ]; then
     gosu iobroker node /opt/iobroker/node_modules/iobroker.js-controller/iobroker.js "$@"
   else
     node /opt/iobroker/node_modules/iobroker.js-controller/iobroker.js "$@"
   fi
+}
+
+if [ "$1" = "fix" ]; then
+  # call iobroker fixer
+  iob_fix
+elif [ "$1" = "node fix" ]; then
+  # call iobroker node fixer
+  echo "The execution of this command is blocked as your ioBroker is running inside a Docker container!"
+  echo "To fix any issues with nodejs, please pull the latest version of the Docker image and recreate your container."
+elif [ "$1" = "diag" ]; then
+  # call iobroker diag script
+  iob_diag
+elif [ "$1" = "start" ] || [ "$1" = "stop" ] || [ "$1" = "restart" ]; then
+  # block execution of iobroker start | stop | restart but pass start | stop for adapters
+  if [ ! "$2" ]; then
+    echo "The execution of this command is blocked as your ioBroker is running inside a Docker container!"
+    echo "For more details see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/) or use the maintenance script 'maintenance --help'."
+  else
+    # passing all other parameters to iobroker.js but check for execution as root
+    iob_run "$@"
+  fi
+elif [ "$1" = "m" ] || [ "$1" = "maint" ] || [ "$1" = "maintenance" ]; then
+  # call iobroker maintenance script but check for execution as root
+  iob_maint "$@"
+else
+  # passing all other parameters to iobroker.js but check for execution as root
+  iob_run "$@"
 fi

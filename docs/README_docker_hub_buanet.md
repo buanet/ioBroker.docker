@@ -125,6 +125,7 @@ You could use environment variables to auto configure your ioBroker container on
 * `LC_ALL` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
 * `OFFLINE_MODE` (optional) Set `true` if your container has no or limited internet connection
 * `PACKAGES` (optional) Install additional Linux packages to your container, packages should be separated by whitespace like this: `package1 package2 package3`.
+* `PACKAGES_UPDATE` (optional) Set `true` if you want to apply Linux package updates at the first start of a new container.
 * `PERMISSION_CHECK` (optional, default: true) Set "false" to skip checking and correcting all relevant permissions on container startup (Use at own risk!!!)
 * `SETGID` (default: 1000) In some cases it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host
 * `SETUID` (default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host

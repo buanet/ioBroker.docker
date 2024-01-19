@@ -71,8 +71,8 @@ jobs:
           push: true
           platforms: |
             linux/amd64
-            linux/arm/v7
             linux/arm64/v8
+#            linux/arm/v7
           tags: |
             buanet/iobroker:latest,
             buanet/iobroker:${{ env.majorversion }},
@@ -140,37 +140,11 @@ jobs:
           push: true
           platforms: |
             linux/amd64
-            linux/arm/v7
             linux/arm64/v8
+#            linux/arm/v7
           tags: |
             iobroker/iobroker:latest,
             iobroker/iobroker:${{ env.majorversion }},
             iobroker/iobroker:${{ env.version }},
           provenance: false
           outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
-
-  delete-untagged-images:
-    if: ${{ always() }}
-    needs: [build-latest-for-buanet, build-latest-for-iobroker]
-    name: Delete untagged images from GitHub Container Registry
-    runs-on: ubuntu-latest
-    steps:
-      - name: Delete images
-        uses: actions/github-script@v7.0.1
-        with:
-          github-token: ${{ secrets.PACKAGES_PASS }}
-          script: |
-            const response = await github.request("GET /users/${{ env.OWNER }}/packages/container/${{ env.PACKAGE_NAME }}/versions",
-              { per_page: ${{ env.PER_PAGE }}
-            });
-            for(version of response.data) {
-                if (version.metadata.container.tags.length == 0) {
-                    console.log("delete " + version.id)
-                    const deleteResponse = await github.request("DELETE /user/packages/container/${{ env.PACKAGE_NAME }}/versions/" + version.id, { });
-                    console.log("status " + deleteResponse.status)
-                }
-            }
-        env:
-          OWNER: buanet
-          PACKAGE_NAME: iobroker
-          PER_PAGE: 100

@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# bash strict mode
+set -euo pipefail
 
 # Script checks health of running container
 

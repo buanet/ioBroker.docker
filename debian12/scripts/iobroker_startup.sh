@@ -17,35 +17,42 @@ offlinemode=$OFFLINE_MODE
 objectsdbhost=$IOB_OBJECTSDB_HOST
 objectsdbport=$IOB_OBJECTSDB_PORT
 objectsdbtype=$IOB_OBJECTSDB_TYPE
-objectsdbname=$IOB_OBJECTSDB_NAME # new for sentinel support
-objectsdbpass=$IOB_OBJECTSDB_PASS # new for auth support
+objectsdbname=$IOB_OBJECTSDB_NAME
+objectsdbpass=$IOB_OBJECTSDB_PASS
 packages=$PACKAGES
+packagesupdate=$PACKAGES_UPDATE
 permissioncheck=$PERMISSION_CHECK
 setgid=$SETGID
 setuid=$SETUID
 statesdbhost=$IOB_STATESDB_HOST
 statesdbport=$IOB_STATESDB_PORT
 statesdbtype=$IOB_STATESDB_TYPE
-statesdbname=$IOB_STATESDB_NAME # new for sentinel support
-statesdbpass=$IOB_STATESDB_PASS # new for auth support
+statesdbname=$IOB_STATESDB_NAME
+statesdbpass=$IOB_STATESDB_PASS
 usbdevices=$USBDEVICES
 set -u
 
 pkill_timeout=10      # timeout for iobroker shutdown in seconds
 
+# Exit with error function 
+exit_with_error() {
+  echo " "
+  echo "This Script will exit now."
+  exit 1
+}
+
 # Stop on error function
 stop_on_error() {
-  if [[ "$debug" == "true" ]]; then 
+  if [[ "$debug" == "true" || "$debug" == "42" ]]; then 
     echo " "
     echo "[DEBUG] Debug mode prevents the container from exiting on errors."
     echo "[DEBUG] This enables you to investigate or fix your issue on the command line."
     echo "[DEBUG] If you want to stop or restart your container you have to do it manually."
     echo "[DEBUG] IoBroker is not running!"
-      tail -f /dev/null
+    trap 'exit_with_error' SIGTERM SIGKILL
+    tail -f /dev/null & wait
   else
-    echo " "
-    echo "This Script will exit now."
-      exit 1
+    exit_with_error
   fi
 }
 
@@ -99,6 +106,7 @@ if [[ "$statesdbname" != "" ]]; then echo -n "-----                    " && echo
 if [[ "$statesdbpass" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_STATESDB_PASS: "***")" && echo " -----"; fi
 if [[ "$offlinemode" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" OFFLINE_MODE: "$offlinemode")" && echo " -----"; fi
 if [[ "$packages" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES: "$packages")" && echo " -----"; fi
+if [[ "$packagesupdate" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PACKAGES_UPDATE: "$packagesupdate")" && echo " -----"; fi
 if [[ "$permissioncheck" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" PERMISSION_CHECK: "$permissioncheck")" && echo " -----"; fi
 if [[ "$setgid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETGID: "$setgid")" && echo " -----"; fi
 if [[ "$setuid" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" SETUID: "$setuid")" && echo " -----"; fi
@@ -107,7 +115,17 @@ echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
 # Debug logging notice
-if [[ "$debug" == "true" ]]; then
+if [[ "$debug" == "42" ]]; then
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!!!                              DON'T PANIC!                              !!!!"
+  echo "!!!!     Just grab your towel. Environment variable DEBUG is set to 42.     !!!!"
+  echo "!!!! What looks like the answer to everything is just a undocumented value. !!!!"
+  echo "!!!! Startup script will do nothing, except keeping your container running. !!!!"
+  echo "!!!!     This might be useful for investigating errors during startup.      !!!!"
+  echo "!!!!  If you did this by mistake, just remove environment variable DEBUG.   !!!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  stop_on_error
+elif [[ "$debug" == "true" ]]; then
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo "!!!!                            DEBUG LOG ACTIVE                            !!!!"
   echo "!!!!               Environment variable DEBUG is set to true.               !!!!"
@@ -119,11 +137,12 @@ if [[ "$debug" == "true" ]]; then
   echo " "
 fi
 
+
 #####
 # STEP 1 - Preparing container
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----                   Step 1 of 5: Preparing container                   -----"
+echo "-----                   Step 1 of 5: Preparing Container                   -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
@@ -132,39 +151,27 @@ if [[ -f /opt/.docker_config/.first_run ]]; then
   # Updating Linux packages
   if [[ "$offlinemode" = "true" ]]; then
     echo "OFFLINE_MODE is \"true\". Skipping Linux package updates on first run."
-  else
-    if bash /opt/scripts/setup_packages.sh -update; then
-      echo " "
-    else
-      echo "Error: Updating failed."
-    fi
+    echo " "
+  elif [[ "$packagesupdate" = "true" ]]; then
+    if ! bash /opt/scripts/setup_packages.sh -update; then echo "Failed."; fi
+    echo " "
   fi
-  echo " "
+
   # Installing packages from ENV
   if [[ "$packages" != "" && "$offlinemode" = "true" ]]; then
     echo "PACKAGES is set, but OFFLINE_MODE is \"true\". Skipping Linux package installation."
   elif [[ "$packages" != "" ]]; then
     echo "PACKAGES is set. Installing the following additional Linux packages: ""$packages"
-      if bash /opt/scripts/setup_packages.sh -install; then
-        echo " "
-      else
-        echo "Error: Installation failed."
-      fi
+    if ! bash /opt/scripts/setup_packages.sh -install; then echo "Failed."; fi
   fi
   echo " "
-  # Register maintenance script
-  echo -n "Registering maintenance script as command... "
-  echo "alias maintenance='/opt/scripts/maintenance.sh'" >> /etc/bash.bashrc
-  echo "alias maint='/opt/scripts/maintenance.sh'" >> /etc/bash.bashrc
-  echo "alias m='/opt/scripts/maintenance.sh'" >> /etc/bash.bashrc
-  echo "Done."
 else
   echo "This is not the first run of this container. Skipping first run preparation."
 fi
 echo " "
 
 # Setting UID and/ or GID
-if [[ "$setgid" != "$(cat /etc/group | grep 'iobroker:' | cut -d':' -f3)" || "$setuid" != "$(cat /etc/passwd | grep 'iobroker:' | cut -d':' -f3)" ]]; then
+if [[ "$setgid" != "$(id -u iobroker)" || "$setuid" != "$(id -g iobroker)" ]]; then
   echo "SETUID and/ or SETGID are set to custom values."
   echo -n "Changing UID to \"""$setuid""\" and GID to \"""$setgid""\"... "
     usermod -u "$setuid" iobroker
@@ -180,7 +187,7 @@ cd /opt/iobroker
 # STEP 2 - Detecting ioBroker-Installation
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----             Step 2 of 5: Detecting ioBroker installation             -----"
+echo "-----             Step 2 of 5: Detecting ioBroker Installation             -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
@@ -194,10 +201,10 @@ elif [[ -f /opt/iobroker/iobroker ]]; then
 elif [[ "$(ls *_backupiobroker.tar.gz 2> /dev/null | wc -l)" != "0" && "$(tar -ztvf /opt/iobroker/*_backupiobroker.tar.gz "backup/backup.json" 2> /dev/null | wc -l)" != "0" ]]; then
   echo "IoBroker backup file detected in /opt/iobroker."
   if [[ "$debug" == "true" ]]; then echo "[DEBUG] Backup file name: " "$(ls *_backupiobroker.tar.gz)"; fi
-  echo "Since Docker Image v8, automatic initial restore is no longer supported!"
+  echo "Since Docker image v8, automatic initial restore is no longer supported!"
   echo "IoBroker will start with a fresh installation, while your backup file will be copied into the backup directory."
   echo "You will be able to restore your backup file manually by using the backitup adapter or the containers maintenance script."
-  echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
+  echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
   echo " "
   echo -n "Copying backup file and restoring initial ioBroker installation... "
     mv /opt/iobroker/*.tar.gz /opt/
@@ -222,11 +229,11 @@ echo " "
 # STEP 3 - Checking ioBroker-Installation
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----             Step 3 of 5: Checking ioBroker installation              -----"
+echo "-----             Step 3 of 5: Checking ioBroker Installation              -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
-# Backing up original iobroker executable to fix sudo bug with gosu
+# Backing up and replace original iobroker executable to fix sudo bug with gosu
 if [[ -n $(cmp /opt/scripts/iobroker.sh /opt/iobroker/iobroker) ]]; then
   echo -n "Replacing ioBroker executable to fix sudo bug... "
   cp -a /opt/iobroker/iobroker /opt/iobroker/iobroker.bak
@@ -308,7 +315,7 @@ elif [[ "$multihost" == "" || "$multihost" == "false" ]]; then
 else
   echo "IOB_MULTIHOST is set, but the value is not valid. Please check your configuration."
   if [[ "$debug" == "true" ]]; then echo "[DEBUG] IOB_MULTIHOST = ""$multihost"; fi
-  echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/#environment-variables-env)."
+  echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/#environment-variables-env)."
   stop_on_error
 fi
 
@@ -330,7 +337,7 @@ if [[ -f /opt/iobroker/.fresh_install && "$multihost" != "slave" ]]; then
   echo "Done."
   echo " "
 else
-  echo -n "Checking Database connection... "
+  echo -n "Checking database connection... "
   set +e
   if gosu iobroker iob uuid &> /dev/null; then
     echo "Done."
@@ -343,7 +350,7 @@ else
       echo "$errormsg"
     fi
     echo "Please check your configuration and try again."
-    echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs)."
+    echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs)."
     stop_on_error
   fi
   set -e
@@ -430,12 +437,12 @@ fi
 # STEP 4 - Setting up special sessting for ioBroker-adapters
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----                Step 4 of 5: Applying special settings                -----"
+echo "-----                Step 4 of 5: Applying Special Settings                -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 
 echo "Some adapters have special requirements/ settings which can be activated by the use of environment variables."
-echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
+echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/)."
 echo " "
 
 # Checking ENV for Adminport
@@ -487,7 +494,7 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
       else
         echo "Looks like the device \"""$i""\" does not exist."
         echo "Did you mount it correctly by using the \"--device\" option?"
-        echo "For more information see ioBroker Docker Image Docs (https://docs.buanet.de/iobroker-docker-image/docs/#mounting-usb-devices)."
+        echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs/#mounting-usb-devices)."
         stop_on_error
       fi
     done
@@ -506,17 +513,24 @@ elif [[ -f /opt/userscripts/userscript_firststart.sh || -f /opt/userscripts/user
     echo "Userscript for first start detected and this is the first start of a new container."
     echo "Running userscript_firststart.sh... "
       chmod 755 /opt/userscripts/userscript_firststart.sh
-      bash /opt/userscripts/userscript_firststart.sh
-    echo "Done."
+      if ! bash /opt/userscripts/userscript_firststart.sh; then
+        echo "Failed."
+      else
+        echo "Done."
+      fi
   fi
   if [[ -f /opt/userscripts/userscript_everystart.sh ]]; then
     echo "Userscript for every start detected. Running userscript_everystart.sh... "
       chmod 755 /opt/userscripts/userscript_everystart.sh
-      bash /opt/userscripts/userscript_everystart.sh
-    echo "Done."
+      if ! bash /opt/userscripts/userscript_everystart.sh; then
+        echo "Failed."
+      else
+        echo "Done."
+      fi
   fi
+  echo " "
 fi
-echo " "
+
 
 # Removing first run an fresh install markers when exists
 if [[ -f /opt/.docker_config/.first_run ]]; then rm -f /opt/.docker_config/.first_run; fi
@@ -526,7 +540,7 @@ if [[ -f /opt/iobroker/.fresh_install ]]; then rm -f /opt/iobroker/.fresh_instal
 # STEP 5 - Starting ioBroker
 #####
 echo "$(printf -- '-%.0s' {1..80})"
-echo "-----                    Step 5 of 5: ioBroker startup                     -----"
+echo "-----                    Step 5 of 5: ioBroker Startup                     -----"
 echo "$(printf -- '-%.0s' {1..80})"
 echo " "
 echo "Starting ioBroker... "

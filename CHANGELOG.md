@@ -1,5 +1,27 @@
 ## Changelog
 
+### v9.1.0-beta.4 (08.01.2023)
+* dropping arm/v7 support (temporary)
+* add trap for debugging mode ([#421](https://github.com/buanet/ioBroker.docker/issues/421))
+* fix ownership of userscripts ([#423 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/423))
+* add strict mode to healthcheck.sh ([#424 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/424))
+* fixes for ci process and dockerfile
+* remove deprecated files from repo
+* v9.1.0-beta.3 (23.11.2023)
+  * add --force to restore in maintenance script
+  * improve shebang in scripts for downgrade and portability
+* v9.1.0-beta.2 (06.11.2023)
+  * enhance logging/ fix typos
+  * add env PACKAGES_UPDATE and remove automatic package updates on first container start
+  * improve setuid/setgid handling during startup ([#397](https://github.com/buanet/ioBroker.docker/issues/397))
+  * move maintenance script registration to dockerfile ([#390](https://github.com/buanet/ioBroker.docker/issues/390))
+* v9.1.0-beta.1 (03.11.2023)
+  * improve maintenance command by symlinking ([#390](https://github.com/buanet/ioBroker.docker/issues/390))
+  * fix restore/ adding backup file selection ([#394](https://github.com/buanet/ioBroker.docker/issues/394))
+  * fix calling iob start|stop with parameters
+  * enhance logging in iobroker_startup.sh
+  * add error handling for user scripts
+
 ### v9.0.1 (10.10.2023)
 * fix issue with avahi setup ([#384](https://github.com/buanet/ioBroker.docker/issues/384); [#385 by @z1r0](https://github.com/buanet/ioBroker.docker/pull/385))
 * add silent cleanup to setup_avahi.sh

@@ -165,12 +165,12 @@ stop_iob() {
 
   if [[ "$killbyname" != yes ]]; then
     # pgrep exits with status 1 when there are no matches
-    while pgrep -u iobroker -f 'io.' > /dev/null; (( $? != 1 )); do
+    while pgrep -u iobroker -f 'io\..' > /dev/null; (( $? != 1 )); do
       if (($(date +%s) > timeout)); then
         echo -e "\nTimeout reached. Killing remaining processes..."
-        pgrep --list-full -u iobroker
-        pkill --signal SIGKILL -u iobroker -f 'io.'
-        echo "\nDone."
+        pgrep --list-full -u iobroker -f 'io\..'
+        pkill --signal SIGKILL -u iobroker -f 'io\..'
+        echo "Done."
         return
       fi
       sleep 1
@@ -184,6 +184,7 @@ stop_iob() {
   fi
 
   echo -e "Done."
+  echo " "
 }
 
 # restart container
@@ -218,40 +219,127 @@ restore_iobroker() {
   echo "You are now going to perform a restore of your iobroker."
   echo "During the restore process, the container will automatically switch into maintenance mode and stop ioBroker."
   echo "Depending on the restart policy, your container will be stopped or restarted automatically after the restore."
-
+  
+  # check autoconfirm
   if [[ "$autoconfirm" != yes ]]; then
     local reply
-
     read -rp 'Do you want to continue [yes/no]? ' reply
-    if [[ "$reply" == y || "$reply" == Y || "$reply" == yes ]]; then
-      : # continue
-    else
-      return 1
+    if [[ "$reply" != y && "$reply" != Y && "$reply" != yes ]]; then
+        return 1
     fi
   fi
+  echo " "
 
+  # check startup script running
   if check_starting > /dev/null; then
     echo "Startup script is still running."
     echo "Please check container log and wait until ioBroker is sucessfully started."
-    echo "Then try again."
     return 1
   fi
 
+  # check mainenance mode
   if ! maintenance_enabled > /dev/null; then
     autoconfirm=yes
     enable_maintenance
   fi
 
-  echo -n "Restoring ioBroker... "
-  set +e
-  bash iobroker restore 0 > /opt/iobroker/log/restore.log 2>&1
-  return=$?
-  set -e
-  if [[ "$return" -ne 0 ]]; then
-    echo "Failed."
-    echo "For more details see \"/opt/iobroker/log/restore.log\"."
-    echo "Please check backup file location and permissions and try again." 
+  # list backup files
+  backup_dir="/opt/iobroker/backups"
+  backup_files=($(find $backup_dir -type f))
+  backup_count=${#backup_files[@]}
+
+  if [[ $backup_count -eq 0 ]]; then
+      echo "Ther are no backup files in $backup_dir."
+      echo "Please check and try again."
+      return 1
+  elif [[ $backup_count -eq 1 ]]; then
+      selected_backup=$(basename "${backup_files[0]}")
+      echo "Selected backup file is \"$selected_backup\"."
+  else
+      # more than one backup file found, ask user to select
+      echo "There are more than one backup file in \"$backup_dir\"."
+      echo ' ' 
+      echo "Please select file for restore:"
+      for ((i=0; i<$backup_count; i++)); do
+        echo "$i: $(basename "${backup_files[$i]}")"
+      done
+      echo
+
+      read -rp "Enter the number of the backup to restore (0-$((backup_count - 1))): " selected_number
+      selected_backup=$(basename "${backup_files[$selected_number]}")
+      echo ' '
+      echo "Selected backup file is \"$selected_backup\"."
+      echo ' '
+  fi
+
+  # extract backup.json from backup
+  tar -xvzf $backup_dir/$selected_backup -C $backup_dir --strip-components=1 "backup/backup.json" > /dev/null 2>&1
+  # write js-controller versions from backup.json into array
+  jq_output=$(jq --arg TITLE "JS controller" -r '.objects[] | select(.value.common.title == $TITLE)' $backup_dir/backup.json)
+  # remove backup.json
+  rm $backup_dir/backup.json
+
+  result=()
+  while read -r line; do
+    entry=$(echo "$line" | jq -r '.value.common.installedVersion')
+    result+=("$entry")
+  done <<< "$(echo "$jq_output" | jq -c '.')"
+
+  # check for empty array
+  if [[ "${#result[@]}" -eq 0 ]]; then
+    echo "There was a problem detecting the js-controller version in the seclected backup file."
     return 1
+  else
+    # check if all found js-controller versions are equal (for multihost systems!)
+    first_version=${result[0]}
+    all_versions_equal=true
+    for i in "${result[@]}"; do
+      version=$i
+      if [[ "$version" != "$first_version" ]]; then
+        all_versions_equal=false
+        break
+      fi
+    done
+
+    if [[ "$all_versions_equal" != true ]]; then
+      echo "Detected different js-controller versions in the selected backup file."
+      return 1
+    fi
+  fi
+   
+  # compare installed js-controller version with version from backup file
+  echo -n "Checking js-controller versions... "
+  installed_version=$(iob version js-controller)
+  echo "Done."
+  echo ' '
+  echo "Installed js-controller version:  $installed_version"
+  echo "Backup js-controller version:     $first_version"
+  echo ' '
+
+  if [[ "$first_version" != "$installed_version" ]]; then
+    echo "The installed js-controller version is different from the version in the selected backup file."
+    echo "If you continue, the script will use the \"--force\" option to restore your backup."
+    echo "Although this is normally safe with small version differences, you should know,"
+    echo "that the recommended way is to first install the same js-controller version before restoring the backup file."
+    local reply
+    read -rp 'Do you want to continue [yes/no]? ' reply
+    if [[ "$reply" != y && "$reply" != Y && "$reply" != yes ]]; then
+        return 1
+    fi
+  fi
+
+  echo -n "Restoring ioBroker from \"$selected_backup\"... "
+
+  set +e
+  bash iobroker restore "$selected_backup" --force > /opt/iobroker/log/restore.log 2>&1
+  return_value=$?
+  set -e
+
+  if [[ "$return_value" -ne 0 ]]; then
+      echo "Failed."
+      echo "For more details see \"/opt/iobroker/log/restore.log\"."
+      echo "Please check backup file location and permissions and try again."
+      return 1
   fi
   echo "Done."
   echo " "
@@ -265,8 +353,8 @@ restore_iobroker() {
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   sleep 10
   echo "Container will be stopped or restarted in 10 seconds..."
-  sleep 10
   echo "stopping" > "$healthcheck"
+  sleep 10
   pkill -u iobroker
 }
 
