@@ -150,7 +150,7 @@ jobs:
             platforms: |
               linux/amd64
               linux/arm64/v8
-#            linux/arm/v7
+#              linux/arm/v7
             tags: |
               buanet/iobroker:beta-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
               buanet/iobroker:${{ env.version }}-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
