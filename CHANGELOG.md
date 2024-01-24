@@ -1,5 +1,8 @@
 ## Changelog
 
+### v9.1.1 (24.01.2024)
+* fix node js setup
+
 ### v9.1.0 (19.01.2024)
 * update docs and ci
 * v9.1.0-beta.4 (08.01.2024)
