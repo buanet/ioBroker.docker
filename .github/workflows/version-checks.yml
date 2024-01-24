@@ -24,7 +24,7 @@ jobs:
 
       - name: Docker Baseimage Checker
         id: baseimage
-        uses: mkumatag/container-image-updater-action@v1.0.5
+        uses: mkumatag/container-image-updater-action@v1.0.6
         with:
           base-image: '${{ env.baseimage }}'
           image: '${{ env.iobroker }}'
