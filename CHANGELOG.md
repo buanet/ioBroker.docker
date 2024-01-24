@@ -1,12 +1,17 @@
 ## Changelog
 
-### v9.1.0-beta.4 (08.01.2023)
-* dropping arm/v7 support (temporary)
-* add trap for debugging mode ([#421](https://github.com/buanet/ioBroker.docker/issues/421))
-* fix ownership of userscripts ([#423 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/423))
-* add strict mode to healthcheck.sh ([#424 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/424))
-* fixes for ci process and dockerfile
-* remove deprecated files from repo
+### v9.1.1 (24.01.2024)
+* fix node js setup
+
+### v9.1.0 (19.01.2024)
+* update docs and ci
+* v9.1.0-beta.4 (08.01.2024)
+  * dropping arm/v7 support (temporary)
+  * add trap for debugging mode ([#421](https://github.com/buanet/ioBroker.docker/issues/421))
+  * fix ownership of userscripts ([#423 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/423))
+  * add strict mode to healthcheck.sh ([#424 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/424))
+  * fixes for ci process and dockerfile
+  * remove deprecated files from repo
 * v9.1.0-beta.3 (23.11.2023)
   * add --force to restore in maintenance script
   * improve shebang in scripts for downgrade and portability
