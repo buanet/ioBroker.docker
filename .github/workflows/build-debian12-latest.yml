@@ -72,7 +72,7 @@ jobs:
           platforms: |
             linux/amd64
             linux/arm64/v8
-#            linux/arm/v7
+            linux/arm/v7
           tags: |
             buanet/iobroker:latest,
             buanet/iobroker:${{ env.majorversion }},
@@ -141,7 +141,7 @@ jobs:
           platforms: |
             linux/amd64
             linux/arm64/v8
-#            linux/arm/v7
+            linux/arm/v7
           tags: |
             iobroker/iobroker:latest,
             iobroker/iobroker:${{ env.majorversion }},
