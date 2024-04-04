@@ -46,7 +46,7 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get update && apt-get install -q -y --no-install-recommends nodejs \
     # Temp Fix (Update npm)
     npm -v \
-    npm install -g npm@latest \
+    npm install npm@latest \
     npm -v \
     # Install node-gyp
     && npm install --production -g node-gyp \
