@@ -45,9 +45,9 @@ RUN apt-get update && apt-get upgrade -y \
     && printf "Package: *\nPin: origin deb.nodesource.com\nPin-Priority: 1001\n" > /etc/apt/preferences.d/nodesource \
     && apt-get update && apt-get install -q -y --no-install-recommends nodejs \
     # Temp Fix (Update npm)
-    npm -v \
-    npm install npm@latest \
-    npm -v \
+    && npm -v \
+    && npm install -g npm@latest \
+    && npm -v \
     # Install node-gyp
     && npm install --production -g node-gyp \
     # Generating locales
