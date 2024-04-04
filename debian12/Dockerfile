@@ -47,7 +47,7 @@ RUN apt-get update && apt-get upgrade -y \
     # Temp Fix (Update npm)
     npm -v \
     npm install -g npm@latest \
-    npm -v\
+    npm -v \
     # Install node-gyp
     && npm install --production -g node-gyp \
     # Generating locales
