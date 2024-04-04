@@ -43,8 +43,8 @@ jobs:
           curl -sL https://repo.iobroker.live/sources-dist.json | \
           jq -r '."discovery".version' > .github/dependencies/.discovery-version
           echo "[LOG] Fetched discovery version is $(cat .github/dependencies/.discovery-version)"
-          curl -sL "https://deb.nodesource.com/node_18.x/dists/bullseye/main/binary-amd64/Packages" | \
-          awk -F ': ' '/^Version:/ {split($2,a,"-"); print a[1]}' > .github/dependencies/.nodejs-version
+          curl -sL https://nodejs.org/dist/index.json | \
+          jq -r 'map(select(.version | startswith("v18."))) | .[0].version' > .github/dependencies/.nodejs-version
           echo "[LOG] Fetched nodejs version is $(cat .github/dependencies/.nodejs-version)"
 
       - name: Check for modified files
