@@ -44,6 +44,10 @@ RUN apt-get update && apt-get upgrade -y \
     && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
     && printf "Package: *\nPin: origin deb.nodesource.com\nPin-Priority: 1001\n" > /etc/apt/preferences.d/nodesource \
     && apt-get update && apt-get install -q -y --no-install-recommends nodejs \
+    # Temp Fix (check/log npm version, update npm to latest)
+    && npm -v \
+    && npm install -g npm@latest \
+    && npm -v \
     # Install node-gyp
     && npm install --production -g node-gyp \
     # Generating locales

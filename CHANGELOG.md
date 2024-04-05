@@ -1,5 +1,8 @@
 ## Changelog
 
+### v9.1.2 (05.04.2024)
+* fix build process by updating npm to latest
+
 ### v9.1.1 (24.01.2024)
 * fix node js setup
 
