@@ -112,7 +112,7 @@ You could use environment variables to auto configure your ioBroker container on
 * `IOB_STATESDB_TYPE` (optional, default: jsonl) Set type of ioBroker states db, could be "jsonl", "file" (deprecated) or "redis"
 * `IOB_STATESDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker states db, supports comma separated list for Redis Sentinel Cluster
 * `IOB_STATESDB_PORT` (optional, default: 9000) Set port for ioBroker states db, supports comma separated list for Redis Sentinel Cluster
-* `IOB_STATESDB_PASS` (optional, default: 9000) Set authentication for Redis db connection
+* `IOB_STATESDB_PASS` (optional) Set authentication for Redis db connection
 * `IOB_STATESDB_NAME` (optional, default: mymaster) Set name for Redis Sentinel cluster db
 
 ### Activate special features: 
