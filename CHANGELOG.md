@@ -1,5 +1,8 @@
 ## Changelog
 
+### v9.2.0-beta.1 (coming soon)
+* improve logging for failed database check ([#411](https://github.com/buanet/ioBroker.docker/issues/411))
+
 ### v9.1.2 (05.04.2024)
 * fix build process by updating npm to latest
 
