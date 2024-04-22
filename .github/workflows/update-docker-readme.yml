@@ -12,7 +12,7 @@ jobs:
   update-docker-readme:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4.1.2
+    - uses: actions/checkout@v4.1.3
 
     - name: Update Docker Hub Readme (buanet)
       uses: peter-evans/dockerhub-description@v4.0.0
