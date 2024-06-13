@@ -24,7 +24,7 @@ jobs:
         run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: Checkout repo
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.7
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
@@ -96,7 +96,7 @@ jobs:
           run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
         - name: Checkout repo
-          uses: actions/checkout@v4.1.2
+          uses: actions/checkout@v4.1.7
           with:
             repository: 'buanet/ioBroker.docker'
             ref: ${{ env.RELEASE_TAG }}

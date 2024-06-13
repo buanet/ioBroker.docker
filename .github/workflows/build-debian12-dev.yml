@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.7
         with:
           repository: 'buanet/ioBroker.docker'
 
@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.7
         with:
           repository: 'buanet/ioBroker.docker'
 
