@@ -1,7 +1,10 @@
 ## Changelog
 
-### v9.2.0-beta.1 (coming soon)
+### v10.0.0-beta.1 (coming soon)
+* upgrade node version to recommended node20
+* remove dedicated node setup from dockerfile
 * improve logging for failed database check ([#411](https://github.com/buanet/ioBroker.docker/issues/411))
+* rework build process due to problems with github actions
 
 ### v9.1.2 (05.04.2024)
 * fix build process by updating npm to latest
