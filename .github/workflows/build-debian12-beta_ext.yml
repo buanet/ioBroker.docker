@@ -1,0 +1,28 @@
+# Github action to trigger external Debian12 image build (Tag: beta)
+name: Trigger external Build (beta)
+
+on:
+  release:
+    types: [prereleased]
+  workflow_dispatch:
+    inputs:
+      chose_node_version:
+        type: choice
+        description: 'Which Node version should be used?'
+        options:
+          - 'Recommended Node version (default)'
+          - 'Experimental Node version'
+          - 'Both Node versions'
+
+jobs:
+  trigger_beta_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger build (beta)
+        uses: benc-uk/workflow-dispatch@v1.2
+        with:
+          ref: refs/heads/main
+          workflow: iob.docker - Build Debian 12 Image (beta)
+          repo: buanet/private.actionsrunner
+          inputs: '{ "chose_node_version": "${{ inputs.chose_node_version }}" }'
+          token: ${{ secrets.ACTIONS_PAT }}
