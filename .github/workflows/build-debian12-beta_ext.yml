@@ -22,10 +22,10 @@ jobs:
       - name: Trigger beta build on release
         uses: benc-uk/workflow-dispatch@v1.2
         with:
-          ref: main
-          workflow: iob.docker - Build Debian 12 Image (beta)
-          repo: buanet/private.actionsrunner
-          inputs: '{ "chose_node_version": "Both Node versions" }'
+          ref: 'main'
+          workflow: 'iob.docker - Build Debian 12 Image (beta)'
+          repo: 'buanet/private.actionsrunner'
+          inputs: '{ "chose_node_version": "Both Node versions", "ref": "main" }'
           token: ${{ secrets.ACTIONS_PAT }}
 
   trigger_beta_build_manual:
@@ -35,8 +35,8 @@ jobs:
       - name: Trigger beta build on release
         uses: benc-uk/workflow-dispatch@v1.2
         with:
-          ref: main
-          workflow: iob.docker - Build Debian 12 Image (beta)
-          repo: buanet/private.actionsrunner
-          inputs: '{ "chose_node_version": "${{ inputs.chose_node_version }}" }'
+          ref: 'main'
+          workflow: 'iob.docker - Build Debian 12 Image (beta)'
+          repo: 'buanet/private.actionsrunner'
+          inputs: '{ "chose_node_version": "${{ inputs.chose_node_version }}", "ref": "main" }'
           token: ${{ secrets.ACTIONS_PAT }}
