@@ -10,7 +10,7 @@ jobs:
   trigger_latest_build_on_release:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger latest build on release
+      - name: Trigger latest build
         uses: benc-uk/workflow-dispatch@v1.2
         with:
           ref: 'main'

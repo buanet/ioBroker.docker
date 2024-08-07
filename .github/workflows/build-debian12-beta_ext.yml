@@ -32,7 +32,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger beta build manual
+      - name: Trigger beta build on dispatch
         uses: benc-uk/workflow-dispatch@v1.2
         with:
           ref: 'main'
