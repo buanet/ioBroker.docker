@@ -38,5 +38,5 @@ jobs:
           ref: 'main'
           workflow: 'iob.docker - Build Debian 12 Image (beta)'
           repo: 'buanet/private.actionsrunner'
-          inputs: '{ "chose_node_version": "${{ inputs.chose_node_version }}", "ref": "main" }'
+          inputs: '{ "chose_node_version": "${{ inputs.chose_node_version }}" }'
           token: ${{ secrets.ACTIONS_PAT }}
