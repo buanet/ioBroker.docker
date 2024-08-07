@@ -1,6 +1,6 @@
 ## Changelog
 
-### v10.0.0-beta.2 (08.08.2024)
+### v10.0.0-beta.2 (07.08.2024)
 * add build date to image
 * cleanup dockerfile
 * v10.0.0-beta.1 (13.07.2024)
