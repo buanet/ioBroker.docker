@@ -1,0 +1,19 @@
+# Github action to trigger external Debian12 image build (Tag: latest)
+name: Trigger external Build (latest)
+
+on:
+  release:
+    types: [released]
+  workflow_dispatch:
+
+jobs:
+  trigger_latest_build_on_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger latest build on release
+        uses: benc-uk/workflow-dispatch@v1.2
+        with:
+          ref: 'main'
+          workflow: 'iob.docker - Build Debian 12 Image (latest)'
+          repo: 'buanet/private.actionsrunner'
+          token: ${{ secrets.ACTIONS_PAT }}
