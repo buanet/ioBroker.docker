@@ -4,6 +4,7 @@
 * v10.0.0-beta.2 (07.08.2024)
   * add build date to image
   * cleanup dockerfile
+  * test new build process
 * v10.0.0-beta.1 (13.07.2024)
   * upgrade node version to recommended node20
   * remove dedicated node setup from dockerfile
