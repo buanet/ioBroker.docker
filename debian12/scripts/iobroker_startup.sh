@@ -343,12 +343,10 @@ else
     echo "Done."
     echo " "
   else
-    errormsg=$(gosu iobroker iob uuid 2>&1 | sed 's/^/[DEBUG] /')
     echo "Failed."
-    if [[ "$debug" == "true" ]]; then
-      echo "[DEBUG] Error message: "
-      echo "$errormsg"
-    fi
+    errormsg=$(gosu iobroker iob uuid 2>&1 | sed 's/^/[ERROR] /')
+    echo "$errormsg"
+    echo " "
     echo "Please check your configuration and try again."
     echo "For more information see ioBroker Docker image docs (https://docs.buanet.de/iobroker-docker-image/docs)."
     stop_on_error

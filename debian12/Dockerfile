@@ -10,7 +10,7 @@ LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.created="${DATI}"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND="noninteractive"
 
 # Copy files
 COPY scripts /opt/scripts
@@ -38,18 +38,6 @@ RUN apt-get update && apt-get upgrade -y \
     tzdata \
     udev \
     wget \
-    # Install node
-    && mkdir -p /etc/apt/keyrings \
-    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
-    && printf "Package: *\nPin: origin deb.nodesource.com\nPin-Priority: 1001\n" > /etc/apt/preferences.d/nodesource \
-    && apt-get update && apt-get install -q -y --no-install-recommends nodejs \
-    # Temp Fix (check/log npm version, update npm to latest)
-    && npm -v \
-    && npm install -g npm@latest \
-    && npm -v \
-    # Install node-gyp
-    && npm install --production -g node-gyp \
     # Generating locales
     && sed -i 's/^# *\(de_DE.UTF-8\)/\1/' /etc/locale.gen \
     && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
@@ -58,12 +46,16 @@ RUN apt-get update && apt-get upgrade -y \
     && mkdir /opt/.docker_config \
     && echo "starting" > /opt/.docker_config/.healthcheck \
     && echo "${VERSION}" > /opt/.docker_config/.thisisdocker \
+    && echo "${DATI}" > /opt/.docker_config/.build \
     && echo "true" > /opt/.docker_config/.first_run \
     # Prepare old .docker_config (needed until changed in iobroker)
     && mkdir /opt/scripts/.docker_config \
     && echo "${VERSION}" > /opt/scripts/.docker_config/.thisisdocker \
     # Run iobroker installer
-    && curl -sL https://iobroker.net/install.sh | bash - \
+    && curl -sL https://iobroker.net/install.sh -o install.sh \
+    && sed -i 's/NODE_MAJOR=[0-9]\+/NODE_MAJOR=${NODE}/' install.sh \
+    && sed -i 's|NODE_JS_BREW_URL=.*|NODE_JS_BREW_URL="https://nodejs.org"|' install.sh \
+    && bash install.sh \
     # Deleting UUID from build
     && iobroker unsetup -y \
     && echo "true" > /opt/iobroker/.fresh_install \
@@ -92,7 +84,8 @@ RUN apt-get update && apt-get upgrade -y \
     && rm -rf /tmp/* /var/tmp/* /root/.cache/* /root/.npm/* /var/lib/apt/lists/*
 
 # Default environment variables
-ENV DEBIAN_FRONTEND="teletype" \
+ENV BUILD="${DATI}" \
+    DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \

@@ -15,14 +15,28 @@ on:
           - 'Both Node versions'
 
 jobs:
-  trigger_beta_build:
+  trigger_beta_build_on_release:
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger build (beta)
+      - name: Trigger beta build on release
         uses: benc-uk/workflow-dispatch@v1.2
         with:
-          ref: refs/heads/main
-          workflow: iob.docker - Build Debian 12 Image (beta)
-          repo: buanet/private.actionsrunner
+          ref: 'main'
+          workflow: 'iob.docker - Build Debian 12 Image (beta)'
+          repo: 'buanet/private.actionsrunner'
+          inputs: '{ "chose_node_version": "Both Node versions" }'
+          token: ${{ secrets.ACTIONS_PAT }}
+
+  trigger_beta_build_manual:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger beta build on dispatch
+        uses: benc-uk/workflow-dispatch@v1.2
+        with:
+          ref: 'main'
+          workflow: 'iob.docker - Build Debian 12 Image (beta)'
+          repo: 'buanet/private.actionsrunner'
           inputs: '{ "chose_node_version": "${{ inputs.chose_node_version }}" }'
           token: ${{ secrets.ACTIONS_PAT }}
