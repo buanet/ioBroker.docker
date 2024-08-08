@@ -35,7 +35,9 @@ New major image versions (e.g. v6, v7, v8) usually include a new major version o
 It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[major_version]` tag instead.
 
 ### Node 18 versions
-* [`v9.1.0`](https://github.com/buanet/ioBroker.docker/blob/v9.1.0/debian12/Dockerfile), [`latest-v9`](https://github.com/buanet/ioBroker.docker/blob/v9.1.0/debian12/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v9.1.0/debian12/Dockerfile)
+* [`v9.1.2`](https://github.com/buanet/ioBroker.docker/blob/v9.1.2/debian12/Dockerfile), [`latest-v9`](https://github.com/buanet/ioBroker.docker/blob/v9.1.2/debian12/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v9.1.2/debian12/Dockerfile)
+* [`v9.1.1`](https://github.com/buanet/ioBroker.docker/blob/v9.1.1/debian12/Dockerfile)
+* [`v9.1.0`](https://github.com/buanet/ioBroker.docker/blob/v9.1.0/debian12/Dockerfile)
 * [`v9.0.1`](https://github.com/buanet/ioBroker.docker/blob/v9.0.1/debian12/Dockerfile)
 * [`v8.1.0`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), [`latest-v8`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), 
 * [`v8.0.1`](https://github.com/buanet/ioBroker.docker/blob/v8.0.1/debian/node18/Dockerfile)
@@ -48,7 +50,7 @@ It is highly recommended not to use the `latest` tag for production, especially 
 
 # What is ioBroker?
 
-IoBroker is a open source IoT platform written in JavaScript that easily connects smarthome components from different manufactures. With the help of plugins (called: "adapters") ioBroker is able to communicate with a big variety of IoT hardware and services using different protocols and APIs.<br>
+IoBroker is an open source IoT platform written in JavaScript that easily connects smarthome components from different manufactures. With the help of plugins (called: "adapters") ioBroker is able to communicate with a big variety of IoT hardware and services using different protocols and APIs.<br>
 All data is stored in a central database that all adapters can access. With this it is very easy to build up logical connections, automation scripts and beautiful visualizations.<br>
 For further details please check out [iobroker.net](https://www.iobroker.net).
 
@@ -110,7 +112,7 @@ You could use environment variables to auto configure your ioBroker container on
 * `IOB_STATESDB_TYPE` (optional, default: jsonl) Set type of ioBroker states db, could be "jsonl", "file" (deprecated) or "redis"
 * `IOB_STATESDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker states db, supports comma separated list for Redis Sentinel Cluster
 * `IOB_STATESDB_PORT` (optional, default: 9000) Set port for ioBroker states db, supports comma separated list for Redis Sentinel Cluster
-* `IOB_STATESDB_PASS` (optional, default: 9000) Set authentication for Redis db connection
+* `IOB_STATESDB_PASS` (optional) Set authentication for Redis db connection
 * `IOB_STATESDB_NAME` (optional, default: mymaster) Set name for Redis Sentinel cluster db
 
 ### Activate special features: 
