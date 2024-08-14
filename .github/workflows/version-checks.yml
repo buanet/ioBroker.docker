@@ -63,6 +63,7 @@ jobs:
         if: steps.baseimage.outputs.needs-update == 'true' || steps.git-check.outputs.modified == 'true'
         uses: benc-uk/workflow-dispatch@v1.2
         with:
-          workflow: Build Debian 12 Image (latest)
-          repo: buanet/ioBroker.docker
+          ref: 'main'
+          workflow: 'iob.docker - Build Debian 12 Image (latest)'
+          repo: 'buanet/private.actionsrunner'
           token: ${{ secrets.ACTIONS_PAT }}
