@@ -67,7 +67,7 @@ RUN apt-get update && apt-get upgrade -y \
     && chsh -s /bin/bash iobroker \
     && usermod --home /opt/iobroker iobroker \
     # && usermod -u 1000 iobroker \
-    && groupmod -g 1000 iobroker \
+    # && groupmod -g 1000 iobroker \
     && chown root:iobroker /usr/sbin/gosu \
     # Set permissions and ownership
     && chown -R iobroker:iobroker /opt/scripts /opt/userscripts \
