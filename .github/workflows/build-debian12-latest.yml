@@ -62,7 +62,10 @@ jobs:
           registry: ghcr.io
           username: ${{ secrets.PACKAGES_USER }}
           password: ${{ secrets.PACKAGES_PASS }}
-
+          
+      - name: Build and load Docker image for arm/v7
+        run: docker buildx build --platform linux/arm/v7 --load --file ./debian12/Dockerfile ./debian12
+        
       - name: Build and push Docker image
         uses: docker/build-push-action@v6.6.1
         with:
@@ -131,6 +134,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER_IOB }}
           password: ${{ secrets.DOCKER_PASS_IOB }}
+
+      - name: Build and load Docker image for arm/v7
+        run: docker buildx build --platform linux/arm/v7 --load --file ./debian12/Dockerfile ./debian12
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6.6.1
