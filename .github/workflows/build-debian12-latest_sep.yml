@@ -1,5 +1,5 @@
 # Github action to build Debian12 image (Tag: latest)
-name: Build Debian 12 Image (latest)
+name: Build Debian 12 Image new (latest)
 
 on:
   release:
