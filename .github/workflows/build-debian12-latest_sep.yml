@@ -73,8 +73,6 @@ jobs:
           tags: |
             buanet/iobroker:latest-armv7,
             ghcr.io/buanet/iobroker:latest-armv7,
-          provenance: false
-          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
   build-latest-arm64v8-for-buanet:
     name: Build latest armv64v8 image for buanet
@@ -142,8 +140,6 @@ jobs:
           tags: |
             buanet/iobroker:latest-arm64v8,
             ghcr.io/buanet/iobroker:latest-arm64v8,
-          provenance: false
-          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
   build-latest-amd64-for-buanet:
     name: Build latest amd64 image for buanet
@@ -181,9 +177,6 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3.2.0
-
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v3.6.1
@@ -211,8 +204,6 @@ jobs:
           tags: |
             buanet/iobroker:latest-amd64,
             ghcr.io/buanet/iobroker:latest-amd64,
-          provenance: false
-          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
 
   create_and_push_multiarch_image:
     runs-on: ubuntu-latest
