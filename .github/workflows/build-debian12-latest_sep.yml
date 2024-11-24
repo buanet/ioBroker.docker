@@ -71,8 +71,8 @@ jobs:
           push: true
           platforms: linux/arm/v7
           tags: |
-            buanet/iobroker:latest-armv7,
-            ghcr.io/buanet/iobroker:latest-armv7,
+            buanet/iobroker:${{ env.version }}-armv7,
+            ghcr.io/buanet/iobroker:${{ env.version }}-armv7,
 
   build-latest-arm64v8-for-buanet:
     name: Build latest armv64v8 image for buanet
@@ -138,8 +138,8 @@ jobs:
           push: true
           platforms: linux/arm64/v8
           tags: |
-            buanet/iobroker:latest-arm64v8,
-            ghcr.io/buanet/iobroker:latest-arm64v8,
+            buanet/iobroker:${{ env.version }}-arm64v8,
+            ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8,
 
   build-latest-amd64-for-buanet:
     name: Build latest amd64 image for buanet
@@ -202,10 +202,10 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            buanet/iobroker:latest-amd64,
-            ghcr.io/buanet/iobroker:latest-amd64,
+            buanet/iobroker:${{ env.version }}-amd64,
+            ghcr.io/buanet/iobroker:${{ env.version }}-amd64,
 
-  create_and_push_multiarch_image:
+  create-multiarch-image-for-buanet:
     runs-on: ubuntu-latest
     needs: [build-latest-armv7-for-buanet, build-latest-arm64v8-for-buanet, build-latest-amd64-for-buanet]
     steps:
@@ -255,73 +255,228 @@ jobs:
 
       - name: Create and push multi-platform image
         run: |
-          docker buildx imagetools create -t buanet/iobroker:test buanet/iobroker:latest-armv7 buanet/iobroker:latest-arm64v8 buanet/iobroker:latest-amd64
-          docker buildx imagetools create -t ghcr.io/buanet/iobroker:test ghcr.io/buanet/iobroker:latest-armv7 ghcr.io/buanet/iobroker:latest-arm64v8 ghcr.io/buanet/iobroker:latest-amd64
-#          docker buildx imagetools create -t buanet/iobroker:${{ env.majorversion }} buanet/iobroker:latest-armv7 buanet/iobroker:latest-arm64v8 buanet/iobroker:latest-amd64
-#          docker buildx imagetools create -t buanet/iobroker:${{ env.version }} buanet/iobroker:latest-armv7 buanet/iobroker:latest-arm64v8 buanet/iobroker:latest-amd64
+          docker buildx imagetools create -t buanet/iobroker:latest buanet/iobroker:${{ env.version }}-armv7 buanet/iobroker:${{ env.version }}-arm64v8 buanet/iobroker:${{ env.version }}-amd64
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:latest ghcr.io/buanet/iobroker:${{ env.version }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-amd64
+          docker buildx imagetools create -t buanet/iobroker:${{ env.majorversion }} buanet/iobroker:${{ env.version }}-armv7 buanet/iobroker:${{ env.version }}-arm64v8 buanet/iobroker:${{ env.version }}-amd64
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.majorversion }} ghcr.io/buanet/iobroker:${{ env.version }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-amd64
+          docker buildx imagetools create -t buanet/iobroker:${{ env.version }} buanet/iobroker:${{ env.version }}-armv7 buanet/iobroker:${{ env.version }}-arm64v8 buanet/iobroker:${{ env.version }}-amd64
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }} ghcr.io/buanet/iobroker:${{ env.version }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-amd64
 
-#  build-latest-for-iobroker:
-#    name: Build latest image for iobroker
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Fetch latest release tag
-#        run: |
-#          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-#          echo "Latest release tag : $LATESTRELEASE"
-#          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
-#
-#      - name: Checkout repo
-#        uses: actions/checkout@v4.1.7
-#        with:
-#          repository: 'buanet/ioBroker.docker'
-#          ref: ${{ env.RELEASE_TAG }}
-#
-#      - name: Set job variables
-#        run: |
-#          VERSION="$(cat .VERSION)"
-#          MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
-#          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
-#          # Log output and export as Github environment variable
-#          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
-#          echo "[LOG] Image Version: $VERSION"
-#          echo "version=$VERSION" >> $GITHUB_ENV
-#          echo "[LOG] Major Image Version: $MAJORVERSION"
-#          echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
-#          echo "[LOG] Buildnumber/Timestamp: $DATI"
-#          echo "dati=$DATI" >> $GITHUB_ENV
-#          # Set values in iobroker_startup.sh
-#          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
-#          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
-#          # Set values in Dockerfile
-#          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-#          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
-#
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v3.2.0
-#
-#      - name: Set up Docker Buildx
-#        id: buildx
-#        uses: docker/setup-buildx-action@v3.6.1
-#
-#      - name: Login to DockerHub (buanet)
-#        uses: docker/login-action@v3.3.0
-#        with:
-#          username: ${{ secrets.DOCKER_USER_IOB }}
-#          password: ${{ secrets.DOCKER_PASS_IOB }}
-#
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v6.6.1
-#        with:
-#          context: ./debian12
-#          file: ./debian12/Dockerfile
-#          push: false
-#          platforms: |
-#            linux/amd64
-#            linux/arm64/v8
-#            linux/arm/v7
-#          tags: |
-#            iobroker/iobroker:latest,
-#            iobroker/iobroker:${{ env.majorversion }},
-#            iobroker/iobroker:${{ env.version }},
-#          provenance: false
-#          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=Official Docker image for ioBroker smarthome software (https://www.iobroker.net)
+  build-latest-armv7-for-iobroker:
+    name: Build latest armv7 image for iobroker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch latest release tag
+        run: |
+          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
+          echo "Latest release tag : $LATESTRELEASE"
+          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
+
+      - name: Checkout repo
+        uses: actions/checkout@v4.1.7
+        with:
+          repository: 'buanet/ioBroker.docker'
+          ref: ${{ env.RELEASE_TAG }}
+
+      - name: Set job variables
+        run: |
+          VERSION="$(cat .VERSION)"
+          MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
+          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          # Log output and export as Github environment variable
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
+          echo "[LOG] Image Version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "[LOG] Major Image Version: $MAJORVERSION"
+          echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber/Timestamp: $DATI"
+          echo "dati=$DATI" >> $GITHUB_ENV
+          # Set values in iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
+          # Set values in Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.2.0
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3.6.1
+
+      - name: Login to DockerHub (iobroker)
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USER_IOB }}
+          password: ${{ secrets.DOCKER_PASS_IOB }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6.6.1
+        with:
+          context: ./debian12
+          file: ./debian12/Dockerfile
+          push: true
+          platforms: linux/arm/v7
+          tags: iobroker/iobroker:${{ env.version }}-armv7
+
+  build-latest-arm64v8-for-iobroker:
+    name: Build latest armv64v8 image for iobroker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch latest release tag
+        run: |
+          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
+          echo "Latest release tag : $LATESTRELEASE"
+          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
+
+      - name: Checkout repo
+        uses: actions/checkout@v4.1.7
+        with:
+          repository: 'buanet/ioBroker.docker'
+          ref: ${{ env.RELEASE_TAG }}
+
+      - name: Set job variables
+        run: |
+          VERSION="$(cat .VERSION)"
+          MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
+          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          # Log output and export as Github environment variable
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
+          echo "[LOG] Image Version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "[LOG] Major Image Version: $MAJORVERSION"
+          echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber/Timestamp: $DATI"
+          echo "dati=$DATI" >> $GITHUB_ENV
+          # Set values in iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
+          # Set values in Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.2.0
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3.6.1
+
+      - name: Login to DockerHub (iobroker)
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USER_IOB }}
+          password: ${{ secrets.DOCKER_PASS_IOB }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6.6.1
+        with:
+          context: ./debian12
+          file: ./debian12/Dockerfile
+          push: true
+          platforms: linux/arm64/v8
+          tags: iobroker/iobroker:${{ env.version }}-arm64v8
+
+  build-latest-amd64-for-iobroker:
+    name: Build latest amd64 image for iobroker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch latest release tag
+        run: |
+          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
+          echo "Latest release tag : $LATESTRELEASE"
+          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
+
+      - name: Checkout repo
+        uses: actions/checkout@v4.1.7
+        with:
+          repository: 'buanet/ioBroker.docker'
+          ref: ${{ env.RELEASE_TAG }}
+
+      - name: Set job variables
+        run: |
+          VERSION="$(cat .VERSION)"
+          MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
+          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          # Log output and export as Github environment variable
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
+          echo "[LOG] Image Version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "[LOG] Major Image Version: $MAJORVERSION"
+          echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber/Timestamp: $DATI"
+          echo "dati=$DATI" >> $GITHUB_ENV
+          # Set values in iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
+          # Set values in Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3.6.1
+
+      - name: Login to DockerHub (iobroker)
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USER_IOB }}
+          password: ${{ secrets.DOCKER_PASS_IOB }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6.6.1
+        with:
+          context: ./debian12
+          file: ./debian12/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: iobroker/iobroker:${{ env.version }}-amd64
+
+  create-multiarch-image-for-iobroker:
+    runs-on: ubuntu-latest
+    needs: [build-latest-armv7-for-iobroker, build-latest-arm64v8-for-iobroker, build-latest-amd64-for-iobroker]
+    steps:
+      - name: Fetch latest release tag
+        run: |
+          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
+          echo "Latest release tag : $LATESTRELEASE"
+          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
+  
+      - name: Checkout repo
+        uses: actions/checkout@v4.1.7
+        with:
+          repository: 'buanet/ioBroker.docker'
+          ref: ${{ env.RELEASE_TAG }}
+  
+      - name: Set job variables
+        run: |
+          VERSION="$(cat .VERSION)"
+          MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
+          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          # Log output and export as Github environment variable
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
+          echo "[LOG] Image Version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "[LOG] Major Image Version: $MAJORVERSION"
+          echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber/Timestamp: $DATI"
+          echo "dati=$DATI" >> $GITHUB_ENV
+          # Set values in iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
+          # Set values in Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+
+      - name: Login to DockerHub (iobroker)
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USER_IOB }}
+          password: ${{ secrets.DOCKER_PASS_IOB }}
+
+      - name: Create and push multi-platform image
+        run: |
+          docker buildx imagetools create -t iobroker/iobroker:latest iobroker/iobroker:${{ env.version }}-armv7 iobroker/iobroker:${{ env.version }}-arm64v8 iobroker/iobroker:${{ env.version }}-amd64
+          docker buildx imagetools create -t iobroker/iobroker:${{ env.majorversion }} iobroker/iobroker:${{ env.version }}-armv7 iobroker/iobroker:${{ env.version }}-arm64v8 iobroker/iobroker:${{ env.version }}-amd64
+          docker buildx imagetools create -t iobroker/iobroker:${{ env.version }} iobroker/iobroker:${{ env.version }}-armv7 iobroker/iobroker:${{ env.version }}-arm64v8 iobroker/iobroker:${{ env.version }}-amd64
