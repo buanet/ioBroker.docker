@@ -1,0 +1,27 @@
+name: Buildnumber test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4.1.7
+        with:
+          repository: 'buanet/ioBroker.docker'
+          token: ${{ secrets.ACTIONS_PAT }}
+
+      - name: Write build number
+        run: |
+          BUILD="$(date +"%Y%m%d.%H%M%S")"
+          echo "$BUILD" > .github/dependencies/.latest-build
+          echo "[LOG] Buildnumber: $BUILD"
+
+      - name: Commit latest release version
+        run: |
+          git config --global user.name 'buanet'
+          git config --global user.email 'info@buanet.de'
+          git commit -am "new build"
+          git push
