@@ -84,7 +84,7 @@ RUN apt-get update && apt-get upgrade -y \
     && rm -rf /tmp/* /var/tmp/* /root/.cache/* /root/.npm/* /var/lib/apt/lists/*
 
 # Default environment variables
-ENV BUILD="${DATI}" \
+ENV BUILD="${BUILD}" \
     DEBIAN_FRONTEND="teletype" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \

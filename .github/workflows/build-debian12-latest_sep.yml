@@ -7,8 +7,35 @@ on:
   workflow_dispatch:
 
 jobs:
+  create-build-number:
+    runs-on: ubuntu-latest
+    outputs:
+      build_number: ${{ steps.generate-build-number.outputs.build_number }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4.1.7
+        with:
+          repository: 'buanet/ioBroker.docker'
+          token: ${{ secrets.ACTIONS_PAT }}
+
+      - name: Generate build number
+        id: generate-build-number
+        run: |
+          BUILD="$(date +"%Y%m%d.%H%M%S")"
+          echo "$BUILD" > .github/dependencies/.latest-build
+          echo "::set-output name=build_number::$BUILD"
+          echo "[LOG] Buildnumber: $BUILD"
+
+      - name: Commit latest release version
+        run: |
+          git config --global user.name 'buanet'
+          git config --global user.email 'info@buanet.de'
+          git commit -am "new build"
+          git push
+
   build-latest-armv7-for-buanet:
     name: Build latest armv7 image for buanet
+    needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
       - name: Fetch latest release tag
@@ -27,20 +54,20 @@ jobs:
         run: |
           VERSION="$(cat .VERSION)"
           MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
-          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
-          echo "[LOG] Buildnumber/Timestamp: $DATI"
-          echo "dati=$DATI" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber: $BUILD"
+          echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -71,11 +98,12 @@ jobs:
           push: true
           platforms: linux/arm/v7
           tags: |
-            buanet/iobroker:${{ env.version }}-armv7,
-            ghcr.io/buanet/iobroker:${{ env.version }}-armv7,
+            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7,
+            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7,
 
   build-latest-arm64v8-for-buanet:
     name: Build latest armv64v8 image for buanet
+    needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
       - name: Fetch latest release tag
@@ -94,20 +122,20 @@ jobs:
         run: |
           VERSION="$(cat .VERSION)"
           MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
-          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
-          echo "[LOG] Buildnumber/Timestamp: $DATI"
-          echo "dati=$DATI" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber: $BUILD"
+          echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -138,11 +166,12 @@ jobs:
           push: true
           platforms: linux/arm64/v8
           tags: |
-            buanet/iobroker:${{ env.version }}-arm64v8,
-            ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8,
+            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8,
+            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8,
 
   build-latest-amd64-for-buanet:
     name: Build latest amd64 image for buanet
+    needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
       - name: Fetch latest release tag
@@ -161,20 +190,20 @@ jobs:
         run: |
           VERSION="$(cat .VERSION)"
           MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
-          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
-          echo "[LOG] Buildnumber/Timestamp: $DATI"
-          echo "dati=$DATI" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber: $BUILD"
+          echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up Docker Buildx
@@ -202,8 +231,8 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            buanet/iobroker:${{ env.version }}-amd64,
-            ghcr.io/buanet/iobroker:${{ env.version }}-amd64,
+            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64,
+            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64,
 
   create-multiarch-image-for-buanet:
     runs-on: ubuntu-latest
@@ -225,21 +254,16 @@ jobs:
         run: |
           VERSION="$(cat .VERSION)"
           MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
-          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
-          echo "[LOG] Buildnumber/Timestamp: $DATI"
-          echo "dati=$DATI" >> $GITHUB_ENV
-          # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
-          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
-          # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+          echo "[LOG] Buildnumber: $BUILD"
+          echo "build=$BUILD" >> $GITHUB_ENV
+
       - name: Login to DockerHub (buanet)
         uses: docker/login-action@v3.3.0
         with:
@@ -255,15 +279,18 @@ jobs:
 
       - name: Create and push multi-platform image
         run: |
-          docker buildx imagetools create -t buanet/iobroker:latest buanet/iobroker:${{ env.version }}-armv7 buanet/iobroker:${{ env.version }}-arm64v8 buanet/iobroker:${{ env.version }}-amd64
-          docker buildx imagetools create -t ghcr.io/buanet/iobroker:latest ghcr.io/buanet/iobroker:${{ env.version }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-amd64
-          docker buildx imagetools create -t buanet/iobroker:${{ env.majorversion }} buanet/iobroker:${{ env.version }}-armv7 buanet/iobroker:${{ env.version }}-arm64v8 buanet/iobroker:${{ env.version }}-amd64
-          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.majorversion }} ghcr.io/buanet/iobroker:${{ env.version }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-amd64
-          docker buildx imagetools create -t buanet/iobroker:${{ env.version }} buanet/iobroker:${{ env.version }}-armv7 buanet/iobroker:${{ env.version }}-arm64v8 buanet/iobroker:${{ env.version }}-amd64
-          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }} ghcr.io/buanet/iobroker:${{ env.version }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-amd64
+          docker buildx imagetools create -t buanet/iobroker:latest buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:latest ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t buanet/iobroker:${{ env.majorversion }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.majorversion }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t buanet/iobroker:${{ env.version }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t buanet/iobroker:${{ env.version }}-build.${{ env.build }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
 
   build-latest-armv7-for-iobroker:
     name: Build latest armv7 image for iobroker
+    needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
       - name: Fetch latest release tag
@@ -282,20 +309,20 @@ jobs:
         run: |
           VERSION="$(cat .VERSION)"
           MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
-          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
-          echo "[LOG] Buildnumber/Timestamp: $DATI"
-          echo "dati=$DATI" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber: $BUILD"
+          echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -318,10 +345,11 @@ jobs:
           file: ./debian12/Dockerfile
           push: true
           platforms: linux/arm/v7
-          tags: iobroker/iobroker:${{ env.version }}-armv7
+          tags: iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-armv7
 
   build-latest-arm64v8-for-iobroker:
     name: Build latest armv64v8 image for iobroker
+    needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
       - name: Fetch latest release tag
@@ -340,20 +368,20 @@ jobs:
         run: |
           VERSION="$(cat .VERSION)"
           MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
-          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
-          echo "[LOG] Buildnumber/Timestamp: $DATI"
-          echo "dati=$DATI" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber: $BUILD"
+          echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -376,10 +404,11 @@ jobs:
           file: ./debian12/Dockerfile
           push: true
           platforms: linux/arm64/v8
-          tags: iobroker/iobroker:${{ env.version }}-arm64v8
+          tags: iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8
 
   build-latest-amd64-for-iobroker:
     name: Build latest amd64 image for iobroker
+    needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
       - name: Fetch latest release tag
@@ -398,20 +427,20 @@ jobs:
         run: |
           VERSION="$(cat .VERSION)"
           MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
-          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
-          echo "[LOG] Buildnumber/Timestamp: $DATI"
-          echo "dati=$DATI" >> $GITHUB_ENV
+          echo "[LOG] Buildnumber: $BUILD"
+          echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up Docker Buildx
@@ -431,7 +460,7 @@ jobs:
           file: ./debian12/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: iobroker/iobroker:${{ env.version }}-amd64
+          tags: iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
 
   create-multiarch-image-for-iobroker:
     runs-on: ubuntu-latest
@@ -453,21 +482,15 @@ jobs:
         run: |
           VERSION="$(cat .VERSION)"
           MAJORVERSION="$(cat .VERSION | cut -c 1-3 | sed -r 's#^(.{0})#\1latest-#')"
-          DATI="$(date --rfc-3339=seconds | sed 's/ /T/')"
+          BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Major Image Version: $MAJORVERSION"
           echo "majorversion=$MAJORVERSION" >> $GITHUB_ENV
-          echo "[LOG] Buildnumber/Timestamp: $DATI"
-          echo "dati=$DATI" >> $GITHUB_ENV
-          # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$DATI/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
-          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
-          # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$DATI/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+          echo "[LOG] Buildnumber: $BUILD"
+          echo "build=$BUILD" >> $GITHUB_ENV
 
       - name: Login to DockerHub (iobroker)
         uses: docker/login-action@v3.3.0
@@ -477,6 +500,7 @@ jobs:
 
       - name: Create and push multi-platform image
         run: |
-          docker buildx imagetools create -t iobroker/iobroker:latest iobroker/iobroker:${{ env.version }}-armv7 iobroker/iobroker:${{ env.version }}-arm64v8 iobroker/iobroker:${{ env.version }}-amd64
-          docker buildx imagetools create -t iobroker/iobroker:${{ env.majorversion }} iobroker/iobroker:${{ env.version }}-armv7 iobroker/iobroker:${{ env.version }}-arm64v8 iobroker/iobroker:${{ env.version }}-amd64
-          docker buildx imagetools create -t iobroker/iobroker:${{ env.version }} iobroker/iobroker:${{ env.version }}-armv7 iobroker/iobroker:${{ env.version }}-arm64v8 iobroker/iobroker:${{ env.version }}-amd64
+          docker buildx imagetools create -t iobroker/iobroker:latest iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t iobroker/iobroker:${{ env.majorversion }} iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t iobroker/iobroker:${{ env.version }} iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t iobroker/iobroker:${{ env.version }}-build.${{ env.build }} iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 iobroker/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
