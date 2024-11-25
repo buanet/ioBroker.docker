@@ -236,7 +236,7 @@ jobs:
 
   create-multiarch-image-for-buanet:
     runs-on: ubuntu-latest
-    needs: [build-latest-armv7-for-buanet, build-latest-arm64v8-for-buanet, build-latest-amd64-for-buanet]
+    needs: [build-latest-armv7-for-buanet, build-latest-arm64v8-for-buanet, build-latest-amd64-for-buanet, create-build-number]
     steps:
       - name: Fetch latest release tag
         run: |
@@ -464,7 +464,7 @@ jobs:
 
   create-multiarch-image-for-iobroker:
     runs-on: ubuntu-latest
-    needs: [build-latest-armv7-for-iobroker, build-latest-arm64v8-for-iobroker, build-latest-amd64-for-iobroker]
+    needs: [build-latest-armv7-for-iobroker, build-latest-arm64v8-for-iobroker, build-latest-amd64-for-iobroker, create-build-number]
     steps:
       - name: Fetch latest release tag
         run: |
