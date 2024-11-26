@@ -23,11 +23,11 @@ jobs:
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Checking Web UI..."
-          curl --insecure http://127.0.0.1:8081 2> /dev/null | grep '<title>Admin</title>' &> /dev/null || exit 1
+          curl --insecure https://iobroker:8081 2> /dev/null | grep '<title>Admin</title>' &> /dev/null || exit 1
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Output testrun.log:"
           cat testrun.log
           echo ' '
-          echo "[LOG] Test sucesssful."
+          echo "[LOG] Test successful."
           echo ' '
