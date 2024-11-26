@@ -11,7 +11,7 @@ jobs:
       - name: Testing with docker run
         run: |
           echo "[LOG] Starting ioBroker Container..."
-          docker run -d -p 8081:8081 --name iobroker -v iobrokerdata:/opt/iobroker buanet/iobroker:latest
+          docker run -d --name iobroker buanet/iobroker:latest
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Waiting for Startup Script..."
