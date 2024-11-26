@@ -15,7 +15,7 @@ jobs:
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Waiting for Startup Script..."
-          sleep 30
+          sleep 60
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Writing Logs..."
@@ -23,7 +23,7 @@ jobs:
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Checking Web UI..."
-          curl --insecure http://iobroker:8081 2> /dev/null | grep '<title>Admin</title>' &> /dev/null || exit 1
+          docker exec iobroker curl -s http://localhost:8081 | grep -q '<title>Admin</title>' || { echo "[LOG] Fehler: Web UI nicht erreichbar."; exit 1; }
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Output testrun.log:"
