@@ -19,8 +19,8 @@ jobs:
         id: baseimage
         uses: mkumatag/container-image-updater-action@v1.0.6
         with:
-          base-image: 'iobroker/iobroker:latest'
-          image: 'debian:bookworm-slim'
+          image: 'iobroker/iobroker:latest'
+          base-image: 'debian:bookworm-slim'
 
       - name: Fetch ioBroker and nodejs versions
         run: |
