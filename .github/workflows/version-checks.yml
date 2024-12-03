@@ -15,19 +15,12 @@ jobs:
           repository: 'buanet/ioBroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}
 
-      - name: Get and write version
-        id: version
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "iobroker=iobroker/iobroker:$LATESTRELEASE" >> $GITHUB_ENV
-          echo "baseimage=library/debian:bookworm-slim" >> $GITHUB_ENV
-
       - name: Docker Baseimage Checker
         id: baseimage
         uses: mkumatag/container-image-updater-action@v1.0.6
         with:
-          base-image: '${{ env.baseimage }}'
-          image: '${{ env.iobroker }}'
+          base-image: 'iobroker/iobroker:latest'
+          image: 'debian:bookworm-slim'
 
       - name: Fetch ioBroker and nodejs versions
         run: |
