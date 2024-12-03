@@ -19,7 +19,7 @@ jobs:
         id: baseimage
         uses: mkumatag/container-image-updater-action@v1.0.6
         with:
-          image: 'iobroker/iobroker:latest'
+          image: 'buanet/iobroker:latest'
           base-image: 'debian:bookworm-slim'
 
       - name: Fetch ioBroker and nodejs versions
@@ -52,11 +52,16 @@ jobs:
           git commit -am "new ioBroker versions"
           git push
 
-      - name: Trigger Build Debian 12 Image (latest)
-        if: steps.baseimage.outputs.needs-update == 'true' || steps.git-check.outputs.modified == 'true'
-        uses: benc-uk/workflow-dispatch@v1.2
-        with:
-          ref: 'main'
-          workflow: 'Build Debian 12 Image (latest)'
-          repo: 'buanet/iobroker.docker'
-          token: ${{ secrets.ACTIONS_PAT }}
+      - name: Logging result
+        run: |
+          echo "base image updated = ${{ steps.baseimage.outputs.needs-update }}"
+          echo "ioBroker version updated = ${{ steps.git-check.outputs.modified }}"
+
+#      - name: Trigger Build Debian 12 Image (latest)
+#        if: steps.baseimage.outputs.needs-update == 'true' || steps.git-check.outputs.modified == 'true'
+#        uses: benc-uk/workflow-dispatch@v1.2
+#        with:
+#          ref: 'main'
+#          workflow: 'Build Debian 12 Image (latest)'
+#          repo: 'buanet/iobroker.docker'
+#          token: ${{ secrets.ACTIONS_PAT }}
