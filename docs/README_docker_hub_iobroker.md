@@ -64,13 +64,10 @@ For taking a first look at iobroker on docker it would be enough to simply run t
 docker run -p 8081:8081 --name iobroker -h iobroker buanet/iobroker
 ```
 
-## Running with docker-compose
+## Running with `docker compose`
 
-When using docker-compose define the iobroker service like this:
-
+When using `docker compose` define the iobroker service in a `docker-compose.yml` file like this:
 ```
-version: '2'
-
 services:
   iobroker:
     container_name: iobroker
@@ -81,6 +78,12 @@ services:
       - "8081:8081"
 ```
 
+Start the service in detached mode with
+```
+docker compose up -d
+```
+[See also in case of adapter connection issues](#notes-about-docker-networks)
+
 ## Persistent data
 
 To make your ioBroker configuration persistent it is recommended to mount a volume or path to `/opt/iobroker`.
@@ -89,10 +92,14 @@ On command-line add
 ```
 -v iobrokerdata:/opt/iobroker
 ```
-On docker-compose add
+In `docker-compose.yml` add
 ```
+services:
+  iobroker:
     volumes:
       - iobrokerdata:/opt/iobroker
+volumes:
+  iobrokerdata:
 ```
 
 ## Configuration via environment variables
@@ -139,8 +146,12 @@ You could use environment variables to auto configure your ioBroker container on
 The examples above are dealing with the Docker default bridge network. In general there are [some reasons](https://docs.docker.com/network/bridge/#differences-between-user-defined-bridges-and-the-default-bridge) why it might be the better choice to use a user-defined bridge network. 
 
 Using a Docker bridge network works fine for taking a first look and with most of the ioBroker adapters (if you don't forget to redirect the ports your adapters use).<br>
-But some ioBroker adapters are using techniques like [Multicast](https://en.wikipedia.org/wiki/Multicast) or [Broadcast](https://en.wikipedia.org/wiki/Broadcasting_(networking)) for automatic detection of IoT devices<br>
-In this case it may be useful to switch to [host](https://docs.docker.com/network/host/) or [MACVLAN](https://docs.docker.com/network/macvlan/) network. 
+But some ioBroker adapters are using techniques like [Multicast](https://en.wikipedia.org/wiki/Multicast) or [Broadcast](https://en.wikipedia.org/wiki/Broadcasting_(networking)) for automatic detection of IoT devices.<br>
+Some let you configure an adapter callback address, which should be set to the IP of the host's physical network adapter.<br>
+In case a callback port can be configured as well, a port mapping for the chosen port needs to be added either via CLI option<br>
+`docker run -p` or to the service configuration in the `docker-compose.yml`.<br>
+Depending on the protocol used, additional ports may need to be mapped to allow packets reaching the adapter instance.<br>
+In cases with limited configuration options it may be useful to switch to [host](https://docs.docker.com/network/host/) or [MACVLAN](https://docs.docker.com/network/macvlan/) network. 
 
 For more information about networking with Docker please refer to the [official Docker docs](https://docs.docker.com/network/). 
 
