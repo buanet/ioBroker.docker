@@ -1,5 +1,6 @@
-FROM node:20.12-bookworm-slim
-# FROM debian:bookworm-slim
+FROM debian:bookworm-slim
+# FROM node:20.12-bookworm-slim
+
 
 LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.description="Official Docker image for ioBroker smarthome software (https://www.iobroker.net)" \
@@ -66,8 +67,8 @@ RUN apt-get update && apt-get upgrade -y \
     # Setting up iobroker-user
     && chsh -s /bin/bash iobroker \
     && usermod --home /opt/iobroker iobroker \
-    # && usermod -u 1000 iobroker \
-    # && groupmod -g 1000 iobroker \
+    && usermod -u 1000 iobroker \
+    && groupmod -g 1000 iobroker \
     && chown root:iobroker /usr/sbin/gosu \
     # Set permissions and ownership
     && chown -R iobroker:iobroker /opt/scripts /opt/userscripts \
