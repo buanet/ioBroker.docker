@@ -20,7 +20,7 @@ jobs:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASS }}
         repository: buanet/iobroker
-        short-description: Official Docker image for ioBroker based on Debian Bullseye slim 
+        short-description: Official Docker image for ioBroker based on Debian Bookworm slim 
         readme-filepath: ./docs/README_docker_hub_buanet.md
 
     - name: Update Docker Hub Readme (iobroker)
@@ -29,5 +29,5 @@ jobs:
         username: ${{ secrets.DOCKER_USER_IOB }}
         password: ${{ secrets.DOCKER_PASS_IOB }}
         repository: iobroker/iobroker
-        short-description: Official Docker image for ioBroker based on Debian Bullseye slim
+        short-description: Official Docker image for ioBroker based on Debian Bookworm slim
         readme-filepath: ./docs/README_docker_hub_iobroker.md

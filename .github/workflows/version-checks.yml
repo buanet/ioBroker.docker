@@ -15,19 +15,12 @@ jobs:
           repository: 'buanet/ioBroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}
 
-      - name: Get and write version
-        id: version
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "iobroker=iobroker/iobroker:$LATESTRELEASE" >> $GITHUB_ENV
-          echo "baseimage=library/debian:bookworm-slim" >> $GITHUB_ENV
-
-      - name: Docker Baseimage Checker
-        id: baseimage
-        uses: mkumatag/container-image-updater-action@v1.0.6
+      - name: Docker baseimage check
+        id: baseimage-check
+        uses: lucacome/docker-image-update-checker@v2.0.0
         with:
-          base-image: '${{ env.baseimage }}'
-          image: '${{ env.iobroker }}'
+          base-image: debian:bookworm-slim
+          image: buanet/iobroker:latest
 
       - name: Fetch ioBroker and nodejs versions
         run: |
@@ -44,7 +37,7 @@ jobs:
           jq -r '."discovery".version' > .github/dependencies/.discovery-version
           echo "[LOG] Fetched discovery version is $(cat .github/dependencies/.discovery-version)"
           curl -sL https://nodejs.org/dist/index.json | \
-          jq -r 'map(select(.version | startswith("v18."))) | .[0].version' > .github/dependencies/.nodejs-version
+          jq -r 'map(select(.version | startswith("v20."))) | .[0].version' > .github/dependencies/.nodejs-version
           echo "[LOG] Fetched nodejs version is $(cat .github/dependencies/.nodejs-version)"
 
       - name: Check for modified files
@@ -59,11 +52,16 @@ jobs:
           git commit -am "new ioBroker versions"
           git push
 
+      - name: Logging result
+        run: |
+          echo "base image updated = ${{ steps.baseimage-check.outputs.needs-updating }}"
+          echo "ioBroker version updated = ${{ steps.git-check.outputs.modified }}"
+
       - name: Trigger Build Debian 12 Image (latest)
-        if: steps.baseimage.outputs.needs-update == 'true' || steps.git-check.outputs.modified == 'true'
+        if: steps.baseimage-check.outputs.needs-updating == 'true' || steps.git-check.outputs.modified == 'true'
         uses: benc-uk/workflow-dispatch@v1.2
         with:
           ref: 'main'
-          workflow: 'iob.docker - Build Debian 12 Image (latest)'
-          repo: 'buanet/private.actionsrunner'
+          workflow: 'Build Debian 12 Image (latest)'
+          repo: 'buanet/iobroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}

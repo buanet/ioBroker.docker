@@ -11,11 +11,11 @@ jobs:
       - name: Testing with docker run
         run: |
           echo "[LOG] Starting ioBroker Container..."
-          docker run -d -p 8081:8081 --name iobroker -v iobrokerdata:/opt/iobroker buanet/iobroker:latest
+          docker run -d --name iobroker buanet/iobroker:latest
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Waiting for Startup Script..."
-          sleep 30
+          sleep 60
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Writing Logs..."
@@ -23,11 +23,11 @@ jobs:
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Checking Web UI..."
-          curl --insecure http://127.0.0.1:8081 2> /dev/null | grep '<title>Admin</title>' &> /dev/null || exit 1
+          docker exec iobroker curl -s http://localhost:8081 | grep -q '<title>Admin</title>' || { echo "[LOG] Fehler: Web UI nicht erreichbar."; exit 1; }
           echo "[LOG] Done."
           echo ' '
           echo "[LOG] Output testrun.log:"
           cat testrun.log
           echo ' '
-          echo "[LOG] Test sucesssful."
+          echo "[LOG] Test successful."
           echo ' '

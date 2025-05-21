@@ -245,7 +245,7 @@ restore_iobroker() {
 
   # list backup files
   backup_dir="/opt/iobroker/backups"
-  backup_files=($(find $backup_dir -type f))
+  backup_files=($(find $backup_dir -type f | sort))
   backup_count=${#backup_files[@]}
 
   if [[ $backup_count -eq 0 ]]; then
