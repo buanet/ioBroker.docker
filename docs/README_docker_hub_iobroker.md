@@ -44,9 +44,6 @@ It is highly recommended not to use the `latest` tag for production, especially 
 * [`v9.1.1`](https://github.com/buanet/ioBroker.docker/blob/v9.1.1/debian12/Dockerfile)
 * [`v9.1.0`](https://github.com/buanet/ioBroker.docker/blob/v9.1.0/debian12/Dockerfile)
 * [`v9.0.1`](https://github.com/buanet/ioBroker.docker/blob/v9.0.1/debian12/Dockerfile)
-* [`v8.1.0`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), [`latest-v8`](https://github.com/buanet/ioBroker.docker/blob/v8.1.0/debian/node18/Dockerfile), 
-* [`v8.0.1`](https://github.com/buanet/ioBroker.docker/blob/v8.0.1/debian/node18/Dockerfile)
-* [`v8.0.0`](https://github.com/buanet/ioBroker.docker/blob/v8.0.0/debian/node18/Dockerfile)
 
 # What is ioBroker?
 
@@ -56,21 +53,22 @@ For further details please check out [iobroker.net](https://www.iobroker.net).
 
 # How to use this image?
 
-## Running from command-line
+## Quick Start (for testing)
 
-For taking a first look at iobroker on docker it would be enough to simply run the following basic docker run command:
+To quickly try out ioBroker in Docker, simply run:
 
 ```
 docker run -p 8081:8081 --name iobroker -h iobroker buanet/iobroker
 ```
 
-## Running with docker-compose
+**Note:**  
+All data and settings will be lost when the container is removed or recreated. For production use, always use persistent storage (see below).
 
-When using docker-compose define the iobroker service like this:
+## Production Setup with Docker Compose
 
-```
-version: '2'
+For a persistent and production-ready setup, use Docker Compose and mount a volume for your data:
 
+```yaml
 services:
   iobroker:
     container_name: iobroker
@@ -79,70 +77,82 @@ services:
     restart: always
     ports:
       - "8081:8081"
-```
-
-## Persistent data
-
-To make your ioBroker configuration persistent it is recommended to mount a volume or path to `/opt/iobroker`.
-
-On command-line add 
-```
--v iobrokerdata:/opt/iobroker
-```
-On docker-compose add
-```
     volumes:
       - iobrokerdata:/opt/iobroker
+    environment:
+      - TZ=Europe/Berlin
+
+volumes:
+  iobrokerdata:
 ```
 
-## Configuration via environment variables
+**Tip:**  
+Depending on your adapters, you may need to expose additional ports or use a different network mode (e.g. `network_mode: host`).  
+See the [Networking section](#notes-about-docker-networks) for more details.
 
-You could use environment variables to auto configure your ioBroker container on startup. 
+## Persistent Data
 
-### Configure ioBroker application:
+To keep your ioBroker configuration and data, always mount a volume or path to `/opt/iobroker`:
 
-* `IOB_ADMINPORT` (optional, default: 8081) Set ioBroker adminport on startup
-* `IOB_BACKITUP_EXTDB` (optional) Set `true` for backing up external databases in ioBroker backitup adapter (Make sure your have read the [docs](https://docs.buanet.de/iobroker-docker-image/docs/#backup))
-* `IOB_MULTIHOST` (optional) Set "master" or "slave" for multihost support (needs additional config for objectsdb and statesdb!)
-* `IOB_OBJECTSDB_TYPE` (optional, default: jsonl) Set type of ioBroker objects db, could be "jsonl", "file" (deprecated) or "redis"
-* `IOB_OBJECTSDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker objects db, supports comma separated list for Redis Sentinel Cluster
-* `IOB_OBJECTSDB_PORT` (optional, default: 9001) Set port for ioBroker objects db, supports comma separated list for Redis Sentinel Cluster
-* `IOB_OBJECTSDB_PASS` (optional) Set authentication for Redis db connection
-* `IOB_OBJECTSDB_NAME` (optional, default: mymaster) Set name for Redis Sentinel CLuster db
-* `IOB_STATESDB_TYPE` (optional, default: jsonl) Set type of ioBroker states db, could be "jsonl", "file" (deprecated) or "redis"
-* `IOB_STATESDB_HOST` (optional, default: 127.0.0.1) Set host for ioBroker states db, supports comma separated list for Redis Sentinel Cluster
-* `IOB_STATESDB_PORT` (optional, default: 9000) Set port for ioBroker states db, supports comma separated list for Redis Sentinel Cluster
-* `IOB_STATESDB_PASS` (optional) Set authentication for Redis db connection
-* `IOB_STATESDB_NAME` (optional, default: mymaster) Set name for Redis Sentinel cluster db
+- **Command-line:**  
+  ```
+  -v iobrokerdata:/opt/iobroker
+  ```
+- **Docker Compose:**  
+  ```
+  volumes:
+    - iobrokerdata:/opt/iobroker
+  ```
 
-### Activate special features: 
+## Configuration via Environment Variables
 
-* `AVAHI` (optional) Set `true` to install and activate avahi-daemon for supporting yahka adapter
+You can use environment variables to automatically configure your ioBroker container at startup.
 
-### Configure environment:
+### Application Configuration
 
-* `DEBUG` (optional) Set `true` to get extended logging messages on container startup
-* `LANG` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
-* `LANGUAGE` (optional, default: de_DE:de) The following locales are pre-generated: de_DE:de, en_US:en
-* `LC_ALL` (optional, default: de_DE.UTF-8) The following locales are pre-generated: de_DE.UTF-8, en_US.UTF-8
-* `OFFLINE_MODE` (optional) Set `true` if your container has no or limited internet connection
-* `PACKAGES` (optional) Install additional Linux packages to your container, packages should be separated by whitespace like this: `package1 package2 package3`.
-* `PACKAGES_UPDATE` (optional) Set `true` if you want to apply Linux package updates at the first start of a new container.
-* `PERMISSION_CHECK` (optional, default: true) Set "false" to skip checking and correcting all relevant permissions on container startup (Use at own risk!!!)
-* `SETGID` (default: 1000) In some cases it might be useful to specify the gid of the containers iobroker user to match an existing group on the docker host
-* `SETUID` (default: 1000) In some cases it might be useful to specify the uid of the containers iobroker user to match an existing user on the docker host
-* `TZ` (optional, default: Europe/Berlin) Specifies the time zone, could be all valid Linux timezones
-* `USBDEVICES` (optional) Set relevant permissions on mounted devices like `/dev/ttyACM0` (inside the container), for more than one device separate with ";"
+- `IOB_ADMINPORT` (optional, default: 8081) – Set ioBroker admin port on startup
+- `IOB_BACKITUP_EXTDB` (optional) – Set `true` to enable external database backup in the Backitup adapter ([see docs](https://docs.buanet.de/iobroker-docker-image/docs/#backup))
+- `IOB_MULTIHOST` (optional) – Set to "master" or "slave" for multihost support (requires additional config for objectsdb and statesdb)
+- `IOB_OBJECTSDB_TYPE` (optional, default: jsonl) – Type of objects DB: "jsonl", "file" (deprecated), or "redis"
+- `IOB_OBJECTSDB_HOST` (optional, default: 127.0.0.1) – Host for objects DB (comma-separated for Redis Sentinel)
+- `IOB_OBJECTSDB_PORT` (optional, default: 9001) – Port for objects DB (comma-separated for Redis Sentinel)
+- `IOB_OBJECTSDB_PASS` (optional) – Password for Redis DB
+- `IOB_OBJECTSDB_NAME` (optional, default: mymaster) – Redis Sentinel DB name
+- `IOB_STATESDB_TYPE` (optional, default: jsonl) – Type of states DB: "jsonl", "file" (deprecated), or "redis"
+- `IOB_STATESDB_HOST` (optional, default: 127.0.0.1) – Host for states DB (comma-separated for Redis Sentinel)
+- `IOB_STATESDB_PORT` (optional, default: 9000) – Port for states DB (comma-separated for Redis Sentinel)
+- `IOB_STATESDB_PASS` (optional) – Password for Redis DB
+- `IOB_STATESDB_NAME` (optional, default: mymaster) – Redis Sentinel DB name
 
-## Notes about Docker networks
+### Special Features
 
-The examples above are dealing with the Docker default bridge network. In general there are [some reasons](https://docs.docker.com/network/bridge/#differences-between-user-defined-bridges-and-the-default-bridge) why it might be the better choice to use a user-defined bridge network. 
+- `AVAHI` (optional) – Set `true` to install and activate avahi-daemon (for yahka adapter support)
 
-Using a Docker bridge network works fine for taking a first look and with most of the ioBroker adapters (if you don't forget to redirect the ports your adapters use).<br>
-But some ioBroker adapters are using techniques like [Multicast](https://en.wikipedia.org/wiki/Multicast) or [Broadcast](https://en.wikipedia.org/wiki/Broadcasting_(networking)) for automatic detection of IoT devices<br>
-In this case it may be useful to switch to [host](https://docs.docker.com/network/host/) or [MACVLAN](https://docs.docker.com/network/macvlan/) network. 
+### Environment Configuration
 
-For more information about networking with Docker please refer to the [official Docker docs](https://docs.docker.com/network/). 
+- `DEBUG` (optional) – Set `true` for extended logging on container startup
+- `LANG` (optional, default: de_DE.UTF-8) – Pre-generated: de_DE.UTF-8, en_US.UTF-8
+- `LANGUAGE` (optional, default: de_DE:de) – Pre-generated: de_DE:de, en_US:en
+- `LC_ALL` (optional, default: de_DE.UTF-8) – Pre-generated: de_DE.UTF-8, en_US.UTF-8
+- `OFFLINE_MODE` (optional) – Set `true` if your container has no or limited internet connection
+- `PACKAGES` (optional) – Install additional Linux packages (space-separated list)
+- `PACKAGES_UPDATE` (optional) – Set `true` to update Linux packages on first start
+- `PERMISSION_CHECK` (optional, default: true) – Set "false" to skip permission checks/corrections (use at your own risk)
+- `SETGID` (default: 1000) – Set the GID for the iobroker user (to match a group on the host)
+- `SETUID` (default: 1000) – Set the UID for the iobroker user (to match a user on the host)
+- `TZ` (optional, default: Europe/Berlin) – Set the timezone (any valid Linux timezone)
+- `USBDEVICES` (optional) – Set permissions for mounted devices (e.g. `/dev/ttyACM0`, separate multiple devices with ";")
+
+## Notes about Docker Networks
+
+The above examples use Docker's default bridge network. In many cases, it is better to use a user-defined bridge network.  
+See [Docker docs: bridge differences](https://docs.docker.com/network/bridge/#differences-between-user-defined-bridges-and-the-default-bridge).
+
+A bridge network works for most adapters if you map all required ports.  
+However, some adapters require [Multicast](https://en.wikipedia.org/wiki/Multicast) or [Broadcast](https://en.wikipedia.org/wiki/Broadcasting_(networking)) for device discovery.  
+In these cases, consider using [host](https://docs.docker.com/network/host/) or [MACVLAN](https://docs.docker.com/network/macvlan/) networking.
+
+For more information, see the [official Docker networking documentation](https://docs.docker.com/network/).
 
 # Support the Project
 
