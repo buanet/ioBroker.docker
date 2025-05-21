@@ -97,7 +97,7 @@ To keep your ioBroker configuration and data, always mount a volume or path to `
   -v iobrokerdata:/opt/iobroker
   ```
 - **Docker Compose:**  
-  ```
+  ```yaml
   volumes:
     - iobrokerdata:/opt/iobroker
   ```
