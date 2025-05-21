@@ -94,15 +94,15 @@ See the [Networking section](#notes-about-docker-networks) for more details.
 
 To keep your ioBroker configuration and data, always mount a volume or path to `/opt/iobroker`:
 
-- **Command-line:**  
-  ```
-  -v iobrokerdata:/opt/iobroker
-  ```
-- **Docker Compose:**  
-  ```yaml
-  volumes:
-    - iobrokerdata:/opt/iobroker
-  ```
+**Command-line:**
+```
+-v iobrokerdata:/opt/iobroker
+```
+**Docker Compose:**
+```yaml
+volumes:
+  - iobrokerdata:/opt/iobroker
+```
 
 ## Configuration via Environment Variables
 
