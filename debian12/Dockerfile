@@ -1,4 +1,6 @@
 FROM debian:bookworm-slim
+# FROM node:20.12-bookworm-slim
+
 
 LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.description="Official Docker image for ioBroker smarthome software (https://www.iobroker.net)" \
