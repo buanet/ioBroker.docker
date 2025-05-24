@@ -20,7 +20,7 @@ jobs:
         id: generate-build-number
         run: |
           BUILD="$(date +"%Y%m%d.%H%M%S")"
-          echo "::set-output name=build_number::$BUILD"
+          echo "build_number=$BUILD" >> $GITHUB_OUTPUT
           echo "[LOG] Buildnumber: $BUILD"
 
   build-dev-armv7-recommended-node:
@@ -35,7 +35,7 @@ jobs:
 
       - name: Set job variables
         run: |
-          VERSION="$(cat .VERSION)-dev"
+          VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
@@ -78,8 +78,8 @@ jobs:
           push: true
           platforms: linux/arm/v7
           tags: |
-            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7,
-            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7,
+            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-dev,
+            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-dev,
 
   build-dev-arm64v8-recommended-node:
     name: Build dev armv64v8 image with recommended node version for buanet
@@ -93,7 +93,7 @@ jobs:
 
       - name: Set job variables
         run: |
-          VERSION="$(cat .VERSION)-dev"
+          VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
@@ -136,8 +136,8 @@ jobs:
           push: true
           platforms: linux/arm64/v8
           tags: |
-            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8,
-            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8,
+            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-dev,
+            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-dev,
 
   build-dev-amd64-recommended-node:
     name: Build dev amd64 image with recommended node version for buanet
@@ -151,7 +151,7 @@ jobs:
 
       - name: Set job variables
         run: |
-          VERSION="$(cat .VERSION)-dev"
+          VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
           echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
@@ -191,8 +191,8 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64,
-            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64,
+            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-dev,
+            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-dev,
 
   create-multiarch-image-with-recommended-node:
     runs-on: ubuntu-latest
@@ -229,5 +229,5 @@ jobs:
 
       - name: Create and push multi-platform image
         run: |
-          docker buildx imagetools create -t buanet/iobroker:dev buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
-          docker buildx imagetools create -t ghcr.io/buanet/iobroker:dev ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
+          docker buildx imagetools create -t buanet/iobroker:dev buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-dev buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-dev buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-dev
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:dev ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-dev ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-dev ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-dev
