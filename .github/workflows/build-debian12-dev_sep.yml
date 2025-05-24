@@ -82,7 +82,7 @@ jobs:
             ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7,
 
   build-dev-arm64v8-recommended-node:
-    name: Build latest armv64v8 image with recommended node version for buanet
+    name: Build dev armv64v8 image with recommended node version for buanet
     needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
@@ -140,7 +140,7 @@ jobs:
             ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8,
 
   build-dev-amd64-recommended-node:
-    name: Build latest amd64 image with recommended node version for buanet
+    name: Build dev amd64 image with recommended node version for buanet
     needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
