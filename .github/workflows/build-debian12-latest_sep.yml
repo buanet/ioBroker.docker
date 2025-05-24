@@ -91,7 +91,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6.6.1
+        uses: docker/build-push-action@v6.17.0
         with:
           context: ./debian12
           file: ./debian12/Dockerfile
@@ -159,7 +159,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6.6.1
+        uses: docker/build-push-action@v6.17.0
         with:
           context: ./debian12
           file: ./debian12/Dockerfile
@@ -224,7 +224,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6.6.1
+        uses: docker/build-push-action@v6.17.0
         with:
           context: ./debian12
           file: ./debian12/Dockerfile
@@ -339,7 +339,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASS_IOB }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6.6.1
+        uses: docker/build-push-action@v6.17.0
         with:
           context: ./debian12
           file: ./debian12/Dockerfile
@@ -398,7 +398,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASS_IOB }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6.6.1
+        uses: docker/build-push-action@v6.17.0
         with:
           context: ./debian12
           file: ./debian12/Dockerfile
@@ -454,7 +454,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASS_IOB }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6.6.1
+        uses: docker/build-push-action@v6.17.0
         with:
           context: ./debian12
           file: ./debian12/Dockerfile
