@@ -8,22 +8,37 @@ on:
 
 jobs:
   create-build-number:
+    name: Create build number
     runs-on: ubuntu-latest
     outputs:
       build_number: ${{ steps.generate-build-number.outputs.build_number }}
+      release_tag: ${{ steps.fetch-release-tag.outputs.release_tag }}
     steps:
+      - name: Fetch latest release tag
+        id: fetch-release-tag
+        run: |
+          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
+          if [ -z "$LATESTRELEASE" ]; then
+            echo "[LOG] No prerelease found!" >&2
+            exit 1
+          fi
+          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
+          echo "release_tag=$LATESTRELEASE" >> $GITHUB_OUTPUT
+          echo "[LOG] Latest release tag : $LATESTRELEASE"
+
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}
+          ref: ${{ env.RELEASE_TAG }}
 
       - name: Generate build number
         id: generate-build-number
         run: |
           BUILD="$(date +"%Y%m%d.%H%M%S")"
           echo "$BUILD" > .github/dependencies/.latest-build
-          echo "::set-output name=build_number::$BUILD"
+          echo "build_number=$BUILD" >> $GITHUB_OUTPUT
           echo "[LOG] Buildnumber: $BUILD"
 
       - name: Commit latest release version
@@ -38,17 +53,11 @@ jobs:
     needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch latest release tag
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "Latest release tag : $LATESTRELEASE"
-          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
-
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ needs.create-build-number.outputs.release_tag }}
 
       - name: Set job variables
         run: |
@@ -106,17 +115,11 @@ jobs:
     needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch latest release tag
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "Latest release tag : $LATESTRELEASE"
-          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
-
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ needs.create-build-number.outputs.release_tag }}
 
       - name: Set job variables
         run: |
@@ -174,17 +177,11 @@ jobs:
     needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch latest release tag
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "Latest release tag : $LATESTRELEASE"
-          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
-
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ needs.create-build-number.outputs.release_tag }}
 
       - name: Set job variables
         run: |
@@ -235,20 +232,15 @@ jobs:
             ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64,
 
   create-multiarch-image-for-buanet:
+    name: Create multiarch image for buanet
     runs-on: ubuntu-latest
     needs: [build-latest-armv7-for-buanet, build-latest-arm64v8-for-buanet, build-latest-amd64-for-buanet, create-build-number]
     steps:
-      - name: Fetch latest release tag
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "Latest release tag : $LATESTRELEASE"
-          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
-
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ needs.create-build-number.outputs.release_tag }}
 
       - name: Set job variables
         run: |
@@ -288,22 +280,18 @@ jobs:
           docker buildx imagetools create -t buanet/iobroker:${{ env.version }}-build.${{ env.build }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
           docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
 
+### build for iobroker repo
+
   build-latest-armv7-for-iobroker:
     name: Build latest armv7 image for iobroker
     needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch latest release tag
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "Latest release tag : $LATESTRELEASE"
-          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
-
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ needs.create-build-number.outputs.release_tag }}
 
       - name: Set job variables
         run: |
@@ -352,17 +340,11 @@ jobs:
     needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch latest release tag
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "Latest release tag : $LATESTRELEASE"
-          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
-
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ needs.create-build-number.outputs.release_tag }}
 
       - name: Set job variables
         run: |
@@ -411,17 +393,11 @@ jobs:
     needs: [create-build-number]
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch latest release tag
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "Latest release tag : $LATESTRELEASE"
-          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
-
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ needs.create-build-number.outputs.release_tag }}
 
       - name: Set job variables
         run: |
@@ -466,17 +442,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-latest-armv7-for-iobroker, build-latest-arm64v8-for-iobroker, build-latest-amd64-for-iobroker, create-build-number]
     steps:
-      - name: Fetch latest release tag
-        run: |
-          LATESTRELEASE="$(curl -sL https://api.github.com/repos/buanet/ioBroker.docker/releases/latest | jq -r '.tag_name')"
-          echo "Latest release tag : $LATESTRELEASE"
-          echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
-  
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ needs.create-build-number.outputs.release_tag }}
   
       - name: Set job variables
         run: |

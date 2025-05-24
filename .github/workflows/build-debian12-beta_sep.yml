@@ -14,7 +14,8 @@ jobs:
       build_number: ${{ steps.generate-build-number.outputs.build_number }}
       release_tag: ${{ steps.fetch-prerelease-tag.outputs.release_tag }}
     steps:
-      - name: Fetch latest prerelease tag
+      - name: Fetch prerelease tag
+        id: fetch-prerelease-tag
         run: |
           PRERELEASE_TAG=$(curl -sL "https://api.github.com/repos/buanet/ioBroker.docker/releases" | jq -r '[.[] | select(.prerelease)][0].tag_name')
           if [ -z "$PRERELEASE_TAG" ]; then
@@ -23,7 +24,7 @@ jobs:
           fi
           echo "RELEASE_TAG=$PRERELEASE_TAG" >> $GITHUB_ENV
           echo "release_tag=$PRERELEASE_TAG" >> $GITHUB_OUTPUT
-           echo "[LOG] Release tag: $PRERELEASE_TAG"
+          echo "[LOG] Release tag: $PRERELEASE_TAG"
 
       - name: Checkout repo
         uses: actions/checkout@v4.2.2

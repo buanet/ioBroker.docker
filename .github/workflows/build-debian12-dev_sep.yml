@@ -15,7 +15,6 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
-          token: ${{ secrets.ACTIONS_PAT }}
 
       - name: Generate build number
         id: generate-build-number
