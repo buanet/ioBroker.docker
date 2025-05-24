@@ -215,7 +215,7 @@ jobs:
   create-multiarch-image-with-recommended-node:
     name: Create multiarch image with recommended node version
     runs-on: ubuntu-latest
-    needs: [build-beta-armv7-recommended-node, build-beta-arm64v8-recommended-node, build-beta-amd64-recommended-node]
+    needs: [build-beta-armv7-recommended-node, build-beta-arm64v8-recommended-node, build-beta-amd64-recommended-node, create-build-number]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
@@ -435,7 +435,7 @@ jobs:
   create-multiarch-image-with-experimental-node:
     name: Create multiarch image with experimental node version
     runs-on: ubuntu-latest
-    needs: [build-beta-armv7-experimental-node, build-beta-arm64v8-experimental-node, build-beta-amd64-experimental-node]
+    needs: [build-beta-armv7-experimental-node, build-beta-arm64v8-experimental-node, build-beta-amd64-experimental-node, create-build-number]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
