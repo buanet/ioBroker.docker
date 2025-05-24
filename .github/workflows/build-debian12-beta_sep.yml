@@ -55,7 +55,7 @@ jobs:
           VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION_BETA }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Buildnumber: $BUILD"
@@ -64,7 +64,7 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -114,7 +114,7 @@ jobs:
           VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION_BETA }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Buildnumber: $BUILD"
@@ -123,7 +123,7 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -173,7 +173,7 @@ jobs:
           VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION_BETA }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Buildnumber: $BUILD"
@@ -182,7 +182,7 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up Docker Buildx
@@ -229,7 +229,7 @@ jobs:
           VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION }}"
+          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION_BETA }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Buildnumber: $BUILD"
@@ -275,7 +275,7 @@ jobs:
           VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION }}"
+          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Buildnumber: $BUILD"
@@ -284,7 +284,7 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -315,8 +315,8 @@ jobs:
           push: true
           platforms: linux/arm/v7
           tags: |
-            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
-            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
+            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }},
+            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }},
 
   build-beta-arm64v8-experimental-node:
     name: Build beta armv64v8 image with experimental node version
@@ -334,7 +334,7 @@ jobs:
           VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION }}"
+          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Buildnumber: $BUILD"
@@ -343,7 +343,7 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
@@ -374,8 +374,8 @@ jobs:
           push: true
           platforms: linux/arm64/v8
           tags: |
-            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
-            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
+            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }},
+            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }},
 
   build-beta-amd64-experimental-node:
     name: Build beta amd64 image with experimental node version
@@ -393,7 +393,7 @@ jobs:
           VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION }}"
+          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Buildnumber: $BUILD"
@@ -402,7 +402,7 @@ jobs:
           sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
           mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up Docker Buildx
@@ -430,8 +430,8 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
-            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION }},
+            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }},
+            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }},
 
   create-multiarch-image-with-experimental-node:
     name: Create multiarch image with experimental node version
@@ -449,7 +449,7 @@ jobs:
           VERSION="$(cat .VERSION)"
           BUILD="${{ needs.create-build-number.outputs.build_number }}"
           # Log output and export as Github environment variable
-          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION }}"
+          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}"
           echo "[LOG] Image Version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "[LOG] Buildnumber: $BUILD"
@@ -470,9 +470,9 @@ jobs:
 
       - name: Create and push multi-platform image
         run: |
-          docker buildx imagetools create -t buanet/iobroker:beta-node${{ vars.EXPERIMENTAL_NODE_VERSION }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION }}
-          docker buildx imagetools create -t ghcr.io/buanet/iobroker:beta-node${{ vars.EXPERIMENTAL_NODE_VERSION }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION }}
-          docker buildx imagetools create -t buanet/iobroker:${{ env.version }}-node${{ vars.EXPERIMENTAL_NODE_VERSION }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION }}
-          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }}-node${{ vars.EXPERIMENTAL_NODE_VERSION }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION }}
-          docker buildx imagetools create -t buanet/iobroker:${{ env.version }}-build.${{ env.build }}-node${{ vars.EXPERIMENTAL_NODE_VERSION }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION }}
-          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-node${{ vars.EXPERIMENTAL_NODE_VERSION }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION }}
+          docker buildx imagetools create -t buanet/iobroker:beta-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:beta-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}
+          docker buildx imagetools create -t buanet/iobroker:${{ env.version }}-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }}-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}
+          docker buildx imagetools create -t buanet/iobroker:${{ env.version }}-build.${{ env.build }}-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}
+          docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}
