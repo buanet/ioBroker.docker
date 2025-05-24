@@ -13,7 +13,7 @@ jobs:
       build_number: ${{ steps.generate-build-number.outputs.build_number }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}
@@ -45,7 +45,7 @@ jobs:
           echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
 
       - name: Checkout repo
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
@@ -113,7 +113,7 @@ jobs:
           echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
 
       - name: Checkout repo
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
@@ -181,7 +181,7 @@ jobs:
           echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
 
       - name: Checkout repo
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
@@ -245,7 +245,7 @@ jobs:
           echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
 
       - name: Checkout repo
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
@@ -300,7 +300,7 @@ jobs:
           echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
 
       - name: Checkout repo
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
@@ -359,7 +359,7 @@ jobs:
           echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
 
       - name: Checkout repo
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
@@ -418,7 +418,7 @@ jobs:
           echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
 
       - name: Checkout repo
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
@@ -473,7 +473,7 @@ jobs:
           echo "RELEASE_TAG=$LATESTRELEASE" >> $GITHUB_ENV
   
       - name: Checkout repo
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ env.RELEASE_TAG }}
