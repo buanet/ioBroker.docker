@@ -31,7 +31,6 @@ jobs:
         with:
           repository: 'buanet/ioBroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}
-          ref: ${{ env.RELEASE_TAG }}
 
       - name: Generate build number
         id: generate-build-number
