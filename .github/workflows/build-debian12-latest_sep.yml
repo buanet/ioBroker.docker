@@ -45,7 +45,9 @@ jobs:
         run: |
           git config --global user.name 'buanet'
           git config --global user.email 'info@buanet.de'
-          git commit -am "new build"
+          git checkout main
+          git add .github/dependencies/.latest-build
+          git commit -am "new build" || true
           git push
 
   build-latest-armv7-for-buanet:
