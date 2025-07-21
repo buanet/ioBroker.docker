@@ -31,6 +31,8 @@ jobs:
         with:
           repository: 'buanet/ioBroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}
+          ref: main
+          fetch-depth: 0
 
       - name: Generate build number
         id: generate-build-number
@@ -44,7 +46,6 @@ jobs:
         run: |
           git config --global user.name 'buanet'
           git config --global user.email 'info@buanet.de'
-          git checkout main
           git add .github/dependencies/.latest-build
           git commit -am "new build" || true
           git push
