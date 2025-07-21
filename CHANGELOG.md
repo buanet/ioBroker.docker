@@ -1,11 +1,13 @@
 ## Changelog
 
-### v10.1.0-beta.1 (24.05.2025)
-* remove restore option from maintenance script
-* restructure build process
-* add node22 tag to beta
-* update readme and docs
-* add sorted list of backups ([#530 by @Marc-Berg](https://github.com/buanet/ioBroker.docker/pull/530))
+### V11.0.0 (21.07.2025)
+* releasing V11.0.0 instead of V10.1.0 due to the upgrade to recommended node22
+* v10.1.0-beta.1 (24.05.2025)
+  * remove restore option from maintenance script
+  * restructure build process
+  * add node22 tag to beta
+  * update readme and docs
+  * add sorted list of backups ([#530 by @Marc-Berg](https://github.com/buanet/ioBroker.docker/pull/530))
 
 ### v10.0.0 (08.08.2024)
 * v10.0.0-beta.2 (07.08.2024)
