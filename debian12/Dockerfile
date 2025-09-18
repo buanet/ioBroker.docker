@@ -88,6 +88,7 @@ RUN apt-get update && apt-get upgrade -y \
 # Default environment variables
 ENV BUILD="${BUILD}" \
     DEBIAN_FRONTEND="teletype" \
+    DOCKER_SOCK="" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
