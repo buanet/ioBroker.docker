@@ -37,7 +37,7 @@ jobs:
           jq -r '."discovery".version' > .github/dependencies/.discovery-version
           echo "[LOG] Fetched discovery version is $(cat .github/dependencies/.discovery-version)"
           curl -sL https://nodejs.org/dist/index.json | \
-          jq -r 'map(select(.version | startswith("v20."))) | .[0].version' > .github/dependencies/.nodejs-version
+          jq -r 'map(select(.version | startswith("v22."))) | .[0].version' > .github/dependencies/.nodejs-version
           echo "[LOG] Fetched nodejs version is $(cat .github/dependencies/.nodejs-version)"
 
       - name: Check for modified files
