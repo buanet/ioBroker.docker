@@ -24,16 +24,16 @@ jobs:
 
       - name: Fetch ioBroker and nodejs versions
         run: |
-          curl -sL https://repo.iobroker.live/sources-dist.json | \
+          curl -sL https://download.iobroker.net/sources-dist.json | \
           jq -r '."js-controller".version' > .github/dependencies/.js-controller-version
           echo "[LOG] Fetched js-controller version is $(cat .github/dependencies/.js-controller-version)"
-          curl -sL https://repo.iobroker.live/sources-dist.json | \
+          curl -sL https://download.iobroker.net/sources-dist.json | \
           jq -r '."admin".version' > .github/dependencies/.admin-version
           echo "[LOG] Fetched admin version is $(cat .github/dependencies/.admin-version)"
-          curl -sL https://repo.iobroker.live/sources-dist.json | \
+          curl -sL https://download.iobroker.net/sources-dist.json | \
           jq -r '."backitup".version' > .github/dependencies/.backitup-version
           echo "[LOG] Fetched backitup version is $(cat .github/dependencies/.backitup-version)"
-          curl -sL https://repo.iobroker.live/sources-dist.json | \
+          curl -sL https://download.iobroker.net/sources-dist.json | \
           jq -r '."discovery".version' > .github/dependencies/.discovery-version
           echo "[LOG] Fetched discovery version is $(cat .github/dependencies/.discovery-version)"
           curl -sL https://nodejs.org/dist/index.json | \
