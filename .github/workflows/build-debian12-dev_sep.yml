@@ -12,7 +12,7 @@ jobs:
       build_number: ${{ steps.generate-build-number.outputs.build_number }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           repository: 'buanet/ioBroker.docker'
 
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           repository: 'buanet/ioBroker.docker'
 
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           repository: 'buanet/ioBroker.docker'
 
@@ -145,7 +145,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           repository: 'buanet/ioBroker.docker'
 
@@ -200,7 +200,7 @@ jobs:
     needs: [build-dev-armv7-recommended-node, build-dev-arm64v8-recommended-node, build-dev-amd64-recommended-node, create-build-number]
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           repository: 'buanet/ioBroker.docker'
 
@@ -241,7 +241,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           repository: 'buanet/ioBroker.docker'
 
@@ -299,7 +299,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           repository: 'buanet/ioBroker.docker'
 
@@ -357,7 +357,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           repository: 'buanet/ioBroker.docker'
 
@@ -412,7 +412,7 @@ jobs:
     needs: [build-dev-armv7-experimental-node, build-dev-arm64v8-experimental-node, build-dev-amd64-experimental-node, create-build-number]
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           repository: 'buanet/ioBroker.docker'
 
