@@ -15,11 +15,12 @@ check_package_preq() {
   # check for influx packages
   if [[ "$i" == "influxdb" || "$i" == "influxdb2-cli" ]]; then
     # add influxdata repo keys
-    wget -qO- https://repos.influxdata.com/influxdata-archive_compat.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg > /dev/null
-    echo "deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https://repos.influxdata.com/debian stable main" | sudo tee /etc/apt/sources.list.d/influxdata.list
+    wget -qO- https://repos.influxdata.com/influxdata-archive.key | gpg --dearmor | tee /usr/share/keyrings/influxdata-archive.gpg > /dev/null
+    echo "deb [signed-by=/usr/share/keyrings/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main" | tee /etc/apt/sources.list.d/influxdata.list
     apt-get -q update >> /opt/scripts/setup_packages.log 2>&1
   fi
 }
+
 check_package_validity() {
   # check string for double spaces
   while echo "$packages" | grep -q '  '; do
@@ -34,7 +35,7 @@ check_package_validity() {
     while echo "$packages" | grep -q '  '; do
       packages=$(echo "$packages" | sed 's/  / /g')
     done
-    if [[ $debug == "true" ]]; then echo "[DEBUG] New list of packages: ""$packages"; fi
+    if [[ $debug == "true" ]]; then echo "[DEBUG] New list of packages: $packages"; fi
     echo " "
   fi
 }
@@ -72,7 +73,7 @@ elif [[ "$1" == "-update" ]]; then
     echo "Done."
   fi
 else
-  echo "No paramerter found!"
+  echo "No parameter found!"
   exit 1
 fi
 
