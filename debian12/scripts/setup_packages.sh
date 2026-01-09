@@ -20,7 +20,6 @@ check_package_preq() {
     # Remove old keys/repos
     rm -f /etc/apt/sources.list.d/influx*
     rm -f /etc/apt/keyrings/influx*
-    rm -f /usr/share/keyrings/influxdata-archive.gpg
     
     # Download and add GPG key
     curl --silent --location https://repos.influxdata.com/influxdata-archive.key | gpg --dearmor > /usr/share/keyrings/influxdata-archive.gpg
