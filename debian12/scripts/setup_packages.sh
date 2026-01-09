@@ -22,7 +22,13 @@ check_package_preq() {
     rm -f /etc/apt/keyrings/influx*
     
     # Download and add GPG key
-    curl --silent --location https://repos.influxdata.com/influxdata-archive.key | gpg --dearmor > /usr/share/keyrings/influxdata-archive.gpg
+    tmp_keyring=$(mktemp)
+    if ! curl --silent --location https://repos.influxdata.com/influxdata-archive.key | gpg --dearmor > "$tmp_keyring"; then
+      echo "Failed to download or dearmor InfluxData GPG key." >&2
+      rm -f "$tmp_keyring"
+      return 1
+    fi
+    mv "$tmp_keyring" /usr/share/keyrings/influxdata-archive.gpg
     echo "deb [signed-by=/usr/share/keyrings/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main" > /etc/apt/sources.list.d/influxdata.list
     apt-get -q update >> /opt/scripts/setup_packages.log 2>&1
   fi
