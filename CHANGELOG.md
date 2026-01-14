@@ -1,5 +1,8 @@
 ## Changelog
 
+### V11.0.1 (14.01.2026)
+* Update InfluxDB repository setup in setup_packages.sh ([#560 by @Marc-Berg](https://github.com/buanet/ioBroker.docker/pull/560))
+
 ### V11.0.0 (21.07.2025)
 * releasing V11.0.0 instead of V10.1.0 due to the upgrade to recommended node22
 * v10.1.0-beta.1 (24.05.2025)
