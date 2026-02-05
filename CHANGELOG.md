@@ -1,9 +1,12 @@
 ## Changelog
 
-### V11.0.1 (14.01.2026)
+### v11.1.0 (05.02.2026)
+* drop arm/v7 support as ioBroker no longer supports 32bit installations ([as here](https://github.com/ioBroker/ioBroker/commit/4b445448b9514f7ca086b0c79d10708a99aea5fd))
+
+### v11.0.1 (14.01.2026)
 * Update InfluxDB repository setup in setup_packages.sh ([#560 by @Marc-Berg](https://github.com/buanet/ioBroker.docker/pull/560))
 
-### V11.0.0 (21.07.2025)
+### v11.0.0 (21.07.2025)
 * releasing V11.0.0 instead of V10.1.0 due to the upgrade to recommended node22
 * v10.1.0-beta.1 (24.05.2025)
   * remove restore option from maintenance script
@@ -32,7 +35,7 @@
 ### v9.1.0 (19.01.2024)
 * update docs and ci
 * v9.1.0-beta.4 (08.01.2024)
-  * dropping arm/v7 support (temporary)
+  * drop arm/v7 support (temporary)
   * add trap for debugging mode ([#421](https://github.com/buanet/ioBroker.docker/issues/421))
   * fix ownership of userscripts ([#423 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/423))
   * add strict mode to healthcheck.sh ([#424 by @EugenMayer](https://github.com/buanet/ioBroker.docker/pull/424))

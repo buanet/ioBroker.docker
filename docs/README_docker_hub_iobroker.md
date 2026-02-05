@@ -37,11 +37,12 @@ New major image versions (e.g. v6, v7, v8) usually include a new major version o
 It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[major_version]` tag instead.
 
 ### Node 22 versions
-* [`v11.0.1`](https://github.com/buanet/ioBroker.docker/blob/v11.0.1/debian12/Dockerfile), [`latest-v11`](https://github.com/buanet/ioBroker.docker/blob/v11.0.1/debian12/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v11.0.1/debian12/Dockerfile)
+* [`v11.1.0`](https://github.com/buanet/ioBroker.docker/blob/v11.1.0/debian12/Dockerfile), [`latest-v11`](https://github.com/buanet/ioBroker.docker/blob/v11.1.0/debian12/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v11.1.0/debian12/Dockerfile)
+* [`v11.0.1`](https://github.com/buanet/ioBroker.docker/blob/v11.0.1/debian12/Dockerfile)
 * [`v11.0.0`](https://github.com/buanet/ioBroker.docker/blob/v11.0.0/debian12/Dockerfile)
 
 ### Node 20 versions
-* [`v10.0.0`](https://github.com/buanet/ioBroker.docker/blob/v10.0.0/debian12/Dockerfile), [`latest-v10`](https://github.com/buanet/ioBroker.docker/blob/v10.0.0/debian12/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v10.0.0/debian12/Dockerfile)
+* [`v10.0.0`](https://github.com/buanet/ioBroker.docker/blob/v10.0.0/debian12/Dockerfile), [`latest-v10`](https://github.com/buanet/ioBroker.docker/blob/v10.0.0/debian12/Dockerfile)
 
 # What is ioBroker?
 
