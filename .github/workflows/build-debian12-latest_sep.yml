@@ -27,7 +27,7 @@ jobs:
           echo "[LOG] Latest release tag : $LATESTRELEASE"
 
       - name: Checkout repo
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           repository: 'buanet/ioBroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}
@@ -57,7 +57,7 @@ jobs:
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: Checkout repo
-#        uses: actions/checkout@v6.0.1
+#        uses: actions/checkout@v6.0.2
 #        with:
 #          repository: 'buanet/ioBroker.docker'
 #          ref: ${{ needs.create-build-number.outputs.release_tag }}
@@ -119,7 +119,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ needs.create-build-number.outputs.release_tag }}
@@ -181,7 +181,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ needs.create-build-number.outputs.release_tag }}
@@ -240,7 +240,7 @@ jobs:
     needs: [build-latest-arm64v8-for-buanet, build-latest-amd64-for-buanet, create-build-number]
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ needs.create-build-number.outputs.release_tag }}
@@ -292,7 +292,7 @@ jobs:
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: Checkout repo
-#        uses: actions/checkout@v6.0.1
+#        uses: actions/checkout@v6.0.2
 #        with:
 #          repository: 'buanet/ioBroker.docker'
 #          ref: ${{ needs.create-build-number.outputs.release_tag }}
@@ -345,7 +345,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ needs.create-build-number.outputs.release_tag }}
@@ -398,7 +398,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ needs.create-build-number.outputs.release_tag }}
@@ -447,7 +447,7 @@ jobs:
     needs: [build-latest-arm64v8-for-iobroker, build-latest-amd64-for-iobroker, create-build-number]
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           repository: 'buanet/ioBroker.docker'
           ref: ${{ needs.create-build-number.outputs.release_tag }}
