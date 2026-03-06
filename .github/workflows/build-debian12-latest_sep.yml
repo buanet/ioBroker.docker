@@ -83,7 +83,7 @@ jobs:
 #          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 #
 #      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v3.7.0
+#        uses: docker/setup-qemu-action@v4.0.0
 #
 #      - name: Set up Docker Buildx
 #        id: buildx
@@ -145,7 +145,7 @@ jobs:
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3.7.0
+        uses: docker/setup-qemu-action@v4.0.0
 
       - name: Set up Docker Buildx
         id: buildx
@@ -318,7 +318,7 @@ jobs:
 #          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 #
 #      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v3.7.0
+#        uses: docker/setup-qemu-action@v4.0.0
 #
 #      - name: Set up Docker Buildx
 #        id: buildx
@@ -371,7 +371,7 @@ jobs:
           mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3.7.0
+        uses: docker/setup-qemu-action@v4.0.0
 
       - name: Set up Docker Buildx
         id: buildx
