@@ -12,6 +12,7 @@ adminport=$IOB_ADMINPORT
 avahi=$AVAHI
 backitup=$IOB_BACKITUP_EXTDB
 debug=$DEBUG
+dockersock=$DOCKER_SOCK
 multihost=$IOB_MULTIHOST
 offlinemode=$OFFLINE_MODE
 objectsdbhost=$IOB_OBJECTSDB_HOST
@@ -91,6 +92,7 @@ echo "-----                                                                     
 echo "-----                        Environment Variables                         -----"
 if [[ "$adminport" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_ADMINPORT: "$adminport")" && echo " -----"; fi
 if [[ "$avahi" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" AVAHI: "$avahi")" && echo " -----"; fi
+if [[ "$dockersock" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" DOCKER_SOCK: "$dockersock")" && echo " -----"; fi
 if [[ "$debug" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" DEBUG: "$debug")" && echo " -----"; fi
 if [[ "$backitup" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_BACKITUP_EXTDB: "$backitup")" && echo " -----"; fi
 if [[ "$multihost" != "" ]]; then echo -n "-----                    " && echo -n "$(printf "%-20s %-28s" IOB_MULTIHOST: "$multihost")" && echo " -----"; fi
@@ -496,6 +498,40 @@ if [[ "$usbdevices" != "" && "$usbdevices" != "none" ]]; then
         stop_on_error
       fi
     done
+  echo " "
+fi
+
+# checking ENV for DOCKER_SOCK
+if [[ "$dockersock" = "true" ]]; then
+  echo "DOCKER_SOCK is \"true\". Setting up Docker socket access for iobroker user..."
+  if [[ -S "/var/run/docker.sock" ]]; then
+    echo -n "Docker socket detected. Adding iobroker user to docker group... "
+    # Get the group ID of the docker socket
+    docker_gid=$(stat -c '%g' /var/run/docker.sock)
+    # Check if docker group exists, if not create it with the correct GID
+    if ! getent group docker > /dev/null 2>&1; then
+      groupadd -g "$docker_gid" docker
+      if [[ "$debug" == "true" ]]; then echo "[DEBUG] Created docker group with GID: $docker_gid"; fi
+    else
+      # If docker group exists but with different GID, modify it
+      existing_gid=$(getent group docker | cut -d: -f3)
+      if [[ "$existing_gid" != "$docker_gid" ]]; then
+        groupmod -g "$docker_gid" docker
+        if [[ "$debug" == "true" ]]; then echo "[DEBUG] Modified docker group GID from $existing_gid to $docker_gid"; fi
+      fi
+    fi
+    # Add iobroker user to docker group
+    usermod -a -G docker iobroker
+    echo "Done."
+    if [[ "$debug" == "true" ]]; then 
+      echo "[DEBUG] Docker socket permissions: $(ls -al /var/run/docker.sock)"
+      echo "[DEBUG] iobroker user groups: $(groups iobroker)"
+    fi
+  else
+    echo "Docker socket not found at /var/run/docker.sock."
+    echo "Make sure to mount the Docker socket with: -v /var/run/docker.sock:/var/run/docker.sock"
+    echo "For more information see ioBroker Docker image docs."
+  fi
   echo " "
 fi
 
