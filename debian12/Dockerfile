@@ -56,7 +56,8 @@ RUN apt-get update && apt-get upgrade -y \
     # Run iobroker installer
     && curl -sL https://iobroker.net/install.sh -o install.sh \
     && sed -i 's/NODE_MAJOR=[0-9]\+/NODE_MAJOR=${NODE}/' install.sh \
-    && sed -i 's|NODE_JS_BREW_URL=.*|NODE_JS_BREW_URL="https://nodejs.org"|' install.sh \
+    && sed -i 's/^\s*NODE_MAJOR=\$NODE_MAJOR_FROM_JSON/# &/' install.sh \
+#    && sed -i 's|NODE_JS_BREW_URL=.*|NODE_JS_BREW_URL="https://nodejs.org"|' install.sh \
     && bash install.sh \
     # Deleting UUID from build
     && iobroker unsetup -y \
