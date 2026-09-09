@@ -85,6 +85,30 @@ volumes:
   iobrokerdata:
 ```
 
+### Docker Manager Support
+
+To use the [ioBroker.docker-manager](https://github.com/ioBroker/ioBroker.docker-manager) adapter for managing Docker containers from within ioBroker, add the Docker socket mount and enable the Docker socket feature:
+
+```yaml
+services:
+  iobroker:
+    container_name: iobroker
+    image: buanet/iobroker
+    hostname: iobroker
+    restart: always
+    ports:
+      - "8081:8081"
+    volumes:
+      - iobrokerdata:/opt/iobroker
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=Europe/Berlin
+      - DOCKER_SOCK=true
+
+volumes:
+  iobrokerdata:
+```
+
 **Tip:**  
 Depending on your adapters, you may need to expose additional ports or use a different network mode (e.g. `network_mode: host`).  
 See the [Networking section](#notes-about-docker-networks) for more details.
@@ -126,6 +150,7 @@ You can use environment variables to automatically configure your ioBroker conta
 ### Special Features
 
 - `AVAHI` (optional) – Set `true` to install and activate avahi-daemon (for yahka adapter support)
+- `DOCKER_SOCK` (optional) – Set `true` to add iobroker user to docker group for Docker API access (requires mounting `/var/run/docker.sock:/var/run/docker.sock`)
 
 ### Environment Configuration
 
