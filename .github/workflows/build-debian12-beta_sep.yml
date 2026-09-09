@@ -39,66 +39,6 @@ jobs:
           echo "build_number=$BUILD" >> $GITHUB_OUTPUT
           echo "[LOG] Buildnumber: $BUILD"
 
-### Deprecation of armv7 (2026-02-05) ###
-#  build-beta-armv7-recommended-node:
-#    name: Build beta armv7 image with recommended node version
-#    needs: [create-build-number]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout repo
-#        uses: actions/checkout@v7.0.1
-#        with:
-#          repository: 'buanet/ioBroker.docker'
-#          ref: ${{ needs.create-build-number.outputs.release_tag }}
-#
-#      - name: Set job variables
-#        run: |
-#          VERSION="$(cat .VERSION)"
-#          BUILD="${{ needs.create-build-number.outputs.build_number }}"
-#          # Log output and export as Github environment variable
-#          echo "[LOG] Nodejs Version: ${{ vars.RECOMMENDED_NODE_VERSION_BETA }}"
-#          echo "[LOG] Image Version: $VERSION"
-#          echo "version=$VERSION" >> $GITHUB_ENV
-#          echo "[LOG] Buildnumber: $BUILD"
-#          echo "build=$BUILD" >> $GITHUB_ENV
-#          # Set values in iobroker_startup.sh
-#          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
-#          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
-#          # Set values in Dockerfile
-#          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-#          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
-#
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v4.3.0
-#
-#      - name: Set up Docker Buildx
-#        id: buildx
-#        uses: docker/setup-buildx-action@v4.3.0
-#
-#      - name: Login to DockerHub (buanet)
-#        uses: docker/login-action@v4.6.0
-#        with:
-#          username: ${{ secrets.DOCKER_USER }}
-#          password: ${{ secrets.DOCKER_PASS }}
-#
-#      - name: Login to GitHub Container Registry
-#        uses: docker/login-action@v4.6.0
-#        with:
-#          registry: ghcr.io
-#          username: ${{ secrets.PACKAGES_USER }}
-#          password: ${{ secrets.PACKAGES_PASS }}
-#
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v7.3.0
-#        with:
-#          context: ./debian12
-#          file: ./debian12/Dockerfile
-#          push: true
-#          platforms: linux/arm/v7
-#          tags: |
-#            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7,
-#            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7,
-
   build-beta-arm64v8-recommended-node:
     name: Build beta armv64v8 image with recommended node version
     needs: [create-build-number]
@@ -259,66 +199,6 @@ jobs:
           docker buildx imagetools create -t ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }} ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-arm64v8 ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-amd64
 
 ### experimental node version
-
-### Deprecation of armv7 (2026-02-05) ###
-#  build-beta-armv7-experimental-node:
-#    name: Build beta armv7 image with experimental node version
-#    needs: [create-build-number]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout repo
-#        uses: actions/checkout@v7.0.1
-#        with:
-#          repository: 'buanet/ioBroker.docker'
-#          ref: ${{ needs.create-build-number.outputs.release_tag }}
-#
-#      - name: Set job variables
-#        run: |
-#          VERSION="$(cat .VERSION)"
-#          BUILD="${{ needs.create-build-number.outputs.build_number }}"
-#          # Log output and export as Github environment variable
-#          echo "[LOG] Nodejs Version: ${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}"
-#          echo "[LOG] Image Version: $VERSION"
-#          echo "version=$VERSION" >> $GITHUB_ENV
-#          echo "[LOG] Buildnumber: $BUILD"
-#          echo "build=$BUILD" >> $GITHUB_ENV
-#          # Set values in iobroker_startup.sh
-#          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
-#          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
-#          # Set values in Dockerfile
-#          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-#          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
-#
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v4.3.0
-#
-#      - name: Set up Docker Buildx
-#        id: buildx
-#        uses: docker/setup-buildx-action@v4.3.0
-#
-#      - name: Login to DockerHub (buanet)
-#        uses: docker/login-action@v4.6.0
-#        with:
-#          username: ${{ secrets.DOCKER_USER }}
-#          password: ${{ secrets.DOCKER_PASS }}
-#
-#      - name: Login to GitHub Container Registry
-#        uses: docker/login-action@v4.6.0
-#        with:
-#          registry: ghcr.io
-#          username: ${{ secrets.PACKAGES_USER }}
-#          password: ${{ secrets.PACKAGES_PASS }}
-#
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v7.3.0
-#        with:
-#          context: ./debian12
-#          file: ./debian12/Dockerfile
-#          push: true
-#          platforms: linux/arm/v7
-#          tags: |
-#            buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }},
-#            ghcr.io/buanet/iobroker:${{ env.version }}-build.${{ env.build }}-armv7-node${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }},
 
   build-beta-arm64v8-experimental-node:
     name: Build beta armv64v8 image with experimental node version

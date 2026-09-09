@@ -1,5 +1,8 @@
 ## Changelog
 
+### v12.0.0-beta.1
+* testing node24
+
 ### v11.1.0 (05.02.2026)
 * drop arm/v7 support as ioBroker no longer supports 32bit installations ([as here](https://github.com/ioBroker/ioBroker/commit/4b445448b9514f7ca086b0c79d10708a99aea5fd))
 
