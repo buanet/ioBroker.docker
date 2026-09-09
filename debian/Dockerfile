@@ -1,6 +1,5 @@
-FROM debian:bookworm-slim
-# FROM node:20.12-bookworm-slim
-
+FROM debian:trixie-slim
+# FROM debian:bookworm-slim
 
 LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.description="Official Docker image for ioBroker smarthome software (https://www.iobroker.net)" \
@@ -8,7 +7,7 @@ LABEL org.opencontainers.image.title="Official ioBroker Docker Image" \
       org.opencontainers.image.authors="André Germann <info@buanet.de>" \
       org.opencontainers.image.url="https://github.com/buanet/ioBroker.docker" \
       org.opencontainers.image.source="https://github.com/buanet/ioBroker.docker" \
-      org.opencontainers.image.base.name="debian:bookworm-slim" \
+      org.opencontainers.image.base.name="debian:trixie-slim" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.created="${DATI}"
 
@@ -56,8 +55,8 @@ RUN apt-get update && apt-get upgrade -y \
     # Run iobroker installer
     && curl -sL https://iobroker.net/install.sh -o install.sh \
     && sed -i 's/NODE_MAJOR=[0-9]\+/NODE_MAJOR=${NODE}/' install.sh \
-    && sed -i 's/^\s*NODE_MAJOR=\$NODE_MAJOR_FROM_JSON/# &/' install.sh \
-#    && sed -i 's|NODE_JS_BREW_URL=.*|NODE_JS_BREW_URL="https://nodejs.org"|' install.sh \
+    && sed -i 's/NODE_MAJOR=\$NODE_MAJOR_FROM_JSON/NODE_MAJOR=\$NODE_MAJOR/' install.sh \
+    && sed -i 's|NODE_JS_BREW_URL=.*|NODE_JS_BREW_URL="https://nodejs.org"|' install.sh \
     && bash install.sh \
     # Deleting UUID from build
     && iobroker unsetup -y \

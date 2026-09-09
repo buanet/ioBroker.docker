@@ -1,6 +1,7 @@
 ## Changelog
 
 ### v12.0.0-beta.1 (09.09.2026)
+* update debian baseimage from bookworm (12) to trixie (13)
 * fixing install.sh manipulation
 * testing node24
 

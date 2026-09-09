@@ -1,5 +1,5 @@
-# Github action to build Debian12 image (Tag: beta)
-name: Build Debian 12 Image (beta)
+# Github action to build Debian image (Tag: beta)
+name: Build Debian Image (beta)
 
 on:
   release:
@@ -61,11 +61,11 @@ jobs:
           echo "[LOG] Buildnumber: $BUILD"
           echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
-          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
+          mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION_BETA }}/" ./debian/Dockerfile > ./debian/Dockerfile.tmp 
+          mv -f ./debian/Dockerfile.tmp ./debian/Dockerfile
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4.3.0
@@ -90,8 +90,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v7.3.0
         with:
-          context: ./debian12
-          file: ./debian12/Dockerfile
+          context: ./debian
+          file: ./debian/Dockerfile
           push: true
           platforms: linux/arm64/v8
           tags: |
@@ -120,11 +120,11 @@ jobs:
           echo "[LOG] Buildnumber: $BUILD"
           echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
-          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
+          mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.RECOMMENDED_NODE_VERSION_BETA }}/" ./debian/Dockerfile > ./debian/Dockerfile.tmp 
+          mv -f ./debian/Dockerfile.tmp ./debian/Dockerfile
 
       - name: Set up Docker Buildx
         id: buildx
@@ -146,8 +146,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v7.3.0
         with:
-          context: ./debian12
-          file: ./debian12/Dockerfile
+          context: ./debian
+          file: ./debian/Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
@@ -222,11 +222,11 @@ jobs:
           echo "[LOG] Buildnumber: $BUILD"
           echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
-          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
+          mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}/" ./debian/Dockerfile > ./debian/Dockerfile.tmp 
+          mv -f ./debian/Dockerfile.tmp ./debian/Dockerfile
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4.3.0
@@ -251,8 +251,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v7.3.0
         with:
-          context: ./debian12
-          file: ./debian12/Dockerfile
+          context: ./debian
+          file: ./debian/Dockerfile
           push: true
           platforms: linux/arm64/v8
           tags: |
@@ -281,11 +281,11 @@ jobs:
           echo "[LOG] Buildnumber: $BUILD"
           echo "build=$BUILD" >> $GITHUB_ENV
           # Set values in iobroker_startup.sh
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian12/scripts/iobroker_startup.sh > ./debian12/scripts/iobroker_startup.tmp
-          mv -f ./debian12/scripts/iobroker_startup.tmp ./debian12/scripts/iobroker_startup.sh
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${BUILD}/$BUILD/" ./debian/scripts/iobroker_startup.sh > ./debian/scripts/iobroker_startup.tmp
+          mv -f ./debian/scripts/iobroker_startup.tmp ./debian/scripts/iobroker_startup.sh
           # Set values in Dockerfile
-          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}/" ./debian12/Dockerfile > ./debian12/Dockerfile.tmp 
-          mv -f ./debian12/Dockerfile.tmp ./debian12/Dockerfile
+          sed -e "s/\${VERSION}/$VERSION/" -e "s/\${DATI}/$BUILD/" -e "s/\${BUILD}/$BUILD/" -e "s/\${NODE}/${{ vars.EXPERIMENTAL_NODE_VERSION_BETA }}/" ./debian/Dockerfile > ./debian/Dockerfile.tmp 
+          mv -f ./debian/Dockerfile.tmp ./debian/Dockerfile
 
       - name: Set up Docker Buildx
         id: buildx
@@ -307,8 +307,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v7.3.0
         with:
-          context: ./debian12
-          file: ./debian12/Dockerfile
+          context: ./debian
+          file: ./debian/Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
