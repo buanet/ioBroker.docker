@@ -5,6 +5,7 @@ set -euo pipefail
 
 autoconfirm=      # can be set to 'yes' by command line option
 killbyname=       # can be set to 'yes' by command line option (undocumented, only for use with backitup restore scripts)
+internal_detached=      # internal marker to prevent recursive detached relaunch
 healthcheck=/opt/.docker_config/.healthcheck      # path of healthcheck file
 pkill_timeout=10      # timeout for stopping iobroker in seconds
 
@@ -54,6 +55,39 @@ maintenance_status() {
     echo "Maintenance mode is turned ON."
   else
     echo "Maintenance mode is turned OFF."
+  fi
+}
+
+# detect if script is called from ioBroker process tree (e.g. javascript adapter)
+called_from_iobroker_tree() {
+  local current_pid parent_pid parent_args
+
+  current_pid="$PPID"
+  while [[ "$current_pid" =~ ^[0-9]+$ ]] && (( current_pid > 1 )); do
+    parent_args="$(ps -o args= -ww -p "$current_pid" 2> /dev/null || true)"
+    if [[ "$parent_args" == *"iobroker.js-controller"* ]] || [[ "$parent_args" == *"controller.js"* ]] || [[ "$parent_args" == *"javascript.js"* ]]; then
+      return 0
+    fi
+
+    parent_pid="$(ps -o ppid= -p "$current_pid" 2> /dev/null | tr -d ' ' || true)"
+    if [[ ! "$parent_pid" =~ ^[0-9]+$ ]] || (( parent_pid <= 1 )); then
+      break
+    fi
+    current_pid="$parent_pid"
+  done
+
+  return 1
+}
+
+# relaunch command detached from current process tree and return immediately
+run_detached() {
+  local log_file
+
+  log_file="/opt/iobroker/log/maintenance-detached.log"
+  if command -v setsid > /dev/null 2>&1; then
+    setsid -f bash "$0" "$@" > "$log_file" 2>&1 < /dev/null
+  else
+    nohup bash "$0" "$@" > "$log_file" 2>&1 < /dev/null &
   fi
 }
 
@@ -202,6 +236,24 @@ restart_container() {
     fi
   fi
 
+  if [[ "$internal_detached" != yes ]] && called_from_iobroker_tree; then
+    local -a detached_args
+
+    detached_args=(restart --internal-detached)
+    if [[ "$autoconfirm" == yes ]]; then
+      detached_args+=(-y)
+    fi
+    if [[ "$killbyname" == yes ]]; then
+      detached_args+=(-kbn)
+    fi
+
+    echo "Detected execution from ioBroker process tree."
+    echo "Restart command will continue in detached mode."
+    run_detached "${detached_args[@]}"
+    echo "Detached restart process started."
+    return
+  fi
+
   if ! maintenance_enabled > /dev/null; then
     echo -n "Stopping ioBroker..."
     stop_iob
@@ -252,6 +304,9 @@ for arg in "$@"; do
       ;;
     -kbn|--killbyname)
       killbyname=yes
+      ;;
+    --internal-detached)
+      internal_detached=yes
       ;;
     --)
       break
