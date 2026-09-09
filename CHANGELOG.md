@@ -1,6 +1,7 @@
 ## Changelog
 
-### v12.0.0-beta.1
+### v12.0.0-beta.1 (09.09.2026)
+* fixing install.sh manipulation
 * testing node24
 
 ### v11.1.0 (05.02.2026)
