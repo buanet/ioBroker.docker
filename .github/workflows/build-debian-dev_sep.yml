@@ -51,7 +51,7 @@ jobs:
           mv -f ./debian/Dockerfile.tmp ./debian/Dockerfile
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4.3.0
+        uses: docker/setup-qemu-action@v4.4.0
 
       - name: Set up Docker Buildx
         id: buildx
@@ -205,7 +205,7 @@ jobs:
           mv -f ./debian/Dockerfile.tmp ./debian/Dockerfile
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4.3.0
+        uses: docker/setup-qemu-action@v4.4.0
 
       - name: Set up Docker Buildx
         id: buildx
