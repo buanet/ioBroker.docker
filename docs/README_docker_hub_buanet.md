@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/v/release/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/releases)
 [![Pre-Release)](https://img.shields.io/github/v/tag/buanet/ioBroker.docker?include_prereleases&label=pre-release)](https://github.com/buanet/ioBroker.docker/releases)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/buanet/ioBroker.docker/build-debian12-latest_sep.yml?branch=main)](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian12-latest_sep.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/buanet/ioBroker.docker/build-debian-latest_sep.yml?branch=main)](https://github.com/buanet/ioBroker.docker/actions/workflows/build-debian-latest_sep.yml)
 [![Github Issues](https://img.shields.io/github/issues/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/issues)
 [![Github Pull Requests](https://img.shields.io/github/issues-pr/buanet/ioBroker.docker?style=flat)](https://github.com/buanet/ioBroker.docker/pulls)
 [![GitHub Discussions](https://img.shields.io/github/discussions/buanet/ioBroker.docker)](https://github.com/buanet/ioBroker.docker/discussions)<br>
@@ -34,13 +34,13 @@ New major image versions (e.g. v6, v7, v8) usually include a new major version o
 
 It is highly recommended not to use the `latest` tag for production, especially when using any kind of automated update procedure like watchtower. Please use the `latest-v[major_version]` tag instead.
 
+### Node 24 versions
+* [`v12.0.0`](https://github.com/buanet/ioBroker.docker/blob/v12.0.0/debian/Dockerfile), [`latest-v12`](https://github.com/buanet/ioBroker.docker/blob/v12.0.0/debian/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v12.0.0/debian/Dockerfile)
+
 ### Node 22 versions
 * [`v11.1.0`](https://github.com/buanet/ioBroker.docker/blob/v11.1.0/debian12/Dockerfile), [`latest-v11`](https://github.com/buanet/ioBroker.docker/blob/v11.1.0/debian12/Dockerfile), [`latest`](https://github.com/buanet/ioBroker.docker/blob/v11.1.0/debian12/Dockerfile)
 * [`v11.0.1`](https://github.com/buanet/ioBroker.docker/blob/v11.0.1/debian12/Dockerfile)
 * [`v11.0.0`](https://github.com/buanet/ioBroker.docker/blob/v11.0.0/debian12/Dockerfile)
-
-### Node 20 versions
-* [`v10.0.0`](https://github.com/buanet/ioBroker.docker/blob/v10.0.0/debian12/Dockerfile), [`latest-v10`](https://github.com/buanet/ioBroker.docker/blob/v10.0.0/debian12/Dockerfile)
 
 # What is ioBroker?
 
