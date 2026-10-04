@@ -71,7 +71,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v7.3.0
+        uses: docker/build-push-action@v7.4.0
         with:
           context: ./debian
           file: ./debian/Dockerfile
@@ -126,7 +126,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v7.3.0
+        uses: docker/build-push-action@v7.4.0
         with:
           context: ./debian
           file: ./debian/Dockerfile
@@ -225,7 +225,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v7.3.0
+        uses: docker/build-push-action@v7.4.0
         with:
           context: ./debian
           file: ./debian/Dockerfile
@@ -280,7 +280,7 @@ jobs:
           password: ${{ secrets.PACKAGES_PASS }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v7.3.0
+        uses: docker/build-push-action@v7.4.0
         with:
           context: ./debian
           file: ./debian/Dockerfile
