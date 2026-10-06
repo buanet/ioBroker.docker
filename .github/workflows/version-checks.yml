@@ -57,11 +57,11 @@ jobs:
           echo "base image updated = ${{ steps.baseimage-check.outputs.needs-updating }}"
           echo "ioBroker version updated = ${{ steps.git-check.outputs.modified }}"
 
-      - name: Trigger Build Debian 12 Image (latest)
+      - name: Trigger Build Debian Image (latest)
         if: steps.baseimage-check.outputs.needs-updating == 'true' || steps.git-check.outputs.modified == 'true'
         uses: benc-uk/workflow-dispatch@v1.3
         with:
           ref: 'main'
-          workflow: 'Build Debian 12 Image (latest)'
+          workflow: 'Build Debian Image (latest)'
           repo: 'buanet/iobroker.docker'
           token: ${{ secrets.ACTIONS_PAT }}
