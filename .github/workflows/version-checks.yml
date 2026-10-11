@@ -19,7 +19,7 @@ jobs:
         id: baseimage-check
         uses: lucacome/docker-image-update-checker@v3.1.2
         with:
-          base-image: debian:bookworm-slim
+          base-image: debian:trixie-slim
           image: buanet/iobroker:latest
 
       - name: Fetch ioBroker and nodejs versions
